@@ -1,0 +1,5 @@
+/backend/portal-web/target/classes
+/backend/portal-web/*.classpath
+/backend/portal-web/*.project
+/backend/portal-web/.settings
+/backend/portal-web/bin/com/h3bpm/web
