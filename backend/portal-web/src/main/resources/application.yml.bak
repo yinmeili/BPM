@@ -84,7 +84,7 @@ h3:
   #新版移动端
 #    scanBasePackages : OThinker.H3.Controller.*,com.h3bpm.mobile.controller,com.h3bpm.base.controller.handler
   #旧版移动端
-    scanBasePackages: OThinker.H3.Controller.*,OThinker.H3.Mobile.Controller,com.h3bpm.base.controller.handler
+    scanBasePackages: OThinker.H3.Controller.*,OThinker.H3.Mobile.Controller,com.h3bpm.base.controller.handler,com.h3bpm.web.controller.*
 
   datasource:
     initialSize: 10
