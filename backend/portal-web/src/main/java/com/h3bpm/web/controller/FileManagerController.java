@@ -43,8 +43,8 @@ import OThinker.H3.Controller.ControllerBase;
  * Created by tonghao on 2020/3/1.
  */
 @Controller
-@RequestMapping(value="/Portal")
-public class FileManagerController  extends ControllerBase{
+@RequestMapping(value="/Portal/fileManage")
+public class FileManagerController extends ControllerBase{
 
     private static final Logger logger = LoggerFactory.getLogger(FileManagerController.class);
     

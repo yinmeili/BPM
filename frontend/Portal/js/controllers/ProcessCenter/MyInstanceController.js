@@ -94,7 +94,7 @@
                 	return "<a target='_blank' href='InstanceSheets.html?InstanceId=" + full.InstanceID + "'>" + data + "</a>";
                 }
             });
-            columns.push({ 
+            columns.push({
             	"mData": "WorkflowName",
             	"mRender": function (data, type, full) {
             		//update by xl@Future 2018.8.10
@@ -189,12 +189,12 @@
             "bServerSide": true,    // 是否读取服务器分页
             "paging": true,         // 是否启用分页
             "bPaginate": true,      // 分页按钮
-            "bFilter": false,        // 是否显示搜索栏  
+            "bFilter": false,        // 是否显示搜索栏
             "searchDelay": 1000,    // 延迟搜索
             "iDisplayLength": 20,   // 每页显示行数
-            "bSort": false,         // 排序  
+            "bSort": false,         // 排序
             "singleSelect": true,
-            "bInfo": true,          // Showing 1 to 10 of 23 entries 总记录数没也显示多少等信息  
+            "bInfo": true,          // Showing 1 to 10 of 23 entries 总记录数没也显示多少等信息
             "pagingType": "full_numbers",  // 设置分页样式，这个是默认的值
             "bLengthChange": true, // 每页显示多少数据
             "aLengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],//设置每页显示数据条数的下拉选项

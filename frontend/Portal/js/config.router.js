@@ -346,8 +346,8 @@ angular.module('app')
                             deps: ['$ocLazyLoad',
                                 function ($ocLazyLoad) {
                                     return $ocLazyLoad.load([
-                                        'js/controllers/ProcessCenter/MyInstanceController.js',
-                                        'vendor/jquery/bootstrap.min.js'
+                                        'js/controllers/ProcessCenter/MyInstanceController.js'
+                                        //'vendor/jquery/bootstrap.min.js'
                                     ]);
                                 }
                             ]
@@ -362,7 +362,7 @@ angular.module('app')
                             deps: ['$ocLazyLoad',
                                 function ($ocLazyLoad) {
                                     return $ocLazyLoad.load([
-                                        'vendor/jquery/bootstrap.min.js',
+                                        // 'vendor/jquery/bootstrap.min.js',
                                         'js/controllers/ProcessCenter/QueryInstanceController.js'
                                     ]);
                                 }
@@ -461,8 +461,9 @@ angular.module('app')
                             deps: ['$ocLazyLoad',
                                 function ($ocLazyLoad) {
                                     return $ocLazyLoad.load([
-                                        'js/controllers/ProcessCenter/MyCommentsController.js',
-                                        'vendor/jquery/bootstrap.min.js']);
+                                        // 'vendor/jquery/bootstrap.min.js',
+                                        'js/controllers/ProcessCenter/MyCommentsController.js'
+                                        ]);
                                 }
                             ]
                         }
@@ -625,6 +626,43 @@ angular.module('app')
                             }]
                         }
                     })
+
+
+
+                        //————知识库————
+                        //共享文件
+//                         .state('app.FileManage', {
+//                             url: '',
+//                             controller: "",
+//                             templateUrl: 'fileManage-index.html',
+// //                            templateUrl: 'fileManage/index.html',
+//                             resolve: {
+//                                 deps: ['$ocLazyLoad',
+//                                     function ($ocLazyLoad) {
+//                                         return $ocLazyLoad.load([
+//                                             'js/controllers/FileManage/FileManageController.js'
+//                                         ]);
+//                                     }
+//                                 ]
+//                             }
+//                         })
+
+                        //已办
+                        .state('app.FileManage', {
+                            url: '',
+                            controller: "",
+                            templateUrl: 'fileManage/fileManage-index.html',
+                            resolve: {
+                                deps: ['$ocLazyLoad',
+                                    function ($ocLazyLoad) {
+                                        return $ocLazyLoad.load([
+                                            // 'fileManage2/src/js/controllers/main.js',
+                                            // 'fileManage2/bower_components/jquery-uploadfile/js/jquery.uploadfile.js'
+                                        ]);
+                                    }
+                                ]
+                            }
+                        })
                 // End
             }
         ]

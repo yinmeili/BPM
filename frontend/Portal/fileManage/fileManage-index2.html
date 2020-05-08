@@ -1,0 +1,185 @@
+
+<!--<!doctype html>-->
+<!--<html lang="en" >-->
+<!--<head>-->
+    <!--&lt;!&ndash;-->
+      <!--* Angular FileManager v1.4.4 (https://github.com/joni2back/angular-filemanager)-->
+      <!--* Jonas Sciangula Street <joni2back@gmail.com>-->
+      <!--* Licensed under MIT (https://github.com/joni2back/angular-filemanager/blob/master/LICENSE)-->
+    <!--&ndash;&gt;-->
+    <!--<meta name="viewport" content="initial-scale=1.0, user-scalable=no">-->
+    <!--<meta charset="utf-8">-->
+    <!--<title>协办平台</title>-->
+
+
+
+    <!--&lt;!&ndash;<script src="fileManage/bower_components/angular/angular.min.js"></script>&ndash;&gt;-->
+    <!--&lt;!&ndash;<script src="fileManage/bower_components/angular-translate/angular-translate.min.js"></script>&ndash;&gt;-->
+    <!--<script src="fileManage2/bower_components/angular-cookies/angular-cookies.min.js"></script>-->
+    <!--&lt;!&ndash;<script src="vendor/jquery/jquery.min.js?v=201812011636"></script>&ndash;&gt;-->
+    <!--&lt;!&ndash;<script src="fileManage/bower_components/jquery/dist/jquery.min.js"></script>&ndash;&gt;-->
+    <!--&lt;!&ndash;<script src="fileManage/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>&ndash;&gt;-->
+    <!--&lt;!&ndash;<link rel="stylesheet" href="fileManage/bower_components/bootswatch/paper/bootstrap.min.css"/>&ndash;&gt;-->
+
+    <!--<link href="fileManage2/bower_components/jquery-uploadfile/css/uploadfile.css" rel="stylesheet">-->
+    <!--<script src="fileManage2/bower_components/jquery-uploadfile/js/jquery.uploadfile.js"></script>-->
+    <!--<script type="text/javascript" src="fileManage2/bower_components/jquery-qrcode/jquery.qrcode.min.js"></script>-->
+
+
+    <!--&lt;!&ndash;<script type="text/javascript">&ndash;&gt;-->
+    <!--&lt;!&ndash;var extraObj;&ndash;&gt;-->
+    <!--&lt;!&ndash;var serverAddresses;&ndash;&gt;-->
+    <!--&lt;!&ndash;$.get("http://localhost:88/getServerUrl",function(data,status){&ndash;&gt;-->
+    <!--&lt;!&ndash;serverAddresses = eval(data);&ndash;&gt;-->
+    <!--&lt;!&ndash;});&ndash;&gt;-->
+    <!--&lt;!&ndash;</script>&ndash;&gt;-->
+
+    <!--<script src="js/app.js?v=201812011636"></script>-->
+
+    <!--&lt;!&ndash;<script src="fileManage2/src/js/app.js" type="text/javascript"></script>&ndash;&gt;-->
+    <!--&lt;!&ndash;<script src="fileManage2/src/js/filters/filters.js" type="text/javascript"></script>&ndash;&gt;-->
+    <!--&lt;!&ndash;<script src="fileManage2/src/js/providers/config.js" type="text/javascript"></script>&ndash;&gt;-->
+    <!--&lt;!&ndash;<script src="fileManage2/src/js/entities/chmod.js" type="text/javascript"></script>&ndash;&gt;-->
+    <!--&lt;!&ndash;<script src="fileManage2/src/js/entities/item.js" type="text/javascript"></script>&ndash;&gt;-->
+    <!--&lt;!&ndash;<script src="fileManage2/src/js/directives/directives.js" type="text/javascript"></script>&ndash;&gt;-->
+    <!--&lt;!&ndash;<script src="fileManage2/src/js/services/filenavigator.js" type="text/javascript"></script>&ndash;&gt;-->
+    <!--&lt;!&ndash;<script src="fileManage2/src/js/services/fileuploader.js" type="text/javascript"></script>&ndash;&gt;-->
+    <!--&lt;!&ndash;<script src="fileManage2/src/js/providers/translations.js" type="text/javascript"></script>&ndash;&gt;-->
+    <!--&lt;!&ndash;<script src="fileManage2/src/js/controllers/main.js" type="text/javascript"></script>&ndash;&gt;-->
+    <!--&lt;!&ndash;<script src="fileManage2/src/js/controllers/selector-controller.js" type="text/javascript"></script>&ndash;&gt;-->
+    <!--&lt;!&ndash;<script src="fileManage2/custom/js/custom.js" type="text/javascript" type="text/javascript"></script>&ndash;&gt;-->
+
+    <!--<link href="fileManage2/src/css/animations.css" rel="stylesheet">-->
+    <!--<link href="fileManage2/src/css/dialogs.css" rel="stylesheet">-->
+    <!--<link href="fileManage2/src/css/main.css" rel="stylesheet">-->
+    <!--<link href="fileManage2/custom/css/style.css" rel="stylesheet">-->
+
+    <!--<script>-->
+
+
+
+    <!--</script>-->
+
+<!--</head>-->
+
+
+<!--&lt;!&ndash;&lt;!&ndash; jQuery &ndash;&gt;&ndash;&gt;-->
+
+
+<!--&lt;!&ndash;&lt;!&ndash; Lazy loading &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="hbox hbox-auto-xs hbox-auto-sm" ng-init="&ndash;&gt;-->
+<!--&lt;!&ndash;app.settings.asideFolded=false;&ndash;&gt;-->
+<!--&lt;!&ndash;app.settings.asideDock=false;">&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash; main &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="col">&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash; main header &ndash;&gt;&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="bg-light lter b-b wrapper-md">&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="row" style=" padding-right: 15px; ">&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="col-sm-6 col-xs-12">&ndash;&gt;-->
+<!--&lt;!&ndash;<span class="h3" title-name function-view-models="user.FunctionViewModels"></span>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;呜呜呜呜呜呜呜呜无无无无无无无无无无无&ndash;&gt;-->
+<!--&lt;!&ndash;&lt;!&ndash;表格部分Start&ndash;&gt;&ndash;&gt;-->
+
+<!--&lt;!&ndash;<body class="ng-cloak">&ndash;&gt;-->
+<!--&lt;!&ndash;111111111111111111111111111111&ndash;&gt;-->
+<!--&lt;!&ndash;<angular-filemanager></angular-filemanager>&ndash;&gt;-->
+<!--&lt;!&ndash;</body>&ndash;&gt;-->
+
+<!--<body>-->
+<!--<div ng-controller="FileManagerCtrl">-->
+<!--<div ng-include="config.tplPath + '/navbar.html'"></div>-->
+
+<!--<div class="container-fluid">-->
+<!--<div class="row">-->
+
+<!--<div class="col-sm-3 col-md-2 sidebar file-tree animated slow fadeIn" ng-include="config.tplPath + '/sidebar.html'" ng-show="config.sidebar && fileNavigator.history[0]"></div>-->
+
+<!--<div class="main" ng-class="config.sidebar && fileNavigator.history[0] && 'col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2'">-->
+<!--<div ng-include="config.tplPath + '/current-folder-breadcrumb.html'" ng-show="config.breadcrumb"></div>-->
+<!--<div ng-include="config.tplPath + '/' + viewTemplate" class="main-navigation clearfix"></div>-->
+<!--</div>-->
+<!--</div>-->
+<!--</div>-->
+
+<!--<div ng-include="config.tplPath + '/modals.html'"></div>-->
+<!--<div ng-include="config.tplPath + '/item-context-menu.html'"></div>-->
+<!--</div>-->
+
+
+<!--&lt;!&ndash;<angular-filemanager></angular-filemanager>&ndash;&gt;-->
+<!--</body>-->
+<!--</html>-->
+
+<!-- FileManage -->
+<!--<script src="fileManage2/src/js/filters/filters.js" type="text/javascript"></script>-->
+<!--<script src="fileManage2/src/js/providers/config.js" type="text/javascript"></script>-->
+<!--<script src="fileManage2/src/js/entities/chmod.js" type="text/javascript"></script>-->
+<!--<script src="fileManage2/src/js/entities/item.js" type="text/javascript"></script>-->
+<!--<script src="fileManage2/src/js/directives/directives.js" type="text/javascript"></script>-->
+<!--<script src="fileManage2/src/js/services/filenavigator.js" type="text/javascript"></script>-->
+<!--<script src="fileManage2/src/js/services/fileuploader.js" type="text/javascript"></script>-->
+<!--<script src="fileManage2/src/js/providers/translations.js" type="text/javascript"></script>-->
+<!--<script src="fileManage2/src/js/controllers/main.js" type="text/javascript"></script>-->
+<!--<script src="fileManage2/src/js/controllers/selector-controller.js" type="text/javascript"></script>-->
+<!--<script src="fileManage2/custom/js/custom.js" type="text/javascript" type="text/javascript"></script>-->
+
+<!doctype html>
+<html lang="en" >
+<head>
+
+    <!--<link href="fileManage2/src/css/animations.css" rel="stylesheet">-->
+    <!--<link href="fileManage2/src/css/dialogs.css" rel="stylesheet">-->
+    <!--<link href="fileManage2/src/css/main.css" rel="stylesheet">-->
+    <!--<link href="fileManage2/custom/css/style.css" rel="stylesheet">-->
+    <!--&lt;!&ndash;<link rel="stylesheet" href="fileManage2/bower_components/bootswatch/paper/bootstrap.min.css"/>&ndash;&gt;-->
+    <!--<link href="fileManage2/bower_components/jquery-uploadfile/css/uploadfile.css" rel="stylesheet">-->
+
+    <!--<script src="fileManage2/bower_components/jquery-uploadfile/js/jquery.uploadfile.js"></script>-->
+    <!--<script src="fileManage2/src/js/filters/filters.js" type="text/javascript"></script>-->
+    <!--<script src="fileManage2/src/js/providers/config.js" type="text/javascript"></script>-->
+    <!--<script src="fileManage2/src/js/entities/chmod.js" type="text/javascript"></script>-->
+    <!--<script src="fileManage2/src/js/entities/item.js" type="text/javascript"></script>-->
+    <!--<script src="fileManage2/src/js/directives/directives.js" type="text/javascript"></script>-->
+    <!--<script src="fileManage2/src/js/services/filenavigator.js" type="text/javascript"></script>-->
+    <!--<script src="fileManage2/src/js/services/fileuploader.js" type="text/javascript"></script>-->
+    <!--<script src="fileManage2/src/js/providers/translations.js" type="text/javascript"></script>-->
+    <!--<script src="fileManage2/src/js/controllers/main.js" type="text/javascript"></script>-->
+    <!--<script src="fileManage2/src/js/controllers/selector-controller.js" type="text/javascript"></script>-->
+    <!--<script src="fileManage2/custom/js/custom.js" type="text/javascript" type="text/javascript"></script>-->
+
+
+</head>
+    <body>
+<div class="hbox hbox-auto-xs hbox-auto-sm">
+    <!-- main -->
+    <!--<form>-->
+    <div class="col">
+        <!-- main header -->
+        <div class="bg-light lter b-b wrapper-md">
+            <div ng-controller="FileManagerCtrl">
+                <div ng-include="config.tplPath + '/navbar.html'"></div>
+
+                <div class="container-fluid">
+                    <div class="row">
+
+                        <!--<div class="col-sm-3 col-md-2 sidebar file-tree animated slow fadeIn" ng-include="config.tplPath + '/sidebar.html'" ng-show="config.sidebar && fileNavigator.history[0]"></div>-->
+                        <div class="col-sm-3 col-md-2 file-tree animated slow fadeIn" ng-include="config.tplPath + '/sidebar.html'" ng-show="config.sidebar && fileNavigator.history[0]"></div>
+
+                        <div class="main" ng-class="config.sidebar && fileNavigator.history[0] && 'col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2'">
+                            <div ng-include="config.tplPath + '/current-folder-breadcrumb.html'" ng-show="config.breadcrumb"></div>
+                            <div ng-include="config.tplPath + '/' + viewTemplate" class="main-navigation clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div ng-include="config.tplPath + '/modals.html'"></div>
+                <div ng-include="config.tplPath + '/item-context-menu.html'"></div>
+            </div>
+        </div>
+    </div>
+</div></body>
+    </html>

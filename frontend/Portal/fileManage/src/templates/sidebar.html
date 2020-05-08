@@ -1,0 +1,63 @@
+<br/>
+
+<ul class="nav nav-sidebar file-tree-root">
+    <li ng-repeat="item in fileNavigator.history" ng-include="'folder-branch-item'" ng-class="{'active': (item.name == fileNavigator.currentPath.join('/') && fileNavigator.isShowFolder)}"></li>
+</ul>
+<script type="text/ng-template" id="folder-branch-item">
+    <a href="" ng-click="fileNavigator.folderClick(item.item)" class="animated fast fadeInDown">
+        <i class="glyphicon glyphicon-folder-close mr2" ng-hide="isInThisPath(item.name)"></i>
+        <i class="glyphicon glyphicon-folder-open mr2"  ng-show="isInThisPath(item.name)"></i>
+        {{ (item.name.split('/').pop() || '共享文件') | strLimit : 24 }}
+    </a>
+
+    <ul class="nav nav-sidebar">
+        <li ng-repeat="item in item.nodes" ng-include="'folder-branch-item'" ng-class="{'active': (item.name == fileNavigator.currentPath.join('/') && fileNavigator.isShowFolder)}"></li>
+    </ul>
+</script>
+
+<ul class="nav nav-sidebar file-tree-root">
+    <li ng-repeat="item in fileNavigator.myFolderHistory" ng-include="'folder-branch-item2'" ng-class="{'active': (item.name == fileNavigator.myFolderCurrentPath.join('/') && fileNavigator.isShowMyFolder)}"></li>
+</ul>
+<script type="text/ng-template" id="folder-branch-item2">
+    <a href="" ng-click="fileNavigator.myFolderClick(item.item)" class="animated fast fadeInDown">
+        <i class="glyphicon glyphicon-folder-close mr2" ng-hide="isMyFolderInThisPath(item.name)"></i>
+        <i class="glyphicon glyphicon-folder-open mr2"  ng-show="isMyFolderInThisPath(item.name)"></i>
+        {{ (item.name.split('/').pop() || '我的文件') | strLimit : 24 }}
+    </a>
+
+    <ul class="nav nav-sidebar">
+        <li ng-repeat="item in item.nodes" ng-include="'folder-branch-item2'" ng-class="{'active': item.name == (fileNavigator.myFolderCurrentPath.join('/') && fileNavigator.isShowMyFolder)}"></li>
+    </ul>
+</script>
+
+<ul class="nav nav-sidebar file-tree-root">
+    <li ng-repeat="item in fileNavigator.flowHistory" ng-include="'folder-branch-item3'" ng-class="{'active': item.name == fileNavigator.flowCurrentPath.join('/')}"></li>
+</ul>
+<script type="text/ng-template" id="folder-branch-item3">
+    <a href="" ng-click="fileNavigator.myFolderClick(item.item)" class="animated fast fadeInDown">
+        <i class="glyphicon glyphicon-folder-close mr2" ng-hide="isMyFolderInThisPath(item.name)"></i>
+        <i class="glyphicon glyphicon-folder-open mr2"  ng-show="isMyFolderInThisPath(item.name)"></i>
+        {{ (item.name.split('/').pop() || '共享流程') | strLimit : 24 }}
+    </a>
+
+    <ul class="nav nav-sidebar">
+        <li ng-repeat="item in item.nodes" ng-include="'folder-branch-item3'" ng-class="{'active': item.name == fileNavigator.flowCurrentPath.join('/')}"></li>
+    </ul>
+</script>
+
+
+<ul class="nav nav-sidebar file-tree-root">
+    <li ng-repeat="item in fileNavigator.myFlowHistory" ng-include="'folder-branch-item4'" ng-class="{'active': item.name == fileNavigator.myFlowCurrentPath.join('/')}"></li>
+</ul>
+<script type="text/ng-template" id="folder-branch-item4">
+    <a href="" ng-click="fileNavigator.myFolderClick(item.item)" class="animated fast fadeInDown">
+        <i class="glyphicon glyphicon-folder-close mr2" ng-hide="isMyFolderInThisPath(item.name)"></i>
+        <i class="glyphicon glyphicon-folder-open mr2"  ng-show="isMyFolderInThisPath(item.name)"></i>
+        {{ (item.name.split('/').pop() || '我的流程') | strLimit : 24 }}
+    </a>
+
+    <ul class="nav nav-sidebar">
+        <li ng-repeat="item in item.nodes" ng-include="'folder-branch-item4'" ng-class="{'active': item.name == fileNavigator.myFlowCurrentPath.join('/')}"></li>
+    </ul>
+</script>
+

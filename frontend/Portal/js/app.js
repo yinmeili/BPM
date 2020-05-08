@@ -14,3 +14,24 @@ angular.module('app', [
     'oc.lazyLoad',
     'pascalprecht.translate'
 ]);
+
+/**
+     * jQuery inits
+     */
+    $(window.document).on('shown.bs.modal', '.modal', function() {
+        window.setTimeout(function() {
+            $('[autofocus]', this).focus();
+        }.bind(this), 100);
+    });
+
+    $(window.document).on('click', function() {
+        $('#context-menu').hide();
+    });
+
+    $(window.document).on('contextmenu', '.main-navigation .table-files td:first-child, .iconset a.thumbnail', function(e) {
+        $('#context-menu').hide().css({
+            left: e.pageX,
+            top: e.pageY
+        }).show();
+        e.preventDefault();
+    });
