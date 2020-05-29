@@ -25,6 +25,16 @@ public class ReqParam {
 	// create folder
 	private String name;
 
+	/**
+	 * 文件权限
+	 */
+	private FilePermissionVo filePermission = null;
+
+	/**
+	 * 查询关键字
+	 */
+	private String keyword = null;
+
 	public ReqParam() {
 	}
 
@@ -33,6 +43,22 @@ public class ReqParam {
 		this.mode = mode;
 		this.onlyFolders = onlyFolders;
 		this.path = path;
+	}
+
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+
+	public FilePermissionVo getFilePermission() {
+		return filePermission;
+	}
+
+	public void setFilePermission(FilePermissionVo filePermission) {
+		this.filePermission = filePermission;
 	}
 
 	public String getFileId() {

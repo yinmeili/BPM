@@ -12,12 +12,12 @@
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <div class="navbar-form navbar-right">
-        <input type="text" class="form-control " placeholder="{{'search' | translate}}..." ng-model="$parent.query">
+        <input type="text" class="form-control " placeholder="搜索..." ng-model="$parent.query">
         <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#newfolder" ng-click="touch()">
-            <i class="glyphicon glyphicon-plus"></i> {{"create_folder" | translate}}
+            <i class="glyphicon glyphicon-plus"></i> 新建文件夹
         </button>
         <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#uploadfile" ng-show="config.allowedActions.upload" ng-click="touch();clearUploadFileList()">
-            <i class="glyphicon glyphicon-upload"></i> {{"upload_file" | translate}}
+            <i class="glyphicon glyphicon-upload"></i> 上传文件
         </button>
 
           <!--<button id="infoshow" class="btn btn-default btn-sm " data-toggle="modal" data-target="#url-qrcode" ng-show="config.allowedActions.qrcode" ng-click="touch();genQRcode();">

@@ -1,11 +1,11 @@
 package com.h3bpm.web.utils;
 
-import java.io.File;
-
 /**
  * Created by tonghao on 2020/3/1.
  */
 public class Constants {
-
-//    public static final String UPLOAD_FOLDER = System.getProperty("ft.webapp") + File.separator + "uploadFiles";
+	/*
+	 * 登录用户会话
+	 */
+	public static final String SESSION_USER = "SESSION_USER";
 }

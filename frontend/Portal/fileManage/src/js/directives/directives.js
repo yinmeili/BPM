@@ -54,10 +54,10 @@
                     dragdropHeight: 200,
                     uploadStr: "选择",
                     cancelStr: "取消",
-                    "abortStr": "终止",
-                    "deleteStr": "删除",
+                    abortStr: "终止",
+                    deleteStr: "删除",
                     dynamicFormData: function () {
-                        var data = {"path": $scope.fileNavigator.currentPath.join('/')};
+                        var data = {"path": $scope.fileNavigator.currentPath.join('/'), "parentId": $scope.fileNavigator.currentFileId};
                         return data;
                     },
                     onSuccess: function (files, data, xhr, pd) {

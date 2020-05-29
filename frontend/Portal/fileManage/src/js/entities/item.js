@@ -197,7 +197,8 @@
             var data = {
                 mode: 'download',
                 preview: preview,
-                path: path
+                path: path,
+                fileId: this.tempModel.id
             };
             return path && [fileManagerConfig.downloadFileUrl, $.param(data)].join('?');
         };
@@ -311,6 +312,7 @@
             var deferred = $q.defer();
             var data = {
                 params: {
+                    fileId: self.tempModel.id,
                     mode: 'delete',
                     path: self.tempModel.fullPath()
                 }

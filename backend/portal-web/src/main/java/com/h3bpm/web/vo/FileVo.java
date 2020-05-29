@@ -1,10 +1,8 @@
-package com.h3bpm.web.entity;
+package com.h3bpm.web.vo;
 
 import java.util.Date;
 
-import com.h3bpm.web.vo.FileVo;
-
-public class File {
+public class FileVo {
 	private String id = null;
 	private String parentId = null;
 	private String type = null;
@@ -14,24 +12,17 @@ public class File {
 	private String createUserId = null;
 	private Date createTime = null;
 	private boolean isDelete = false;
+	
+	private FilePermissionVo filePermission = null;
 
-	public File(){
-		
+	public FilePermissionVo getFilePermission() {
+		return filePermission;
 	}
-	
-	public File(FileVo voBean){
-		this.id = voBean.getId();
-		this.parentId = voBean.getParentId();
-		this.type = voBean.getType();
-		this.name = voBean.getName();
-		this.dir = voBean.getDir();
-		this.fileSize = voBean.getFileSize();
-		this.createUserId = voBean.getCreateUserId();
-		this.createTime = voBean.getCreateTime();
-		this.isDelete = voBean.getIsDelete();
+
+	public void setFilePermission(FilePermissionVo filePermission) {
+		this.filePermission = filePermission;
 	}
-	
-	
+
 	public boolean getIsDelete() {
 		return isDelete;
 	}

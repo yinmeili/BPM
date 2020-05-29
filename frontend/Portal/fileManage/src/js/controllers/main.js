@@ -4,6 +4,8 @@
         '$scope', '$translate', '$cookies', 'fileManagerConfig', 'item', 'fileNavigator', 'fileUploader',
         function ($scope, $translate, $cookies, fileManagerConfig, Item, FileNavigator, FileUploader) {
 
+
+
             $scope.config = fileManagerConfig;
             $scope.reverse = false;
             $scope.predicate = ['model.type', 'model.name'];
@@ -32,9 +34,9 @@
             };
 
             $scope.touch = function (item) {
-                // item = item instanceof Item ? item : new Item();
-                // item.revert();
-                // $scope.temp = item;
+                item = item instanceof Item ? item : new Item();
+                item.revert();
+                $scope.temp = item;
 
                 // $scope.WorkflowCode = $("#sheetWorkflow").SheetUIManager().GetValue();
                 // $scope.Originator = $("#sheetUser").SheetUIManager().GetValue();
@@ -256,5 +258,83 @@
             $scope.fileNavigator.refresh();
             $translate.refresh('cn');
             //$translate.use('cn');
+
+
+            /*新建文件夹弹出框*/
+            // $scope.loadScroll = function() {
+            //     $scope.myScroll = new IScroll('.dataTables_scrollBody', {
+            //         scrollbars: true,
+            //         bounce: false,
+            //         mouseWheel: true,
+            //         interactiveScrollbars: true,
+            //         shrinkScrollbars: 'scale',
+            //         fadeScrollbars: true
+            //     });
+            // };
+            //
+            // $scope.UserOptions = {
+            //     ResignVisible:true,
+            //     Editable: true,
+            //     Visiable: true,
+            //     OrgUnitVisible: true,
+            //     V: $scope.user == undefined ? "": $scope.user.ObjectID,
+            //     PlaceHolder: '',
+            //     IsMultiple : true
+            // };
+            //
+            //
+            // var filter = $(".searchContainer");
+            // filter.find("button").unbind("click.DT").bind("click.DT", function () {
+            //     $scope.Originator = $("#sheetUser").SheetUIManager().GetValue();
+            //     $("#tabQueryInstance").dataTable().fnDraw();
+            // });
+            // filter.find("select").unbind("change.Load").bind("change.Load", function () {
+            //     $scope.Originator = $("#sheetUser").SheetUIManager().GetValue();
+            //     $("#tabQueryInstance").dataTable().fnDraw();
+            // });
+            // $scope.loadScroll();
+
+            // $(".H3Panel").BuildPanel({ excludeIDs: ["FuntionAclList"] });
+            // var code = "";
+            // CreateLigerGrid(
+            //     $("#FuntionAclList"),
+            //     GetCategoryColumns(),
+            //     $.Controller.FunctionNode.GetFunctionAclList,
+            //     true,
+            //     "98%",
+            //     null, null, null,
+            //     { code: code }
+            // );
+            //
+            // $("#divUser").SheetUser({ Editable: true, Visiable: true, Originate: true, OrgUnitVisible: true });
+
+            $(".H3Panel").BuildPanel();
+            //构造SheetUser
+            // $("#divUser").SheetUser({ Editable: true, Visiable: true, Originate: true, OrgUnitVisible: true });
+            $("#divUser").SheetUser({
+                ResignVisible:true,
+                    Editable: true,
+                Visiable: true,
+                OrgUnitVisible: true,
+                IsMultiple : true,
+                UserVisible: true
+            });
+            // function GetCategoryColumns() {
+            //     var userName = '姓名';
+            //     var view = '展示';
+            //     return [
+            //         { display: "ObjectID", name: "ObjectID", hide: true },
+            //         { display: userName, name: "UserID", width: '30%' },
+            //         {
+            //             display: view, name: "Run", width: 250, align: 'center', render: function (row) {
+            //             if (row.Run != "0") {
+            //                 return "<img src='"+_PORTALROOT_GLOBAL+ "/WFRes/images/checked.gif' />";
+            //             }
+            //             else
+            //                 return "<img src='"+_PORTALROOT_GLOBAL+ "/WFRes/images/unChecked.gif' />";
+            //         }
+            //         }
+            //     ];
+            // }
         }]);
 })(window, angular, jQuery);

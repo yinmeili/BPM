@@ -1,3 +1,13 @@
+<script>
+    $(function () {
+
+        $(".H3Panel").BuildPanel();
+//        //构造SheetUser
+        $("#divUser").SheetUser({ Editable: true, Visiable: true, GroupVisible: true, IsMultiple: true, UserVisible:true, OrgUnitVisible: true,GroupVisible:true,IsMultiple:true });
+
+    });
+</script>
+
 <div class="modal animated fadeIn" id="imagepreview">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -59,15 +69,15 @@
             <span aria-hidden="true">&times;</span>
             <span class="sr-only">{{"close" | translate}}</span>
         </button>
-        <h4 class="modal-title">{{"confirm" | translate}}</h4>
+        <h4 class="modal-title">确认框</h4>
       </div>
       <div class="modal-body">
-        {{'sure_to_delete' | translate}} <b>{{temp.model.name}}</b> ?
+        确定删除 <b>{{temp.model.name}}</b> ?
         <div ng-include data-src="'error-bar'" class="clearfix"></div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess">{{"cancel" | translate}}</button>
-        <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess" autofocus="autofocus">{{"remove" | translate}}</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess">取消</button>
+        <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess" autofocus="autofocus">确定</button>
       </div>
       </form>
     </div>
@@ -83,18 +93,18 @@
                   <span aria-hidden="true">&times;</span>
                   <span class="sr-only">{{"close" | translate}}</span>
               </button>
-              <h4 class="modal-title">{{'change_name_move' | translate}}</h4>
+              <h4 class="modal-title">编辑</h4>
             </div>
             <div class="modal-body">
-              <label class="radio">{{'enter_new_name_for' | translate}} <b>{{temp.model.name}}</b></label>
+              <label class="radio">修改名称 <b>{{temp.model.name}}</b></label>
               <input class="form-control" ng-model="temp.tempModel.name" autofocus="autofocus">
 
               <div ng-include data-src="'path-selector'" class="clearfix"></div>
               <div ng-include data-src="'error-bar'" class="clearfix"></div>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess">{{"cancel" | translate}}</button>
-              <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess">{{'rename' | translate}}</button>
+              <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess">取消</button>
+              <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess">保存</button>
             </div>
         </form>
     </div>
@@ -244,13 +254,32 @@
                   <span aria-hidden="true">&times;</span>
                   <span class="sr-only">{{"close" | translate}}</span>
               </button>
-             <h4 class="modal-title">{{'create_folder' | translate}}</h4>
+             <h4 class="modal-title">新建文件夹</h4>
             </div>
             <div class="modal-body">
-              <label class="radio">{{'folder_name' | translate}}</label>
+              <label class="radio">文件夹名称</label>
               <input class="form-control" ng-model="temp.tempModel.name" autofocus="autofocus">
               <div ng-include data-src="'error-bar'" class="clearfix"></div>
             </div>
+
+            <div class="H3Panel">
+                <table>
+                    <tr>
+                        <td data-lang="FunctionAcl.NewManager">权限选择</td>
+                        <td style="width: 250px;">
+                            <div id="divUser" style="width: 200px;"></div>
+                        </td>
+
+                    </tr>
+                </table>
+            </div>
+
+            <div id="control1" class="col-md-4">
+                <div id="Control11" data-datafield="user_permission" data-type="SheetUser" class="" style="" data-orgunitvisible="true" data-groupvisible="true">
+
+                </div>
+            </div>
+
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess">{{"cancel" | translate}}</button>
               <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess">{{'create' | translate}}</button>
@@ -410,11 +439,11 @@
   <div class="panel panel-primary mt10 mb0">
     <div class="panel-body">
         <div class="detail-sources">
-          <code class="mr5"><b>{{"source" | translate}}:</b> {{temp.model.fullPath()}}</code>
+          <code class="mr5"><b>原路径:</b> {{temp.model.fullPath()}}</code>
         </div>
         <div class="detail-sources">
-          <code class="mr5"><b>{{"destination" | translate}}:</b>{{temp.tempModel.fullPath()}}</code>
-          <a href="" class="label label-primary" ng-click="openNavigator(temp)">{{'change' | translate}}</a>
+          <code class="mr5"><b>新路径:</b>{{temp.tempModel.fullPath()}}</code>
+          <a href="" class="label label-primary" ng-click="openNavigator(temp)">更改</a>
         </div>
     </div>
   </div>

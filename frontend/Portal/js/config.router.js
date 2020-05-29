@@ -631,27 +631,53 @@ angular.module('app')
 
                         //————知识库————
                         //共享文件
-//                         .state('app.FileManage', {
-//                             url: '',
-//                             controller: "",
-//                             templateUrl: 'fileManage-index.html',
-// //                            templateUrl: 'fileManage/index.html',
-//                             resolve: {
-//                                 deps: ['$ocLazyLoad',
-//                                     function ($ocLazyLoad) {
-//                                         return $ocLazyLoad.load([
-//                                             'js/controllers/FileManage/FileManageController.js'
-//                                         ]);
-//                                     }
-//                                 ]
-//                             }
-//                         })
-
-                        //已办
-                        .state('app.FileManage', {
+                        .state('app.allFiles', {
                             url: '',
                             controller: "",
-                            templateUrl: 'fileManage/fileManage-index.html',
+                            templateUrl: 'fileManage/src/templates/allFiles/index.html',
+                            resolve: {
+                                deps: ['$ocLazyLoad',
+                                    function ($ocLazyLoad) {
+                                        return $ocLazyLoad.load([
+
+                                            'WFRes/_Scripts/MvcSheet/SheetControls.js',
+                                            'WFRes/_Scripts/MvcSheet/MvcSheetUI.js',
+                                            'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js',
+                                            'WFRes/_Scripts/MvcSheet/Controls/MvcSheetControls.js',
+                                            'WFRes/_Scripts/H3AdminPlugins.js'
+                                            // 'WFRes/_Scripts/sheet.js',
+                                            // 'WFRes/_Scripts/ligerUI/ligerui.all.js',
+                                            // 'WFRes/_Scripts/MvcSheet/MvcSheetAll.js'
+                                            //'fileManage/src/js/controllers/main.js'
+                                            // 'fileManage2/bower_components/jquery-uploadfile/js/jquery.uploadfile.js'
+                                        ]);
+                                    }
+                                ]
+                            }
+                        })
+
+                        //我的文件
+                        .state('app.myFiles', {
+                            url: '',
+                            controller: "",
+                            templateUrl: 'fileManage/src/templates/myFiles/index.html',
+                            resolve: {
+                                deps: ['$ocLazyLoad',
+                                    function ($ocLazyLoad) {
+                                        return $ocLazyLoad.load([
+                                            // 'fileManage2/src/js/controllers/main.js',
+                                            // 'fileManage2/bower_components/jquery-uploadfile/js/jquery.uploadfile.js'
+                                        ]);
+                                    }
+                                ]
+                            }
+                        })
+
+                        //我的文件
+                        .state('app.recycleFiles', {
+                            url: '',
+                            controller: "",
+                            templateUrl: 'fileManage/src/templates/recycleFiles/index.html',
                             resolve: {
                                 deps: ['$ocLazyLoad',
                                     function ($ocLazyLoad) {

@@ -9,37 +9,36 @@ import com.h3bpm.web.entity.File;
  */
 public class FileDesc {
 
-    // list
+	// list
 	private String id;
-    private String name;
-    private String rights;
-    private long size;
-    private Date date;
-    private String type;
+	private String name;
+	private String rights;
+	private long size;
+	private Date date;
+	private String type;
 
-    // rename remove
-    private boolean success;
-    private String error;
+	// rename remove
+	private boolean success;
+	private String error;
 
-    // 文件内容
-    private String result;
+	// 文件内容
+	private String result;
 
+	private FilePermissionVo filePermission = null;
 
-    public FileDesc() {
-    }
-    
-    public FileDesc(File file) {
-    	this.id = file.getId();
-        this.name = file.getName();
-        this.rights = null;
-        this.size = file.getFileSize();
-        this.date = file.getCreateTime();
-        this.type = file.getType();
-    }
+	public FileDesc() {
+	}
 
-    
-    
-    public String getId() {
+	public FileDesc(File file) {
+		this.id = file.getId();
+		this.name = file.getName();
+		this.rights = null;
+		this.size = file.getFileSize();
+		this.date = file.getCreateTime();
+		this.type = file.getType();
+	}
+
+	public String getId() {
 		return id;
 	}
 
@@ -48,99 +47,110 @@ public class FileDesc {
 	}
 
 	/**
-     * @param name   文件名
-     * @param rights 权限
-     * @param size   大小
-     * @param date   最后修改日期
-     * @param type   文件类型
-     */
-    public FileDesc(String name, String rights, long size, Date date, String type) {
-        this.name = name;
-        this.rights = rights;
-        this.size = size;
-        this.date = date;
-        this.type = type;
-    }
+	 * @param name
+	 *            文件名
+	 * @param rights
+	 *            权限
+	 * @param size
+	 *            大小
+	 * @param date
+	 *            最后修改日期
+	 * @param type
+	 *            文件类型
+	 */
+	public FileDesc(String name, String rights, long size, Date date, String type) {
+		this.name = name;
+		this.rights = rights;
+		this.size = size;
+		this.date = date;
+		this.type = type;
+	}
 
+	public FileDesc(String name, long size, Date date, String type) {
+		this.name = name;
+		this.size = size;
+		this.date = date;
+		this.type = type;
+	}
 
-    public FileDesc(String name, long size, Date date, String type) {
-        this.name = name;
-        this.size = size;
-        this.date = date;
-        this.type = type;
-    }
+	public FileDesc(boolean success, String error) {
+		this.success = success;
+		this.error = error;
+	}
 
+	public FileDesc(String result) {
+		this.result = result;
+	}
 
-    public FileDesc(boolean success, String error) {
-        this.success = success;
-        this.error = error;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public FileDesc(String result) {
-        this.result = result;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getRights() {
+		return rights;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setRights(String rights) {
+		this.rights = rights;
+	}
 
-    public String getRights() {
-        return rights;
-    }
+	public long getSize() {
+		return size;
+	}
 
-    public void setRights(String rights) {
-        this.rights = rights;
-    }
+	public void setSize(long size) {
+		this.size = size;
+	}
 
-    public long getSize() {
-        return size;
-    }
+	public Date getDate() {
+		return date;
+	}
 
-    public void setSize(long size) {
-        this.size = size;
-    }
+	public void setDate(Date date) {
+		this.date = date;
+	}
 
-    public Date getDate() {
-        return date;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
+	public void setType(String type) {
+		this.type = type;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public boolean isSuccess() {
+		return success;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public void setSuccess(boolean success) {
+		this.success = success;
+	}
 
-    public boolean isSuccess() {
-        return success;
-    }
+	public String getError() {
+		return error;
+	}
 
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
+	public void setError(String error) {
+		this.error = error;
+	}
 
-    public String getError() {
-        return error;
-    }
+	public String getResult() {
+		return result;
+	}
 
-    public void setError(String error) {
-        this.error = error;
-    }
+	public void setResult(String result) {
+		this.result = result;
+	}
 
-    public String getResult() {
-        return result;
-    }
+	public FilePermissionVo getFilePermission() {
+		return filePermission;
+	}
 
-    public void setResult(String result) {
-        this.result = result;
-    }
+	public void setFilePermission(FilePermissionVo filePermission) {
+		this.filePermission = filePermission;
+	}
 }

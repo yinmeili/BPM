@@ -122,7 +122,8 @@ angular.module('app')
   })
   .constant('ControllerConfig', {
       Organization: {
-          LoginIn: "Organization/LoginIn",
+          // LoginIn: "Organization/LoginIn",
+          LoginIn: "login/LoginIn",
           LoginOut: "Organization/LoginOut",
           GetCurrentUser: "Organization/GetCurrentUser",//获取当前登录用户
           GetUserInfo: "PersonalInfo/GetUserInfo"//获取用户信息（传入用户ID）
