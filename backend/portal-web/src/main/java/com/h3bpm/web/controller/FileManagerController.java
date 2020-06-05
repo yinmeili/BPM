@@ -44,11 +44,11 @@ import com.h3bpm.web.utils.UserSessionUtils;
 import com.h3bpm.web.vo.FileDesc;
 import com.h3bpm.web.vo.FileDescList;
 import com.h3bpm.web.vo.FileDescSingle;
+import com.h3bpm.web.vo.FilePermissionVo;
 import com.h3bpm.web.vo.FileVo;
-import com.h3bpm.web.vo.OrgInfoVo;
 import com.h3bpm.web.vo.ReqParam;
 import com.h3bpm.web.vo.ReqParamList;
-import com.h3bpm.web.vo.UserInfoVo;
+import com.h3bpm.web.vo.ReqUpdateFile;
 import com.h3bpm.web.vo.UserSessionInfo;
 import com.jcraft.jsch.SftpException;
 
@@ -175,12 +175,11 @@ public class FileManagerController extends ControllerBase {
 		return result;
 	}
 
-	@RequestMapping(value = "/renameFile", produces = "application/json;charset=utf8")
+	@RequestMapping(value = "/updateFile", produces = "application/json;charset=utf8")
 	@ResponseBody
-	public FileDescSingle renameFile(@RequestBody ReqParamList paramList) {
-		ReqParam param = paramList.getParams();
-		String pathStr = param.getPath();
-		String newPathStr = param.getNewPath();
+	public FileDescSingle updateFile(@RequestBody ReqUpdateFile reqUpdateFile) {
+		String pathStr = reqUpdateFile.getOldPath();
+		String newPathStr = reqUpdateFile.getNewPath();
 		// logger.info("path :" + pathStr);
 		// logger.info("newPath: " + newPathStr);
 		pathStr = pathStr.replace("\\", File.separator);
@@ -189,56 +188,20 @@ public class FileManagerController extends ControllerBase {
 		Path sourcePath = Paths.get(uploadPath + pathStr);
 		Path desPath = Paths.get(uploadPath + newPathStr);
 
+		com.h3bpm.web.entity.File fileEntity = fileService.getFileById(reqUpdateFile.getFileId());
+		FileVo fileVo = new FileVo(fileEntity);
+
+		fileVo.setParentId(reqUpdateFile.getParentId());
+		fileVo.setDir(newPathStr != null ? newPathStr : pathStr);
+		fileVo.setFilePermission(reqUpdateFile.getFilePermission());
+
+		fileService.updateFile(fileVo);
 		FileDesc desc = null;
 		// List<FileDesc> descList = new ArrayList<>();
 		// FileDescList result = new FileDescList(descList);
 		FileDescSingle fileDescSingle = new FileDescSingle();
 
 		String errorMsg = "";
-		if (Files.notExists(sourcePath)) {
-			if (Files.isDirectory(sourcePath)) {
-				errorMsg = "源文件夹";
-			} else {
-				errorMsg = "源文件";
-			}
-			desc = new FileDesc(false, errorMsg + "不存在");
-			// descList.add(desc);
-			fileDescSingle.setResult(desc);
-			return fileDescSingle;
-		}
-
-		if (!Files.exists(sourcePath) && !Files.notExists(sourcePath)) {
-			if (Files.isDirectory(sourcePath)) {
-				errorMsg = "源文件夹";
-			} else {
-				errorMsg = "源文件";
-			}
-			desc = new FileDesc(false, errorMsg + "不可访问");
-			// descList.add(desc);
-			fileDescSingle.setResult(desc);
-			return fileDescSingle;
-		}
-
-		// 貌似前台有检测了
-		if (!Files.notExists(desPath)) {
-			if (Files.isDirectory(sourcePath)) {
-				errorMsg = "目标文件夹";
-			} else {
-				errorMsg = "目标文件";
-			}
-			desc = new FileDesc(false, errorMsg + "已存在");
-			// descList.add(desc);
-			fileDescSingle.setResult(desc);
-			return fileDescSingle;
-		}
-
-		try {
-			Files.move(sourcePath, desPath);
-			desc = new FileDesc(true, "");
-		} catch (IOException e) {
-			e.printStackTrace();
-			desc = new FileDesc(false, "重命名时出错");
-		}
 		fileDescSingle.setResult(desc);
 		return fileDescSingle;
 	}
@@ -380,26 +343,26 @@ public class FileManagerController extends ControllerBase {
 		fileVo.setCreateTime(new Date());
 
 		com.h3bpm.web.vo.FilePermissionVo filePermission = param.getFilePermission();
-//		com.h3bpm.web.vo.FilePermissionVo filePermission = new com.h3bpm.web.vo.FilePermissionVo();
+		// com.h3bpm.web.vo.FilePermissionVo filePermission = new com.h3bpm.web.vo.FilePermissionVo();
 		fileVo.setFilePermission(filePermission);
 
-//		List<OrgInfoVo> orgInfoList = new ArrayList<OrgInfoVo>();
-//		List<UserInfoVo> userInfoList = new ArrayList<UserInfoVo>();
-//		for (int i = 0; i <= 100; i++) {
-//			OrgInfoVo org = new OrgInfoVo();
-//			org.setId("aaaaaaaaaaaaaaaaaaaaa" + i);
-//			org.setName("哒哒哒哒哒哒多多多多多多" + i);
-//
-//			orgInfoList.add(org);
-//
-//			UserInfoVo user = new UserInfoVo();
-//			user.setId("bbbbbbbbbbbbbbbbbbbb" + i);
-//			user.setName("哈哈哈哈哈哈哈哈哈哈哈哈哈哈" + i);
-//
-//			userInfoList.add(user);
-//		}
-//		filePermission.setOrgList(orgInfoList);
-//		filePermission.setUserList(userInfoList);
+		// List<OrgInfoVo> orgInfoList = new ArrayList<OrgInfoVo>();
+		// List<UserInfoVo> userInfoList = new ArrayList<UserInfoVo>();
+		// for (int i = 0; i <= 100; i++) {
+		// OrgInfoVo org = new OrgInfoVo();
+		// org.setId("aaaaaaaaaaaaaaaaaaaaa" + i);
+		// org.setName("哒哒哒哒哒哒多多多多多多" + i);
+		//
+		// orgInfoList.add(org);
+		//
+		// UserInfoVo user = new UserInfoVo();
+		// user.setId("bbbbbbbbbbbbbbbbbbbb" + i);
+		// user.setName("哈哈哈哈哈哈哈哈哈哈哈哈哈哈" + i);
+		//
+		// userInfoList.add(user);
+		// }
+		// filePermission.setOrgList(orgInfoList);
+		// filePermission.setUserList(userInfoList);
 
 		fileService.createFile(fileVo);
 

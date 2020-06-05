@@ -97,8 +97,10 @@ public class FileService extends ApiDataService {
 	public void updateFile(FileVo fileVo) {
 		fileMapper.updateFile(new File(fileVo));
 
-		filePermissionMapper.deleteFilePermissionByFileId(fileVo.getId());
-		filePermissionMapper.createFilePermission(new FilePermission(fileVo.getFilePermission()));
+		if (fileVo.getFilePermission() != null) {
+			filePermissionMapper.deleteFilePermissionByFileId(fileVo.getId());
+			filePermissionMapper.createFilePermission(new FilePermission(fileVo.getFilePermission()));
+		}
 	}
 
 	/**

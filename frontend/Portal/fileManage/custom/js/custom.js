@@ -8,6 +8,7 @@ app.config(['fileManagerConfigProvider', function (config) {
         removeUrl: fileManagerApiUrl + 'removeFile',
         getContentUrl: fileManagerApiUrl + 'getContent',
         editUrl: fileManagerApiUrl + 'saveFile',
+        updateUrl: fileManagerApiUrl + 'updateFile',
         downloadFileUrl: fileManagerApiUrl + 'previewFile',
         createFolderUrl: fileManagerApiUrl + 'createFolder',
         listMyFolderUrl: fileManagerApiUrl + 'listMyFolder',

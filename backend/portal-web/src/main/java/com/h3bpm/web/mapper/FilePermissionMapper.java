@@ -15,6 +15,6 @@ public interface FilePermissionMapper {
 	@Insert({"INSERT INTO `ot_file_permission` (`file_id`, `orgs`, `users`) VALUES (#{fileId}, #{orgs}, #{users})"})
 	public void createFilePermission(FilePermission filePermission);
 	
-	@Delete({"DELETE FROM `ot_file_permission` WHERE file_id = ${fileId}"})
+	@Delete({"DELETE FROM `ot_file_permission` WHERE file_id = '${fileId}'"})
 	public void deleteFilePermissionByFileId(@Param("fileId") String fileId);
 }

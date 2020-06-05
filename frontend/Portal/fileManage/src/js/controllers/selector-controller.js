@@ -13,6 +13,7 @@
 
         $scope.fileNavigator = new FileNavigator();
         $rootScope.select = function(item, temp) {
+            temp.tempModel.id = item.model.id;
             temp.tempModel.path = item.model.fullPath().split('/');
             $('#selector').modal('hide');
         };

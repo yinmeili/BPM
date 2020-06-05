@@ -3,7 +3,7 @@
         <tr>
             <th>
                 <a href="" ng-click="order('model.name')">
-                    {{"name" | translate}}
+                    名称
                     <span class="sortorder" ng-show="predicate[1] === 'model.name'" ng-class="{reverse:reverse}"></span>
                 </a>
             </th>
@@ -21,7 +21,7 @@
                 {{"no_folders_in_folder" | translate}}...
             </td>
             <td class="text-right">
-                <button class="btn btn-sm btn-default" ng-click="fileNavigator.upDir()">{{"go_back" | translate}}</button>
+                <button class="btn btn-sm btn-default" ng-click="fileNavigator.upDir()">返回</button>
             </td>
         </tr>
         <tr ng-show="!fileNavigator.requesting && fileNavigator.error">
@@ -38,7 +38,7 @@
             </td>
             <td class="text-right">
                 <button class="btn btn-sm btn-default" ng-click="select(item, temp)">
-                    <i class="glyphicon glyphicon-hand-up"></i> {{"select_this" | translate}}
+                    <i class="glyphicon glyphicon-hand-up"></i> 选择
                 </button>
             </td>
         </tr>

@@ -2,6 +2,8 @@ package com.h3bpm.web.vo;
 
 import java.util.Date;
 
+import com.h3bpm.web.entity.File;
+
 public class FileVo {
 	private String id = null;
 	private String parentId = null;
@@ -12,8 +14,24 @@ public class FileVo {
 	private String createUserId = null;
 	private Date createTime = null;
 	private boolean isDelete = false;
-	
+
 	private FilePermissionVo filePermission = null;
+
+	public FileVo() {
+		
+	}
+	
+	public FileVo(File entity) {
+		this.id = entity.getId();
+		this.parentId = entity.getParentId();
+		this.type = entity.getType();
+		this.name = entity.getName();
+		this.dir = entity.getDir();
+		this.fileSize = entity.getFileSize();
+		this.createUserId = entity.getCreateUserId();
+		this.createTime = entity.getCreateTime();
+		this.isDelete = entity.getIsDelete();
+	}
 
 	public FilePermissionVo getFilePermission() {
 		return filePermission;

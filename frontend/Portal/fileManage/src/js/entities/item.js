@@ -122,6 +122,29 @@
             return deferred.promise;
         };
 
+        Item.prototype.updateFile = function () {
+            var self = this;
+            var deferred = $q.defer();
+            var data = {
+
+                    fileId: self.model.id,
+                    parentId: self.tempModel.id,
+                    oldPath: self.model.fullPath(),
+                    newPath: self.tempModel.fullPath()
+
+            };
+            self.inprocess = true;
+            self.error = '';
+            $http.post(fileManagerConfig.updateUrl, data).success(function (data) {
+                self.deferredHandler(data, deferred);
+            }).error(function (data) {
+                self.deferredHandler(data, deferred, $translate.instant('error_renaming'));
+            })['finally'](function () {
+                self.inprocess = false;
+            });
+            return deferred.promise;
+        };
+
         Item.prototype.copy = function () {
             var self = this;
             var deferred = $q.defer();

@@ -216,6 +216,18 @@
                 });
             };
 
+            $scope.updateFile = function (item) {
+                var samePath = item.tempModel.path.join() === item.model.path.join();
+                if (samePath && $scope.fileNavigator.fileNameExists(item.tempModel.name)) {
+                    item.error = $translate.instant('error_invalid_filename');
+                    return false;
+                }
+                item.updateFile().then(function () {
+                    $scope.fileNavigator.refresh();
+                    $scope.modal('rename', true);
+                });
+            };
+
             $scope.createFolder = function (item) {
                 var name = item.tempModel.name && item.tempModel.name.trim();
                 item.tempModel.type = 'dir';
