@@ -1,5 +1,6 @@
 body {
-  padding-top: 55px;
+  /*padding-top: 55px;*/
+  /*padding-top: 65.6px;!*留出的位置和导航栏一样的高度*!*/
   font-size: 14px;
 }
 
@@ -19,7 +20,8 @@ body {
 .navbar .navbar-brand {
   font-size: inherit;
   height: 55px;
-  line-height: 100%;
+  /*line-height: 100%;*/
+  line-height: 55px;/*使得垂直居中*/
 }
 
 .navbar .navbar-form {
@@ -27,7 +29,7 @@ body {
   border-top: none;
   box-shadow: none;
   padding: 0 10px;
-  margin-top: 10px;
+  /*margin-top: 10px;*//*使得上下居中*/
 }
 
 .breadcrumb {
@@ -99,6 +101,8 @@ a:hover {
 
 .main {
   padding: 0;
+  float: left;/*浮动和左边的排列*/
+  margin: 15px 0;/*使得左边和右边没有缝隙*/
 }
 
 .main .page-header {
