@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.h3bpm:h3bpm-common:10.7.3-RELEASE">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.m2/repository/com/h3bpm/h3bpm-common/10.7.3-RELEASE/h3bpm-common-10.7.3-RELEASE.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.m2/repository/com/h3bpm/h3bpm-common/10.7.3-RELEASE/h3bpm-common-10.7.3-RELEASE-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.m2/repository/com/h3bpm/h3bpm-common/10.7.3-RELEASE/h3bpm-common-10.7.3-RELEASE-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

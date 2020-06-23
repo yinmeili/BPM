@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.authine.cloudpivot.engine:cloudpivot-engine-api:10.7.1-RELEASE">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.m2/repository/com/authine/cloudpivot/engine/cloudpivot-engine-api/10.7.1-RELEASE/cloudpivot-engine-api-10.7.1-RELEASE.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.m2/repository/com/authine/cloudpivot/engine/cloudpivot-engine-api/10.7.1-RELEASE/cloudpivot-engine-api-10.7.1-RELEASE-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.m2/repository/com/authine/cloudpivot/engine/cloudpivot-engine-api/10.7.1-RELEASE/cloudpivot-engine-api-10.7.1-RELEASE-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

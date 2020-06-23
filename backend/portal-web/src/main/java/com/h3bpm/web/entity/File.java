@@ -1,5 +1,6 @@
 package com.h3bpm.web.entity;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 import com.h3bpm.web.vo.FileVo;
@@ -14,6 +15,7 @@ public class File {
 	private String createUserId = null;
 	private Date createTime = null;
 	private boolean isDelete = false;
+	private Timestamp deleteTime = null; //显示删除时间
 
 	public File(){
 		
@@ -102,6 +104,14 @@ public class File {
 
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
+	}
+
+	public Timestamp getDeleteTime() {
+		return deleteTime;
+	}
+
+	public void setDeleteTime(Timestamp deleteTime) {
+		this.deleteTime = deleteTime;
 	}
 
 }

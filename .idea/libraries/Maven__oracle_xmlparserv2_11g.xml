@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: oracle:xmlparserv2:11g">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.m2/repository/oracle/xmlparserv2/11g/xmlparserv2-11g.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.m2/repository/oracle/xmlparserv2/11g/xmlparserv2-11g-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.m2/repository/oracle/xmlparserv2/11g/xmlparserv2-11g-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

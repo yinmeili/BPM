@@ -1,7 +1,9 @@
 package com.h3bpm.web.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -83,6 +85,9 @@ public class FileService extends ApiDataService {
 	public void deleteFile(String fileId) {
 		File file = fileMapper.getFileById(fileId);
 		file.setIsDelete(true);
+		file.setDeleteTime(new Timestamp(new Date().getTime()));
+
+		System.out.println("操作已经成功.....");
 
 		fileMapper.updateFile(file);
 	}
