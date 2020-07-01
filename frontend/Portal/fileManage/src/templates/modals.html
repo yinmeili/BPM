@@ -3,7 +3,7 @@
 
         $(".H3Panel").BuildPanel();
 //        //构造SheetUser
-        $("#divUser").SheetUser({ Editable: true, Visiable: true, GroupVisible: true, IsMultiple: true, UserVisible:true, OrgUnitVisible: true,GroupVisible:true,IsMultiple:true });
+        $("#divUser").SheetUser({ Editable: true, Visiable: true, GroupVisible: true, IsMultiple: true, UserVisible:true, OrgUnitVisible: true });
 
     });
 </script>
@@ -285,25 +285,27 @@
             </div>
             <div class="modal-body">
               <label class="radio">文件夹名称</label>
-              <input class="form-control" ng-model="temp.tempModel.name" autofocus="autofocus">
-              <div ng-include data-src="'error-bar'" class="clearfix"></div>
-            </div>
+              <input class="form-control" ng-model="temp.tempModel.name" autofocus="autofocus"/>
+              <div data-src="'error-bar'" class="clearfix"></div>
+                <div class="H3Panel">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table>
+                                <tr>
+                                    <td data-lang="FunctionAcl.NewManager">权限选择</td>
+                                    <td style="width: 250px;">
+                                        <div id="divUser" style="width: 200px;"></div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="H3Panel">
-                <table>
-                    <tr>
-                        <td data-lang="FunctionAcl.NewManager">权限选择</td>
-                        <td style="width: 250px;">
-                            <div id="divUser" style="width: 200px;"></div>
-                        </td>
+                <div id="control1" class="col-md-4">
+                    <div id="Control11" data-datafield="user_permission" data-type="SheetUser" class="" style="" data-orgunitvisible="true" data-groupvisible="true">
 
-                    </tr>
-                </table>
-            </div>
-
-            <div id="control1" class="col-md-4">
-                <div id="Control11" data-datafield="user_permission" data-type="SheetUser" class="" style="" data-orgunitvisible="true" data-groupvisible="true">
-
+                    </div>
                 </div>
             </div>
 
@@ -315,6 +317,106 @@
     </div>
   </div>
 </div>
+
+<!--新建文件夹的模态框-->
+<script type="text/ng-template" id="newfolder.html">
+
+    <form class="bs-example form-horizontal" ng-submit="createFolder(temp)">
+        <div class="modal-header">
+            <button type="button" class="close"
+                    data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+                ×
+            </button>
+            <h4 class="modal-title" id="myModalLabel" style="color:#778CA2;">
+                新建文件夹
+            </h4>
+        </div>
+        <div class="modal-body" style="padding-left:50px;padding-right:50px;">
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="form-group" style="color:#778CA2;">
+                        <div class="row" style="margin-bottom: 20px;">
+                            <div class="col-md-3">文件夹名称</div>
+                            <div class="col-md-9 input-group" style="float: left;">
+                                <input class="form-control" type="text" id="fileName" style="border:1px solid #d9d9d9;
+    background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                                       ng-model="temp.tempModel.name" autofocus="autofocus"/>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-bottom: 20px;">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <span class="col-md-3">是否公开</span>
+                                    <label class="col-md-3">是 <input type="radio" name="open" value="1" ng-click="WasShow()" checked></label>
+                                    <label class="col-md-3">否 <input type="radio" name="open" value="0" ng-click="WasShow()"></label><br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" id="permission">
+                            <div class="col-md-3">权限选择</div>
+                            <div class="col-md-9 input-group">
+                                <div ui-jq="SheetUser" ui-options="WasAgentOptions" id="WasView"
+                                     class="" style="" data-orgunitvisible="true" data-groupvisible="true">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess">{{"cancel" | translate}}</button>
+            <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess">{{'create' | translate}}</button>
+        </div>
+    </form>
+
+</script>
+
+<!--上传文件权限-->
+<script type="text/ng-template" id="uploadfile.html">
+    <div class="modal-header">
+        <button type="button" class="close"
+                data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+            ×
+        </button>
+        <h4 class="modal-title" id="myModalLabel1" style="color:#778CA2;">
+            上传
+        </h4>
+    </div>
+    <!--弹框提示-->
+    <div class="modal-body" style="padding-left:50px;padding-right:50px;">
+        <form class="bs-example form-horizontal H3Panel">
+            <div class="row">
+                <div class="col-md-10">
+                    <div class="form-group" style="color:#778CA2;">
+                        <div class="row" style="margin-bottom: 20px;">
+                            <div jquery-upload="">选择</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-3 col-sm-3">权限选择</div>
+                            <div class="col-md-9 col-sm-9 input-group">
+                                <div ui-jq="SheetUser" ui-options="WasAgentOptions"
+                                     class="" style="" data-orgunitvisible="true" data-groupvisible="true">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                </div>
+            </div>
+        </form>
+    </div>
+    <!--<div class="modal-footer">-->
+        <!--<button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess">{{"cancel" | translate}}</button>-->
+        <!--<button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess">{{'create' | translate}}</button>-->
+    <!--</div>-->
+    <div class="modal-footer">
+        <div id="extrabutton1" class="ajax-file-upload-green" ng-click="startUploadFile()" >开始上传</div>
+    </div>
+</script>
 
 <!--<div class="modal animated fadeIn" id="uploadfile">
   <div class="modal-dialog">

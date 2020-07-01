@@ -648,7 +648,7 @@ angular.module('app')
                                             // 'WFRes/_Scripts/sheet.js',
                                             // 'WFRes/_Scripts/ligerUI/ligerui.all.js',
                                             // 'WFRes/_Scripts/MvcSheet/MvcSheetAll.js'
-                                            //'fileManage/src/js/controllers/main.js'
+                                            // 'fileManage/src/js/controllers/main.js'
                                             // 'fileManage2/bower_components/jquery-uploadfile/js/jquery.uploadfile.js'
                                         ]);
                                     }
@@ -689,6 +689,31 @@ angular.module('app')
                                 ]
                             }
                         })
+
+                        //弹出框
+                        .state('app.whtFiles', {
+                                url: '',
+                                controller: "FileManagerCtrl",
+                                templateUrl: 'fileManage/src/templates/whtFiles/index.html',
+                                resolve: {
+                                    deps: ['$ocLazyLoad',
+                                        function ($ocLazyLoad) {
+                                            return $ocLazyLoad.load([
+                                                'WFRes/_Content/themes/ligerUI/Aqua/css/ligerui-all.min.css',
+                                                'WFRes/assets/stylesheets/sheet.css',
+                                                'WFRes/_Scripts/jquery/jquery.lang.js',
+                                                'WFRes/_Scripts/ligerUI/ligerui.all.min.js',
+                                                'WFRes/_Scripts/MvcSheet/SheetControls.js',
+                                                'WFRes/_Scripts/MvcSheet/MvcSheetUI.js',
+                                                'js/controllers/ProcessCenter/MyAgentsController.js',
+                                                'fileManage/src/js/controllers/main.js',
+                                                'js/services/notify.js'
+                                            ]);
+                                        }
+                                    ]
+                                }
+                            })
+
                 // End
             }
         ]
