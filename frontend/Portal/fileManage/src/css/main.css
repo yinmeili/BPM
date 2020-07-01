@@ -13,6 +13,19 @@ body {
   min-height: 32px;
 }
 
+/* 修改顶部导航栏颜色 */
+.navbar-inverse {
+  /* background-color: #222;
+  border-color: #080808; */
+  background-color:#efa105;
+  border-color: #efa105;
+}
+.navbar-inverse .navbar-brand {
+  /* color: #9d9d9d; */
+  /* color:#58666e; */
+  color: hsla(0, 0%, 100%, 0.5);
+}
+
 .navbar .navbar-toggle {
   padding: 5px 10px;
 }

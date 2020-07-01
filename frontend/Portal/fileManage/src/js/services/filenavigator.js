@@ -1,10 +1,9 @@
 (function(angular) {
     'use strict';
-    app.service('fileNavigator', [
-        '$http', '$q', 'fileManagerConfig', 'item', function ($http, $q, fileManagerConfig, Item) {
+	app.service('fileNavigator', [
+		'$http', '$q', 'fileManagerConfig', 'item', function ($http, $q, fileManagerConfig, Item) {
 
         $http.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-
         var FileNavigator = function() {
             this.requesting = false;
             this.fileList = [];
@@ -12,9 +11,9 @@
             this.history = [];
             this.error = '';
 
-            this.currentFileId = '';
-
-
+						this.currentFileId = '';
+						this.currentParentId = '';
+            
             this.myFolderCurrentPath = ["我的文件"];
             this.myFolderFileList = [];
             this.myFolderHistory = [{name:"我的文件"}];
@@ -30,7 +29,7 @@
             this.isShowFolder = false;
             this.isShowMyFolder = false;
             this.isShowFlow = false;
-            this.isShowMyFlow = false;
+						this.isShowMyFlow = false;
 
         };
 
@@ -56,9 +55,10 @@
         FileNavigator.prototype.list = function() {
             var self = this;
             var deferred = $q.defer();
-            var path = self.currentPath.join('/');
+						var path = self.currentPath.join('/');
             var data = {params: {
-                fileId: self.currentFileId,
+								fileId: self.currentFileId,
+								parentId: self.currentParentId,
                 mode: 'list',
                 onlyFolders: false,
                 path: '/' + path
@@ -108,6 +108,7 @@
             var self = this;
             var path = self.currentPath.join('/');
             return self.list().then(function(data) {
+								self.currentParentId = data.parentId;
                 self.fileList = (data.result || []).map(function(file) {
                     return new Item(file, self.currentPath);
                 });
@@ -227,7 +228,7 @@
             }
         };
 
-        FileNavigator.prototype.folderClick = function(item) {
+        /* FileNavigator.prototype.folderClick = function(item) {
             this.currentPath = [];
             this.currentFileId = '';
 
@@ -236,7 +237,19 @@
                 this.currentPath = item.model.fullPath().split('/').splice(1);
             }
             this.refresh();
-        };
+				}; */
+				FileNavigator.prototype.folderClick = function (item) {
+					this.currentPath = [];
+					this.currentFileId = '';
+					this.currentParentId='';
+
+					if (item && item.isFolder()) {
+						this.currentFileId = item.model.id;
+						this.currentParentId=item.model.parentId;
+						this.currentPath = item.model.fullPath().split('/').splice(1);
+					}
+					this.refresh();
+				};
 
         FileNavigator.prototype.myFolderClick = function(item) {
             //this.myFolderCurrentPath = [];
@@ -246,17 +259,20 @@
             this.myFolderRefresh();
         };
 
-        FileNavigator.prototype.upDir = function() {
-            if (this.currentPath[0]) {
-                this.currentPath = this.currentPath.slice(0, -1);
-                this.refresh();
-            }
-        };
+            FileNavigator.prototype.upDir = function () {
+                if (this.currentPath[0]) {
+										this.currentPath = this.currentPath.slice(0, -1);
+										//用于返回上一级操作，将当前文件夹的父id赋值给当前id
+										this.currentFileId = this.currentParentId;
+                    this.refresh();
+                }
+						};
 
-        FileNavigator.prototype.goTo = function(index) {
+        /* FileNavigator.prototype.goTo = function(index) {
+					// debugger;
             this.currentPath = this.currentPath.slice(0, index + 1);
             this.refresh();
-        };
+        }; */
 
         FileNavigator.prototype.fileNameExists = function(fileName) {
             for (var item in this.fileList) {
