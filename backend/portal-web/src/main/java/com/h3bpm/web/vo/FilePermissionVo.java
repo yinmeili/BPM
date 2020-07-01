@@ -1,17 +1,16 @@
 package com.h3bpm.web.vo;
 
+import com.h3bpm.web.entity.FilePermission;
+import com.h3bpm.web.utils.ObjectUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.io.IOException;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.h3bpm.web.entity.FilePermission;
-import com.h3bpm.web.utils.ObjectUtil;
-
 public class FilePermissionVo {
 	private String fileId = null;
-	private List<OrgInfoVo> orgList = null;
-	private List<UserInfoVo> userList = null;
+	private List<OrgInfoVo> orgList = null;	//原版
+	private List<UserInfoVo> userList = null;	//原版
 
 	public FilePermissionVo() {
 
@@ -23,7 +22,7 @@ public class FilePermissionVo {
 		if(entityBean == null){
 			return;
 		}
-		
+
 		this.fileId = entityBean.getFileId();
 		try {
 			this.orgList = (List<OrgInfoVo>) ObjectUtil.unPersistenceObject(entityBean.getOrgs());

@@ -1,25 +1,20 @@
 package com.h3bpm.web.service;
 
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.UUID;
-import java.util.Date;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.h3bpm.web.entity.File;
 import com.h3bpm.web.entity.FilePermission;
 import com.h3bpm.web.mapper.FileMapper;
 import com.h3bpm.web.mapper.FilePermissionMapper;
 import com.h3bpm.web.utils.Constants;
 import com.h3bpm.web.utils.UserSessionUtils;
-import com.h3bpm.web.vo.FilePermissionVo;
-import com.h3bpm.web.vo.FileVo;
-import com.h3bpm.web.vo.OrgInfoVo;
-import com.h3bpm.web.vo.UserInfoVo;
-import com.h3bpm.web.vo.UserSessionInfo;
+import com.h3bpm.web.vo.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class FileService extends ApiDataService {
@@ -51,6 +46,27 @@ public class FileService extends ApiDataService {
 		return fileMapper.getFileById(fileId);
 	}
 
+
+	/**
+	 * 根据CreateUserId获取文件,垃圾箱功能
+	 *author:lhl
+	 * @param createId
+	 * @return
+	 */
+	public List<File> getFileByCreateUserId(String createId){
+
+		List<File> fileList = null;
+		try {
+			fileList = fileMapper.getFileByCreateUserId(createId);
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return fileList;
+
+	}
+
 	/**
 	 * 新增文件或文件夹
 	 * 
@@ -69,7 +85,12 @@ public class FileService extends ApiDataService {
 
 		if (fileVo.getFilePermission() != null) {
 			fileVo.getFilePermission().setFileId(uuid);
+
+			FilePermission filePermission = new FilePermission(fileVo.getFilePermission());
+
+//			filePermissionMapper.createFilePermissionTest("111111111");//测试使用
 			filePermissionMapper.createFilePermission(new FilePermission(fileVo.getFilePermission()));
+
 		}
 
 		return uuid;
@@ -77,7 +98,7 @@ public class FileService extends ApiDataService {
 
 	/**
 	 * 删除文件或文件夹
-	 * 
+	 *
 	 * @param fileVo
 	 * @return 文件ID
 	 */
@@ -94,7 +115,7 @@ public class FileService extends ApiDataService {
 
 	/**
 	 * 新增文件或文件夹
-	 * 
+	 *
 	 * @param fileVo
 	 * @return 文件ID
 	 */
@@ -110,7 +131,7 @@ public class FileService extends ApiDataService {
 
 	/**
 	 * 判断用户是否有文件夹或文件的访问权限
-	 * 
+	 *
 	 * @param fileId
 	 * @param userId
 	 * @return

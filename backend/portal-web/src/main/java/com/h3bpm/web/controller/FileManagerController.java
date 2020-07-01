@@ -1,39 +1,7 @@
 package com.h3bpm.web.controller;
 
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-
+import OThinker.Common.Organization.Models.User;
+import OThinker.H3.Controller.ControllerBase;
 import com.h3bpm.web.enumeration.FileType;
 import com.h3bpm.web.service.FilePermissionService;
 import com.h3bpm.web.service.FileService;
@@ -41,19 +9,25 @@ import com.h3bpm.web.utils.Constants;
 import com.h3bpm.web.utils.FtUtils;
 import com.h3bpm.web.utils.SFTPUtil;
 import com.h3bpm.web.utils.UserSessionUtils;
-import com.h3bpm.web.vo.FileDesc;
-import com.h3bpm.web.vo.FileDescList;
-import com.h3bpm.web.vo.FileDescSingle;
-import com.h3bpm.web.vo.FilePermissionVo;
-import com.h3bpm.web.vo.FileVo;
-import com.h3bpm.web.vo.ReqParam;
-import com.h3bpm.web.vo.ReqParamList;
-import com.h3bpm.web.vo.ReqUpdateFile;
-import com.h3bpm.web.vo.UserSessionInfo;
+import com.h3bpm.web.vo.*;
 import com.jcraft.jsch.SftpException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import OThinker.Common.Organization.Models.User;
-import OThinker.H3.Controller.ControllerBase;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
 
 /**
  * Created by tonghao on 2020/3/1.
@@ -113,15 +87,48 @@ public class FileManagerController extends ControllerBase {
 	// return result;
 	// }
 
+	//author:lhl
+	@RequestMapping(value = "/recycleStation", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public FileDescList recycle(@RequestBody RecycleParam recycleParam){
+		List<FileDesc> descList = new ArrayList<>();
+
+		try{
+			String req_create_id = recycleParam.getCreate_id();
+
+			List<com.h3bpm.web.entity.File> fileList = fileService.getFileByCreateUserId(req_create_id);
+			for(com.h3bpm.web.entity.File file : fileList){
+
+				FileDesc fileDesc = new FileDesc(file);
+				descList.add(fileDesc);
+
+			}
+
+			FileDescList result = new FileDescList(descList);
+
+			return result;
+		}catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+	}
+
+
+
 	@RequestMapping(value = "/listFile", produces = "application/json;charset=utf8")
 	@ResponseBody
 	public FileDescList listFile(@RequestBody ReqParamList paramList) {
 
 		List<FileDesc> descList = new ArrayList<>();
-		FileDescList result = new FileDescList(descList);
+//		FileDescList result = new FileDescList(descList);
 
 		try {
 			ReqParam param = paramList.getParams();
+
+			String id = param.getFileId();
+
 			String pathStr = param.getPath();
 			pathStr = pathStr.replace("\\", File.separator);
 			Path currentPath = Paths.get(uploadPath + pathStr);
@@ -130,6 +137,7 @@ public class FileManagerController extends ControllerBase {
 
 			FileDesc desc = null;
 
+			com.h3bpm.web.entity.File fileDb = fileService.getFileById(id);
 			List<com.h3bpm.web.entity.File> fileList = fileService.findFileByParentIdAndKeyword(fileId, param.getKeyword());
 			Map<String, Object> userMap = this._getCurrentUser();
 			User user = (User) userMap.get("User");
@@ -148,13 +156,24 @@ public class FileManagerController extends ControllerBase {
 					// }
 
 				}
+
 			}
+			FileDescList result = new FileDescList(descList);
+
+			if(fileDb == null || fileDb.getParentId() == null){
+				result.setParentId("");
+			}else{
+				result.setParentId(fileDb.getParentId());
+			}
+
+			return result;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return null;
 		}
 
-		return result;
+//		return result;
 	}
 
 	@RequestMapping(value = "/listMyFolder", produces = "application/json;charset=utf8")
@@ -383,6 +402,37 @@ public class FileManagerController extends ControllerBase {
 
 		return fileDescSingle;
 	}
+
+	//author:lhl
+	@RequestMapping(value = "/reqCreateFolder", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public WebReqParam lCreateFolder(@RequestBody WebReqParam reqParamTest) throws Exception {
+		UserSessionInfo userSessionInfo = UserSessionUtils.get(Constants.SESSION_USER, UserSessionInfo.class);
+
+		FileVo fileVo = new FileVo();
+
+		//获取地址
+		String pathStr = reqParamTest.getPath();
+		pathStr = pathStr.replace("\\", File.separator);
+		Path sourcePath = Paths.get(uploadPath + File.separator + pathStr + File.separator + reqParamTest.getName());
+		logger.info(pathStr);
+
+		fileVo.setName(reqParamTest.getName());	//获取名字存入fileVo
+		fileVo.setFilePermission(reqParamTest.getFilePermission());	//获取权限存入fileVo
+		fileVo.setParentId(reqParamTest.getParentId());//获取Id存入
+		fileVo.setDir(pathStr + File.separator + fileVo.getName() + File.separator);//地址存入
+
+		fileVo.setType(FileType.DIR.getValue());//存入类型
+		fileVo.setCreateUserId(userSessionInfo.getUser().getObjectId());//存入用户Id
+		fileVo.setCreateTime(new Date());
+
+		fileService.createFile(fileVo);
+
+		return reqParamTest;
+
+	}
+
+
 
 	@RequestMapping(value = "/saveFile", produces = "application/json;charset=utf8")
 	@ResponseBody

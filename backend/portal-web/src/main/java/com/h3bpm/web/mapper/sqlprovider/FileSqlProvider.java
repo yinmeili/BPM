@@ -37,5 +37,27 @@ public class FileSqlProvider {
 			"				name";
 		return sql;
 	}
+
+	public String findFileByCreateUserId(Map<String, Object> para) {
+		String create_id = (String)para.get("createUserId");
+
+		String createId_sql = "create_user_id = '" + create_id + "'";
+
+		String sql =
+				"SELECT"+
+						"			 id,"+
+						"			 name,"+
+						"			 type,"+
+						"			 parent_id parentId,"+
+						"			 dir,"+
+						"			 file_size fileSize,"+
+						"			 create_user_id createUserId,"+
+						"			 create_time createTime"+
+						"			FROM"+
+						"				ot_file"+
+						"				WHERE is_delete=1 AND "+
+						createId_sql ;
+		return sql;
+	}
 	
 }

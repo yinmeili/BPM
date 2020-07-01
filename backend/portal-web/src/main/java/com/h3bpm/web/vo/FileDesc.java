@@ -1,8 +1,8 @@
 package com.h3bpm.web.vo;
 
-import java.util.Date;
-
 import com.h3bpm.web.entity.File;
+
+import java.util.Date;
 
 /**
  * Created by tonghao on 2020/3/1.
@@ -16,6 +16,9 @@ public class FileDesc {
 	private long size;
 	private Date date;
 	private String type;
+
+	private String parentId;
+
 
 	// rename remove
 	private boolean success;
@@ -36,6 +39,7 @@ public class FileDesc {
 		this.size = file.getFileSize();
 		this.date = file.getCreateTime();
 		this.type = file.getType();
+		this.parentId = file.getParentId();
 	}
 
 	public String getId() {
@@ -57,13 +61,16 @@ public class FileDesc {
 	 *            最后修改日期
 	 * @param type
 	 *            文件类型
+	 *
+	 * @param parentId
 	 */
-	public FileDesc(String name, String rights, long size, Date date, String type) {
+	public FileDesc(String name, String rights,long size, Date date, String type) {
 		this.name = name;
 		this.rights = rights;
 		this.size = size;
 		this.date = date;
 		this.type = type;
+
 	}
 
 	public FileDesc(String name, long size, Date date, String type) {
@@ -71,6 +78,7 @@ public class FileDesc {
 		this.size = size;
 		this.date = date;
 		this.type = type;
+
 	}
 
 	public FileDesc(boolean success, String error) {
@@ -152,5 +160,12 @@ public class FileDesc {
 
 	public void setFilePermission(FilePermissionVo filePermission) {
 		this.filePermission = filePermission;
+	}
+	public String getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(String parentId) {
+		this.parentId = parentId;
 	}
 }

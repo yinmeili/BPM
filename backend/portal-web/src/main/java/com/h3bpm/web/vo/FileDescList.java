@@ -8,6 +8,16 @@ import java.util.List;
 public class FileDescList {
     private List<FileDesc> result;
 
+    private String parentId;
+
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+    }
+
     public FileDescList() {
     }
 
