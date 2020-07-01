@@ -38,7 +38,7 @@ public class FileSqlProvider {
 		return sql;
 	}
 
-	public String findFileByCreateUserId(Map<String, Object> para) {
+	public String findDeletedFileByCreateUserId(Map<String, Object> para) {
 		String create_id = (String)para.get("createUserId");
 
 		String createId_sql = "create_user_id = '" + create_id + "'";

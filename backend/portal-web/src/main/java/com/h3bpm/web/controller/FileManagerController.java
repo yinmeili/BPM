@@ -94,9 +94,10 @@ public class FileManagerController extends ControllerBase {
 		List<FileDesc> descList = new ArrayList<>();
 
 		try{
-			String req_create_id = recycleParam.getCreate_id();
+			UserSessionInfo userSessionInfo = UserSessionUtils.get(Constants.SESSION_USER, UserSessionInfo.class);
+			String req_create_id = userSessionInfo.getUser().getObjectID();
 
-			List<com.h3bpm.web.entity.File> fileList = fileService.getFileByCreateUserId(req_create_id);
+			List<com.h3bpm.web.entity.File> fileList = fileService.findFileByCreateUserId(req_create_id);
 			for(com.h3bpm.web.entity.File file : fileList){
 
 				FileDesc fileDesc = new FileDesc(file);
@@ -122,7 +123,6 @@ public class FileManagerController extends ControllerBase {
 	public FileDescList listFile(@RequestBody ReqParamList paramList) {
 
 		List<FileDesc> descList = new ArrayList<>();
-//		FileDescList result = new FileDescList(descList);
 
 		try {
 			ReqParam param = paramList.getParams();
@@ -342,84 +342,23 @@ public class FileManagerController extends ControllerBase {
 	// return fileDescSingle;
 	// }
 
+	//author:lhl
 	@RequestMapping(value = "/createFolder", produces = "application/json;charset=utf8")
 	@ResponseBody
-	public FileDescSingle createFolder(@RequestBody ReqParamList paramList) throws Exception {
-		UserSessionInfo userSessionInfo = UserSessionUtils.get(Constants.SESSION_USER, UserSessionInfo.class);
-
-		ReqParam param = paramList.getParams();
-		String pathStr = param.getPath();
-		pathStr = pathStr.replace("\\", File.separator);
-		Path sourcePath = Paths.get(uploadPath + File.separator + pathStr + File.separator + param.getName());
-		logger.info(pathStr);
-
-		FileVo fileVo = new FileVo();
-		fileVo.setParentId(param.getFileId());
-		fileVo.setType(FileType.DIR.getValue());
-		fileVo.setName(param.getName());
-		fileVo.setDir(pathStr + File.separator + fileVo.getName() + File.separator);
-		fileVo.setCreateUserId(userSessionInfo.getUser().getObjectId());
-		fileVo.setCreateTime(new Date());
-
-		com.h3bpm.web.vo.FilePermissionVo filePermission = param.getFilePermission();
-		// com.h3bpm.web.vo.FilePermissionVo filePermission = new com.h3bpm.web.vo.FilePermissionVo();
-		fileVo.setFilePermission(filePermission);
-
-		// List<OrgInfoVo> orgInfoList = new ArrayList<OrgInfoVo>();
-		// List<UserInfoVo> userInfoList = new ArrayList<UserInfoVo>();
-		// for (int i = 0; i <= 100; i++) {
-		// OrgInfoVo org = new OrgInfoVo();
-		// org.setId("aaaaaaaaaaaaaaaaaaaaa" + i);
-		// org.setName("哒哒哒哒哒哒多多多多多多" + i);
-		//
-		// orgInfoList.add(org);
-		//
-		// UserInfoVo user = new UserInfoVo();
-		// user.setId("bbbbbbbbbbbbbbbbbbbb" + i);
-		// user.setName("哈哈哈哈哈哈哈哈哈哈哈哈哈哈" + i);
-		//
-		// userInfoList.add(user);
-		// }
-		// filePermission.setOrgList(orgInfoList);
-		// filePermission.setUserList(userInfoList);
-
-		fileService.createFile(fileVo);
-
-		FileDesc desc = null;
-		FileDescSingle fileDescSingle = new FileDescSingle();
-		try {
-			Files.createDirectories(sourcePath);
-		} catch (IOException e) {
-			e.printStackTrace();
-
-			desc = new FileDesc(false, "创建文件夹出错");
-			fileDescSingle.setResult(desc);
-			return fileDescSingle;
-		}
-
-		desc = new FileDesc(true, null);
-		fileDescSingle.setResult(desc);
-
-		return fileDescSingle;
-	}
-
-	//author:lhl
-	@RequestMapping(value = "/reqCreateFolder", produces = "application/json;charset=utf8")
-	@ResponseBody
-	public WebReqParam lCreateFolder(@RequestBody WebReqParam reqParamTest) throws Exception {
+	public ReqCreateFolder createFolder(@RequestBody ReqCreateFolder reqParam) throws Exception {
 		UserSessionInfo userSessionInfo = UserSessionUtils.get(Constants.SESSION_USER, UserSessionInfo.class);
 
 		FileVo fileVo = new FileVo();
 
 		//获取地址
-		String pathStr = reqParamTest.getPath();
+		String pathStr = reqParam.getPath();
 		pathStr = pathStr.replace("\\", File.separator);
-		Path sourcePath = Paths.get(uploadPath + File.separator + pathStr + File.separator + reqParamTest.getName());
+		Path sourcePath = Paths.get(uploadPath + File.separator + pathStr + File.separator + reqParam.getName());
 		logger.info(pathStr);
 
-		fileVo.setName(reqParamTest.getName());	//获取名字存入fileVo
-		fileVo.setFilePermission(reqParamTest.getFilePermission());	//获取权限存入fileVo
-		fileVo.setParentId(reqParamTest.getParentId());//获取Id存入
+		fileVo.setName(reqParam.getName());	//获取名字存入fileVo
+		fileVo.setFilePermission(reqParam.getFilePermission());	//获取权限存入fileVo
+		fileVo.setParentId(reqParam.getParentId());//获取Id存入
 		fileVo.setDir(pathStr + File.separator + fileVo.getName() + File.separator);//地址存入
 
 		fileVo.setType(FileType.DIR.getValue());//存入类型
@@ -428,8 +367,7 @@ public class FileManagerController extends ControllerBase {
 
 		fileService.createFile(fileVo);
 
-		return reqParamTest;
-
+		return reqParam;
 	}
 
 

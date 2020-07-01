@@ -1,6 +1,6 @@
 package com.h3bpm.web.vo;
 
-public class WebReqParam {
+public class ReqCreateFolder {
 
     private String path;
     private String parentId;//父ID

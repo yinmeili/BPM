@@ -53,11 +53,11 @@ public class FileService extends ApiDataService {
 	 * @param createId
 	 * @return
 	 */
-	public List<File> getFileByCreateUserId(String createId){
+	public List<File> findFileByCreateUserId(String createId){
 
 		List<File> fileList = null;
 		try {
-			fileList = fileMapper.getFileByCreateUserId(createId);
+			fileList = fileMapper.findDeletedFileByCreateUserId(createId);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
