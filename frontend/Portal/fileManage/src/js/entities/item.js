@@ -128,10 +128,9 @@
             var deferred = $q.defer();
             var data = {
                 fileId: self.model.id,
-			    parentId: self.tempModel.id,
+                parentId: self.tempModel.id,
                 oldPath: self.model.fullPath(),
                 newPath: self.tempModel.fullPath()
-
             };
             
             self.inprocess = true;
