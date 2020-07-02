@@ -76,11 +76,11 @@
             return deferred.resolve(data);
         };
 
-        Item.prototype.createFolder = function () {
+        Item.prototype.createFolder = function (rootdir) {
             var self = this;
             var deferred = $q.defer();
             var data = {
-                "path":"共享文件/" + self.tempModel.path.join('/'),
+                "path":rootdir + '/' + self.tempModel.path.join('/'),
                 "name":self.tempModel.name,
                 "parentId": self.tempModel.id,
                 "filePermission": self.tempModel.filePermission

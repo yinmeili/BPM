@@ -11,10 +11,10 @@
                 $scope.reverse = ($scope.predicate[1] === predicate) ? !$scope.reverse : false;
                 $scope.predicate[1] = predicate;
             };
-
             $scope.query = '';
             // $scope.temp = new Item();
             $rootScope.temp = new Item();
+            $rootScope.rootdir = $scope.fileMemuTile
             $scope.fileNavigator = new FileNavigator();
             $scope.fileUploader = FileUploader;
             $scope.uploadFileList = [];
@@ -69,8 +69,6 @@
             };
 
             $scope.startUploadFile = function (e) {
-                //console.log(111);
-                //console.log(extraObj);
                 extraObj.startUpload();
             };
 
@@ -233,7 +231,7 @@
                 item.tempModel.path = $scope.fileNavigator.currentPath;
                 item.tempModel.id = $scope.fileNavigator.currentFileId;
                 if (name && !$scope.fileNavigator.fileNameExists(name)) {
-                    item.createFolder().then(function () {
+                    item.createFolder($rootScope.rootdir).then(function () {
                         $scope.fileNavigator.refresh();
                         $scope.modal('newfolder', true);
                     });
@@ -372,7 +370,7 @@
 
                         var modalInstance = $modal.open({
                             templateUrl: 'newfolder.html',    // 指向上面创建的视图
-                            controller: 'EditAgencyController1',// 初始化模态范围
+                            controller: 'ModalsController',// 初始化模态范围
                             size: "md",
                             resolve: {
                                 params: function () {
@@ -432,7 +430,7 @@
 
                         var modalInstance = $modal.open({
                             templateUrl: 'uploadfile.html',    // 指向上面创建的视图
-                            controller: 'EditAgencyController1',// 初始化模态范围
+                            controller: 'ModalsController',// 初始化模态范围
                             size: "md",
                             resolve: {
                                 params: function () {
@@ -476,7 +474,7 @@
             }]);
 
 
-    app.controller("EditAgencyController1", ["$scope", "$rootScope", "$http", "$translate", "$state", "$filter", "$modal", "$modalInstance", "$interval", "$timeout", "ControllerConfig", "notify", "datecalculation", "params",
+    app.controller("ModalsController", ["$scope", "$rootScope", "$http", "$translate", "$state", "$filter", "$modal", "$modalInstance", "$interval", "$timeout", "ControllerConfig", "notify", "datecalculation", "params",
         function ($scope, $rootScope, $http, $translate, $state, $filter, $modal, $modalInstance, $interval, $timeout, ControllerConfig, notify, datecalculation, params) {
             var $newscope = $rootScope.scope;
             $scope.getLanguage = function () {
@@ -611,7 +609,7 @@
                 item.tempModel.name = foldername;
 
                 if (foldername && ! $newscope.fileNavigator.fileNameExists(foldername)) {
-                    item.createFolder().then(function () {
+                    item.createFolder($rootScope.rootdir).then(function () {
                         $newscope.fileNavigator.refresh();
                         $newscope.modal('newfolder', true);
                     });
@@ -622,9 +620,6 @@
                 $scope.cancel();
             };
             $scope.startUploadFile = function (e) {
-                //console.log(111);
-                // console.log(extraObj);
-                debugger
                 extraObj.startUpload();
                 $scope.cancel();
             };
