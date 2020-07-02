@@ -1,5 +1,5 @@
 body {
-  /*padding-top: 55px;*/
+  /* padding-top: 55px; */
   /*padding-top: 65.6px;!*留出的位置和导航栏一样的高度*!*/
   font-size: 14px;
 }
@@ -17,13 +17,12 @@ body {
 .navbar-inverse {
   /* background-color: #222;
   border-color: #080808; */
-  background-color:#efa105;
-  border-color: #efa105;
+  background-color:hsla(0, 0%, 100%, 0.3);
+  border-color: hsla(0, 0%, 100%, 0.3);
 }
 .navbar-inverse .navbar-brand {
   /* color: #9d9d9d; */
-  /* color:#58666e; */
-  color: hsla(0, 0%, 100%, 0.5);
+  color:#58666e;
 }
 
 .navbar .navbar-toggle {
