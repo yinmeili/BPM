@@ -76,18 +76,15 @@
             return deferred.resolve(data);
         };
 
-        Item.prototype.createFolder = function () {
+        Item.prototype.createFolder = function (rootdir) {
             var self = this;
             var deferred = $q.defer();
             var data = {
-                params: {
-                    fileId: self.tempModel.id,
-                    mode: 'addfolder',
-                    path: self.tempModel.path.join('/'),
-                    name: self.tempModel.name
-                }
+                "path":rootdir + '/' + self.tempModel.path.join('/'),
+                "name":self.tempModel.name,
+                "parentId": self.tempModel.id,
+                "filePermission": self.tempModel.filePermission
             };
-
             self.inprocess = true;
             self.error = '';
             $http.post(fileManagerConfig.createFolderUrl, data).success(function (data) {
@@ -97,7 +94,6 @@
             })['finally'](function () {
                 self.inprocess = false;
             });
-
             return deferred.promise;
         };
 
