@@ -759,7 +759,8 @@ body {
     position: fixed;
   }
   .app-aside-fixed .aside-wrap {
-    background: #001529;
+    /* background: #001529; */
+    background-color:#efa105;
     position: fixed;
     overflow: hidden;
     top: 64px;
