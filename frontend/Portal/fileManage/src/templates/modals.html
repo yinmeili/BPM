@@ -320,7 +320,6 @@
 
 <!--新建文件夹的模态框-->
 <script type="text/ng-template" id="newfolder.html">
-
     <form class="bs-example form-horizontal" ng-submit="createFolder(temp)">
         <div class="modal-header">
             <button type="button" class="close"
@@ -376,23 +375,23 @@
 
 <!--上传文件权限-->
 <script type="text/ng-template" id="uploadfile.html">
-    <div class="modal-header">
-        <button type="button" class="close"
-                data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
-            ×
-        </button>
-        <h4 class="modal-title" id="myModalLabel1" style="color:#778CA2;">
-            上传
-        </h4>
-    </div>
-    <!--弹框提示-->
-    <div class="modal-body" style="padding-left:50px;padding-right:50px;">
-        <form class="bs-example form-horizontal H3Panel">
+    <form class="bs-example form-horizontal H3Panel" ng-submit="uploadFiles()">
+        <div class="modal-header">
+            <button type="button" class="close"
+                    data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+                ×
+            </button>
+            <h4 class="modal-title" id="myModalLabel1" style="color:#778CA2;">
+                上传
+            </h4>
+        </div>
+        <!--弹框提示-->
+        <div class="modal-body" style="padding-left:50px;padding-right:50px;">
             <div class="row">
                 <div class="col-md-10">
                     <div class="form-group" style="color:#778CA2;">
                         <div class="row" style="margin-bottom: 20px;">
-                            <div jquery-upload="">选择</div>
+                            <div id="fileuploader1" jquery-upload="">选择</div>
                         </div>
                         <div class="row">
                             <div class="col-md-3 col-sm-3">权限选择</div>
@@ -407,15 +406,12 @@
                 <div class="col-md-2">
                 </div>
             </div>
-        </form>
-    </div>
-    <!--<div class="modal-footer">-->
-        <!--<button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess">{{"cancel" | translate}}</button>-->
-        <!--<button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess">{{'create' | translate}}</button>-->
-    <!--</div>-->
-    <div class="modal-footer">
-        <div id="extrabutton1" class="ajax-file-upload-green" ng-click="startUploadFile()" >开始上传</div>
-    </div>
+        </div>
+        <div class="modal-footer">
+            <div id="extrabutton1" class="ajax-file-upload-green" ng-click="startUploadFile()">开始上传</div>
+        </div>
+    </form>
+
 </script>
 
 <!--<div class="modal animated fadeIn" id="uploadfile">
@@ -464,7 +460,7 @@
                     <div id="fileuploader" jquery-upload="" >选择</div>
                 </div>
                 <div class="modal-footer">
-                    <div id="extrabutton" class="ajax-file-upload-green" ng-click="startUploadFile()" >开始上传</div>
+                    <div id="extrabutton" class="ajax-file-upload-green" ng-click="startUploadFile()">开始上传</div>
                 </div>
                <!-- <div class="modal-body">
                     <label class="radio">{{"files_will_uploaded_to" | translate}} <b>{{fileNavigator.currentPath.join('/')}}</b></label>

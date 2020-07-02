@@ -228,11 +228,9 @@
             };
 
             $scope.createFolder = function (item) {
-                console.log(item);
                 var name = item.tempModel.name && item.tempModel.name.trim();
                 item.tempModel.type = 'dir';
                 item.tempModel.path = $scope.fileNavigator.currentPath;
-                console.log(item.tempModel.path);
                 item.tempModel.id = $scope.fileNavigator.currentFileId;
                 if (name && !$scope.fileNavigator.fileNameExists(name)) {
                     item.createFolder().then(function () {
@@ -417,9 +415,6 @@
             }
 
 // *************************上传文件选人模态框********************************
-            $scope.$on('$viewContentLoaded', function (event) {
-                $scope.myScroll = null
-            });
             $scope.uploadfile = function (data) {
                 var AgencyID;
                 if (data == undefined) AgencyID = "";
@@ -437,7 +432,7 @@
 
                         var modalInstance = $modal.open({
                             templateUrl: 'uploadfile.html',    // 指向上面创建的视图
-                            controller: 'EditAgencyController',// 初始化模态范围
+                            controller: 'EditAgencyController1',// 初始化模态范围
                             size: "md",
                             resolve: {
                                 params: function () {
@@ -624,6 +619,13 @@
                     item.error = $translate.instant('error_invalid_filename');
                     return false;
                 }
+                $scope.cancel();
+            };
+            $scope.startUploadFile = function (e) {
+                //console.log(111);
+                // console.log(extraObj);
+                debugger
+                extraObj.startUpload();
                 $scope.cancel();
             };
             $scope.cancel = function () {
