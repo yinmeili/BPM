@@ -673,7 +673,7 @@ angular.module('app')
                             }
                         })
 
-                        //我的文件
+                        //回收站
                         .state('app.recycleFiles', {
                             url: '',
                             controller: "",

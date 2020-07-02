@@ -5,6 +5,7 @@
         var Item = function (model, path) {
             var rawModel = {
                 id: model && model.id,
+                parentId:model && model.parentId,
                 name: model && model.name || '',
                 path: path || [],
                 type: model && model.type || 'file',
@@ -122,13 +123,13 @@
             var self = this;
             var deferred = $q.defer();
             var data = {
-
-                    fileId: self.model.id,
-                    parentId: self.tempModel.id,
-                    oldPath: self.model.fullPath(),
-                    newPath: self.tempModel.fullPath()
+                fileId: self.model.id,
+			    parentId: self.tempModel.id,
+                oldPath: self.model.fullPath(),
+                newPath: self.tempModel.fullPath()
 
             };
+            
             self.inprocess = true;
             self.error = '';
             $http.post(fileManagerConfig.updateUrl, data).success(function (data) {
