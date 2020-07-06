@@ -214,12 +214,16 @@
             };
 
             $scope.updateFile = function (item) {
+								// debugger;
                 var samePath = item.tempModel.path.join() === item.model.path.join();
                 if (samePath && $scope.fileNavigator.fileNameExists(item.tempModel.name)) {
                     item.error = $translate.instant('error_invalid_filename');
                     return false;
                 }
                 item.updateFile().then(function () {
+									// item.currentFileId = item.model.id;
+									// item.currentParentId = item.model.parentId;
+									// item.currentFileId = item.currentParentId;
                     $scope.fileNavigator.refresh();
 									$scope.modal('updateFile', true);
 								});
