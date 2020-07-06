@@ -19,6 +19,10 @@
         };
         
         $rootScope.openNavigator = function(item) {
+            // debugger;
+            $scope.fileNavigator.currentFileId = item.model.id;
+            $scope.fileNavigator.currentParentId = item.model.parentId;
+            $scope.fileNavigator.currentFileId = $scope.fileNavigator.currentParentId;
             $scope.fileNavigator.currentPath = item.model.path.slice();
             $scope.fileNavigator.refresh();
             $('#selector').modal('show');

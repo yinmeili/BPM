@@ -5,6 +5,7 @@
         var Item = function (model, path) {
             var rawModel = {
                 id: model && model.id,
+                parentId:model && model.parentId,
                 name: model && model.name || '',
                 path: path || [],
                 type: model && model.type || 'file',
@@ -75,18 +76,15 @@
             return deferred.resolve(data);
         };
 
-        Item.prototype.createFolder = function () {
+        Item.prototype.createFolder = function (rootdir) {
             var self = this;
             var deferred = $q.defer();
             var data = {
-                params: {
-                    fileId: self.tempModel.id,
-                    mode: 'addfolder',
-                    path: self.tempModel.path.join('/'),
-                    name: self.tempModel.name
-                }
+                "path":rootdir + '/' + self.tempModel.path.join('/'),
+                "name":self.tempModel.name,
+                "parentId": self.tempModel.id,
+                "filePermission": self.tempModel.filePermission
             };
-
             self.inprocess = true;
             self.error = '';
             $http.post(fileManagerConfig.createFolderUrl, data).success(function (data) {
@@ -96,7 +94,6 @@
             })['finally'](function () {
                 self.inprocess = false;
             });
-
             return deferred.promise;
         };
 
@@ -126,13 +123,12 @@
             var self = this;
             var deferred = $q.defer();
             var data = {
-
-                    fileId: self.model.id,
-                    parentId: self.tempModel.id,
-                    oldPath: self.model.fullPath(),
-                    newPath: self.tempModel.fullPath()
-
+                fileId: self.model.id,
+                parentId: self.tempModel.id,
+                oldPath: self.model.fullPath(),
+                newPath: self.tempModel.fullPath()
             };
+            
             self.inprocess = true;
             self.error = '';
             $http.post(fileManagerConfig.updateUrl, data).success(function (data) {

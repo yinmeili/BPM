@@ -644,11 +644,12 @@ angular.module('app')
                                             'WFRes/_Scripts/MvcSheet/MvcSheetUI.js',
                                             'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js',
                                             'WFRes/_Scripts/MvcSheet/Controls/MvcSheetControls.js',
-                                            'WFRes/_Scripts/H3AdminPlugins.js'
+                                            'WFRes/_Scripts/H3AdminPlugins.js',
+                                            'js/services/notify.js'
                                             // 'WFRes/_Scripts/sheet.js',
                                             // 'WFRes/_Scripts/ligerUI/ligerui.all.js',
                                             // 'WFRes/_Scripts/MvcSheet/MvcSheetAll.js'
-                                            //'fileManage/src/js/controllers/main.js'
+                                            // 'fileManage/src/js/controllers/main.js'
                                             // 'fileManage2/bower_components/jquery-uploadfile/js/jquery.uploadfile.js'
                                         ]);
                                     }
@@ -689,6 +690,7 @@ angular.module('app')
                                 ]
                             }
                         })
+
                 // End
             }
         ]
