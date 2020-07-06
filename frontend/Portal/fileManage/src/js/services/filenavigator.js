@@ -105,7 +105,6 @@
         };
 
         FileNavigator.prototype.refresh = function() {
-					// debugger;
             var self = this;
             var path = self.currentPath.join('/');
             return self.list().then(function(data) {
@@ -130,6 +129,7 @@
         
         FileNavigator.prototype.buildTree = function(path) {
             var flatNodes = [], selectedNode = {};
+
             function recursive(parent, item, path) {
                 var absName = path ? (path + '/' + item.model.name) : item.model.name;
                 if (parent.name.trim() && path.trim().indexOf(parent.name) !== 0) {
@@ -269,10 +269,8 @@
 						};
 
         /* FileNavigator.prototype.goTo = function(index) {
-						this.currentPath = this.currentPath.slice(0, index + 1);
-						if(index==-1){
-							this.currentFileId = "";
-						}
+					// debugger;
+            this.currentPath = this.currentPath.slice(0, index + 1);
             this.refresh();
         }; */
 
