@@ -1,8 +1,8 @@
 package com.h3bpm.web.entity;
 
-import java.io.IOException;
-
 import com.h3bpm.web.utils.ObjectUtil;
+
+import java.io.IOException;
 
 public class FilePermission {
 	private String fileId = null;
@@ -11,23 +11,24 @@ public class FilePermission {
 
 	@Deprecated
 	public FilePermission(){
-		
+
 	}
-	
+
 	public FilePermission(com.h3bpm.web.vo.FilePermissionVo voBean) {
 		if(voBean == null){
 			return;
 		}
-		
 		this.fileId = voBean.getFileId();
 
 		try {
 			orgs = ObjectUtil.persistenceObject(voBean.getOrgList());
 			users = ObjectUtil.persistenceObject(voBean.getUserList());
 
-		} catch (IOException e) {
+		} catch (NullPointerException | IOException e) {
 			e.printStackTrace();
 		}
+
+		System.out.println("方法执行完毕");
 
 	}
 

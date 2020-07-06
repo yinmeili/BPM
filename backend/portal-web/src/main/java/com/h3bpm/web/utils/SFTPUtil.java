@@ -282,10 +282,10 @@ public class SFTPUtil {
 	public static void main(String[] args) throws SftpException, IOException {
 		SFTPUtil sftp = new SFTPUtil("user_file_manage", "tfzq123!@#", "192.168.41.15", 22);
 		sftp.login();
-	
+
 		// byte[] buff = sftp.download("/opt", "start.sh");
 		// System.out.println(Arrays.toString(buff));
-		
+
 		File file = new File("D:\\work\\important.txt");
 		InputStream is = new FileInputStream(file);
 

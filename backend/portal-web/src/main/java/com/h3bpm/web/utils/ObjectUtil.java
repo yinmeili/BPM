@@ -60,18 +60,18 @@ public class ObjectUtil {
 			OrgInfoVo org = new OrgInfoVo();
 			org.setId("aaaaaaaaaaaaaaaaaaaaa"+i);
 			org.setName("哒哒哒哒哒哒多多多多多多"+i);
-			
+
 			orgInfoList.add(org);
 		}
-		
-		
-		
+
+
+
 		try {
 			System.out.println(ObjectUtil.persistenceObject(orgInfoList));
-			
+
 			try {
 				List<OrgInfoVo> b = (List<OrgInfoVo>) ObjectUtil.unPersistenceObject(ObjectUtil.persistenceObject(orgInfoList));
-				
+
 				b.size();
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
