@@ -1,4 +1,4 @@
-package com.chinacloud.reportservice;
+package com.h3bpm.web.service;
 
 /**
  * This exception will be thrown when some errors occur in the platform layer.
