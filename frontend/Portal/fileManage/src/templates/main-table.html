@@ -7,6 +7,12 @@
                     <span class="sortorder" ng-show="predicate[1] === 'model.name'" ng-class="{reverse:reverse}"></span>
                 </a>
             </th>
+            <th class="hidden-sm hidden-xs" ng-if="fileMemuTile == '我的文件'">
+                <a href="" ng-click="order('model.size')">
+                    文件路径
+                    <span class="sortorder" ng-show="predicate[1] === 'model.size'" ng-class="{reverse:reverse}"></span>
+                </a>
+            </th>
             <th class="hidden-sm hidden-xs">
                 <a href="" ng-click="order('model.size')">
                     大小
@@ -31,7 +37,7 @@
     <tbody class="file-item" ng-show=fileNavigator.isShowFolder>
         <tr ng-show="fileNavigator.requesting">
             <td colspan="5">
-                <div ng-include="	.tplPath + '/spinner.html'"></div>
+                <div ng-include="config.tplPath + '/spinner.html'"></div>
             </td>
         </tr>
         <tr ng-show="!fileNavigator.requesting && fileNavigator.fileList.length < 1 && !fileNavigator.error">
