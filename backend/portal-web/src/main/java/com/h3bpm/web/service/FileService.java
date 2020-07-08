@@ -45,15 +45,24 @@ public class FileService extends ApiDataService {
 	public File getFileById(String fileId) {
 		return fileMapper.getFileById(fileId);
 	}
-
+	
+	/**
+	 * 根据路径获取文件
+	 * 
+	 * @param fileId
+	 * @return
+	 */
+	public File getFileByPath(String path) {
+		return fileMapper.getFileByPath(path);
+	}
 
 	/**
-	 * 根据CreateUserId获取文件,垃圾箱功能
-	 *author:lhl
+	 * 根据CreateUserId获取文件,垃圾箱功能 author:lhl
+	 * 
 	 * @param createId
 	 * @return
 	 */
-	public List<File> findFileByCreateUserId(String createId){
+	public List<File> findFileByCreateUserId(String createId) {
 
 		List<File> fileList = null;
 		try {
@@ -88,7 +97,7 @@ public class FileService extends ApiDataService {
 
 			FilePermission filePermission = new FilePermission(fileVo.getFilePermission());
 
-//			filePermissionMapper.createFilePermissionTest("111111111");//测试使用
+			// filePermissionMapper.createFilePermissionTest("111111111");//测试使用
 			filePermissionMapper.createFilePermission(new FilePermission(fileVo.getFilePermission()));
 
 		}
@@ -125,6 +134,10 @@ public class FileService extends ApiDataService {
 
 		if (fileVo.getFilePermission() != null) {
 			filePermissionMapper.deleteFilePermissionByFileId(fileVo.getId());
+
+			if (fileVo.getFilePermission().getFileId() == null) {
+				fileVo.getFilePermission().setFileId(fileVo.getId());
+			}
 			filePermissionMapper.createFilePermission(new FilePermission(fileVo.getFilePermission()));
 		}
 	}

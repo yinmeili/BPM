@@ -17,6 +17,9 @@ public interface FileMapper {
 
 	@Select("SELECT `id`, `parent_id` parentId, `type`, `name`, `dir`, `file_size` fileSize, `create_user_id` createUserId, `create_time` createTime, `is_delete` isDelete FROM `ot_file` where id = #{id}")
 	public File getFileById(@Param("id") String id);
+	
+	@Select("SELECT `id`, `parent_id` parentId, `type`, `name`, `dir`, `file_size` fileSize, `create_user_id` createUserId, `create_time` createTime, `is_delete` isDelete FROM `ot_file` where dir = #{path}")
+	public File getFileByPath(@Param("path") String path);
 
 	@Insert({ "INSERT INTO `h3bpm`.`ot_file` (`id`, `parent_id`, `type`, `name`, `dir`, `file_size`, `create_user_id`, `create_time`, `is_delete`) VALUES (#{id}, #{parentId}, #{type}, #{name}, #{dir}, #{fileSize}, #{createUserId}, #{createTime}, #{isDelete})" })
 	public void createFile(File file);
