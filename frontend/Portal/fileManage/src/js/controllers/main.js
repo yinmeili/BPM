@@ -365,7 +365,7 @@
             $scope.$on('$viewContentLoaded', function (event) {
                 $scope.myScroll = null
             });
-            $scope.newfolder = function (data) {
+            $scope.newFolder = function (data) {
                 var AgencyID;
                 if (data == undefined) AgencyID = "";
                 else AgencyID = data;
@@ -381,7 +381,7 @@
                         // 弹出模态框
 
                         var modalInstance = $modal.open({
-                            templateUrl: 'newfolder.html',    // 指向上面创建的视图
+                            templateUrl: 'newFolder.html',    // 指向上面创建的视图
                             controller: 'ModalsController',// 初始化模态范围
                             size: "md",
                             resolve: {
@@ -421,7 +421,7 @@
             }
 
 // *************************共享文件上传文件选人模态框********************************
-            $scope.uploadfile = function (data) {
+            $scope.uploadFile = function (data) {
                 var AgencyID;
                 if (data == undefined) AgencyID = "";
                 else AgencyID = data;
@@ -437,7 +437,7 @@
                         // 弹出模态框
 
                         var modalInstance = $modal.open({
-                            templateUrl: 'uploadfile.html',    // 指向上面创建的视图
+                            templateUrl: 'uploadFile.html',    // 指向上面创建的视图
                             controller: 'ModalsController',// 初始化模态范围
                             size: "md",
                             resolve: {
@@ -542,7 +542,7 @@
             }
 
 // ***************************我的文件新建文件夹模态框********************************
-            $scope.mynewfolder = function (data) {
+            $scope.myNewFolder = function (data) {
                 var AgencyID;
                 if (data == undefined) AgencyID = "";
                 else AgencyID = data;
@@ -558,7 +558,7 @@
                         // 弹出模态框
 
                         var modalInstance = $modal.open({
-                            templateUrl: 'mynewfolder.html',    // 指向上面创建的视图
+                            templateUrl: 'myNewFolder.html',    // 指向上面创建的视图
                             controller: 'ModalsController',// 初始化模态范围
                             size: "md",
                             resolve: {
@@ -598,7 +598,7 @@
             }
 
 // *************************我的文件上传文件选人模态框********************************
-            $scope.myuploadfile = function (data) {
+            $scope.myUploadFile = function (data) {
                 var AgencyID;
                 if (data == undefined) AgencyID = "";
                 else AgencyID = data;
@@ -614,7 +614,7 @@
                         // 弹出模态框
 
                         var modalInstance = $modal.open({
-                            templateUrl: 'myuploadfile.html',    // 指向上面创建的视图
+                            templateUrl: 'myUploadfile.html',    // 指向上面创建的视图
                             controller: 'ModalsController',// 初始化模态范围
                             size: "md",
                             resolve: {
