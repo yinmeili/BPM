@@ -5,6 +5,7 @@ import com.h3bpm.web.utils.ObjectUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class FilePermissionVo {
@@ -14,6 +15,18 @@ public class FilePermissionVo {
 
 	public FilePermissionVo() {
 
+	}
+
+	public FilePermissionVo(String[] orgIds) {
+		orgList = new ArrayList<OrgInfoVo>();
+		for(String str:orgIds){
+			OrgInfoVo orgInfoVo = new OrgInfoVo();
+
+			System.out.println(str);
+			orgInfoVo.setId(str);
+
+			orgList.add(orgInfoVo);
+		}
 	}
 
 	@SuppressWarnings("unchecked")

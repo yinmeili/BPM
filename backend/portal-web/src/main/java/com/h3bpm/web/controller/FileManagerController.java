@@ -140,7 +140,7 @@ public class FileManagerController extends ControllerBase {
 			com.h3bpm.web.entity.File fileDb = fileService.getFileById(id);
 			List<com.h3bpm.web.entity.File> fileList = fileService.findFileByParentIdAndKeyword(fileId, param.getKeyword());
 			Map<String, Object> userMap = this._getCurrentUser();
-			User user = (User) userMap.get("User");
+			OThinker.Common.Organization.Models.User user = (User) userMap.get("User");
 
 			if (fileList != null) {
 				for (com.h3bpm.web.entity.File file : fileList) {
@@ -528,10 +528,11 @@ public class FileManagerController extends ControllerBase {
 	 */
 	@RequestMapping(value = "/uploadFile", method = RequestMethod.POST, produces = "application/json;charset=utf8")
 	@ResponseBody
-	public FileDesc uploadFileHandler(@RequestParam("file") MultipartFile file, @RequestParam("path") String path, @RequestParam("parentId") String parentId, HttpServletResponse response) throws IOException {
+	public ResponseVo uploadFileHandler(@RequestParam("file") MultipartFile file,@RequestParam("filePermission") String filePermission, @RequestParam("path") String path, @RequestParam("parentId") String parentId, HttpServletResponse response) throws IOException {
 
 		logger.info(path);
 		FileDesc desc = null;
+		ResponseVo respUploadFile = null;
 
 		if (!file.isEmpty()) {
 			UserSessionInfo userSessionInfo = UserSessionUtils.get(Constants.SESSION_USER, UserSessionInfo.class);
@@ -576,26 +577,51 @@ public class FileManagerController extends ControllerBase {
 				fileVo.setFileSize(file.getSize());
 				fileVo.setCreateUserId(userSessionInfo.getUser().getObjectId());
 				fileVo.setCreateTime(new Date());
+
+				//处理filePermission字符串
+				String[] idList = filePermission.split(",");
+				FilePermissionVo filePermissionVo = new FilePermissionVo(idList);
+				//设置FilePermission
+				fileVo.setFilePermission(filePermissionVo);
+
 				fileService.createFile(fileVo);
 
-				desc = new FileDesc(true, "");
-				return desc;
+				//设置返回数据格式
+				FileId fileIdResp = new FileId();
+				fileIdResp.setId(fileVo.getId());
+				ResponseVo respUploadFileSuccess = new ResponseVo(fileIdResp);
 
-			} catch (IOException e) {
-				e.printStackTrace();
-				desc = new FileDesc(false, "系统内部错误，请稍后重试");
-				return desc;
-			} catch (SftpException e) {
-				// TODO Auto-generated catch block
+				return respUploadFileSuccess;
+			} catch (IOException | SftpException e) {
 				e.printStackTrace();
 			}
-
-		} else {
-			desc = new FileDesc(false, "文件为空");
-			return desc;
+		}else{
+			ResponseVo respUploadFileFalse = new ResponseVo();
+			respUploadFileFalse.setErrorCode(404);
+			respUploadFileFalse.setMsg("调用失败");
+			return respUploadFileFalse;
 		}
 
-		return desc;
+		return respUploadFile;
+
+//				desc = new FileDesc(true, "");
+//				return desc;
+//
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//				desc = new FileDesc(false, "系统内部错误，请稍后重试");
+//				return desc;
+//			} catch (SftpException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//
+//		} else {
+//			desc = new FileDesc(false, "文件为空");
+//			return desc;
+//		}
+//
+//		return desc;
 	}
 
 	@RequestMapping(value = "/uploadMultiFile", method = RequestMethod.POST, produces = "application/json;charset=utf8")
