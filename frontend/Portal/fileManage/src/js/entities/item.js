@@ -1,6 +1,6 @@
 (function (window, angular, $) {
     'use strict';
-    app.factory('item', ['$http', '$q', '$translate', 'fileManagerConfig', 'chmod', function ($http, $q, $translate, fileManagerConfig, Chmod) {
+    app.factory('item', ['$http', '$q', '$translate', 'fileManagerConfig', 'chmod', '$rootScope',function ($http, $q, $translate, fileManagerConfig, Chmod, $rootScope) {
 
         var Item = function (model, path) {
             var rawModel = {
@@ -125,8 +125,9 @@
             var data = {
                 fileId: self.model.id,
                 parentId: self.tempModel.parentId,
-                oldPath: self.model.fullPath(),
-                newPath: self.tempModel.fullPath()
+                oldPath: $rootScope.rootdir + self.model.fullPath(),
+                newPath: $rootScope.rootdir + self.tempModel.fullPath(),
+                filePermission: self.tempModel.filePermission
             };
             
             self.inprocess = true;

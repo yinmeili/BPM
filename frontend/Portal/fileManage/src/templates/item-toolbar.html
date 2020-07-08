@@ -1,5 +1,8 @@
 <div ng-show="!item.inprocess" >
-    <button class="btn btn-sm btn-default" data-toggle="modal" data-target="#updateFile" ng-show="config.allowedActions.rename" ng-click="touch(item)" title="编辑">
+    <!--<button class="btn btn-sm btn-default" data-toggle="modal" data-target="#updateFile" ng-show="config.allowedActions.rename" ng-click="touch(item)" title="编辑">-->
+    <!--<i class="glyphicon glyphicon-edit"></i>-->
+    <!--</button>-->
+    <button class="btn btn-sm btn-default" ng-click="toUpdateFile(item)" ng-show="config.allowedActions.rename" title="编辑">
         <i class="glyphicon glyphicon-edit"></i>
     </button>
     <button class="btn btn-sm btn-default" data-toggle="modal" data-target="#copy" ng-show="config.allowedActions.copy && !item.isFolder()" ng-click="touch(item)" title="{{'copy' | translate}}">
@@ -9,7 +12,7 @@
         <i class="glyphicon glyphicon-pencil"></i>
     </button>
     <button class="btn btn-sm btn-default" data-toggle="modal" data-target="#changepermissions" ng-show="config.allowedActions.changePermissions" ng-click="touch(item)" title="{{'permissions' | translate}}">
-        <i class="glyphicon glyphicon-lock"></i>
+        <i class="glyphicon glyphicon-share"></i>
     </button>
     <button class="btn btn-sm btn-default" data-toggle="modal" data-target="#compress" ng-show="config.allowedActions.compress && item.isCompressible()" ng-click="touch(item)" title="{{'compress' | translate}}">
         <i class="glyphicon glyphicon-compressed"></i>

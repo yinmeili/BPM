@@ -253,6 +253,11 @@
                 });
             };
 
+            //搜索
+            $scope.search = function (){
+                alert("搜索");
+            };
+
             $scope.getQueryParam = function (param) {
                 var found;
                 window.location.search.substr(1).split('&').forEach(function (item) {
@@ -348,8 +353,7 @@
             //     ];
             // }
 
-
-// ***************************新建文件夹模态框********************************
+// ***************************共享文件新建文件夹模态框********************************
             //进入视图触发
             $scope.$on('$viewContentLoaded', function (event) {
                 $scope.myScroll = null
@@ -398,10 +402,6 @@
                                 }]
                             }
                         });
-                        modalInstance.opened.then(function() {
-                            //TODO not work
-                        });
-
                     })
                 var times = setInterval(function() {
                     if($("#WorkflowCodes").length>0){
@@ -413,7 +413,7 @@
                 }, 50);
             }
 
-// *************************上传文件选人模态框********************************
+// *************************共享文件上传文件选人模态框********************************
             $scope.uploadfile = function (data) {
                 var AgencyID;
                 if (data == undefined) AgencyID = "";
@@ -458,6 +458,7 @@
                                 }]
                             }
                         });
+
                         modalInstance.opened.then(function() {
                             //TODO not work
                         });
@@ -472,12 +473,194 @@
                 }, 50);
             }
 
+// *************************共享文件编辑路径和名称模态框******************************
+            $scope.toUpdateFile = function (data) {
+                $scope.fileNavigator = $rootScope.scope.fileNavigator;//参数
+                $rootScope.temp = data;
+                data = "";
+                var AgencyID;
+                if (data == undefined) AgencyID = "";
+                else AgencyID = data;
+                $http({
+                    url: ControllerConfig.Agents.GetAgency,
+                    params: {
+                        agentID: AgencyID,
+                        random: new Date().getTime()
+                    }
+                }).success(function (result, header, config, status) {
+                        var Agency = result.Rows[0];
+                        // 弹出模态框
+
+                        var modalInstance = $modal.open({
+                            templateUrl: 'updateFile.html',    // 指向上面创建的视图
+                            controller: 'ModalsController',// 初始化模态范围
+                            size: "md",
+                            resolve: {
+                                params: function () {
+                                    return {
+                                        user: $scope.user,
+                                        Agency: Agency,
+                                        AgencyID: AgencyID
+                                    };
+                                },
+                                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                                    return $ocLazyLoad.load([
+                                        'WFRes/_Content/themes/ligerUI/Aqua/css/ligerui-all.min.css',
+                                        'WFRes/assets/stylesheets/sheet.css',
+                                        'WFRes/_Scripts/jquery/jquery.lang.js',
+                                        'WFRes/_Scripts/ligerUI/ligerui.all.min.js',
+                                        'WFRes/_Scripts/MvcSheet/SheetControls.js',
+                                        'WFRes/_Scripts/MvcSheet/MvcSheetUI.js'
+                                    ]).then(function () {
+                                        return $ocLazyLoad.load([
+                                            'WFRes/_Scripts/MvcSheet/Controls/SheetWorkflow.js',
+                                            'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js'
+                                        ]);
+                                    });
+                                }]
+                            }
+                        });
+                        modalInstance.opened.then(function() {
+                            //TODO not work
+                        });
+                    });
+                var times = setInterval(function() {
+                    if($("#WorkflowCodes").length>0){
+                        clearInterval(times);
+                        $(".select2-search-field").find("input").css("z-index", 0);
+                        //console.log($("#WorkflowCodes"));
+                        $("#WorkflowCodes").css("width","246px");
+                    }
+                }, 50);
+            }
+
+// ***************************我的文件新建文件夹模态框********************************
+            $scope.mynewfolder = function (data) {
+                var AgencyID;
+                if (data == undefined) AgencyID = "";
+                else AgencyID = data;
+                $http({
+                    url: ControllerConfig.Agents.GetAgency,
+                    params: {
+                        agentID: AgencyID,
+                        random: new Date().getTime()
+                    }
+                })
+                    .success(function (result, header, config, status) {
+                        var Agency = result.Rows[0];
+                        // 弹出模态框
+
+                        var modalInstance = $modal.open({
+                            templateUrl: 'mynewfolder.html',    // 指向上面创建的视图
+                            controller: 'ModalsController',// 初始化模态范围
+                            size: "md",
+                            resolve: {
+                                params: function () {
+                                    return {
+                                        user: $scope.user,
+                                        Agency: Agency,
+                                        AgencyID: AgencyID
+                                    };
+                                },
+                                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                                    return $ocLazyLoad.load([
+                                        'WFRes/_Content/themes/ligerUI/Aqua/css/ligerui-all.min.css',
+                                        'WFRes/assets/stylesheets/sheet.css',
+                                        'WFRes/_Scripts/jquery/jquery.lang.js',
+                                        'WFRes/_Scripts/ligerUI/ligerui.all.min.js',
+                                        'WFRes/_Scripts/MvcSheet/SheetControls.js',
+                                        'WFRes/_Scripts/MvcSheet/MvcSheetUI.js'
+                                    ]).then(function () {
+                                        return $ocLazyLoad.load([
+                                            'WFRes/_Scripts/MvcSheet/Controls/SheetWorkflow.js',
+                                            'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js'
+                                        ]);
+                                    });
+                                }]
+                            }
+                        });
+                    })
+                var times = setInterval(function() {
+                    if($("#WorkflowCodes").length>0){
+                        clearInterval(times);
+                        $(".select2-search-field").find("input").css("z-index", 0);
+                        //console.log($("#WorkflowCodes"));
+                        $("#WorkflowCodes").css("width","246px");
+                    }
+                }, 50);
+            }
+
+// *************************我的文件上传文件选人模态框********************************
+            $scope.myuploadfile = function (data) {
+                var AgencyID;
+                if (data == undefined) AgencyID = "";
+                else AgencyID = data;
+                $http({
+                    url: ControllerConfig.Agents.GetAgency,
+                    params: {
+                        agentID: AgencyID,
+                        random: new Date().getTime()
+                    }
+                })
+                    .success(function (result, header, config, status) {
+                        var Agency = result.Rows[0];
+                        // 弹出模态框
+
+                        var modalInstance = $modal.open({
+                            templateUrl: 'myuploadfile.html',    // 指向上面创建的视图
+                            controller: 'ModalsController',// 初始化模态范围
+                            size: "md",
+                            resolve: {
+                                params: function () {
+                                    return {
+                                        user: $scope.user,
+                                        Agency: Agency,
+                                        AgencyID: AgencyID
+                                    };
+                                },
+                                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                                    return $ocLazyLoad.load([
+                                        'WFRes/_Content/themes/ligerUI/Aqua/css/ligerui-all.min.css',
+                                        'WFRes/assets/stylesheets/sheet.css',
+                                        'WFRes/_Scripts/jquery/jquery.lang.js',
+                                        'WFRes/_Scripts/ligerUI/ligerui.all.min.js',
+                                        'WFRes/_Scripts/MvcSheet/SheetControls.js',
+                                        'WFRes/_Scripts/MvcSheet/MvcSheetUI.js'
+                                    ]).then(function () {
+                                        return $ocLazyLoad.load([
+                                            'WFRes/_Scripts/MvcSheet/Controls/SheetWorkflow.js',
+                                            'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js'
+                                        ]);
+                                    });
+                                }]
+                            }
+                        });
+
+                        modalInstance.opened.then(function() {
+                            //TODO not work
+                        });
+                    })
+                var times = setInterval(function() {
+                    if($("#WorkflowCodes").length>0){
+                        clearInterval(times);
+                        $(".select2-search-field").find("input").css("z-index", 0);
+                        //console.log($("#WorkflowCodes"));
+                        $("#WorkflowCodes").css("width","246px");
+                    }
+                }, 50);
+            }
+
+
             }]);
 
 
     app.controller("ModalsController", ["$scope", "$rootScope", "$http", "$translate", "$state", "$filter", "$modal", "$modalInstance", "$interval", "$timeout", "ControllerConfig", "notify", "datecalculation", "params",
         function ($scope, $rootScope, $http, $translate, $state, $filter, $modal, $modalInstance, $interval, $timeout, ControllerConfig, notify, datecalculation, params) {
-            var $newscope = $rootScope.scope;
+            $scope.config = $rootScope.scope.config;
+            var _newscope = $rootScope.scope;
+            $scope.fileNavigator = _newscope.fileNavigator;
+            $scope.temp = $rootScope.temp;
+            $scope.fileMemuTile = $rootScope.rootdir;
             $scope.getLanguage = function () {
                 $scope.LanJson = {
                     StartTime: $translate.instant("QueryTableColumn.StartTime"),
@@ -516,10 +699,10 @@
                 Editable: true, Visiable: true, Mode: "WorkflowTemplate", IsMultiple: true, PlaceHolder: $scope.LanJson.WorkFlow, IsSearch:true
             }
             $scope.WasAgentOptions = {
-                Editable: true, Visiable: true, PlaceHolder: $scope.LanJson.Originator
+                Editable: true, Visiable: true, PlaceHolder: $scope.LanJson.Originator, IsMultiple: true //全选属性
             }
             $scope.OriginatorRangeOptions = {
-               // Editable: true, Visiable: true, OrgUnitVisible: false, UserVisible: false, PlaceHolder: $scope.LanJson.Originator,GroupVisible:true,IsMultiple: true
+               Editable: true, Visiable: true, OrgUnitVisible: false, UserVisible: false, PlaceHolder: $scope.LanJson.Originator,GroupVisible:true,IsMultiple: true
             }
 
             $scope.init = function () {
@@ -548,85 +731,89 @@
             }
             $scope.init();
 
-            //新建的文件夹是否公开
-            $scope.WasShow = function(){
-                var WasView = $("input[name='open']:checked").val();//选中的单选框的值
-                if(WasView == 1){//不公开
-                    $("#permission").show();
-                    return 1;
-                }else if(WasView == 0){
-                    $("#permission").hide();
-                    return 0;
-                }
-            }
-            $scope.createFolder = function (item) {
-                var foldername = item.tempModel.name && item.tempModel.name.trim();//文件夹名称
-
+            // 功能：获取权限，参数：jq对象，返回值：权限的对象
+            $scope.getPermission = function(jqObj){
                 //权限
                 var fileId = null;//文件的id
                 var orgList = [];//组织的对象数组
                 var userList = [];//个人的对象数组
 
-                var orgListObj = {};// 组织的对象
-                var userListObj = {};// 个人的对象
-                var WasView = $scope.WasShow()//选中的单选框的值
-                if(WasView){//如果公开的话，就取出权限的人员和组织
-                    var id = $('#WasView').SheetUIManager().GetValue();// 获取的是组织或者人员的id
-                    var name = $('#WasView').SheetUIManager().GetText();// 可以获取组织或者人员的名称
-                    orgListObj = {
-                        "id": id,
-                        "name": name
-                    }
-                    // if(IsUser){
-                    //     var id = $('#WasView').SheetUIManager().GetValue();// 获取的是组织或者人员的id
-                    //     var name = $('#WasView').SheetUIManager().GetText();// 可以获取组织或者人员的名称
-                    //     userListObj = {
-                    //         "id": id,
-                    //         "name": name
-                    //     }
-                    // }
+                var idArray = jqObj.SheetUIManager().GetValue();// 获取的是组织或者人员的id
+                var nameArray = jqObj.SheetUIManager().GetText().split(',');// 可以获取组织或者人员的名称
+
+                var len = idArray.length;
+                for(var i = 0;i < len;i++){
+                    orgList.push({
+                        id:idArray[i],
+                        name: nameArray[i]
+                    });
+                // if(IsUser){userList.push({})}
                 }
-                else{
-                    orgListObj = {};
-                    userListObj = {};
-                }
-                orgList.push(orgListObj);
-                userList.push(userListObj);
-                //协办管理员
-                // unitID:82237383-a18e-4055-8006-8c873e84e087
-                // unitID:82237383-a18e-4055-8006-8c873e84e087
-                item.tempModel.type = 'dir';
-                item.tempModel.path = $newscope.fileNavigator.currentPath;
-                if($newscope.fileNavigator.currentFileId == ""){
-                    item.tempModel.id = null;
-                }else{
-                    item.tempModel.id = $newscope.fileNavigator.currentFileId;
-                }
-                item.tempModel.filePermission =  {
+                return {
                     "fileId": fileId,
                     "orgList": orgList,
                     "userList": userList
                 };
+            }
+            $scope.createFolder = function (item) {
+                var foldername = item.tempModel.name && item.tempModel.name.trim();//文件夹名称
+                item.tempModel.filePermission =  $scope.getPermission($("#folderPer"));
+                //协办管理员
+                // unitID:82237383-a18e-4055-8006-8c873e84e087
+                // unitID:82237383-a18e-4055-8006-8c873e84e087
+                item.tempModel.type = 'dir';
+                item.tempModel.path = _newscope.fileNavigator.currentPath;
+                if(_newscope.fileNavigator.currentFileId == ""){
+                    item.tempModel.id = null;
+                }else{
+                    item.tempModel.id = _newscope.fileNavigator.currentFileId;
+                }
                 item.tempModel.name = foldername;
 
-                if (foldername && ! $newscope.fileNavigator.fileNameExists(foldername)) {
+                var permission = $("#folderPer").SheetUIManager().GetValue();
+
+                if (foldername && ! _newscope.fileNavigator.fileNameExists(foldername) && permission) {
                     item.createFolder($rootScope.rootdir).then(function () {
-                        $newscope.fileNavigator.refresh();
-                        $newscope.modal('newfolder', true);
+                        _newscope.fileNavigator.refresh();
                     });
                 } else {
-                    item.error = $translate.instant('error_invalid_filename');
+                    item.error = $translate.instant('没有选择权限或者文件夹名称重复');
                     return false;
                 }
                 $scope.cancel();
             };
+            //上传文件的数据交互
             $scope.startUploadFile = function (e) {
+                $scope.fileNavigator = _newscope.fileNavigator;
+                $scope.fileNavigator.currentPath.unshift($rootScope.rootdir);
+                var permission = $("#uploadPer").SheetUIManager().GetValue();
+                if(permission){
+                    $scope.fileNavigator.filePermission = permission.join(',');
+                }else{
+                    e.error = $translate.instant('没有选择权限');
+                    return false;
+                }
                 extraObj.startUpload();
+                $scope.cancel();
+            };
+            //更改路径数据交互
+            $scope.updateFile = function (item) {
+                item.tempModel.filePermission = $scope.getPermission($("#editPer"));
+                $scope.fileNavigator = _newscope.fileNavigator;
+                var samePath = item.tempModel.path.join() === item.model.path.join();
+                if (samePath && $scope.fileNavigator.fileNameExists(item.tempModel.name)) {
+                    item.error = $translate.instant('error_invalid_filename');
+                    return false;
+                }
+                item.updateFile().then(function () {
+                    $scope.fileNavigator.refresh();
+                });
                 $scope.cancel();
             };
             $scope.cancel = function () {
                 $modalInstance.dismiss('cancel'); // 退出
             }
+            $rootScope.cancel = $scope.cancel;
 
         }]);
 })(window, angular, jQuery);

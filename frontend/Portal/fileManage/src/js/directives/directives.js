@@ -57,17 +57,17 @@
                     abortStr: "终止",
                     deleteStr: "删除",
                     dynamicFormData: function () {
-                        var data = {"path": $scope.fileNavigator.currentPath.join('/'), "parentId": $scope.fileNavigator.currentFileId};
+                        var data = {"path": $scope.fileNavigator.currentPath.join('/'), "parentId": $scope.fileNavigator.currentFileId, "filePermission":$scope.fileNavigator.filePermission};
                         return data;
                     },
                     onSuccess: function (files, data, xhr, pd) {
                         var obj = eval(data);
 
-                        if (obj.success) {
+                        if (obj.errorCode == 200) {
                             $scope.fileNavigator.refresh();
                         } else {
                             pd.progressDiv.hide();
-                            pd.statusbar.append("<span class='ajax-file-upload-error'>ERROR: " + obj.error + "</span>");
+                            pd.statusbar.append("<span class='ajax-file-upload-error'>ERROR: " + obj.msg + "</span>");
                         }
                     }
                 });
