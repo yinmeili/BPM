@@ -1,7 +1,7 @@
 (function(angular) {
     'use strict';
 	app.service('fileNavigator', [
-		'$http', '$q', 'fileManagerConfig', 'item', function ($http, $q, fileManagerConfig, Item) {
+		'$http', '$q', 'fileManagerConfig', 'item','$rootScope', function ($http, $q, fileManagerConfig, Item,$rootScope) {
 
         $http.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
         var FileNavigator = function() {
@@ -268,13 +268,35 @@
                 }
 						};
 
-        /* FileNavigator.prototype.goTo = function(index) {
-						this.currentPath = this.currentPath.slice(0, index + 1);
-						if(index==-1){
-							this.currentFileId = "";
+        FileNavigator.prototype.goTo = function(index) {
+					this.currentPath = this.currentPath.slice(0, index + 1);
+					this.currentParentId = '';
+					var self = this;
+					var deferred = $q.defer();
+					var path = self.currentPath.join('/');
+					self.requesting = true;
+					$http({
+						method: "POST",
+						url: fileManagerConfig.getFileIdByPathUrl,
+						params: {
+							path: ($rootScope.rootdir + '/' + path + '/').replace(/\/\//, '/')
 						}
-            this.refresh();
-        }; */
+					})
+					.success(function (data) {
+						if (index == -1) {
+							self.currentFileId = "";
+						} else {
+							self.currentFileId = data.data.id;
+						}
+						self.deferredHandler(data, deferred);
+						self.refresh();
+					}).error(function (data) {
+						self.deferredHandler(data, deferred, 'Unknown error listing, check the response');
+					})['finally'](function () {
+						self.requesting = false;
+					});
+            
+        };
 
         FileNavigator.prototype.fileNameExists = function(fileName) {
             for (var item in this.fileList) {
