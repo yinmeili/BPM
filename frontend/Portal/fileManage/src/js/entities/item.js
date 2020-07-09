@@ -23,7 +23,7 @@
                     //return Math.round(this.size / 1024, 1);
                 },
                 fullPath: function () {
-                    return ('/' + this.path.join('/') + '/' + this.name).replace(/\/\//, '/');
+                    return ($rootScope.rootdir + '/' + this.path.join('/') + '/' + this.name).replace(/\/\//, '/');
                 }
             };
 
