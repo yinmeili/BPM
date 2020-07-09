@@ -57,16 +57,16 @@ public class FileService extends ApiDataService {
 	}
 
 	/**
-	 * 根据CreateUserId获取文件,垃圾箱功能 author:lhl
+	 * 根据用户ID获取用户删除的文件
 	 * 
 	 * @param createId
 	 * @return
 	 */
-	public List<File> findFileByCreateUserId(String createId) {
+	public List<File> findDeletedFileByUserId(String userId) {
 
 		List<File> fileList = null;
 		try {
-			fileList = fileMapper.findDeletedFileByCreateUserId(createId);
+			fileList = fileMapper.findDeletedFileByUserId(userId);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

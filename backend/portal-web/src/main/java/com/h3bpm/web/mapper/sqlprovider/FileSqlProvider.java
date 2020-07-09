@@ -7,7 +7,8 @@ public class FileSqlProvider {
 		String parentId = (String) para.get("parentId");
 		String keyword = para.get("keyword") == null ? "" : (String) para.get("keyword");
 		
-		String parentIdSqlStr = parentId.isEmpty() ? "parent_id is null" : "parent_id='" + parentId + "'";
+		
+		String parentIdSqlStr = (parentId == null || parentId.isEmpty()) ? " AND parent_id is null" : " AND parent_id='" + parentId + "'";
 		
 		/*
 		 * 关键字不为空时，模糊搜索所有目录名称和文件名 
@@ -15,7 +16,6 @@ public class FileSqlProvider {
 		String keywordSqlStr = "";
 		if(!keyword.isEmpty()){
 			keywordSqlStr = " AND name like '%" + keyword + "%'";
-			parentIdSqlStr = "";
 		}
 		
 		String sql =
@@ -30,7 +30,7 @@ public class FileSqlProvider {
 			"			 create_time createTime"+
 			"			FROM"+
 			"				ot_file"+
-			"				WHERE is_delete=0 AND "+
+			"				WHERE is_delete=0 "+
 						parentIdSqlStr +
 						keywordSqlStr +
 			"			ORDER BY"+
@@ -38,10 +38,8 @@ public class FileSqlProvider {
 		return sql;
 	}
 
-	public String findDeletedFileByCreateUserId(Map<String, Object> para) {
-		String create_id = (String)para.get("createUserId");
-
-		String createId_sql = "create_user_id = '" + create_id + "'";
+	public String findDeletedFileByUserId(Map<String, Object> para) {
+		String userId = (String)para.get("userId");
 
 		String sql =
 				"SELECT"+
@@ -52,11 +50,14 @@ public class FileSqlProvider {
 						"			 dir,"+
 						"			 file_size fileSize,"+
 						"			 create_user_id createUserId,"+
-						"			 create_time createTime"+
+						"			 create_time createTime,"+
+						"			 is_delete isDelete,"+
+						"			 delete_time deleteTime"+
 						"			FROM"+
 						"				ot_file"+
 						"				WHERE is_delete=1 AND "+
-						createId_sql ;
+						"           create_user_id = '" + userId + "'"+
+						"				ORDER BY delete_time DESC";
 		return sql;
 	}
 	

@@ -88,26 +88,25 @@ public class FileManagerController extends ControllerBase {
 	// }
 
 	// author:lhl
-	@RequestMapping(value = "/recycleStation", produces = "application/json;charset=utf8")
+	@RequestMapping(value = "/listRecycleFile", produces = "application/json;charset=utf8")
 	@ResponseBody
-	public FileDescList recycle(@RequestBody RecycleParam recycleParam) {
-		List<FileDesc> descList = new ArrayList<>();
-
+	public ResponseVo listRecycleFile() {
+		List<FileVo> descList = new ArrayList<>();
 		try {
 			UserSessionInfo userSessionInfo = UserSessionUtils.get(Constants.SESSION_USER, UserSessionInfo.class);
-			String req_create_id = userSessionInfo.getUser().getObjectID();
+			String userId = userSessionInfo.getUser().getObjectID();
 
-			List<com.h3bpm.web.entity.File> fileList = fileService.findFileByCreateUserId(req_create_id);
+//			List<com.h3bpm.web.entity.File> fileList = fileService.findDeletedFileByUserId("82237383-a18e-4055-8006-8c873e84e087");
+			List<com.h3bpm.web.entity.File> fileList = fileService.findDeletedFileByUserId(userId);
 			for (com.h3bpm.web.entity.File file : fileList) {
 
-				FileDesc fileDesc = new FileDesc(file);
-				descList.add(fileDesc);
+				FileVo fileVo = new FileVo(file);
+				descList.add(fileVo);
 
 			}
 
-			FileDescList result = new FileDescList(descList);
-
-			return result;
+			return new ResponseVo(descList);
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -172,6 +171,53 @@ public class FileManagerController extends ControllerBase {
 		}
 
 		// return result;
+	}
+	
+	@RequestMapping(value = "/searchListFile", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public FileDescList searchListFile(@RequestBody ReqListFile requestBean) {
+
+		List<FileDesc> descList = new ArrayList<>();
+
+		try {
+
+			String id = requestBean.getParentId();
+
+			com.h3bpm.web.entity.File fileDb = fileService.getFileById(id);
+			List<com.h3bpm.web.entity.File> fileList = fileService.findFileByParentIdAndKeyword(id, requestBean.getKeyword());
+			Map<String, Object> userMap = this._getCurrentUser();
+			OThinker.Common.Organization.Models.User user = (User) userMap.get("User");
+
+			if (fileList != null) {
+				for (com.h3bpm.web.entity.File file : fileList) {
+
+					/*
+					 * 判断当前用户是否有文件的访问权限
+					 */
+					// if(fileService.validateFilePermission(file.getId(), user.getObjectId())){
+					FileDesc fileDesc = new FileDesc(file);
+					fileDesc.setFilePermission(filePermissionService.getFilePermissionByFileId(file.getId()));
+
+					descList.add(fileDesc);
+					// }
+
+				}
+
+			}
+			FileDescList result = new FileDescList(descList);
+
+			if (fileDb == null || fileDb.getParentId() == null) {
+				result.setParentId("");
+			} else {
+				result.setParentId(fileDb.getParentId());
+			}
+
+			return result;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@RequestMapping(value = "/getFileIdByPath", produces = "application/json;charset=utf8")

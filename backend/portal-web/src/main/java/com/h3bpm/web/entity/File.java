@@ -15,7 +15,7 @@ public class File {
 	private String createUserId = null;
 	private Date createTime = null;
 	private boolean isDelete = false;
-	private Timestamp deleteTime = null; //显示删除时间
+	private Date deleteTime = null; //显示删除时间
 
 	public File(){
 		
@@ -106,7 +106,7 @@ public class File {
 		this.createTime = createTime;
 	}
 
-	public Timestamp getDeleteTime() {
+	public Date getDeleteTime() {
 		return deleteTime;
 	}
 

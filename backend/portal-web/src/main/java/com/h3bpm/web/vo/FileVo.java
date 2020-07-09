@@ -14,13 +14,14 @@ public class FileVo {
 	private String createUserId = null;
 	private Date createTime = null;
 	private boolean isDelete = false;
+	private Date deleteTime = null;
 
 	private FilePermissionVo filePermission = null;
 
 	public FileVo() {
-		
+
 	}
-	
+
 	public FileVo(File entity) {
 		this.id = entity.getId();
 		this.parentId = entity.getParentId();
@@ -31,6 +32,7 @@ public class FileVo {
 		this.createUserId = entity.getCreateUserId();
 		this.createTime = entity.getCreateTime();
 		this.isDelete = entity.getIsDelete();
+		this.deleteTime = entity.getDeleteTime();
 	}
 
 	public FilePermissionVo getFilePermission() {
@@ -47,6 +49,14 @@ public class FileVo {
 
 	public void setIsDelete(boolean isDelete) {
 		this.isDelete = isDelete;
+	}
+
+	public Date getDeleteTime() {
+		return deleteTime;
+	}
+
+	public void setDeleteTime(Date deleteTime) {
+		this.deleteTime = deleteTime;
 	}
 
 	public long getFileSize() {
