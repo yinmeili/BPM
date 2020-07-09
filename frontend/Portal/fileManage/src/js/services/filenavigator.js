@@ -6,14 +6,16 @@
         $http.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
         var FileNavigator = function() {
             this.requesting = false;
-						this.fileList = [];
-						this.recycleFileList=[];
+            this.position = false;
+            this.fileList = [];
+    		this.recycleFileList=[];
+
             this.currentPath = [];
             this.history = [];
             this.error = '';
 
-						this.currentFileId = '';
-						this.currentParentId = '';
+            this.currentFileId = '';
+            this.currentParentId = '';
             
             this.myFolderCurrentPath = ["我的文件"];
             this.myFolderFileList = [];
@@ -62,7 +64,7 @@
 								parentId: self.currentParentId,
                 mode: 'list',
                 onlyFolders: false,
-                path: '/' + path
+                path:$rootScope.rootdir + '/' + path
             }};
 
             self.requesting = true;
@@ -128,28 +130,47 @@
             return deferred.promise;
         };
 
+        FileNavigator.prototype.search = function(keyword, url){
+            var self = this;
+            var deferred = $q.defer();
+            var path = self.currentPath.join('/');
+            var data = {
+                parentId: self.currentFileId,
+                keyword: keyword
+            }
+            $http.post(url, data).success(function (data) {
+                self.deferredHandler(data, deferred);
+            }).error(function (data) {
+                self.deferredHandler(data, deferred, 'Unknown error listing, check the response');
+            })['finally'](function () {
+                // self.position = false;
+            });
+            return deferred.promise;
+        }
+
         FileNavigator.prototype.refresh = function() {
             var self = this;
-						var path = self.currentPath.join('/');
-					// 判断不同的index的页面刷新不同的数据
-					if ($rootScope.rootdir=='回收站'){
-						return self.listRecycle().then(function (data) {
-							// self.currentParentId = data.parentId;
-							self.recycleFileList = (data.data || []).map(function (file) {
-								return new Item(file, self.currentPath);
-							});
-							self.buildTree(path);
-						});
-					} else{
-						return self.list().then(function (data) {
-							self.currentParentId = data.parentId;
-							self.fileList = (data.result || []).map(function (file) {
-								return new Item(file, self.currentPath);
-							});
-							self.buildTree(path);
-						});
-					}
-				};
+            var path = self.currentPath.join('/');
+            self.position = false;
+            // 判断不同的index的页面刷新不同的数据
+            if ($rootScope.rootdir=='回收站'){
+                return self.listRecycle().then(function (data) {
+                    // self.currentParentId = data.parentId;
+                    self.recycleFileList = (data.data || []).map(function (file) {
+                        return new Item(file, self.currentPath);
+                    });
+                    self.buildTree(path);
+                });
+            } else{
+                return self.list().then(function (data) {
+                    self.currentParentId = data.parentId;
+                    self.fileList = (data.result || []).map(function (file) {
+                        return new Item(file, self.currentPath);
+                    });
+                    self.buildTree(path);
+                });
+            }
+        };
 				
 
 
@@ -302,7 +323,7 @@
 										this.currentFileId = this.currentParentId;
                     this.refresh();
                 }
-						};
+            };
 
         FileNavigator.prototype.goTo = function(index) {
 					this.currentPath = this.currentPath.slice(0, index + 1);

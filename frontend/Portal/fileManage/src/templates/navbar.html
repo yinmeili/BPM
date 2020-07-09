@@ -1,7 +1,7 @@
 <!--<nav class="navbar navbar-inverse navbar-fixed-top">-->
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
-    <div class="navbar-header">
+    <!--<div class="navbar-header">-->
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
         <span class="sr-only">Toggle</span>
         <span class="icon-bar"></span>
@@ -11,10 +11,11 @@
       <!-- <a class="navbar-brand hidden-xs" href="" ng-click="fileNavigator.goTo(-1)">{{config.appName}}</a> -->
       <!-- <a class="navbar-brand hidden-xs" href="" ng-click="fileNavigator.goTo(-1)">{{config.appName}}</a> -->
       <div class="navbar-form navbar-left">
-        <input type="text" class="form-control " placeholder="搜索..." ng-model="$parent.query">
+        <input type="text" class="form-control " id="allSearch"><!--  ng-model="$parent.query" -->
+        <input type="button" value="搜索" class="form-control" ng-click="search('allSearch');">
       </div>
       
-    </div>
+    <!--</div>-->
     <div id="navbar" class="navbar-collapse collapse">
       <div class="navbar-form navbar-right">
         <!-- <input type="text" class="form-control " placeholder="搜索..." ng-model="$parent.query"> -->
@@ -22,14 +23,14 @@
             <!--<i class="glyphicon glyphicon-plus"></i> 新建文件夹-->
         <!--</button>-->
         <button class="btn btn-default btn-sm">
-          <i class="glyphicon glyphicon-plus" ng-click="newfolder()"><span style="margin-left: 5px;">新建文件夹</span></i>
+          <i class="glyphicon glyphicon-plus" ng-click="newFolder()"><span style="margin-left: 5px;">新建文件夹</span></i>
         </button>
 
         <!--<button class="btn btn-default btn-sm" data-toggle="modal" data-target="#uploadfile" ng-show="config.allowedActions.upload" ng-click="touch();clearUploadFileList()">-->
             <!--<i class="glyphicon glyphicon-upload"></i> 上传文件-->
         <!--</button>-->
         <button class="btn btn-default btn-sm">
-          <i class="glyphicon glyphicon-upload" ng-click="uploadfile()"><span style="margin-left: 5px;">上传文件</span></i>
+          <i class="glyphicon glyphicon-upload" ng-click="uploadFile()"><span style="margin-left: 5px;">上传文件</span></i>
         </button>
 
           <!--<button id="infoshow" class="btn btn-default btn-sm " data-toggle="modal" data-target="#url-qrcode" ng-show="config.allowedActions.qrcode" ng-click="touch();genQRcode();">

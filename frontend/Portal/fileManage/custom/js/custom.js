@@ -14,6 +14,8 @@ app.config(['fileManagerConfigProvider', function (config) {
         downloadFileUrl: fileManagerApiUrl + 'previewFile',
         createFolderUrl: fileManagerApiUrl + 'createFolder',
         listMyFolderUrl: fileManagerApiUrl + 'listMyFolder',
+        listMyFileUrl: fileManagerApiUrl + 'listMyFile',
+        searchListFileUrl: fileManagerApiUrl + 'searchListFile',
         allowedActions: angular.extend(defaults.allowedActions, {
             copy : false,
             edit : true,

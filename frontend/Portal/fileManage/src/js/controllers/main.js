@@ -260,10 +260,50 @@
                 });
             };
 
-            //搜索
-            $scope.search = function (){
-                alert("搜索");
+            //我的搜索
+            $scope.mySearch = function (searchId){
+                var val = $("#"+searchId).val();
+                var data = {
+                    parentId: $scope.fileNavigator.currentParentId,
+                    keyword: val
+                }
+                $scope.fileNavigator.requesting = true;
+                $http.post(fileManagerConfig.listMyFileUrl, data).success(function (data) {
+                    console.log(data);
+                    console.log(1);
+                }).error(function (data) {
+                    console.log(data);
+                    console.log(2);
+                })['finally'](function () {
+                    console.log(3);
+                });
+
             };
+
+            //搜索,先拿到数据，先发送请求http，在渲染refresh
+            $scope.search = function(searchId){
+                $scope.fileNavigator.position = true;
+                var keyword = $("#"+searchId).val();
+                var url = "";
+                if(searchId == "allSearch"){
+                    url = fileManagerConfig.searchListFileUrl;
+                }else if(searchId == "mySearch"){
+                    url = fileManagerConfig.listMyFileUrl;
+                }
+                if(keyword){
+                    var path = $scope.fileNavigator.currentPath.join('/');
+                    $scope.fileNavigator.search(keyword, url).then(function (data) {
+                        $scope.fileNavigator.currentParentId = data.parentId;
+                        $scope.fileNavigator.fileList = (data.result || []).map(function(file) {
+                            return new Item(file, $scope.fileNavigator.currentPath);
+                        });
+                        $scope.fileNavigator.buildTree(path);
+                    });
+
+                }else{
+                    alert('请输入查询名称');
+                }
+            }
 
             $scope.getQueryParam = function (param) {
                 var found;
@@ -365,7 +405,7 @@
             $scope.$on('$viewContentLoaded', function (event) {
                 $scope.myScroll = null
             });
-            $scope.newfolder = function (data) {
+            $scope.newFolder = function (data) {
                 var AgencyID;
                 if (data == undefined) AgencyID = "";
                 else AgencyID = data;
@@ -381,7 +421,7 @@
                         // 弹出模态框
 
                         var modalInstance = $modal.open({
-                            templateUrl: 'newfolder.html',    // 指向上面创建的视图
+                            templateUrl: 'newFolder.html',    // 指向上面创建的视图
                             controller: 'ModalsController',// 初始化模态范围
                             size: "md",
                             resolve: {
@@ -421,7 +461,7 @@
             }
 
 // *************************共享文件上传文件选人模态框********************************
-            $scope.uploadfile = function (data) {
+            $scope.uploadFile = function (data) {
                 var AgencyID;
                 if (data == undefined) AgencyID = "";
                 else AgencyID = data;
@@ -437,7 +477,7 @@
                         // 弹出模态框
 
                         var modalInstance = $modal.open({
-                            templateUrl: 'uploadfile.html',    // 指向上面创建的视图
+                            templateUrl: 'uploadFile.html',    // 指向上面创建的视图
                             controller: 'ModalsController',// 初始化模态范围
                             size: "md",
                             resolve: {
@@ -542,7 +582,7 @@
             }
 
 // ***************************我的文件新建文件夹模态框********************************
-            $scope.mynewfolder = function (data) {
+            $scope.myNewFolder = function (data) {
                 var AgencyID;
                 if (data == undefined) AgencyID = "";
                 else AgencyID = data;
@@ -558,7 +598,7 @@
                         // 弹出模态框
 
                         var modalInstance = $modal.open({
-                            templateUrl: 'mynewfolder.html',    // 指向上面创建的视图
+                            templateUrl: 'myNewFolder.html',    // 指向上面创建的视图
                             controller: 'ModalsController',// 初始化模态范围
                             size: "md",
                             resolve: {
@@ -598,7 +638,7 @@
             }
 
 // *************************我的文件上传文件选人模态框********************************
-            $scope.myuploadfile = function (data) {
+            $scope.myUploadFile = function (data) {
                 var AgencyID;
                 if (data == undefined) AgencyID = "";
                 else AgencyID = data;
@@ -614,7 +654,7 @@
                         // 弹出模态框
 
                         var modalInstance = $modal.open({
-                            templateUrl: 'myuploadfile.html',    // 指向上面创建的视图
+                            templateUrl: 'myUploadfile.html',    // 指向上面创建的视图
                             controller: 'ModalsController',// 初始化模态范围
                             size: "md",
                             resolve: {
@@ -656,6 +696,69 @@
                     }
                 }, 50);
             }
+
+// *************************我的文件编辑路径和名称模态框******************************
+            $scope.myToUpdateFile = function (data) {
+                $scope.fileNavigator = $rootScope.scope.fileNavigator;//参数
+                $rootScope.temp = data;
+                data = "";
+                var AgencyID;
+                if (data == undefined) AgencyID = "";
+                else AgencyID = data;
+                $http({
+                    url: ControllerConfig.Agents.GetAgency,
+                    params: {
+                        agentID: AgencyID,
+                        random: new Date().getTime()
+                    }
+                }).success(function (result, header, config, status) {
+                    var Agency = result.Rows[0];
+                    // 弹出模态框
+
+                    var modalInstance = $modal.open({
+                        templateUrl: 'myUpdateFile.html',    // 指向上面创建的视图
+                        controller: 'ModalsController',// 初始化模态范围
+                        size: "md",
+                        resolve: {
+                            params: function () {
+                                return {
+                                    user: $scope.user,
+                                    Agency: Agency,
+                                    AgencyID: AgencyID
+                                };
+                            },
+                            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                                return $ocLazyLoad.load([
+                                    'WFRes/_Content/themes/ligerUI/Aqua/css/ligerui-all.min.css',
+                                    'WFRes/assets/stylesheets/sheet.css',
+                                    'WFRes/_Scripts/jquery/jquery.lang.js',
+                                    'WFRes/_Scripts/ligerUI/ligerui.all.min.js',
+                                    'WFRes/_Scripts/MvcSheet/SheetControls.js',
+                                    'WFRes/_Scripts/MvcSheet/MvcSheetUI.js'
+                                ]).then(function () {
+                                    return $ocLazyLoad.load([
+                                        'WFRes/_Scripts/MvcSheet/Controls/SheetWorkflow.js',
+                                        'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js'
+                                    ]);
+                                });
+                            }]
+                        }
+                    });
+                    modalInstance.opened.then(function() {
+                        //TODO not work
+                    });
+                });
+                var times = setInterval(function() {
+                    if($("#WorkflowCodes").length>0){
+                        clearInterval(times);
+                        $(".select2-search-field").find("input").css("z-index", 0);
+                        //console.log($("#WorkflowCodes"));
+                        $("#WorkflowCodes").css("width","246px");
+                    }
+                }, 50);
+            }
+
+
 
 
             }]);
@@ -745,16 +848,25 @@
                 var orgList = [];//组织的对象数组
                 var userList = [];//个人的对象数组
 
-                var idArray = jqObj.SheetUIManager().GetValue();// 获取的是组织或者人员的id
-                var nameArray = jqObj.SheetUIManager().GetText().split(',');// 可以获取组织或者人员的名称
+                var H3Obj = jqObj.SheetUIManager();
+                if(H3Obj){
+                    if(H3Obj.GetValue()){
+                        var idArray = H3Obj.GetValue();// 获取的是组织或者人员的id
+                        var nameArray = H3Obj.GetText().split(',');// 可以获取组织或者人员的名称
 
-                var len = idArray.length;
-                for(var i = 0;i < len;i++){
-                    orgList.push({
-                        id:idArray[i],
-                        name: nameArray[i]
-                    });
-                // if(IsUser){userList.push({})}
+                        var len = idArray.length;
+                        for(var i = 0;i < len;i++){
+                            orgList.push({
+                                id:idArray[i],
+                                name: nameArray[i]
+                            });
+                            // if(IsUser){userList.push({})}
+                        }
+                    }else{
+                        alert('请选择权限');//未
+                    }
+                }else{
+                    alert('请选择权限....');
                 }
                 return {
                     "fileId": fileId,
@@ -762,6 +874,7 @@
                     "userList": userList
                 };
             }
+            //共享文件新建文件夹数据交互
             $scope.createFolder = function (item) {
                 var foldername = item.tempModel.name && item.tempModel.name.trim();//文件夹名称
                 item.tempModel.filePermission =  $scope.getPermission($("#folderPer"));
@@ -777,9 +890,9 @@
                 }
                 item.tempModel.name = foldername;
 
-                var permission = $("#folderPer").SheetUIManager().GetValue();
+                // var permission = $("#folderPer").SheetUIManager().GetValue();
 
-                if (foldername && ! _newscope.fileNavigator.fileNameExists(foldername) && permission) {
+                if (foldername && ! _newscope.fileNavigator.fileNameExists(foldername)) {
                     item.createFolder($rootScope.rootdir).then(function () {
                         _newscope.fileNavigator.refresh();
                     });
@@ -789,8 +902,65 @@
                 }
                 $scope.cancel();
             };
-            //上传文件的数据交互
+            //共享文件上传文件的数据交互
             $scope.startUploadFile = function (e) {
+                $scope.fileNavigator = _newscope.fileNavigator;
+                var permission = $("#uploadPer").SheetUIManager().GetValue();
+                if(permission){
+                    $scope.fileNavigator.filePermission = permission.join(',');
+                }else{
+                    alert('请选择权限');
+                    e.error = $translate.instant('没有选择权限');
+                    return false;
+                }
+                extraObj.startUpload();
+                $scope.cancel();
+            };
+            //共享文件更改路径数据交互
+            $scope.updateFile = function (item) {
+                item.tempModel.filePermission = $scope.getPermission($("#editPer"));
+                $scope.fileNavigator = _newscope.fileNavigator;
+                var samePath = item.tempModel.path.join() === item.model.path.join();
+                if (samePath && $scope.fileNavigator.fileNameExists(item.tempModel.name)) {
+                    item.error = $translate.instant('error_invalid_filename');
+                    return false;
+                }
+                item.updateFile().then(function () {
+                    $scope.fileNavigator.refresh();
+                });
+                $scope.cancel();
+            };
+
+            //我的文件新建文件夹数据交互
+            $scope.myCreateFolder = function (item) {
+                var foldername = item.tempModel.name && item.tempModel.name.trim();//文件夹名称
+                item.tempModel.filePermission =  $scope.getPermission($("#folderPer"));
+                //协办管理员
+                // unitID:82237383-a18e-4055-8006-8c873e84e087
+                // unitID:82237383-a18e-4055-8006-8c873e84e087
+                item.tempModel.type = 'dir';
+                item.tempModel.path = _newscope.fileNavigator.currentPath;
+                if(_newscope.fileNavigator.currentFileId == ""){
+                    item.tempModel.id = null;
+                }else{
+                    item.tempModel.id = _newscope.fileNavigator.currentFileId;
+                }
+                item.tempModel.name = foldername;
+
+                // var permission = $("#folderPer").SheetUIManager().GetValue();
+
+                if (foldername && ! _newscope.fileNavigator.fileNameExists(foldername)) {
+                    item.createFolder($rootScope.rootdir).then(function () {
+                        _newscope.fileNavigator.refresh();
+                    });
+                } else {
+                    item.error = $translate.instant('没有选择权限或者文件夹名称重复');
+                    return false;
+                }
+                $scope.cancel();
+            };
+            //我的文件上传文件的数据交互
+            $scope.myStartUploadFile = function (e) {
                 $scope.fileNavigator = _newscope.fileNavigator;
                 $scope.fileNavigator.currentPath.unshift($rootScope.rootdir);
                 var permission = $("#uploadPer").SheetUIManager().GetValue();
@@ -803,8 +973,8 @@
                 extraObj.startUpload();
                 $scope.cancel();
             };
-            //更改路径数据交互
-            $scope.updateFile = function (item) {
+            //我的文件更改路径数据交互
+            $scope.myUpdateFile = function (item) {
                 item.tempModel.filePermission = $scope.getPermission($("#editPer"));
                 $scope.fileNavigator = _newscope.fileNavigator;
                 var samePath = item.tempModel.path.join() === item.model.path.join();
