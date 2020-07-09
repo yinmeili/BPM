@@ -6,7 +6,8 @@
         $http.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
         var FileNavigator = function() {
             this.requesting = false;
-            this.fileList = [];
+						this.fileList = [];
+						this.recycleFileList=[];
             this.currentPath = [];
             this.history = [];
             this.error = '';
@@ -77,7 +78,30 @@
                 self.requesting = false;
             });
             return deferred.promise;
-        };
+				};
+			
+			/********************回收站列表*********************/
+			FileNavigator.prototype.listRecycle = function () {
+				var self = this;
+				var deferred = $q.defer();
+				var path = self.currentPath.join('/');
+				self.requesting = true;
+				self.recycleFileList = [];
+				self.error = '';
+				self.showList('showFolder');
+
+				$http({
+					method: "POST",
+					url: fileManagerConfig.listRecycleFileUrl
+				}).success(function (data) {
+					self.deferredHandler(data, deferred);
+				}).error(function (data) {
+					self.deferredHandler(data, deferred, 'Unknown error listing, check the response');
+				})['finally'](function () {
+					self.requesting = false;
+				});
+				return deferred.promise;
+			};
 
         FileNavigator.prototype.listMyFolder = function() {
             var self = this;
@@ -105,17 +129,29 @@
         };
 
         FileNavigator.prototype.refresh = function() {
-					// debugger;
             var self = this;
-            var path = self.currentPath.join('/');
-            return self.list().then(function(data) {
-								self.currentParentId = data.parentId;
-                self.fileList = (data.result || []).map(function(file) {
-                    return new Item(file, self.currentPath);
-                });
-                self.buildTree(path);
-            });
-        };
+						var path = self.currentPath.join('/');
+					// 判断不同的index的页面刷新不同的数据
+					if ($rootScope.rootdir=='回收站'){
+						return self.listRecycle().then(function (data) {
+							// self.currentParentId = data.parentId;
+							self.recycleFileList = (data.data || []).map(function (file) {
+								return new Item(file, self.currentPath);
+							});
+							self.buildTree(path);
+						});
+					} else{
+						return self.list().then(function (data) {
+							self.currentParentId = data.parentId;
+							self.fileList = (data.result || []).map(function (file) {
+								return new Item(file, self.currentPath);
+							});
+							self.buildTree(path);
+						});
+					}
+				};
+				
+
 
         FileNavigator.prototype.myFolderRefresh = function() {
             var self = this;
