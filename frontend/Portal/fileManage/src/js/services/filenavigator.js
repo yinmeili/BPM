@@ -14,8 +14,8 @@
             this.history = [];
             this.error = '';
 
-						this.currentFileId = '';
-						this.currentParentId = '';
+            this.currentFileId = '';
+            this.currentParentId = '';
             
             this.myFolderCurrentPath = ["我的文件"];
             this.myFolderFileList = [];
@@ -150,27 +150,27 @@
 
         FileNavigator.prototype.refresh = function() {
             var self = this;
- 					var path = self.currentPath.join('/');
-            		self.position = false;
-					// 判断不同的index的页面刷新不同的数据
-					if ($rootScope.rootdir=='回收站'){
-						return self.listRecycle().then(function (data) {
-							// self.currentParentId = data.parentId;
-							self.recycleFileList = (data.data || []).map(function (file) {
-								return new Item(file, self.currentPath);
-							});
-							self.buildTree(path);
-						});
-					} else{
-						return self.list().then(function (data) {
-							self.currentParentId = data.parentId;
-							self.fileList = (data.result || []).map(function (file) {
-								return new Item(file, self.currentPath);
-							});
-							self.buildTree(path);
-						});
-					}
-				};
+            var path = self.currentPath.join('/');
+            self.position = false;
+            // 判断不同的index的页面刷新不同的数据
+            if ($rootScope.rootdir=='回收站'){
+                return self.listRecycle().then(function (data) {
+                    // self.currentParentId = data.parentId;
+                    self.recycleFileList = (data.data || []).map(function (file) {
+                        return new Item(file, self.currentPath);
+                    });
+                    self.buildTree(path);
+                });
+            } else{
+                return self.list().then(function (data) {
+                    self.currentParentId = data.parentId;
+                    self.fileList = (data.result || []).map(function (file) {
+                        return new Item(file, self.currentPath);
+                    });
+                    self.buildTree(path);
+                });
+            }
+        };
 				
 
 
@@ -323,7 +323,7 @@
 										this.currentFileId = this.currentParentId;
                     this.refresh();
                 }
-						};
+            };
 
         FileNavigator.prototype.goTo = function(index) {
 					this.currentPath = this.currentPath.slice(0, index + 1);
