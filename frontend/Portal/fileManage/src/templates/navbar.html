@@ -11,8 +11,8 @@
       <!-- <a class="navbar-brand hidden-xs" href="" ng-click="fileNavigator.goTo(-1)">{{config.appName}}</a> -->
       <!-- <a class="navbar-brand hidden-xs" href="" ng-click="fileNavigator.goTo(-1)">{{config.appName}}</a> -->
       <div class="navbar-form navbar-left">
-        <input type="text" class="form-control " ng-model="$parent.query">
-        <input type="button" value="搜索" class="form-control" ng-click="search()">
+        <input type="text" class="form-control " id="allSearch"><!--  ng-model="$parent.query" -->
+        <input type="button" value="搜索" class="form-control" ng-click="search('allSearch');">
       </div>
       
     <!--</div>-->

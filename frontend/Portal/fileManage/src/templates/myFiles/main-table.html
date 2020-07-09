@@ -19,18 +19,12 @@
                     <span class="sortorder" ng-show="predicate[1] === 'model.size'" ng-class="{reverse:reverse}"></span>
                 </a>
             </th>
-            <th class=" hidden-xs">
+            <th class="hidden-sm hidden-xs">
                 <a href="" ng-click="order('model.date')">
                     创建日期
                     <span class="sortorder" ng-show="predicate[1] === 'model.date'" ng-class="{reverse:reverse}"></span>
                 </a>
             </th>
-            <!--<th class="hidden-sm hidden-xs">
-                <a href="" ng-click="order('model.permissions')">
-                    {{"permissions" | translate}}
-                    <span class="sortorder" ng-show="predicate[1] === 'model.permissions'" ng-class="{reverse:reverse}"></span>
-                </a>
-            </th>-->
             <th class="text-right "></th>
         </tr>
     </thead>
@@ -59,7 +53,7 @@
                 </a>
             </td>
             <!-- 路径位置 -->
-            <td class="hidden-xs" ng-show="fileNavigator.position">
+            <td class="hidden-xs" ng-show="fileNavigator.requesting">
                 {{item.model.fullPath()}}
             </td>
             <td class="hidden-sm hidden-xs " >
@@ -74,7 +68,7 @@
                 {{item.model.perms.toCode(item.model.type === 'dir'?'d':'-')}}
             </td>-->
             <td class="text-right " nowrap>
-                <div ng-include="config.tplPath + '/item-toolbar.html'"></div>
+                <div ng-include="config.tplPath + '/myFiles/item-toolbar.html'"></div>
             </td>
         </tr>
     </tbody>
@@ -105,6 +99,10 @@
                     {{item.model.name | strLimit : 32}}
                 </a>
             </td>
+            <!-- 路径位置 -->
+            <td class="hidden-xs" ng-show="fileNavigator.position">
+                {{item.model.fullPath()}}
+            </td>
             <td class="hidden-sm hidden-xs " >
                 <span ng-show="item.model.type === 'file'">{{item.model.sizeKb()}}KB</span>
                 <span ng-show="item.model.type === 'dir'"></span>
@@ -117,7 +115,7 @@
                  {{item.model.perms.toCode(item.model.type === 'dir'?'d':'-')}}
              </td>-->
             <td class="text-right " nowrap>
-                <div ng-include="config.tplPath + '/item-toolbar.html'"></div>
+                <div ng-include="config.tplPath + '/myFiles/item-toolbar.html'"></div>
             </td>
         </tr>
     </tbody>
