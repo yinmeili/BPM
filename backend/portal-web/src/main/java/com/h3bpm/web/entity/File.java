@@ -16,6 +16,7 @@ public class File {
 	private Date createTime = null;
 	private boolean isDelete = false;
 	private Date deleteTime = null; //显示删除时间
+	private String downloadFileId = null;	//下载文件id
 
 	public File(){
 		
@@ -31,9 +32,22 @@ public class File {
 		this.createUserId = voBean.getCreateUserId();
 		this.createTime = voBean.getCreateTime();
 		this.isDelete = voBean.getIsDelete();
+		this.downloadFileId = voBean.getDownloadFileId();
 	}
 	
 	
+	public String getDownloadFileId() {
+		return downloadFileId;
+	}
+
+	public void setDownloadFileId(String downloadFileId) {
+		this.downloadFileId = downloadFileId;
+	}
+
+	public void setDeleteTime(Date deleteTime) {
+		this.deleteTime = deleteTime;
+	}
+
 	public boolean getIsDelete() {
 		return isDelete;
 	}
@@ -109,9 +123,4 @@ public class File {
 	public Date getDeleteTime() {
 		return deleteTime;
 	}
-
-	public void setDeleteTime(Timestamp deleteTime) {
-		this.deleteTime = deleteTime;
-	}
-
 }

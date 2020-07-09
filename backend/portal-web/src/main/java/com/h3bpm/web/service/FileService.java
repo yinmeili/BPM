@@ -95,11 +95,7 @@ public class FileService extends ApiDataService {
 		if (fileVo.getFilePermission() != null) {
 			fileVo.getFilePermission().setFileId(uuid);
 
-			FilePermission filePermission = new FilePermission(fileVo.getFilePermission());
-
-			// filePermissionMapper.createFilePermissionTest("111111111");//测试使用
 			filePermissionMapper.createFilePermission(new FilePermission(fileVo.getFilePermission()));
-
 		}
 
 		return uuid;
@@ -115,9 +111,7 @@ public class FileService extends ApiDataService {
 	public void deleteFile(String fileId) {
 		File file = fileMapper.getFileById(fileId);
 		file.setIsDelete(true);
-		file.setDeleteTime(new Timestamp(new Date().getTime()));
-
-		System.out.println("操作已经成功.....");
+		file.setDeleteTime(new Date());
 
 		fileMapper.updateFile(file);
 	}

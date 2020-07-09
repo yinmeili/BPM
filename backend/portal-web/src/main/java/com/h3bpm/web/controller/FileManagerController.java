@@ -96,13 +96,10 @@ public class FileManagerController extends ControllerBase {
 			UserSessionInfo userSessionInfo = UserSessionUtils.get(Constants.SESSION_USER, UserSessionInfo.class);
 			String userId = userSessionInfo.getUser().getObjectID();
 
-//			List<com.h3bpm.web.entity.File> fileList = fileService.findDeletedFileByUserId("82237383-a18e-4055-8006-8c873e84e087");
 			List<com.h3bpm.web.entity.File> fileList = fileService.findDeletedFileByUserId(userId);
 			for (com.h3bpm.web.entity.File file : fileList) {
-
 				FileVo fileVo = new FileVo(file);
 				descList.add(fileVo);
-
 			}
 
 			return new ResponseVo(descList);
@@ -128,7 +125,6 @@ public class FileManagerController extends ControllerBase {
 
 			String pathStr = param.getPath();
 			pathStr = pathStr.replace("\\", File.separator);
-			Path currentPath = Paths.get(uploadPath + pathStr);
 
 			String fileId = param.getFileId();
 
@@ -503,8 +499,7 @@ public class FileManagerController extends ControllerBase {
 				int suffixIndex = strArray.length - 1;
 				String fileSuffix = strArray[suffixIndex];
 
-				byte[] buff = sftp.download(ftpDir, fileId);
-				// System.out.println(Arrays.toString(buff));
+				byte[] buff = sftp.download(ftpDir, file.getDownloadFileId());
 
 				sftp.logout();
 
@@ -590,6 +585,7 @@ public class FileManagerController extends ControllerBase {
 		if (!file.isEmpty()) {
 			UserSessionInfo userSessionInfo = UserSessionUtils.get(Constants.SESSION_USER, UserSessionInfo.class);
 			String fileId = UUID.randomUUID().toString();
+			String downloadFileId = UUID.randomUUID().toString();
 
 			path = path.replace("\\", "/");
 			String fileFullName = file.getOriginalFilename();

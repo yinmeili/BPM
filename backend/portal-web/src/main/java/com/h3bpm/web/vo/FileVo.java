@@ -15,6 +15,7 @@ public class FileVo {
 	private Date createTime = null;
 	private boolean isDelete = false;
 	private Date deleteTime = null;
+	private String downloadFileId = null;
 
 	private FilePermissionVo filePermission = null;
 
@@ -33,6 +34,14 @@ public class FileVo {
 		this.createTime = entity.getCreateTime();
 		this.isDelete = entity.getIsDelete();
 		this.deleteTime = entity.getDeleteTime();
+	}
+
+	public String getDownloadFileId() {
+		return downloadFileId;
+	}
+
+	public void setDownloadFileId(String downloadFileId) {
+		this.downloadFileId = downloadFileId;
 	}
 
 	public FilePermissionVo getFilePermission() {

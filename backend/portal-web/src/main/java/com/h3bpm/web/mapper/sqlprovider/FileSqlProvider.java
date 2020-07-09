@@ -27,7 +27,8 @@ public class FileSqlProvider {
 			"			 dir,"+
 			"			 file_size fileSize,"+
 			"			 create_user_id createUserId,"+
-			"			 create_time createTime"+
+			"			 create_time createTime,"+
+			"			 download_file_id downloadFileId"+
 			"			FROM"+
 			"				ot_file"+
 			"				WHERE is_delete=0 "+
