@@ -5,6 +5,7 @@ app.config(['fileManagerConfigProvider', function (config) {
         appName: '知识库',
         listUrl: fileManagerApiUrl + 'listFile',
         getFileIdByPathUrl: fileManagerApiUrl + 'getFileIdByPath',
+        listRecycleFileUrl: fileManagerApiUrl + 'listRecycleFile',
         renameUrl: fileManagerApiUrl + "renameFile",
         removeUrl: fileManagerApiUrl + 'removeFile',
         getContentUrl: fileManagerApiUrl + 'getContent',
