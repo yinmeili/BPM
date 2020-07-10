@@ -330,35 +330,28 @@
                 新建文件夹
             </h4>
         </div>
-        <div class="modal-body" style="padding-left:50px;padding-right:50px;">
-            <div class="row">
-                <div class="col-md-10">
-                    <div class="form-group" style="color:#778CA2;">
-                        <div class="row" style="margin-bottom: 20px;">
-                            <div class="col-md-3">文件夹名称</div>
-                            <div class="col-md-9 input-group" style="float: left;">
-                                <input class="form-control" type="text" id="fileName" style="border:1px solid #d9d9d9;
-    background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
-                                       ng-model="temp.tempModel.name" autofocus="autofocus"/>
-                            </div>
-                        </div>
-                        <div class="row" style="margin-bottom: 20px;">
-                            <div class="col-md-3">权限选择</div>
-                            <div class="col-md-9 input-group">
-                                <div ui-jq="SheetUser" ui-options="WasAgentOptions" id="folderPer"
-                                     class="" style="" data-orgunitvisible="true" data-groupvisible="true" data-sheetusercontrol="true">
-                                </div>
-                                <!--<span style="color: red;">{{temp.error}}</span>-->
-                            </div>
-                        </div>
-                    </div>
+        <div class="modal-body" style="color:#778CA2;">
+            <div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">文件夹名称</div>
+                <div class="col-md-8 input-group">
+                    <input class="form-control" type="text" id="folderName" style="border:1px solid #d9d9d9;
+background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                           ng-model="temp.tempModel.name" autofocus="autofocus"/>
                 </div>
-                <div class="col-md-2">
+            </div>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">权限选择</div>
+                <div class="col-md-8 input-group">
+                    <div ui-jq="SheetUser" ui-options="WasAgentOptions" id="folderPer"
+                         class="" style="" data-orgunitvisible="true" data-groupvisible="true" data-sheetusercontrol="true">
+                    </div>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess">取消</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
             <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess">保存</button>
         </div>
     </form>
@@ -380,24 +373,22 @@
         <!--弹框提示-->
         <div class="modal-body" style="padding-left:50px;padding-right:50px;">
             <div class="row">
+                <div class="col-md-1"></div>
                 <div class="col-md-10">
                     <div class="form-group" style="color:#778CA2;">
                         <div class="row" style="margin-bottom: 20px;">
                             <div id="fileuploader1" jquery-upload="">选择</div>
                         </div>
                         <div class="row">
-                            <div class="col-md-3 col-sm-3">权限选择</div>
-                            <div class="col-md-9 col-sm-9 input-group">
+                            <div class="col-md-2 col-sm-3">权限选择</div>
+                            <div class="col-md-10 col-sm-9 input-group">
                                 <div ui-jq="SheetUser" ui-options="WasAgentOptions" id="uploadPer"
                                      class="" style="" data-orgunitvisible="true" data-groupvisible="true">
                                 </div>
-                                <!--<span>{{temp.error}}</span>-->
                             </div>
                         </div>
 
                     </div>
-                </div>
-                <div class="col-md-2">
                 </div>
             </div>
         </div>
@@ -422,13 +413,14 @@
         </div>
         <div class="modal-body" style="padding-left:50px;padding-right:50px;">
             <div class="row">
+                <div class="col-md-1"></div>
                 <div class="col-md-10">
                     <div class="form-group" style="color:#778CA2;">
-                        <div class="row" style="margin-bottom: 20px;">
+                        <div class="row" style="margin-bottom: 10px;">
                             <div class="col-md-12">修改名称<b>{{temp.model.name}}</b></div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12 input-group" style="float: left;">
+                        <div class="row" style="margin-bottom: 20px;">
+                            <div class="col-md-12">
                                 <input class="form-control" type="text" style="border:1px solid #d9d9d9;
     background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
                                        ng-model="temp.tempModel.name" autofocus="autofocus"/>
@@ -437,12 +429,14 @@
                         <div class="row" style="margin-bottom: 20px;">
                             <div ng-include data-src="'path-selector'" class="clearfix col-md-12"></div>
                         </div>
-                        <div class="row" style="margin-bottom: 20px;">
+                        <div class="row" style="margin-bottom: 10px;">
                             <div ng-include data-src="'error-bar'" class="clearfix col-md-12"></div>
                         </div>
+                        <div class="row" style="margin-bottom: 10px;">
+                            <div class="col-md-12">权限选择</div>
+                        </div>
                         <div class="row">
-                            <div class="col-md-3">权限选择</div>
-                            <div class="col-md-9 input-group">
+                            <div class="col-md-12">
                                 <div ui-jq="SheetUser" ui-options="WasAgentOptions" id="editPer"
                                      class="" style="" data-orgunitvisible="true" data-groupvisible="true">
                                 </div>
@@ -450,12 +444,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-2">
-                </div>
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess">取消</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
             <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess">保存</button>
         </div>
     </form>
@@ -493,26 +485,19 @@
                 新建文件夹
             </h4>
         </div>
-        <div class="modal-body" style="padding-left:50px;padding-right:50px;">
-            <div class="row">
-                <div class="col-md-10">
-                    <div class="form-group" style="color:#778CA2;">
-                        <div class="row">
-                            <div class="col-md-3">文件夹名称</div>
-                            <div class="col-md-9 input-group" style="float: left;">
-                                <input class="form-control" type="text" id="myfileName" style="border:1px solid #d9d9d9;
-    background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
-                                       ng-model="temp.tempModel.name" autofocus="autofocus"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-2">
+        <div class="modal-body">
+            <div class="row form-group" style="color:#778CA2;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">文件夹名称</div>
+                <div class="col-md-8 input-group" style="float: left;">
+                    <input class="form-control" type="text" id="myFolderName" style="border:1px solid #d9d9d9;
+background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                           ng-model="temp.tempModel.name" autofocus="autofocus"/>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess">取消</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel()">取消</button>
             <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess">保存</button>
         </div>
     </form>
@@ -531,18 +516,11 @@
         </h4>
     </div>
     <!--弹框提示-->
-    <div class="modal-body" style="padding-left:50px;padding-right:50px;">
+    <div class="modal-body">
         <div class="row">
+            <div class="col-md-1"></div>
             <div class="col-md-10">
-                <div class="form-group" style="color:#778CA2;">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div id="fileuploader10" jquery-upload="">选择</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-2">
+                <div id="fileuploader10" jquery-upload="">选择</div>
             </div>
         </div>
     </div>
@@ -565,13 +543,14 @@
         </div>
         <div class="modal-body" style="padding-left:50px;padding-right:50px;">
             <div class="row">
+                <div class="col-md-1"></div>
                 <div class="col-md-10">
                     <div class="form-group" style="color:#778CA2;">
                         <div class="row" style="margin-bottom: 20px;">
                             <div class="col-md-12">修改名称<b>{{temp.model.name}}</b></div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12 input-group" style="float: left;">
+                            <div class="col-md-12">
                                 <input class="form-control" type="text" style="border:1px solid #d9d9d9;
     background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
                                        ng-model="temp.tempModel.name" autofocus="autofocus"/>
@@ -585,12 +564,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-2">
-                </div>
             </div>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess">取消</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel()">取消</button>
             <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess">保存</button>
         </div>
     </form>
@@ -750,7 +727,7 @@
           <code class="mr5"><b>原路径:</b> {{temp.model.fullPath()}}</code>
         </div>
         <div class="detail-sources">
-          <code class="mr5"><b>新路径:</b>{{temp.tempModel.fullPath()}}</code>
+          <code class="mr5"><b>新路径:</b>{{fileMemuTile + '/' + temp.tempModel.path.join('/')+ '/' + temp.tempModel.name}}</code>
           <a href="" class="label label-primary" ng-click="openNavigator(temp)">更改</a>
         </div>
     </div>

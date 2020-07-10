@@ -11,7 +11,7 @@
     <button class="btn btn-sm btn-default" data-toggle="modal" data-target="#edit" ng-show="config.allowedActions.edit && item.isEditable()" ng-click="item.getContent(); touch(item)" title="{{'edit' | translate}}">
         <i class="glyphicon glyphicon-pencil"></i>
     </button>
-    <button class="btn btn-sm btn-default" data-toggle="modal" data-target="#changepermissions" ng-show="config.allowedActions.changePermissions" ng-click="touch(item)" title="{{'permissions' | translate}}">
+    <button class="btn btn-sm btn-default" data-toggle="modal" data-target="#changepermissions" ng-show="config.allowedActions.changePermissions" ng-click="touch(item)" title="分享">
         <i class="glyphicon glyphicon-share"></i>
     </button>
     <button class="btn btn-sm btn-default" data-toggle="modal" data-target="#compress" ng-show="config.allowedActions.compress && item.isCompressible()" ng-click="touch(item)" title="{{'compress' | translate}}">
@@ -20,10 +20,10 @@
     <button class="btn btn-sm btn-default" data-toggle="modal" data-target="#extract" ng-show="config.allowedActions.extract && item.isExtractable()" ng-click="touch(item); item.tempModel.name=''" title="{{'extract' | translate}}">
         <i class="glyphicon glyphicon-export"></i>
     </button>
-    <button class="btn btn-sm btn-default" ng-show="config.allowedActions.download && !item.isFolder()" ng-click="item.download()" title="{{'download' | translate}}">
-        <i class="glyphicon glyphicon-cloud-download"></i>
+    <button class="btn btn-sm btn-default" ng-show="config.allowedActions.download && !item.isFolder()" ng-click="item.download()" title="{{'下载' | translate}}">
+        <i class="glyphicon glyphicon-download"></i>
     </button>
-    <button class="btn btn-sm btn-default" ng-show="config.allowedActions.preview && item.isImage()" ng-click="openImagePreview(item)" title="{{'view_item' | translate}}">
+    <button class="btn btn-sm btn-default" ng-show="config.allowedActions.preview && item.isImage()" ng-click="openImagePreview(item)" title="{{'图片' | translate}}">
         <i class="glyphicon glyphicon-picture"></i>
     </button>
     <button class="btn btn-sm btn-danger" data-toggle="modal" data-target="#delete" ng-show="config.allowedActions.remove" ng-click="touch(item)" title="删除">
