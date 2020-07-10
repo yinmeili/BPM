@@ -16,6 +16,7 @@
                 perms: new Chmod(model && model.rights),
                 content: model && model.content || '',
                 recursive: false,
+                filePermission: model && model.filePermission,
                 sizeKb: function () {
                     var sizeKB = Math.ceil(this.size / 1024);
 
@@ -127,11 +128,11 @@
             var data = {
                 fileId: self.model.id,
                 parentId: self.tempModel.parentId,
-                oldPath: $rootScope.rootdir + self.model.fullPath(),
-                newPath: $rootScope.rootdir + self.tempModel.fullPath(),
+                oldPath: self.model.fullPath(),
+                newPath: self.tempModel.path.join('/') + self.tempModel.name,
                 filePermission: self.tempModel.filePermission
             };
-            
+
             self.inprocess = true;
             self.error = '';
             $http.post(fileManagerConfig.updateUrl, data).success(function (data) {
