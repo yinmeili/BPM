@@ -43,7 +43,15 @@
             isEditableFilePattern: /\.(txt|html?|aspx?|ini|pl|py|md|css|js|log|htaccess|htpasswd|json|sql|xml|xslt?|sh|rb|as|bat|cmd|coffee|php[3-6]?|java|c|cbl|go|h|scala|vb)$/i,
             isImageFilePattern: /\.(jpe?g|gif|bmp|png|svg|tiff?)$/i,
             isExtractableFilePattern: /\.(gz|tar|rar|g?zip)$/i,
-            tplPath: 'fileManage/src/templates'
+            tplPath: 'fileManage/src/templates',
+
+            fileMemuTitle:{
+                "allFiles": '共享文件',
+                "myFiles": '我的文件',
+                "allFlows": '共享流程',
+                "myFlows": '我的流程',
+                "recycle": '回收站'
+            }
         };
 
         return { 
@@ -56,4 +64,3 @@
         };
     
     });
-

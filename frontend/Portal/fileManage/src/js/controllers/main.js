@@ -6,20 +6,27 @@
         function ($scope, $translate, $cookies, fileManagerConfig, Item, FileNavigator, FileUploader, $http, ControllerConfig, $modal, $rootScope, $state, $filter, $compile, jqdatables) {
             $scope.config = fileManagerConfig;
             $scope.reverse = false;
-						$scope.query = '';
-					//回收站按照删除时间默认排序
-					if ($scope.fileMemuTile == '回收站') {
-						$scope.predicate = ['model.deleteTime'];
-						$scope.reverse = true;
-					} else {
-						$scope.predicate = ['model.type', 'model.name'];
-					}
-					$scope.order = function (predicate) {
-						$scope.reverse = ($scope.predicate[1] === predicate) ? !$scope.reverse : false;
-						$scope.predicate[1] = predicate;
-					};
+            $scope.query = '';
+            //回收站按照删除时间默认排序
+            if ($scope.fileMemuTile == '回收站') {
+                $scope.predicate = ['model.deleteTime'];
+                $scope.reverse = true;
+            } else {
+                $scope.predicate = ['model.type', 'model.name'];
+            }
+            $scope.order = function (predicate) {
+                $scope.reverse = ($scope.predicate[1] === predicate) ? !$scope.reverse : false;
+                $scope.predicate[1] = predicate;
+            };
             
             // $scope.temp = new Item();
+
+            $rootScope.initRootDir = function () {
+                $scope.fileMemuTile = $scope.config.fileMemuTitle[$scope.fileMemuTile];
+                $rootScope.rootdir = $scope.fileMemuTile
+            }
+            $rootScope.initRootDir();
+
             $rootScope.temp = new Item();
             $rootScope.rootdir = $scope.fileMemuTile
             $scope.fileNavigator = new FileNavigator();
