@@ -38,7 +38,7 @@
     }]);
 
     //app.value('extraObj', null);
-    app.directive("jqueryUpload", ["fileNavigator", function (fileNavigator) {
+    app.directive("jqueryUpload", ["fileNavigator", "$rootScope", function (fileNavigator,$rootScope) {
         return {
             require: '?ngModel',
             restrict: 'A',
@@ -57,7 +57,7 @@
                     abortStr: "终止",
                     deleteStr: "删除",
                     dynamicFormData: function () {
-                        var data = {"path": $rootScope.rootdir + $scope.fileNavigator.currentPath.join('/'), "parentId": $scope.fileNavigator.currentFileId, "filePermission":$scope.fileNavigator.filePermission};
+                        var data = {"path": $rootScope.rootdir + '/' + $scope.fileNavigator.currentPath.join('/'), "parentId": $scope.fileNavigator.currentFileId, "filePermission":$scope.fileNavigator.filePermission};
                         return data;
                     },
                     onSuccess: function (files, data, xhr, pd) {

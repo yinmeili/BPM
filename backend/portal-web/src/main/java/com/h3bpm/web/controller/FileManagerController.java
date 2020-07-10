@@ -103,7 +103,7 @@ public class FileManagerController extends ControllerBase {
 			}
 
 			return new ResponseVo(descList);
-			
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -168,7 +168,7 @@ public class FileManagerController extends ControllerBase {
 
 		// return result;
 	}
-	
+
 	@RequestMapping(value = "/searchListFile", produces = "application/json;charset=utf8")
 	@ResponseBody
 	public FileDescList searchListFile(@RequestBody ReqListFile requestBean) {
@@ -218,12 +218,12 @@ public class FileManagerController extends ControllerBase {
 
 	@RequestMapping(value = "/getFileIdByPath", produces = "application/json;charset=utf8")
 	@ResponseBody
-	public ResponseVo getFileIdByPath(@RequestParam(value="path")String path) {	
-	Map<String, String> resultMap = new HashMap<String, String>();
-		
+	public ResponseVo getFileIdByPath(@RequestParam(value = "path") String path) {
+		Map<String, String> resultMap = new HashMap<String, String>();
+
 		try {
 			com.h3bpm.web.entity.File file = fileService.getFileByPath(path);
-			
+
 			if (file != null) {
 				resultMap.put("id", file.getId());
 			}
@@ -408,7 +408,7 @@ public class FileManagerController extends ControllerBase {
 		// 获取地址
 		String pathStr = reqParam.getPath();
 		pathStr = pathStr.replace("\\", "/");
-//		Path sourcePath = Paths.get(uploadPath + File.separator + pathStr + File.separator + reqParam.getName());
+		// Path sourcePath = Paths.get(uploadPath + File.separator + pathStr + File.separator + reqParam.getName());
 		logger.info(pathStr);
 
 		fileVo.setName(reqParam.getName()); // 获取名字存入fileVo
@@ -469,66 +469,68 @@ public class FileManagerController extends ControllerBase {
 		 * try { pathStr = URLDecoder.decode(pathStr, "UTF-8"); } catch (UnsupportedEncodingException e) { e.printStackTrace(); }
 		 */
 		pathStr = pathStr.replace("\\", File.separator);
-		Path sourcePath = Paths.get(uploadPath + pathStr);
 
-		logger.info(param.getPreview() + "");
-		if (param.getPreview().equals("true")) {
-			response.setContentType("image/gif");
-			try (OutputStream out = response.getOutputStream(); FileInputStream fis = new FileInputStream(sourcePath.toFile());) {
-				byte[] b = new byte[fis.available()];
-				fis.read(b);
-				out.write(b);
-				out.flush();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		} else {
+		// :TODO 在线编辑暂时不用
+		// Path sourcePath = Paths.get(uploadPath + pathStr);
+		// if (param.getPreview().equals("true")) {
+		// response.setContentType("image/gif");
+		// try (OutputStream out = response.getOutputStream(); FileInputStream fis = new FileInputStream(sourcePath.toFile());) {
+		// byte[] b = new byte[fis.available()];
+		// fis.read(b);
+		// out.write(b);
+		// out.flush();
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
+		// } else {
+		//
+		//
+		// }
 
-			com.h3bpm.web.entity.File file = fileService.getFileById(fileId);
-			OutputStream os = null;
+		com.h3bpm.web.entity.File file = fileService.getFileById(fileId);
+		OutputStream os = null;
 
-			try (OutputStream out = response.getOutputStream();) {
-				response.setHeader("Content-Type", "application/octet-stream");
-				response.setHeader("content-disposition", "attachment;filename=" + URLEncoder.encode(file.getName(), "UTF-8"));
-				response.setContentLength((int) file.getFileSize());
+		try (OutputStream out = response.getOutputStream();) {
+			response.setHeader("Content-Type", "application/octet-stream");
+			response.setHeader("content-disposition", "attachment;filename=" + URLEncoder.encode(file.getName(), "UTF-8"));
+			response.setContentLength((int) file.getFileSize());
 
-				SFTPUtil sftp = new SFTPUtil(ftpUserName, ftpPassword, ftpIp, 22);
-				sftp.login();
+			SFTPUtil sftp = new SFTPUtil(ftpUserName, ftpPassword, ftpIp, 22);
+			sftp.login();
 
-				String[] strArray = file.getName().split("\\.");
-				int suffixIndex = strArray.length - 1;
-				String fileSuffix = strArray[suffixIndex];
+			String[] strArray = file.getName().split("\\.");
+			int suffixIndex = strArray.length - 1;
+			String fileSuffix = strArray[suffixIndex];
 
-				byte[] buff = sftp.download(ftpDir, file.getDownloadFileId());
+			byte[] buff = sftp.download(ftpDir, file.getDownloadFileId());
 
-				sftp.logout();
+			sftp.logout();
 
-				os = new BufferedOutputStream(response.getOutputStream());
-				os.write(buff);// 输出文件
-				os.flush();
+			os = new BufferedOutputStream(response.getOutputStream());
+			os.write(buff);// 输出文件
+			os.flush();
 
-				// 循环将输入流中的内容读取到缓冲区当中 while ((len = in.read(buffer)) > 0) { // 输出缓冲区的内容到浏览器，实现文件下载 out.write(buffer, 0, len); //out.flush(); } response.flushBuffer(); } catch (UnsupportedEncodingException e) { e.printStackTrace(); } catch (IOException e) { e.printStackTrace(); }
+			// 循环将输入流中的内容读取到缓冲区当中 while ((len = in.read(buffer)) > 0) { // 输出缓冲区的内容到浏览器，实现文件下载 out.write(buffer, 0, len); //out.flush(); } response.flushBuffer(); } catch (UnsupportedEncodingException e) { e.printStackTrace(); } catch (IOException e) { e.printStackTrace(); }
 
-				// try {
-				// MultipartFileSender.fromPath(sourcePath).with(request).with(response).serveResource();
-			} catch (Exception e) {
-				e.printStackTrace();
-				if (os != null) {
-					try {
-						os.flush();
-					} catch (IOException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+			// try {
+			// MultipartFileSender.fromPath(sourcePath).with(request).with(response).serveResource();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (os != null) {
+				try {
+					os.flush();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
-			} finally {
-				if (os != null) {
-					try {
-						os.close();
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+			}
+		} finally {
+			if (os != null) {
+				try {
+					os.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}
@@ -611,10 +613,8 @@ public class FileManagerController extends ControllerBase {
 				SFTPUtil sftp = new SFTPUtil(ftpUserName, ftpPassword, ftpIp, 22);
 				sftp.login();
 
-				// byte[] buff = sftp.download("/opt", "start.sh");
-				// System.out.println(Arrays.toString(buff));
 
-				sftp.upload(ftpDir, fileId, in);
+				sftp.upload(ftpDir, downloadFileId, in);
 				sftp.logout();
 
 				FileVo fileVo = new FileVo();
@@ -626,6 +626,7 @@ public class FileManagerController extends ControllerBase {
 				fileVo.setFileSize(file.getSize());
 				fileVo.setCreateUserId(userSessionInfo.getUser().getObjectId());
 				fileVo.setCreateTime(new Date());
+				fileVo.setDownloadFileId(downloadFileId);
 
 				// 处理filePermission字符串
 				String[] idList = filePermission.split(",");
@@ -640,6 +641,7 @@ public class FileManagerController extends ControllerBase {
 				resultMap.put("id", fileVo.getId());
 
 				return new ResponseVo(resultMap);
+				
 			} catch (IOException | SftpException e) {
 				e.printStackTrace();
 			}
