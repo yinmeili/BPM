@@ -4,11 +4,16 @@
         '$scope', '$translate', '$cookies', 'fileManagerConfig', 'item', 'fileNavigator', 'fileUploader','$http', 'ControllerConfig', '$modal',
         "$rootScope", "$state", "$filter",  "$compile", "jq.datables",
         function ($scope, $translate, $cookies, fileManagerConfig, Item, FileNavigator, FileUploader, $http, ControllerConfig, $modal, $rootScope, $state, $filter, $compile, jqdatables) {
-            $scope.config = fileManagerConfig;
+						$scope.config = fileManagerConfig;
+					$rootScope.initRootDir = function () {
+						$scope.fileMemuTile = $scope.config.fileMemuTitle[$scope.fileMemuTile];
+						$rootScope.rootdir = $scope.fileMemuTile;
+					}
+					$rootScope.initRootDir();
             $scope.reverse = false;
             $scope.query = '';
             //回收站按照删除时间默认排序
-            if ($scope.fileMemuTile == '回收站') {
+					if ($scope.fileMemuTile == $scope.config.fileMemuTitle['recycle']) {
                 $scope.predicate = ['model.deleteTime'];
                 $scope.reverse = true;
             } else {
@@ -21,14 +26,9 @@
             
             // $scope.temp = new Item();
 
-            $rootScope.initRootDir = function () {
-                $scope.fileMemuTile = $scope.config.fileMemuTitle[$scope.fileMemuTile];
-                $rootScope.rootdir = $scope.fileMemuTile
-            }
-            $rootScope.initRootDir();
 
             $rootScope.temp = new Item();
-            $rootScope.rootdir = $scope.fileMemuTile
+            $rootScope.rootdir = $scope.fileMemuTile;
             $scope.fileNavigator = new FileNavigator();
             $scope.fileUploader = FileUploader;
             $scope.uploadFileList = [];

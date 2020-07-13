@@ -1,7 +1,7 @@
 (function(angular) {
     'use strict';
 	app.service('fileNavigator', [
-		'$http', '$q', 'fileManagerConfig', 'item','$rootScope', function ($http, $q, fileManagerConfig, Item,$rootScope) {
+		'$http', '$q', 'fileManagerConfig', 'item', '$rootScope' ,function ($http, $q, fileManagerConfig, Item, $rootScope) {
 
         $http.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
         var FileNavigator = function() {
@@ -198,7 +198,7 @@
             var path = self.currentPath.join('/');
             self.position = false;
             // 判断不同的index的页面刷新不同的数据
-            if ($rootScope.rootdir=='回收站'){
+					if ($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['recycle']){
                 return self.listRecycle().then(function (data) {
                     // self.currentParentId = data.parentId;
                     self.recycleFileList = (data.data || []).map(function (file) {
