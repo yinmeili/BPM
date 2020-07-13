@@ -45,7 +45,7 @@ public class FileService extends ApiDataService {
 	public File getFileById(String fileId) {
 		return fileMapper.getFileById(fileId);
 	}
-	
+
 	/**
 	 * 根据路径获取文件
 	 * 
@@ -149,22 +149,27 @@ public class FileService extends ApiDataService {
 		/*
 		 * 判断用户是否有权限查看
 		 */
-		if (filePermissionVo.getUserList() != null && !filePermissionVo.getUserList().isEmpty()) {
-			for (UserInfoVo userInfoVo : filePermissionVo.getUserList()) {
-				if (userInfoVo.getId().equals(userId)) {
-					return true;
-				}
-			}
-		}
+		// if (filePermissionVo.getUserList() != null && !filePermissionVo.getUserList().isEmpty()) {
+		// for (UserInfoVo userInfoVo : filePermissionVo.getUserList()) {
+		// if (userInfoVo.getId().equals(userId)) {
+		// return true;
+		// }
+		// }
+		// }
 
 		/*
-		 * 判断用户是否属于部门下面
+		 * 判断用户是否属于部门下面,由于前端数据不能分出部门和用户ID，因此 用户ID和部门ID 全部都放入OrgList中，只做orglist的判断
 		 */
 		if (filePermissionVo.getOrgList() != null && !filePermissionVo.getOrgList().isEmpty()) {
 			UserSessionInfo userSessionInfo = UserSessionUtils.get(Constants.SESSION_USER, UserSessionInfo.class);
 			List<String> parentIds = userSessionInfo.getParentIds();
-			for (String parentId : parentIds) {
-				for (OrgInfoVo orgInfoVo : filePermissionVo.getOrgList()) {
+			for (OrgInfoVo orgInfoVo : filePermissionVo.getOrgList()) {
+
+				if (orgInfoVo.getId().equals(userId)) {
+					return true;
+				}
+
+				for (String parentId : parentIds) {
 					if (orgInfoVo.getId().equals(parentId)) {
 						return true;
 					}

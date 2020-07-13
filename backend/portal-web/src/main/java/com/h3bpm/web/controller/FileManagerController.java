@@ -141,12 +141,12 @@ public class FileManagerController extends ControllerBase {
 					/*
 					 * 判断当前用户是否有文件的访问权限
 					 */
-					// if(fileService.validateFilePermission(file.getId(), user.getObjectId())){
-					FileDesc fileDesc = new FileDesc(file);
-					fileDesc.setFilePermission(filePermissionService.getFilePermissionByFileId(file.getId()));
+					if (file.getCreateUserId().equals(user.getObjectID()) || fileService.validateFilePermission(file.getId(), user.getObjectId())) {
+						FileDesc fileDesc = new FileDesc(file);
+						fileDesc.setFilePermission(filePermissionService.getFilePermissionByFileId(file.getId()));
 
-					descList.add(fileDesc);
-					// }
+						descList.add(fileDesc);
+					}
 
 				}
 
@@ -190,12 +190,12 @@ public class FileManagerController extends ControllerBase {
 					/*
 					 * 判断当前用户是否有文件的访问权限
 					 */
-					// if(fileService.validateFilePermission(file.getId(), user.getObjectId())){
-					FileDesc fileDesc = new FileDesc(file);
-					fileDesc.setFilePermission(filePermissionService.getFilePermissionByFileId(file.getId()));
+					if (file.getCreateUserId().equals(user.getObjectID()) || fileService.validateFilePermission(file.getId(), user.getObjectId())) {
+						FileDesc fileDesc = new FileDesc(file);
+						fileDesc.setFilePermission(filePermissionService.getFilePermissionByFileId(file.getId()));
 
-					descList.add(fileDesc);
-					// }
+						descList.add(fileDesc);
+					}
 
 				}
 
@@ -613,7 +613,6 @@ public class FileManagerController extends ControllerBase {
 				SFTPUtil sftp = new SFTPUtil(ftpUserName, ftpPassword, ftpIp, 22);
 				sftp.login();
 
-
 				sftp.upload(ftpDir, downloadFileId, in);
 				sftp.logout();
 
@@ -641,7 +640,7 @@ public class FileManagerController extends ControllerBase {
 				resultMap.put("id", fileVo.getId());
 
 				return new ResponseVo(resultMap);
-				
+
 			} catch (IOException | SftpException e) {
 				e.printStackTrace();
 			}
