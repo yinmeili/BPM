@@ -191,8 +191,8 @@ public class FileManagerController extends ControllerBase {
 
 			Map<String, Object> userMap = this._getCurrentUser();
 			OThinker.Common.Organization.Models.User user = (User) userMap.get("User");
-			com.h3bpm.web.entity.File fileDb = myFileService.getFileById(id);
-			List<com.h3bpm.web.entity.File> fileList = myFileService.findFileByParentIdAndKeyword(fileId, param.getKeyword(), user.getObjectId());
+			com.h3bpm.web.entity.File fileDb = myFileService.getMyFileById(id);
+			List<com.h3bpm.web.entity.File> fileList = myFileService.findMyFileByParentIdAndKeyword(fileId, param.getKeyword(), user.getObjectId());
 
 			if (fileList != null) {
 				for (com.h3bpm.web.entity.File file : fileList) {
@@ -283,8 +283,8 @@ public class FileManagerController extends ControllerBase {
 			Map<String, Object> userMap = this._getCurrentUser();
 			OThinker.Common.Organization.Models.User user = (User) userMap.get("User");
 
-			com.h3bpm.web.entity.File fileDb = myFileService.getFileById(id);
-			List<com.h3bpm.web.entity.File> fileList = myFileService.findFileByParentIdAndKeyword(id, requestBean.getKeyword(), user.getObjectId());
+			com.h3bpm.web.entity.File fileDb = myFileService.getMyFileById(id);
+			List<com.h3bpm.web.entity.File> fileList = myFileService.findMyFileByParentIdAndKeyword(id, requestBean.getKeyword(), user.getObjectId());
 
 			if (fileList != null) {
 				for (com.h3bpm.web.entity.File file : fileList) {
@@ -337,7 +337,7 @@ public class FileManagerController extends ControllerBase {
 		Map<String, String> resultMap = new HashMap<String, String>();
 
 		try {
-			com.h3bpm.web.entity.File file = myFileService.getFileByPath(path);
+			com.h3bpm.web.entity.File file = myFileService.getMyFileByPath(path);
 
 			if (file != null) {
 				resultMap.put("id", file.getId());
@@ -388,14 +388,14 @@ public class FileManagerController extends ControllerBase {
 		// Path sourcePath = Paths.get(uploadPath + pathStr);
 		// Path desPath = Paths.get(uploadPath + newPathStr);
 
-		com.h3bpm.web.entity.File fileEntity = myFileService.getFileById(reqUpdateFile.getFileId());
+		com.h3bpm.web.entity.File fileEntity = myFileService.getMyFileById(reqUpdateFile.getFileId());
 		FileVo fileVo = new FileVo(fileEntity);
 
 		fileVo.setParentId(reqUpdateFile.getParentId());
 		fileVo.setDir(newPathStr != null ? newPathStr : pathStr);
 		fileVo.setFilePermission(reqUpdateFile.getFilePermission());
 
-		fileService.updateFile(fileVo);
+		myFileService.updateMyFile(fileVo);
 		FileDesc desc = null;
 		FileDescSingle fileDescSingle = new FileDescSingle();
 
@@ -465,7 +465,7 @@ public class FileManagerController extends ControllerBase {
 		String errorMsg = "";
 
 		String fileId = param.getFileId();
-		myFileService.deleteFile(fileId);
+		myFileService.deleteMyFile(fileId);
 
 		desc = new FileDesc(true, "");
 		fileDescSingle.setResult(desc);
@@ -590,7 +590,7 @@ public class FileManagerController extends ControllerBase {
 		fileVo.setCreateUserId(userSessionInfo.getUser().getObjectId());// 存入用户Id
 		fileVo.setCreateTime(new Date());
 
-		myFileService.createFile(fileVo);
+		myFileService.createMyFile(fileVo);
 
 		return reqParam;
 	}
@@ -734,7 +734,7 @@ public class FileManagerController extends ControllerBase {
 		//
 		// }
 
-		com.h3bpm.web.entity.File file = myFileService.getFileById(fileId);
+		com.h3bpm.web.entity.File file = myFileService.getMyFileById(fileId);
 		OutputStream os = null;
 
 		try (OutputStream out = response.getOutputStream();) {
@@ -957,7 +957,7 @@ public class FileManagerController extends ControllerBase {
 				// 设置FilePermission
 				fileVo.setFilePermission(filePermissionVo);
 
-				myFileService.createFile(fileVo);
+				myFileService.createMyFile(fileVo);
 
 				// 设置返回数据格式
 				Map<String, String> resultMap = new HashMap<String, String>();

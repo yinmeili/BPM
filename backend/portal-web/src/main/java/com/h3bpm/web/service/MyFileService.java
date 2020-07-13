@@ -22,7 +22,7 @@ public class MyFileService extends ApiDataService {
 	@Autowired
 	private MyFileMapper myFileMapper;
 
-	public List<File> findFileByParentIdAndKeyword(String parentId, String keyword, String userId) {
+	public List<File> findMyFileByParentIdAndKeyword(String parentId, String keyword, String userId) {
 		List<File> fileList = null;
 		try {
 			fileList = myFileMapper.findMyFileByParentIdAndKeyword(parentId, keyword, userId);
@@ -40,7 +40,7 @@ public class MyFileService extends ApiDataService {
 	 * @param fileId
 	 * @return
 	 */
-	public File getFileById(String fileId) {
+	public File getMyFileById(String fileId) {
 		return myFileMapper.getMyFileById(fileId);
 	}
 
@@ -50,7 +50,7 @@ public class MyFileService extends ApiDataService {
 	 * @param fileId
 	 * @return
 	 */
-	public File getFileByPath(String path) {
+	public File getMyFileByPath(String path) {
 		return myFileMapper.getMyFileByPath(path);
 	}
 
@@ -60,7 +60,7 @@ public class MyFileService extends ApiDataService {
 	 * @param createId
 	 * @return
 	 */
-	public List<File> findDeletedFileByUserId(String userId) {
+	public List<File> findDeletedMyFileByUserId(String userId) {
 
 		List<File> fileList = null;
 		try {
@@ -81,7 +81,7 @@ public class MyFileService extends ApiDataService {
 	 * @return 文件ID
 	 */
 	@Transactional
-	public String createFile(FileVo fileVo) {
+	public String createMyFile(FileVo fileVo) {
 		String uuid = fileVo.getId();
 		if (uuid == null) {
 			uuid = UUID.randomUUID().toString();
@@ -100,7 +100,7 @@ public class MyFileService extends ApiDataService {
 	 * @return 文件ID
 	 */
 	@Transactional
-	public void deleteFile(String fileId) {
+	public void deleteMyFile(String fileId) {
 		File file = myFileMapper.getMyFileById(fileId);
 		file.setIsDelete(true);
 		file.setDeleteTime(new Date());
@@ -115,7 +115,7 @@ public class MyFileService extends ApiDataService {
 	 * @return 文件ID
 	 */
 	@Transactional
-	public void updateFile(FileVo fileVo) {
+	public void updateMyFile(FileVo fileVo) {
 		myFileMapper.updateMyFile(new File(fileVo));
 	}
 }
