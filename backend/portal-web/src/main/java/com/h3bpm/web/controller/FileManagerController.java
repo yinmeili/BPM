@@ -5,6 +5,7 @@ import OThinker.H3.Controller.ControllerBase;
 import com.h3bpm.web.enumeration.FileType;
 import com.h3bpm.web.service.FilePermissionService;
 import com.h3bpm.web.service.FileService;
+import com.h3bpm.web.service.MyFileService;
 import com.h3bpm.web.utils.Constants;
 import com.h3bpm.web.utils.FtUtils;
 import com.h3bpm.web.utils.SFTPUtil;
@@ -55,6 +56,9 @@ public class FileManagerController extends ControllerBase {
 
 	@Autowired
 	private FileService fileService;
+
+	@Autowired
+	private MyFileService myFileService;
 
 	@Autowired
 	private FilePermissionService filePermissionService;
@@ -169,6 +173,56 @@ public class FileManagerController extends ControllerBase {
 		// return result;
 	}
 
+	@RequestMapping(value = "/listMyFile", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public FileDescList listMyFile(@RequestBody ReqParamList paramList) {
+
+		List<FileDesc> descList = new ArrayList<>();
+
+		try {
+			ReqParam param = paramList.getParams();
+
+			String id = param.getFileId();
+
+			String pathStr = param.getPath();
+			pathStr = pathStr.replace("\\", File.separator);
+
+			String fileId = param.getFileId();
+
+			Map<String, Object> userMap = this._getCurrentUser();
+			OThinker.Common.Organization.Models.User user = (User) userMap.get("User");
+			com.h3bpm.web.entity.File fileDb = myFileService.getFileById(id);
+			List<com.h3bpm.web.entity.File> fileList = myFileService.findFileByParentIdAndKeyword(fileId, param.getKeyword(), user.getObjectId());
+
+			if (fileList != null) {
+				for (com.h3bpm.web.entity.File file : fileList) {
+
+					FileDesc fileDesc = new FileDesc(file);
+					fileDesc.setFilePermission(filePermissionService.getFilePermissionByFileId(file.getId()));
+
+					descList.add(fileDesc);
+
+				}
+
+			}
+			FileDescList result = new FileDescList(descList);
+
+			if (fileDb == null || fileDb.getParentId() == null) {
+				result.setParentId("");
+			} else {
+				result.setParentId(fileDb.getParentId());
+			}
+
+			return result;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+
+		// return result;
+	}
+
 	@RequestMapping(value = "/searchListFile", produces = "application/json;charset=utf8")
 	@ResponseBody
 	public FileDescList searchListFile(@RequestBody ReqListFile requestBean) {
@@ -216,6 +270,48 @@ public class FileManagerController extends ControllerBase {
 		}
 	}
 
+	@RequestMapping(value = "/searchListMyFile", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public FileDescList searchListMyFile(@RequestBody ReqListFile requestBean) {
+
+		List<FileDesc> descList = new ArrayList<>();
+
+		try {
+
+			String id = requestBean.getParentId();
+
+			Map<String, Object> userMap = this._getCurrentUser();
+			OThinker.Common.Organization.Models.User user = (User) userMap.get("User");
+
+			com.h3bpm.web.entity.File fileDb = myFileService.getFileById(id);
+			List<com.h3bpm.web.entity.File> fileList = myFileService.findFileByParentIdAndKeyword(id, requestBean.getKeyword(), user.getObjectId());
+
+			if (fileList != null) {
+				for (com.h3bpm.web.entity.File file : fileList) {
+					FileDesc fileDesc = new FileDesc(file);
+					fileDesc.setFilePermission(filePermissionService.getFilePermissionByFileId(file.getId()));
+
+					descList.add(fileDesc);
+
+				}
+
+			}
+			FileDescList result = new FileDescList(descList);
+
+			if (fileDb == null || fileDb.getParentId() == null) {
+				result.setParentId("");
+			} else {
+				result.setParentId(fileDb.getParentId());
+			}
+
+			return result;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	@RequestMapping(value = "/getFileIdByPath", produces = "application/json;charset=utf8")
 	@ResponseBody
 	public ResponseVo getFileIdByPath(@RequestParam(value = "path") String path) {
@@ -235,22 +331,23 @@ public class FileManagerController extends ControllerBase {
 		}
 	}
 
-	@RequestMapping(value = "/listMyFolder", produces = "application/json;charset=utf8")
+	@RequestMapping(value = "/getMyFileIdByPath", produces = "application/json;charset=utf8")
 	@ResponseBody
-	public FileDescList listMyFolder(@RequestBody ReqParamList paramList) {
-		ReqParam param = paramList.getParams();
-		String pathStr = param.getPath();
-		pathStr = pathStr.replace("\\", File.separator);
-		Path currentPath = Paths.get(uploadPath + pathStr);
+	public ResponseVo getMyFileIdByPath(@RequestParam(value = "path") String path) {
+		Map<String, String> resultMap = new HashMap<String, String>();
 
-		FileDesc desc = null;
-		List<FileDesc> descList = new ArrayList<>();
-		FileDescList result = new FileDescList(descList);
+		try {
+			com.h3bpm.web.entity.File file = myFileService.getFileByPath(path);
 
-		descList.add(new FileDesc("aaa.txt", 11111111L, new Date(), "file"));
-		descList.add(new FileDesc("bbb.txt", 11111111L, new Date(), "file"));
-
-		return result;
+			if (file != null) {
+				resultMap.put("id", file.getId());
+			}
+			return new ResponseVo(resultMap);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	@RequestMapping(value = "/updateFile", produces = "application/json;charset=utf8")
@@ -265,6 +362,33 @@ public class FileManagerController extends ControllerBase {
 		// Path desPath = Paths.get(uploadPath + newPathStr);
 
 		com.h3bpm.web.entity.File fileEntity = fileService.getFileById(reqUpdateFile.getFileId());
+		FileVo fileVo = new FileVo(fileEntity);
+
+		fileVo.setParentId(reqUpdateFile.getParentId());
+		fileVo.setDir(newPathStr != null ? newPathStr : pathStr);
+		fileVo.setFilePermission(reqUpdateFile.getFilePermission());
+
+		fileService.updateFile(fileVo);
+		FileDesc desc = null;
+		FileDescSingle fileDescSingle = new FileDescSingle();
+
+		String errorMsg = "";
+		fileDescSingle.setResult(desc);
+		return fileDescSingle;
+	}
+
+	@RequestMapping(value = "/updateMyFile", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public FileDescSingle updateMyFile(@RequestBody ReqUpdateFile reqUpdateFile) {
+		String pathStr = reqUpdateFile.getOldPath();
+		String newPathStr = reqUpdateFile.getNewPath();
+		pathStr = pathStr.replace("\\", File.separator);
+		newPathStr = newPathStr.replace("\\", File.separator);
+
+		// Path sourcePath = Paths.get(uploadPath + pathStr);
+		// Path desPath = Paths.get(uploadPath + newPathStr);
+
+		com.h3bpm.web.entity.File fileEntity = myFileService.getFileById(reqUpdateFile.getFileId());
 		FileVo fileVo = new FileVo(fileEntity);
 
 		fileVo.setParentId(reqUpdateFile.getParentId());
@@ -323,6 +447,25 @@ public class FileManagerController extends ControllerBase {
 
 		String fileId = param.getFileId();
 		fileService.deleteFile(fileId);
+
+		desc = new FileDesc(true, "");
+		fileDescSingle.setResult(desc);
+		return fileDescSingle;
+	}
+
+	@RequestMapping(value = "/removeMyFile", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public FileDescSingle removeMyFile(@RequestBody ReqParamList paramList) {
+		ReqParam param = paramList.getParams();
+		String pathStr = param.getPath();
+		pathStr = pathStr.replace("\\", File.separator);
+		Path sourcePath = Paths.get(uploadPath + pathStr);
+		FileDesc desc = null;
+		FileDescSingle fileDescSingle = new FileDescSingle();
+		String errorMsg = "";
+
+		String fileId = param.getFileId();
+		myFileService.deleteFile(fileId);
 
 		desc = new FileDesc(true, "");
 		fileDescSingle.setResult(desc);
@@ -425,6 +568,33 @@ public class FileManagerController extends ControllerBase {
 		return reqParam;
 	}
 
+	@RequestMapping(value = "/createMyFolder", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public ReqCreateFolder createMyFolder(@RequestBody ReqCreateFolder reqParam) throws Exception {
+		UserSessionInfo userSessionInfo = UserSessionUtils.get(Constants.SESSION_USER, UserSessionInfo.class);
+
+		FileVo fileVo = new FileVo();
+
+		// 获取地址
+		String pathStr = reqParam.getPath();
+		pathStr = pathStr.replace("\\", "/");
+		// Path sourcePath = Paths.get(uploadPath + File.separator + pathStr + File.separator + reqParam.getName());
+		logger.info(pathStr);
+
+		fileVo.setName(reqParam.getName()); // 获取名字存入fileVo
+		fileVo.setFilePermission(reqParam.getFilePermission()); // 获取权限存入fileVo
+		fileVo.setParentId(reqParam.getParentId());// 获取Id存入
+		fileVo.setDir(pathStr + "/" + fileVo.getName() + "/");// 地址存入
+
+		fileVo.setType(FileType.DIR.getValue());// 存入类型
+		fileVo.setCreateUserId(userSessionInfo.getUser().getObjectId());// 存入用户Id
+		fileVo.setCreateTime(new Date());
+
+		myFileService.createFile(fileVo);
+
+		return reqParam;
+	}
+
 	@RequestMapping(value = "/saveFile", produces = "application/json;charset=utf8")
 	@ResponseBody
 	public FileDescSingle saveFile(@RequestBody ReqParamList paramList) {
@@ -488,6 +658,83 @@ public class FileManagerController extends ControllerBase {
 		// }
 
 		com.h3bpm.web.entity.File file = fileService.getFileById(fileId);
+		OutputStream os = null;
+
+		try (OutputStream out = response.getOutputStream();) {
+			response.setHeader("Content-Type", "application/octet-stream");
+			response.setHeader("content-disposition", "attachment;filename=" + URLEncoder.encode(file.getName(), "UTF-8"));
+			response.setContentLength((int) file.getFileSize());
+
+			SFTPUtil sftp = new SFTPUtil(ftpUserName, ftpPassword, ftpIp, 22);
+			sftp.login();
+
+			String[] strArray = file.getName().split("\\.");
+			int suffixIndex = strArray.length - 1;
+			String fileSuffix = strArray[suffixIndex];
+
+			byte[] buff = sftp.download(ftpDir, file.getDownloadFileId());
+
+			sftp.logout();
+
+			os = new BufferedOutputStream(response.getOutputStream());
+			os.write(buff);// 输出文件
+			os.flush();
+
+			// 循环将输入流中的内容读取到缓冲区当中 while ((len = in.read(buffer)) > 0) { // 输出缓冲区的内容到浏览器，实现文件下载 out.write(buffer, 0, len); //out.flush(); } response.flushBuffer(); } catch (UnsupportedEncodingException e) { e.printStackTrace(); } catch (IOException e) { e.printStackTrace(); }
+
+			// try {
+			// MultipartFileSender.fromPath(sourcePath).with(request).with(response).serveResource();
+		} catch (Exception e) {
+			e.printStackTrace();
+			if (os != null) {
+				try {
+					os.flush();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		} finally {
+			if (os != null) {
+				try {
+					os.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+
+	@RequestMapping(value = "/previewMyFile")
+	@ResponseBody
+	public void previewMyFile(ReqParam param, HttpServletRequest request, HttpServletResponse response) {
+
+		String pathStr = param.getPath();
+		String fileId = param.getFileId();
+		/*
+		 * try { pathStr = URLDecoder.decode(pathStr, "UTF-8"); } catch (UnsupportedEncodingException e) { e.printStackTrace(); }
+		 */
+		pathStr = pathStr.replace("\\", File.separator);
+
+		// :TODO 在线编辑暂时不用
+		// Path sourcePath = Paths.get(uploadPath + pathStr);
+		// if (param.getPreview().equals("true")) {
+		// response.setContentType("image/gif");
+		// try (OutputStream out = response.getOutputStream(); FileInputStream fis = new FileInputStream(sourcePath.toFile());) {
+		// byte[] b = new byte[fis.available()];
+		// fis.read(b);
+		// out.write(b);
+		// out.flush();
+		// } catch (Exception e) {
+		// e.printStackTrace();
+		// }
+		// } else {
+		//
+		//
+		// }
+
+		com.h3bpm.web.entity.File file = myFileService.getFileById(fileId);
 		OutputStream os = null;
 
 		try (OutputStream out = response.getOutputStream();) {
@@ -634,6 +881,83 @@ public class FileManagerController extends ControllerBase {
 				fileVo.setFilePermission(filePermissionVo);
 
 				fileService.createFile(fileVo);
+
+				// 设置返回数据格式
+				Map<String, String> resultMap = new HashMap<String, String>();
+				resultMap.put("id", fileVo.getId());
+
+				return new ResponseVo(resultMap);
+
+			} catch (IOException | SftpException e) {
+				e.printStackTrace();
+			}
+		} else {
+			ResponseVo respUploadFileFalse = new ResponseVo();
+			respUploadFileFalse.setErrorCode(404);
+			respUploadFileFalse.setMsg("调用失败");
+			return respUploadFileFalse;
+		}
+
+		return null;
+	}
+
+	/**
+	 * Upload single file using Spring Controller
+	 */
+	@RequestMapping(value = "/uploadMyFile", method = RequestMethod.POST, produces = "application/json;charset=utf8")
+	@ResponseBody
+	public ResponseVo uploadMyFileHandler(@RequestParam("file") MultipartFile file, @RequestParam("filePermission") String filePermission, @RequestParam("path") String path, @RequestParam("parentId") String parentId, HttpServletResponse response) throws IOException {
+
+		if (!file.isEmpty()) {
+			UserSessionInfo userSessionInfo = UserSessionUtils.get(Constants.SESSION_USER, UserSessionInfo.class);
+			String fileId = UUID.randomUUID().toString();
+			String downloadFileId = UUID.randomUUID().toString();
+
+			path = path.replace("\\", "/");
+			String fileFullName = file.getOriginalFilename();
+
+			// 获取文件后缀
+			String[] strArray = fileFullName.split("\\.");
+			int suffixIndex = strArray.length - 1;
+			String fileSuffix = strArray[suffixIndex];
+
+			// :TODO 判断文件是否已存在
+			// Path folderPath = Paths.get(uploadPath + File.separator + path);
+			//
+			// if (Files.notExists(folderPath))
+			// Files.createDirectories(folderPath);
+			// Path filePath = Paths.get(uploadPath + File.separator + path + File.separator + file.getOriginalFilename());
+			// if (!Files.notExists(filePath)) {
+			// desc = new FileDesc(false, "文件已存在");
+			// return desc;
+			// }
+
+			try (InputStream in = file.getInputStream()) {
+
+				SFTPUtil sftp = new SFTPUtil(ftpUserName, ftpPassword, ftpIp, 22);
+				sftp.login();
+
+				sftp.upload(ftpDir, downloadFileId, in);
+				sftp.logout();
+
+				FileVo fileVo = new FileVo();
+				fileVo.setId(fileId);
+				fileVo.setParentId(parentId);
+				fileVo.setType(FileType.FILE.getValue());
+				fileVo.setName(fileFullName);
+				fileVo.setDir(path + "/" + fileFullName);
+				fileVo.setFileSize(file.getSize());
+				fileVo.setCreateUserId(userSessionInfo.getUser().getObjectId());
+				fileVo.setCreateTime(new Date());
+				fileVo.setDownloadFileId(downloadFileId);
+
+				// 处理filePermission字符串
+				String[] idList = filePermission.split(",");
+				FilePermissionVo filePermissionVo = new FilePermissionVo(idList);
+				// 设置FilePermission
+				fileVo.setFilePermission(filePermissionVo);
+
+				myFileService.createFile(fileVo);
 
 				// 设置返回数据格式
 				Map<String, String> resultMap = new HashMap<String, String>();
