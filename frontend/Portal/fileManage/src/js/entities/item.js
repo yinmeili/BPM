@@ -79,11 +79,33 @@
             return deferred.resolve(data);
         };
 
-        Item.prototype.createFolder = function (rootdir) {
+        Item.prototype.myCreateFolder = function() {
             var self = this;
             var deferred = $q.defer();
             var data = {
-                "path":rootdir + '/' + self.tempModel.path.join('/'),
+                "path":$rootScope.rootdir + '/' + self.tempModel.path.join('/'),
+                "name":self.tempModel.name,
+                "parentId": self.tempModel.id,
+                // "filePermission": self.tempModel.filePermission,
+                "filePermission": null
+            };
+            self.inprocess = true;
+            self.error = '';
+            $http.post(fileManagerConfig.createMyFolderUrl, data).success(function (data) {
+                self.deferredHandler(data, deferred);
+            }).error(function (data) {
+                self.deferredHandler(data, deferred, $translate.instant('error_creating_folder'));
+            })['finally'](function () {
+                self.inprocess = false;
+            });
+            return deferred.promise;
+        }
+
+        Item.prototype.createFolder = function () {
+            var self = this;
+            var deferred = $q.defer();
+            var data = {
+                "path":$rootScope.rootdir + '/' + self.tempModel.path.join('/'),
                 "name":self.tempModel.name,
                 "parentId": self.tempModel.id,
                 "filePermission": self.tempModel.filePermission
@@ -144,6 +166,30 @@
             });
             return deferred.promise;
         };
+
+        Item.prototype.myUpdateFile = function () {
+            var self = this;
+            var deferred = $q.defer();
+            var data = {
+                fileId: self.model.id,
+                parentId: self.tempModel.parentId,
+                oldPath: self.model.fullPath(),
+                newPath: self.tempModel.path.join('/') + self.tempModel.name,
+                filePermission: null
+            };
+
+            self.inprocess = true;
+            self.error = '';
+            $http.post(fileManagerConfig.updateMyUrl, data).success(function (data) {//地址改为我的文件
+                self.deferredHandler(data, deferred);
+            }).error(function (data) {
+                self.deferredHandler(data, deferred, $translate.instant('error_renaming'));
+            })['finally'](function () {
+                self.inprocess = false;
+            });
+            return deferred.promise;
+        };
+
 
         Item.prototype.copy = function () {
             var self = this;

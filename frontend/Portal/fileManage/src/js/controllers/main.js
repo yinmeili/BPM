@@ -269,21 +269,21 @@
 
             //我的搜索
             $scope.mySearch = function (searchId){
-                var val = $("#"+searchId).val();
-                var data = {
-                    parentId: $scope.fileNavigator.currentParentId,
-                    keyword: val
+                $scope.fileNavigator.position = true;
+                var keyword = $("#"+searchId).val();
+                var url = fileManagerConfig.searchListMyFileUrl;
+                if(keyword){
+                    var path = $scope.fileNavigator.currentPath.join('/');
+                    $scope.fileNavigator.mySearch(keyword).then(function (data) {
+                        $scope.fileNavigator.currentParentId = data.parentId;
+                        $scope.fileNavigator.fileList = (data.result || []).map(function(file) {
+                            return new Item(file, $scope.fileNavigator.currentPath);
+                        });
+                        $scope.fileNavigator.buildTree(path);
+                    });
+                }else{
+                    alert('请输入查询名称');
                 }
-                $scope.fileNavigator.requesting = true;
-                $http.post(fileManagerConfig.listMyFileUrl, data).success(function (data) {
-                    console.log(data);
-                    console.log(1);
-                }).error(function (data) {
-                    console.log(data);
-                    console.log(2);
-                })['finally'](function () {
-                    console.log(3);
-                });
 
             };
 
@@ -291,15 +291,10 @@
             $scope.search = function(searchId){
                 $scope.fileNavigator.position = true;
                 var keyword = $("#"+searchId).val();
-                var url = "";
-                if(searchId == "allSearch"){
-                    url = fileManagerConfig.searchListFileUrl;
-                }else if(searchId == "mySearch"){
-                    url = fileManagerConfig.searchListMyFileUrl;
-                }
+                var url = fileManagerConfig.searchListFileUrl;
                 if(keyword){
                     var path = $scope.fileNavigator.currentPath.join('/');
-                    $scope.fileNavigator.search(keyword, url).then(function (data) {
+                    $scope.fileNavigator.search(keyword).then(function (data) {
                         $scope.fileNavigator.currentParentId = data.parentId;
                         $scope.fileNavigator.fileList = (data.result || []).map(function(file) {
                             return new Item(file, $scope.fileNavigator.currentPath);
@@ -892,13 +887,12 @@
                     "userList": userList
                 };
             }
-            //共享文件新建文件夹数据交互
+
+            //-----共享文件 start
+            //新建文件夹数据交互
             $scope.createFolder = function (item) {
                 var foldername = item.tempModel.name && item.tempModel.name.trim();//文件夹名称
                 item.tempModel.filePermission =  $scope.getPermission($("#folderPer"));
-                //协办管理员
-                // unitID:82237383-a18e-4055-8006-8c873e84e087
-                // unitID:82237383-a18e-4055-8006-8c873e84e087
                 item.tempModel.type = 'dir';
                 item.tempModel.path = _newscope.fileNavigator.currentPath;
                 if(_newscope.fileNavigator.currentFileId == ""){
@@ -920,7 +914,7 @@
                 }
                 $scope.cancel();
             };
-            //共享文件上传文件的数据交互
+            //上传文件的数据交互
             $scope.startUploadFile = function (e) {
                 $scope.fileNavigator = _newscope.fileNavigator;
                 var permission = $("#uploadPer").SheetUIManager().GetValue();
@@ -934,7 +928,7 @@
                 extraObj.startUpload();
                 $scope.cancel();
             };
-            //共享文件更改路径数据交互
+            //更改路径数据交互
             $scope.updateFile = function (item) {
                 item.tempModel.filePermission = $scope.getPermission($("#editPer"));
                 $scope.fileNavigator = _newscope.fileNavigator;
@@ -948,14 +942,13 @@
                 });
                 $scope.cancel();
             };
+            //-----共享文件 end
 
-            //我的文件新建文件夹数据交互
+
+            //-----我的文件 start
+            //新建文件夹数据交互 ok
             $scope.myCreateFolder = function (item) {
                 var foldername = item.tempModel.name && item.tempModel.name.trim();//文件夹名称
-                item.tempModel.filePermission =  $scope.getPermission($("#folderPer"));
-                //协办管理员
-                // unitID:82237383-a18e-4055-8006-8c873e84e087
-                // unitID:82237383-a18e-4055-8006-8c873e84e087
                 item.tempModel.type = 'dir';
                 item.tempModel.path = _newscope.fileNavigator.currentPath;
                 if(_newscope.fileNavigator.currentFileId == ""){
@@ -965,46 +958,38 @@
                 }
                 item.tempModel.name = foldername;
 
-                // var permission = $("#folderPer").SheetUIManager().GetValue();
-
                 if (foldername && ! _newscope.fileNavigator.fileNameExists(foldername)) {
-                    item.createFolder($rootScope.rootdir).then(function () {
+                    item.myCreateFolder().then(function () {
                         _newscope.fileNavigator.refresh();
                     });
                 } else {
-                    item.error = $translate.instant('没有选择权限或者文件夹名称重复');
+                    item.error = $translate.instant('文件夹名称重复');
                     return false;
                 }
                 $scope.cancel();
             };
-            //我的文件上传文件的数据交互
+            //上传文件的数据交互 未
             $scope.myStartUploadFile = function (e) {
                 $scope.fileNavigator = _newscope.fileNavigator;
-                $scope.fileNavigator.currentPath.unshift($rootScope.rootdir);
-                var permission = $("#uploadPer").SheetUIManager().GetValue();
-                if(permission){
-                    $scope.fileNavigator.filePermission = permission.join(',');
-                }else{
-                    e.error = $translate.instant('没有选择权限');
-                    return false;
-                }
+                $scope.fileNavigator.filePermission = null;
                 extraObj.startUpload();
                 $scope.cancel();
             };
-            //我的文件更改路径数据交互
+            //更改路径数据交互 ok
             $scope.myUpdateFile = function (item) {
-                item.tempModel.filePermission = $scope.getPermission($("#editPer"));
+                // item.tempModel.filePermission = $scope.getPermission($("#editPer"));
                 $scope.fileNavigator = _newscope.fileNavigator;
                 var samePath = item.tempModel.path.join() === item.model.path.join();
                 if (samePath && $scope.fileNavigator.fileNameExists(item.tempModel.name)) {
                     item.error = $translate.instant('error_invalid_filename');
                     return false;
                 }
-                item.updateFile().then(function () {
+                item.myUpdateFile().then(function () {
                     $scope.fileNavigator.refresh();
                 });
                 $scope.cancel();
             };
+            //------我的文件 end
             $scope.cancel = function () {
                 $modalInstance.dismiss('cancel'); // 退出
             }

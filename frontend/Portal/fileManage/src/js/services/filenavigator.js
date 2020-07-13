@@ -58,10 +58,10 @@
         FileNavigator.prototype.list = function() {
             var self = this;
             var deferred = $q.defer();
-						var path = self.currentPath.join('/');
+            var path = self.currentPath.join('/');
             var data = {params: {
-								fileId: self.currentFileId,
-								parentId: self.currentParentId,
+                fileId: self.currentFileId,
+                parentId: self.currentParentId,
                 mode: 'list',
                 onlyFolders: false,
                 path:$rootScope.rootdir + '/' + path
@@ -80,10 +80,37 @@
                 self.requesting = false;
             });
             return deferred.promise;
-				};
+        };
+
+        FileNavigator.prototype.myList = function() {//未调用debugger;
+            var self = this;
+            var deferred = $q.defer();
+            var path = self.currentPath.join('/');
+            var data = {params: {
+                    fileId: self.currentFileId,
+                    parentId: self.currentParentId,
+                    mode: 'list',
+                    onlyFolders: false,
+                    path:$rootScope.rootdir + '/' + path
+                }};
+
+            self.requesting = true;
+            self.fileList = [];
+            self.error = '';
+            self.showList('showFolder');
+
+            $http.post(fileManagerConfig.listMyUrl, data).success(function(data) {
+                self.deferredHandler(data, deferred);
+            }).error(function(data) {
+                self.deferredHandler(data, deferred, 'Unknown error listing, check the response');
+            })['finally'](function() {
+                self.requesting = false;
+            });
+            return deferred.promise;
+        };
 			
 			/********************回收站列表*********************/
-			FileNavigator.prototype.listRecycle = function () {
+        FileNavigator.prototype.listRecycle = function () {
 				var self = this;
 				var deferred = $q.defer();
 				var path = self.currentPath.join('/');
@@ -130,7 +157,7 @@
             return deferred.promise;
         };
 
-        FileNavigator.prototype.search = function(keyword, url){
+        FileNavigator.prototype.search = function(keyword){
             var self = this;
             var deferred = $q.defer();
             var path = self.currentPath.join('/');
@@ -138,7 +165,7 @@
                 parentId: self.currentFileId,
                 keyword: keyword
             }
-            $http.post(url, data).success(function (data) {
+            $http.post(fileManagerConfig.searchListFileUrl, data).success(function (data) {
                 self.deferredHandler(data, deferred);
             }).error(function (data) {
                 self.deferredHandler(data, deferred, 'Unknown error listing, check the response');
@@ -147,6 +174,24 @@
             });
             return deferred.promise;
         }
+
+        FileNavigator.prototype.mySearch = function(keyword){
+                var self = this;
+                var deferred = $q.defer();
+                var path = self.currentPath.join('/');
+                var data = {
+                    parentId: self.currentFileId,
+                    keyword: keyword
+                }
+                $http.post(fileManagerConfig.searchListMyFileUrl, data).success(function (data) {
+                    self.deferredHandler(data, deferred);
+                }).error(function (data) {
+                    self.deferredHandler(data, deferred, 'Unknown error listing, check the response');
+                })['finally'](function () {
+                    // self.position = false;
+                });
+                return deferred.promise;
+            }
 
         FileNavigator.prototype.refresh = function() {
             var self = this;
@@ -171,7 +216,6 @@
                 });
             }
         };
-				
 
 
         FileNavigator.prototype.myFolderRefresh = function() {

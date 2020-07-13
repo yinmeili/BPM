@@ -531,7 +531,7 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
 
 <!--我的文件更新名称模态框-->
 <script type="text/ng-template" id="myUpdateFile.html">
-    <form ng-submit="updateFile(temp)" class="bs-example form-horizontal">
+    <form ng-submit="myUpdateFile(temp)" class="bs-example form-horizontal">
         <div class="modal-header">
             <button type="button" class="close"
                     data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
@@ -727,7 +727,7 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
           <code class="mr5"><b>原路径:</b> {{temp.model.fullPath()}}</code>
         </div>
         <div class="detail-sources">
-          <code class="mr5"><b>新路径:</b>{{fileMemuTile + '/' + temp.tempModel.path.join('/')+ '/' + temp.tempModel.name}}</code>
+          <code class="mr5"><b>新路径:</b>{{temp.tempModel.path.join('/')+ '/' + temp.tempModel.name}}</code>
           <a href="" class="label label-primary" ng-click="openNavigator(temp)">更改</a>
         </div>
     </div>

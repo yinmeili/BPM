@@ -4,19 +4,29 @@ app.config(['fileManagerConfigProvider', function (config) {
     config.set({
         appName: '知识库',
         listUrl: fileManagerApiUrl + 'listFile',
-        getFileIdByPathUrl: fileManagerApiUrl + 'getFileIdByPath',
-        listRecycleFileUrl: fileManagerApiUrl + 'listRecycleFile',
-        renameUrl: fileManagerApiUrl + "renameFile",
+        getFileIdByPathUrl: fileManagerApiUrl + 'getFileIdByPath',//根据文件id获取路径
         removeUrl: fileManagerApiUrl + 'removeFile',
+        downloadFileUrl: fileManagerApiUrl + 'previewFile',
+        createFolderUrl: fileManagerApiUrl + 'createFolder',
+        searchListFileUrl: fileManagerApiUrl + 'searchListFile',
+
+        renameUrl: fileManagerApiUrl + "renameFile",
         getContentUrl: fileManagerApiUrl + 'getContent',
         editUrl: fileManagerApiUrl + 'saveFile',
         updateUrl: fileManagerApiUrl + 'updateFile',
-        downloadFileUrl: fileManagerApiUrl + 'previewFile',
-        createFolderUrl: fileManagerApiUrl + 'createFolder',
         listMyFolderUrl: fileManagerApiUrl + 'listMyFolder',
-        listMyFileUrl: fileManagerApiUrl + 'listMyFile',
-        searchListFileUrl: fileManagerApiUrl + 'searchListFile',
-        searchListMyFileUrl: fileManagerApiUrl + 'searchListMyFile',
+        listRecycleFileUrl: fileManagerApiUrl + 'listRecycleFile',
+
+        listMyFileUrl: fileManagerApiUrl + 'listMyFile',//我的搜索？
+
+        searchListMyFileUrl: fileManagerApiUrl + 'searchListFile',//okk
+        listMyUrl: fileManagerApiUrl + 'listFile',//未调用
+        getMyFileIdByPathUrl: fileManagerApiUrl + 'getFileIdByPath',//goto
+        removeMyUrl: fileManagerApiUrl + 'removeFile',
+        downloadMyFileUrl: fileManagerApiUrl + 'previewFile',
+        createMyFolderUrl: fileManagerApiUrl + 'createFolder',//okk
+        updateMyUrl: fileManagerApiUrl + 'updateFile',//okk
+
         allowedActions: angular.extend(defaults.allowedActions, {
             copy : false,
             edit : true,
