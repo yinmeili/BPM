@@ -32,7 +32,7 @@
             this.isShowFolder = false;
             this.isShowMyFolder = false;
             this.isShowFlow = false;
-						this.isShowMyFlow = false;
+            this.isShowMyFlow = false;
 
         };
 
@@ -82,24 +82,24 @@
             return deferred.promise;
         };
 
-        FileNavigator.prototype.myList = function() {//未调用debugger;
+        FileNavigator.prototype.myList = function() {
             var self = this;
             var deferred = $q.defer();
             var path = self.currentPath.join('/');
             var data = {params: {
-                    fileId: self.currentFileId,
-                    parentId: self.currentParentId,
-                    mode: 'list',
-                    onlyFolders: false,
-                    path:$rootScope.rootdir + '/' + path
-                }};
+                fileId: self.currentFileId,
+                parentId: self.currentParentId,
+                mode: 'list',
+                onlyFolders: false,
+                path:$rootScope.rootdir + '/' + path
+            }};
 
             self.requesting = true;
             self.fileList = [];
             self.error = '';
             self.showList('showFolder');
 
-            $http.post(fileManagerConfig.listMyUrl, data).success(function(data) {
+            $http.post(fileManagerConfig.listMyFileUrl, data).success(function(data) {
                 self.deferredHandler(data, deferred);
             }).error(function(data) {
                 self.deferredHandler(data, deferred, 'Unknown error listing, check the response');
@@ -198,7 +198,7 @@
             var path = self.currentPath.join('/');
             self.position = false;
             // 判断不同的index的页面刷新不同的数据
-					if ($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['recycle']){
+            if ($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['recycle']){
                 return self.listRecycle().then(function (data) {
                     // self.currentParentId = data.parentId;
                     self.recycleFileList = (data.data || []).map(function (file) {
@@ -206,7 +206,15 @@
                     });
                     self.buildTree(path);
                 });
-            } else{
+            } else if(($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['myFiles'])){
+                return self.myList().then(function (data) {
+                    self.currentParentId = data.parentId;
+                    self.fileList = (data.result || []).map(function (file) {
+                        return new Item(file, self.currentPath);
+                    });
+                    self.buildTree(path);
+                });
+            }else if(($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['allFiles'])){
                 return self.list().then(function (data) {
                     self.currentParentId = data.parentId;
                     self.fileList = (data.result || []).map(function (file) {
@@ -360,7 +368,7 @@
             this.myFolderRefresh();
         };
 
-            FileNavigator.prototype.upDir = function () {
+        FileNavigator.prototype.upDir = function () {
                 if (this.currentPath[0]) {
 										this.currentPath = this.currentPath.slice(0, -1);
 										//用于返回上一级操作，将当前文件夹的父id赋值给当前id
@@ -370,33 +378,42 @@
             };
 
         FileNavigator.prototype.goTo = function(index) {
-					this.currentPath = this.currentPath.slice(0, index + 1);
-					this.currentParentId = '';
-					var self = this;
-					var deferred = $q.defer();
-					var path = self.currentPath.join('/');
-					self.requesting = true;
-					$http({
-						method: "POST",
-						url: fileManagerConfig.getFileIdByPathUrl,
-						params: {
-							path: ($rootScope.rootdir + '/' + path + '/').replace(/\/\//, '/')
-						}
-					})
-					.success(function (data) {
-						if (index == -1) {
-							self.currentFileId = "";
-						} else {
-							self.currentFileId = data.data.id;
-						}
-						self.deferredHandler(data, deferred);
-						self.refresh();
-					}).error(function (data) {
-						self.deferredHandler(data, deferred, 'Unknown error listing, check the response');
-					})['finally'](function () {
-						self.requesting = false;
-					});
-            
+            this.currentPath = this.currentPath.slice(0, index + 1);
+            this.currentParentId = '';
+            var self = this;
+            var deferred = $q.defer();
+            var path = self.currentPath.join('/');
+            var url = "";
+            if($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['allFiles']){
+                url = fileManagerConfig.getFileIdByPathUrl;//共享
+            }else if($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['myFiles']){
+                url = fileManagerConfig.getMyFileIdByPathUrl;// 我的
+            }
+            if(url == ""){
+                return;
+            }
+            self.requesting = true;
+            $http({
+                method: "POST",
+                url: url,
+                params: {
+                    path: ($rootScope.rootdir + '/' + path + '/').replace(/\/\//, '/')
+                }
+            })
+            .success(function (data) {
+                if (index == -1) {
+                    self.currentFileId = "";
+                } else {
+                    self.currentFileId = data.data.id;
+                }
+                self.deferredHandler(data, deferred);
+                self.refresh();
+            }).error(function (data) {
+                self.deferredHandler(data, deferred, 'Unknown error listing, check the response');
+            })['finally'](function () {
+                self.requesting = false;
+            });
+
         };
 
         FileNavigator.prototype.fileNameExists = function(fileName) {

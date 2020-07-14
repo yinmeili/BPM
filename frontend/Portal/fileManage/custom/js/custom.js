@@ -17,15 +17,16 @@ app.config(['fileManagerConfigProvider', function (config) {
         listMyFolderUrl: fileManagerApiUrl + 'listMyFolder',
         listRecycleFileUrl: fileManagerApiUrl + 'listRecycleFile',
 
-        listMyFileUrl: fileManagerApiUrl + 'listMyFile',//我的搜索？
 
-        searchListMyFileUrl: fileManagerApiUrl + 'searchListFile',//okk
-        listMyUrl: fileManagerApiUrl + 'listFile',//未调用
-        getMyFileIdByPathUrl: fileManagerApiUrl + 'getFileIdByPath',//goto
-        removeMyUrl: fileManagerApiUrl + 'removeFile',
         downloadMyFileUrl: fileManagerApiUrl + 'previewFile',
-        createMyFolderUrl: fileManagerApiUrl + 'createFolder',//okk
-        updateMyUrl: fileManagerApiUrl + 'updateFile',//okk
+        // listMyUrl: fileManagerApiUrl + 'listFile',//okk
+        // 上传文件的请求路径不在这儿
+        listMyFileUrl: fileManagerApiUrl + 'listMyFile',//ok
+        searchListMyFileUrl: fileManagerApiUrl + 'searchListMyFile',//okk
+        getMyFileIdByPathUrl: fileManagerApiUrl + 'getMyFileIdByPath',//ok
+        removeMyUrl: fileManagerApiUrl + 'removeMyFile',//ok
+        createMyFolderUrl: fileManagerApiUrl + 'createMyFolder',//okk
+        updateMyUrl: fileManagerApiUrl + 'updateMyFile',//okk
 
         allowedActions: angular.extend(defaults.allowedActions, {
             copy : false,

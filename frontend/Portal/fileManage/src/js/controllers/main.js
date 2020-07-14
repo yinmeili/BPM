@@ -4,16 +4,16 @@
         '$scope', '$translate', '$cookies', 'fileManagerConfig', 'item', 'fileNavigator', 'fileUploader','$http', 'ControllerConfig', '$modal',
         "$rootScope", "$state", "$filter",  "$compile", "jq.datables",
         function ($scope, $translate, $cookies, fileManagerConfig, Item, FileNavigator, FileUploader, $http, ControllerConfig, $modal, $rootScope, $state, $filter, $compile, jqdatables) {
-						$scope.config = fileManagerConfig;
-					$rootScope.initRootDir = function () {
-						$scope.fileMemuTile = $scope.config.fileMemuTitle[$scope.fileMemuTile];
-						$rootScope.rootdir = $scope.fileMemuTile;
-					}
-					$rootScope.initRootDir();
+            $scope.config = fileManagerConfig;
+            $rootScope.initRootDir = function () {
+                $scope.fileMemuTile = $scope.config.fileMemuTitle[$scope.fileMemuTile];
+                $rootScope.rootdir = $scope.fileMemuTile;
+            }
+            $rootScope.initRootDir();
             $scope.reverse = false;
             $scope.query = '';
             //回收站按照删除时间默认排序
-					if ($scope.fileMemuTile == $scope.config.fileMemuTitle['recycle']) {
+            if ($scope.fileMemuTile == $scope.config.fileMemuTitle['recycle']) {
                 $scope.predicate = ['model.deleteTime'];
                 $scope.reverse = true;
             } else {
@@ -591,6 +591,74 @@
                 }, 800);
             }
 
+// ************************共享文件删除模态框****************************************
+            $scope.toDelete = function (data) {
+                $scope.fileNavigator = $rootScope.scope.fileNavigator;//参数
+                $rootScope.temp = data;
+                var lenOrgList = data.model.filePermission.orgList.length;//组织的长度
+                data = "";
+                var AgencyID;
+                if (data == undefined) AgencyID = "";
+                else AgencyID = data;
+                $http({
+                    url: ControllerConfig.Agents.GetAgency,
+                    params: {
+                        agentID: AgencyID,
+                        random: new Date().getTime()
+                    }
+                }).success(function (result, header, config, status) {
+                    var Agency = result.Rows[0];
+                    // 弹出模态框
+                    var modalInstance = $modal.open({
+                        templateUrl: 'delete.html',    // 指向上面创建的视图
+                        controller: 'ModalsController',// 初始化模态范围
+                        size: "md",
+                        resolve: {
+                            params: function () {
+                                return {
+                                    user: $scope.user,
+                                    Agency: Agency,
+                                    AgencyID: AgencyID
+                                };
+                            },
+                            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                                return $ocLazyLoad.load([
+                                    'WFRes/_Content/themes/ligerUI/Aqua/css/ligerui-all.min.css',
+                                    'WFRes/assets/stylesheets/sheet.css',
+                                    'WFRes/_Scripts/jquery/jquery.lang.js',
+                                    'WFRes/_Scripts/ligerUI/ligerui.all.min.js',
+                                    'WFRes/_Scripts/MvcSheet/SheetControls.js',
+                                    'WFRes/_Scripts/MvcSheet/MvcSheetUI.js'
+                                ]).then(function () {
+                                    return $ocLazyLoad.load([
+                                        'WFRes/_Scripts/MvcSheet/Controls/SheetWorkflow.js',
+                                        'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js'
+                                    ]);
+                                });
+                            }]
+                        }
+                    });
+                    modalInstance.opened.then(function() {
+                        //TODO not work
+                    });
+                });
+
+                var arrOrgList = [];
+                for(var i = 0; i < lenOrgList; i++){
+                    //strOrgList += '<li class="select2-search-choice" id="'+ $rootScope.temp.model.filePermission.orgList[i].id + '" data-code="18f923a7-5a5e-426d-94ae-a55ad1a4b240" style="cursor: pointer; margin-top: 2px; background-color: rgb(250, 250, 250);"><div>'+ $rootScope.temp.model.filePermission.orgList[i].name +'</div><a href="javascript:void(0)" class="select2-search-choice-close"></a></li>';
+                    arrOrgList.push($rootScope.temp.model.filePermission.orgList[i].id);
+                }
+                var times = setInterval(function() {
+                    if($("#editPer").length>0){
+                        clearInterval(times);
+                        $(".select2-search-field").find("input").css("z-index", 0);
+                        //$("#editPer").find("ul").prepend(strOrgList);
+                        var control = $("#editPer").SheetUIManager();
+                        control.SetValue(arrOrgList);
+                    }
+                }, 800);
+            }
+
 // ***************************我的文件新建文件夹模态框********************************
             $scope.myNewFolder = function (data) {
                 $rootScope.temp.tempModel.name = "";
@@ -768,9 +836,63 @@
                     }
                 }, 50);
             }
-
-
-
+// ************************我的文件删除模态框*****************************************
+            $scope.toMyDelete = function (data) {
+                $scope.fileNavigator = $rootScope.scope.fileNavigator;//参数
+                $rootScope.temp = data;
+                data = "";
+                var AgencyID;
+                if (data == undefined) AgencyID = "";
+                else AgencyID = data;
+                $http({
+                    url: ControllerConfig.Agents.GetAgency,
+                    params: {
+                        agentID: AgencyID,
+                        random: new Date().getTime()
+                    }
+                }).success(function (result, header, config, status) {
+                    var Agency = result.Rows[0];
+                    // 弹出模态框
+                    var modalInstance = $modal.open({
+                        templateUrl: 'myDelete.html',    // 指向上面创建的视图
+                        controller: 'ModalsController',// 初始化模态范围
+                        size: "md",
+                        resolve: {
+                            params: function () {
+                                return {
+                                    user: $scope.user,
+                                    Agency: Agency,
+                                    AgencyID: AgencyID
+                                };
+                            },
+                            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                                return $ocLazyLoad.load([
+                                    'WFRes/_Content/themes/ligerUI/Aqua/css/ligerui-all.min.css',
+                                    'WFRes/assets/stylesheets/sheet.css',
+                                    'WFRes/_Scripts/jquery/jquery.lang.js',
+                                    'WFRes/_Scripts/ligerUI/ligerui.all.min.js',
+                                    'WFRes/_Scripts/MvcSheet/SheetControls.js',
+                                    'WFRes/_Scripts/MvcSheet/MvcSheetUI.js'
+                                ]).then(function () {
+                                    return $ocLazyLoad.load([
+                                        'WFRes/_Scripts/MvcSheet/Controls/SheetWorkflow.js',
+                                        'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js'
+                                    ]);
+                                });
+                            }]
+                        }
+                    });
+                    modalInstance.opened.then(function() {
+                        //TODO not work
+                    });
+                });
+                var times = setInterval(function() {
+                    if($("#editPer").length>0){
+                        clearInterval(times);
+                        $(".select2-search-field").find("input").css("z-index", 0);
+                    }
+                }, 800);
+            }
 
             }]);
 
@@ -905,7 +1027,7 @@
                 // var permission = $("#folderPer").SheetUIManager().GetValue();
 
                 if (foldername && ! _newscope.fileNavigator.fileNameExists(foldername) && item.tempModel.filePermission) {
-                    item.createFolder($rootScope.rootdir).then(function () {
+                    item.createFolder().then(function () {
                         _newscope.fileNavigator.refresh();
                     });
                 } else {
@@ -942,6 +1064,13 @@
                 });
                 $scope.cancel();
             };
+            //删除文件
+            $scope.remove = function(item){
+                item.remove().then(function () {
+                    $scope.fileNavigator.refresh();
+                });
+                $scope.cancel();
+            }
             //-----共享文件 end
 
 
@@ -968,10 +1097,8 @@
                 }
                 $scope.cancel();
             };
-            //上传文件的数据交互 未
+            //上传文件的数据交互 未 去掉权限
             $scope.myStartUploadFile = function (e) {
-                $scope.fileNavigator = _newscope.fileNavigator;
-                $scope.fileNavigator.filePermission = null;
                 extraObj.startUpload();
                 $scope.cancel();
             };
@@ -989,11 +1116,17 @@
                 });
                 $scope.cancel();
             };
+            //删除文件
+            $scope.myRemove = function(item){
+                item.myRemove().then(function () {
+                    $scope.fileNavigator.refresh();
+                });
+                $scope.cancel();
+            }
             //------我的文件 end
             $scope.cancel = function () {
                 $modalInstance.dismiss('cancel'); // 退出
             }
             $rootScope.cancel = $scope.cancel;
-
         }]);
 })(window, angular, jQuery);

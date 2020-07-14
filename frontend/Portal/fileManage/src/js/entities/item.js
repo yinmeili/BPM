@@ -151,7 +151,7 @@
                 fileId: self.model.id,
                 parentId: self.tempModel.parentId,
                 oldPath: self.model.fullPath(),
-                newPath: self.tempModel.path.join('/') + self.tempModel.name,
+                newPath: self.tempModel.path.join('/') + '/' + self.tempModel.name,
                 filePermission: self.tempModel.filePermission
             };
 
@@ -386,10 +386,32 @@
                     path: self.tempModel.fullPath()
                 }
             };
-
             self.inprocess = true;
             self.error = '';
             $http.post(fileManagerConfig.removeUrl, data).success(function (data) {
+                self.deferredHandler(data, deferred);
+            }).error(function (data) {
+                self.deferredHandler(data, deferred, $translate.instant('error_deleting'));
+            })['finally'](function () {
+                self.inprocess = false;
+            });
+            return deferred.promise;
+        };
+
+        Item.prototype.myRemove = function () {
+            var self = this;
+            var deferred = $q.defer();
+            var data = {
+                params: {
+                    fileId: self.tempModel.id,
+                    mode: 'delete',
+                    path: self.tempModel.fullPath()
+                }
+            };
+
+            self.inprocess = true;
+            self.error = '';
+            $http.post(fileManagerConfig.removeMyUrl, data).success(function (data) {
                 self.deferredHandler(data, deferred);
             }).error(function (data) {
                 self.deferredHandler(data, deferred, $translate.instant('error_deleting'));
