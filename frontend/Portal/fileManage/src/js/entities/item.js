@@ -9,7 +9,9 @@
                 name: model && model.name || '',
                 path: path || [],
                 type: model && model.type || 'file',
+                dir:model && model.dir,//回收站路径
                 size: model && parseInt(model.size || 0),
+                fileSize: model && parseInt(model.fileSize || 0),//回收站文件大小
                 date: model && model.date,
                 createTime: model && model.createTime,
                 deleteTime: model && model.deleteTime,
@@ -18,7 +20,7 @@
                 recursive: false,
                 filePermission: model && model.filePermission,
                 sizeKb: function () {
-                    var sizeKB = Math.ceil(this.size / 1024);
+                    var sizeKB = Math.ceil(this.fileSize / 1024);
 
                     return formatSize(sizeKB, 0);
                     //return Math.round(this.size / 1024, 1);
@@ -83,7 +85,8 @@
             var self = this;
             var deferred = $q.defer();
             var data = {
-                "path":rootdir + '/' + self.tempModel.path.join('/'),
+							// 路径判断 当前不空 则拼接当前路径
+                "path": rootdir + (self.tempModel.path.join('/') == ''? '':'/' + self.tempModel.path.join('/')),
                 "name":self.tempModel.name,
                 "parentId": self.tempModel.id,
                 "filePermission": self.tempModel.filePermission
@@ -128,11 +131,12 @@
             var data = {
                 fileId: self.model.id,
                 parentId: self.tempModel.parentId,
-                oldPath: self.model.fullPath(),
-                newPath: self.tempModel.path.join('/') + self.tempModel.name,
+                fileName: self.tempModel.name,
+                oldPath: self.model.fullPath()+'/',
+                newPath: self.tempModel.fullPath() + '/',
+                //self.tempModel.path.join('/') + '/' + self.tempModel.name,
                 filePermission: self.tempModel.filePermission
             };
-
             self.inprocess = true;
             self.error = '';
             $http.post(fileManagerConfig.updateUrl, data).success(function (data) {

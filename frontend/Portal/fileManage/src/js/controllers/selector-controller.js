@@ -15,10 +15,12 @@
         $rootScope.select = function(item, temp) {
 					// 修改过路径的id赋值给旧的parentId
           temp.tempModel.parentId = item.model.id;
-          temp.tempModel.path = item.model.fullPath().split('/');
+					// temp.tempModel.path = item.model.fullPath().split('/');
+					temp.tempModel.path = item.model.fullPath().split('/').slice(1);//删除第一个元素
             $rootScope.cancel();
         };
-        
+				
+				/***************点击更改路径 弹出路径选择框 ***************/
         $rootScope.openNavigator = function(item) {
             $scope.fileNavigator = $rootScope.scope.fileNavigator;// 参数问题
             // 判断是根目录下文件路径还是子文件路径
@@ -29,8 +31,8 @@
             } else {
                 $scope.fileNavigator.currentFileId = item.model.parentId;
             }
-            $scope.fileNavigator.currentPath = item.model.path.slice();
-            $scope.fileNavigator.refresh();
+						$scope.fileNavigator.currentPath = item.model.path.slice();
+            $scope.fileNavigator.selectFolderRefresh(item);
             //弹出更改路径模态框
             (function (data) {
                 var AgencyID;
