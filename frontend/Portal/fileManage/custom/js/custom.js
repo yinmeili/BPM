@@ -4,19 +4,28 @@ app.config(['fileManagerConfigProvider', function (config) {
     config.set({
         appName: '知识库',
         listUrl: fileManagerApiUrl + 'listFile',
-        getFileIdByPathUrl: fileManagerApiUrl + 'getFileIdByPath',
-        listRecycleFileUrl: fileManagerApiUrl + 'listRecycleFile',
-        renameUrl: fileManagerApiUrl + "renameFile",
+        getFileIdByPathUrl: fileManagerApiUrl + 'getFileIdByPath',//根据文件id获取路径
         removeUrl: fileManagerApiUrl + 'removeFile',
+        downloadFileUrl: fileManagerApiUrl + 'previewFile',
+        createFolderUrl: fileManagerApiUrl + 'createFolder',
+        searchListFileUrl: fileManagerApiUrl + 'searchListFile',
+
+        renameUrl: fileManagerApiUrl + "renameFile",
         getContentUrl: fileManagerApiUrl + 'getContent',
         editUrl: fileManagerApiUrl + 'saveFile',
         updateUrl: fileManagerApiUrl + 'updateFile',
-        downloadFileUrl: fileManagerApiUrl + 'previewFile',
-        createFolderUrl: fileManagerApiUrl + 'createFolder',
         listMyFolderUrl: fileManagerApiUrl + 'listMyFolder',
+        listRecycleFileUrl: fileManagerApiUrl + 'listRecycleFile',
+
+
+        downloadMyFileUrl: fileManagerApiUrl + 'previewFile',
         listMyFileUrl: fileManagerApiUrl + 'listMyFile',
-        searchListFileUrl: fileManagerApiUrl + 'searchListFile',
         searchListMyFileUrl: fileManagerApiUrl + 'searchListMyFile',
+        getMyFileIdByPathUrl: fileManagerApiUrl + 'getMyFileIdByPath',
+        removeMyUrl: fileManagerApiUrl + 'removeMyFile',
+        createMyFolderUrl: fileManagerApiUrl + 'createMyFolder',
+        updateMyUrl: fileManagerApiUrl + 'updateMyFile',
+
         allowedActions: angular.extend(defaults.allowedActions, {
             copy : false,
             edit : true,

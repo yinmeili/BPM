@@ -473,6 +473,26 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
     </div>
 </script>
 
+<!--共享文件删除-->
+<script type="text/ng-template" id="delete.html">
+    <form ng-submit="remove(temp)" style="color:#778CA2;">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true" ng-click="cancel();">&times;</span>
+            </button>
+            <h4 class="modal-title">确认框</h4>
+        </div>
+        <div class="modal-body">
+            确定删除 <b>{{temp.model.name}}</b> ?
+            <div ng-include data-src="'error-bar'" class="clearfix"></div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
+            <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess" autofocus="autofocus">确定</button>
+        </div>
+    </form>
+</script>
+
 <!--我的文件新建文件夹的模态框-->
 <script type="text/ng-template" id="myNewFolder.html">
     <form class="bs-example form-horizontal" ng-submit="myCreateFolder(temp)">
@@ -531,7 +551,7 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
 
 <!--我的文件更新名称模态框-->
 <script type="text/ng-template" id="myUpdateFile.html">
-    <form ng-submit="updateFile(temp)" class="bs-example form-horizontal">
+    <form ng-submit="myUpdateFile(temp)" class="bs-example form-horizontal">
         <div class="modal-header">
             <button type="button" class="close"
                     data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
@@ -569,6 +589,26 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel()">取消</button>
             <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess">保存</button>
+        </div>
+    </form>
+</script>
+
+<!--我的文件删除-->
+<script type="text/ng-template" id="myDelete.html">
+    <form ng-submit="myRemove(temp)" style="color:#778CA2;">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true" ng-click="cancel();">&times;</span>
+            </button>
+            <h4 class="modal-title">确认框</h4>
+        </div>
+        <div class="modal-body">
+            确定删除 <b>{{temp.model.name}}</b> ?
+            <div ng-include data-src="'error-bar'" class="clearfix"></div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
+            <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess" autofocus="autofocus">确定</button>
         </div>
     </form>
 </script>
