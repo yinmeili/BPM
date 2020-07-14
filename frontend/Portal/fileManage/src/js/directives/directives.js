@@ -43,8 +43,17 @@
             require: '?ngModel',
             restrict: 'A',
             link: function ($scope, element, attrs, ngModel) {
+                var url = "/Portal/fileManage/";
+                var jsonData = {};
+                if($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['allFiles']){
+                    url += "uploadFile";
+                    jsonData = {"path": $rootScope.rootdir + '/' + $scope.fileNavigator.currentPath.join('/'), "parentId": $scope.fileNavigator.currentFileId, "filePermission":$scope.fileNavigator.filePermission};
+                }else if($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['myFiles']){
+                    url += "uploadMyFile";
+                    jsonData = {"path": $rootScope.rootdir + '/' + $scope.fileNavigator.currentPath.join('/'), "parentId": $scope.fileNavigator.currentFileId};
+                }
                 extraObj = $(element).uploadFile({
-                    url: "/Portal/fileManage/uploadFile",
+                    url: url,
                     fileName: "file",
                     showFileSize: true,
                     showDelete: true,
@@ -57,8 +66,7 @@
                     abortStr: "终止",
                     deleteStr: "删除",
                     dynamicFormData: function () {
-                        var data = {"path": $rootScope.rootdir + '/' + $scope.fileNavigator.currentPath.join('/'), "parentId": $scope.fileNavigator.currentFileId, "filePermission":$scope.fileNavigator.filePermission};
-                        return data;
+                        return jsonData;
                     },
                     onSuccess: function (files, data, xhr, pd) {
                         var obj = eval(data);
