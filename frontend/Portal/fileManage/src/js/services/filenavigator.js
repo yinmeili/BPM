@@ -8,8 +8,7 @@
             this.requesting = false;
             this.position = false;
             this.fileList = [];
-    		this.recycleFileList=[];
-
+    				this.recycleFileList=[];
             this.currentPath = [];
             this.history = [];
             this.error = '';
@@ -223,7 +222,33 @@
                     self.buildTree(path);
                 });
             }
-        };
+				};
+		  /********** 更改路径后去掉当前文件夹再渲染*********/
+			FileNavigator.prototype.selectFolderRefresh = function (item) {
+				var self = this;
+				var path = self.currentPath.join('/');
+				var fileList=[];
+				self.position = false;
+					return self.list().then(function (data) {
+						fileList = self.filterFileListById(data.result,item.model.id);
+						// self.currentParentId = data.parentId;
+						self.fileList = (fileList || []).map(function (file) {
+							return new Item(file, self.currentPath);
+						});
+						self.buildTree(path);
+					});
+				};
+				
+			FileNavigator.prototype.filterFileListById = function (fileList,fileId){
+					var fileListTemp = [];
+					for (var i = 0; i < fileList.length; i++) {
+						if (fileId != fileList[i].id) {
+							fileListTemp.push(fileList[i]);
+						}
+					}
+					return fileListTemp;
+				}
+				
 
 
         FileNavigator.prototype.myFolderRefresh = function() {

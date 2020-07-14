@@ -2,31 +2,31 @@
     <thead>
         <tr>
             <th>
-                <a href="" ng-click="order('model.name')">
+                <a href="">
                     名称
                     <span class="sortorder" ng-show="predicate[1] === 'model.name'" ng-class="{reverse:reverse}"></span>
                 </a>
             </th>
             <th class="hidden-sm hidden-xs">
-                <a href="" ng-click="order('model.fullPath()')">
+                <a href="">
                     原位置
-                    <span class="sortorder" ng-show="predicate[1] === 'model.fullPath()'" ng-class="{reverse:reverse}"></span>
+                    <span class="sortorder" ng-show="predicate[1] === 'model.dir'" ng-class="{reverse:reverse}"></span>
                 </a>
             </th>
             <th class="hidden-sm hidden-xs">
-                <a href="" ng-click="order('model.size')">
+                <a href="">
                     大小
-                    <span class="sortorder" ng-show="predicate[1] === 'model.size'" ng-class="{reverse:reverse}"></span>
+                    <span class="sortorder" ng-show="predicate[1] === 'model.fileSize'" ng-class="{reverse:reverse}"></span>
                 </a>
 						</th>
 						<th class="hidden-sm hidden-xs">
-							<a href="" ng-click="order('model.deleteTime')">
+							<a href="">
 								删除日期
 								<span class="sortorder" ng-show="predicate[1] === 'model.deleteTime'" ng-class="{reverse:reverse}"></span>
 							</a>
 						</th>
             <th class=" hidden-xs">
-                <a href="" ng-click="order('model.createTime')">
+                <a href="">
                     创建日期
                     <span class="sortorder" ng-show="predicate[1] === 'model.createTime'" ng-class="{reverse:reverse}"></span>
                 </a>
@@ -68,13 +68,15 @@
 						</td>
 						<!-- 路径位置 -->
 						<td class="hidden-xs">
-							{{item.model.fullPath()}}
+							{{item.model.dir}}
 						</td>
 						<!-- 文件大小 -->
             <td class="hidden-sm hidden-xs " >
-                <span ng-show="item.model.type === 'file'">{{item.model.sizeKb()}}KB</span>
-                <span ng-show="item.model.type === 'dir'"></span>
-               {{item.model.sizeKb()}}kB
+                <span ng-show="item.model.type === 'file'">
+									{{item.model.sizeKb()}}KB
+									<!-- {{item.model.fileSize}} -->
+								</span>
+                <span ng-show="item.model.type === 'dir'">{{item.model.sizeKb()}}KB</span>
 						</td>
 						<!-- 删除日期 -->
 						<td class="hidden-xs">

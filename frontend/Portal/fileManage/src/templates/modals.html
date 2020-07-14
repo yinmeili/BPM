@@ -767,7 +767,10 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
           <code class="mr5"><b>原路径:</b> {{temp.model.fullPath()}}</code>
         </div>
         <div class="detail-sources">
-          <code class="mr5"><b>新路径:</b>{{temp.tempModel.path.join('/')+ '/' + temp.tempModel.name}}</code>
+					<!-- <code class="mr5"><b>新路径:</b>{{fileMemuTile + '/' + temp.tempModel.path.join('/')+ '/' + temp.tempModel.name}}</code> -->
+					<code class="mr5"><b>新路径:</b>
+						{{fileMemuTile + '/' + (temp.tempModel.path.join('/') == '' ? temp.tempModel.name : temp.tempModel.path.join('/')+ '/' + temp.tempModel.name) }}
+					</code>
           <a href="" class="label label-primary" ng-click="openNavigator(temp)">更改</a>
         </div>
     </div>
