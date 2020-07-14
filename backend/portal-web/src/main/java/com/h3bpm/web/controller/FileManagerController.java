@@ -198,8 +198,6 @@ public class FileManagerController extends ControllerBase {
 				for (com.h3bpm.web.entity.File file : fileList) {
 
 					FileDesc fileDesc = new FileDesc(file);
-					fileDesc.setFilePermission(filePermissionService.getFilePermissionByFileId(file.getId()));
-
 					descList.add(fileDesc);
 
 				}
@@ -365,6 +363,7 @@ public class FileManagerController extends ControllerBase {
 		FileVo fileVo = new FileVo(fileEntity);
 
 		fileVo.setParentId(reqUpdateFile.getParentId());
+		fileVo.setName(reqUpdateFile.getFileName());
 		fileVo.setDir(newPathStr != null ? newPathStr : pathStr);
 		fileVo.setFilePermission(reqUpdateFile.getFilePermission());
 
@@ -906,7 +905,7 @@ public class FileManagerController extends ControllerBase {
 	 */
 	@RequestMapping(value = "/uploadMyFile", method = RequestMethod.POST, produces = "application/json;charset=utf8")
 	@ResponseBody
-	public ResponseVo uploadMyFileHandler(@RequestParam("file") MultipartFile file, @RequestParam("filePermission") String filePermission, @RequestParam("path") String path, @RequestParam("parentId") String parentId, HttpServletResponse response) throws IOException {
+	public ResponseVo uploadMyFileHandler(@RequestParam("file") MultipartFile file, @RequestParam("path") String path, @RequestParam("parentId") String parentId, HttpServletResponse response) throws IOException {
 
 		if (!file.isEmpty()) {
 			UserSessionInfo userSessionInfo = UserSessionUtils.get(Constants.SESSION_USER, UserSessionInfo.class);
@@ -950,12 +949,6 @@ public class FileManagerController extends ControllerBase {
 				fileVo.setCreateUserId(userSessionInfo.getUser().getObjectId());
 				fileVo.setCreateTime(new Date());
 				fileVo.setDownloadFileId(downloadFileId);
-
-				// 处理filePermission字符串
-				String[] idList = filePermission.split(",");
-				FilePermissionVo filePermissionVo = new FilePermissionVo(idList);
-				// 设置FilePermission
-				fileVo.setFilePermission(filePermissionVo);
 
 				myFileService.createMyFile(fileVo);
 

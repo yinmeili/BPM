@@ -35,7 +35,7 @@ public class MyFileSqlProvider {
 			"			 create_time createTime,"+
 			"			 download_file_id downloadFileId"+
 			"			FROM"+
-			"				ot_file"+
+			"				ot_my_file"+
 			"				WHERE is_delete=0 "+
 						parentIdSqlStr +
 						keywordSqlStr +
@@ -61,7 +61,7 @@ public class MyFileSqlProvider {
 						"			 is_delete isDelete,"+
 						"			 delete_time deleteTime"+
 						"			FROM"+
-						"				ot_file"+
+						"				ot_my_file"+
 						"				WHERE is_delete=1 AND "+
 						"           create_user_id = '" + userId + "'"+
 						"				ORDER BY delete_time DESC";
