@@ -86,7 +86,7 @@
             var deferred = $q.defer();
             var data = {
 							// 路径判断 当前不空 则拼接当前路径
-                "path": rootdir + (self.tempModel.path.join('/') == ''? '':'/' + self.tempModel.path.join('/')),
+                "path": $rootScope.rootdir + (self.tempModel.path.join('/') == ''? '':'/' + self.tempModel.path.join('/')),
                 "name":self.tempModel.name,
                 "parentId": self.tempModel.id,
                 // "filePermission": self.tempModel.filePermission,
