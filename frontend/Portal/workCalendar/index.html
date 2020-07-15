@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" data-ng-app="WorkCalendarApp">
+
+	<head>
+		<meta charset="utf-8" />
+		<title>AngularUI Calendar for AngularJS</title>
+		<!-- <link rel="icon" href="favicon.ico" /> -->
+		<link rel="stylesheet" href="css/bootstrap.css" />
+		<link rel="stylesheet" href="css/fullcalendar.css">
+
+		<script src="js/jquery.js"></script>
+		<script src="js/angular.js"></script>
+		<script src="js/ui-bootstrap-tpls-0.9.0.js"></script>
+		<script src="js/moment.js"></script>
+		<script src="js/fullcalendar.js"></script>
+		<script src="js/gcal.js"></script>
+		<script src="js/calendar.js"></script>
+		<script src="js/angular-locale_zh-cn.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/calendarDemo.js"></script>
+	</head>
+
+	<body>
+		<div id="calendar" ng-controller="workCalendarCtrl">
+			
+			<!-- <div class="fc-button-group">
+				<input id="monthpicker" type="text"
+					class="fc-prev-button fc-button fc-state-default fc-corner-left" style="width:100px;height:20px;"
+					placeholder="输入年-月"><button type="button" id="monthbutton"
+					class="fc-next-button fc-button fc-state-default fc-corner-right">goto</button>
+			</div> -->
+
+			<div class="container">
+				<div>
+					<select class="fc-button fc-state-default fc-corner-left" ng-model="selectYear" ng-options="year for year in years">
+						<option value="">请选择</option>
+					</select>
+					<span>年</span>
+					<select class="fc-button fc-state-default fc-corner-right" ng-model="selectMonth" ng-options="month for month 	in months">
+						<option value="">请选择</option>
+					</select>
+					<span>月</span>
+					<button type="button" class="fc fc-button-group fc-next-button fc-button fc-state-default fc-corner-left fc-corner-right" ng-click="goToByDate()">选择</button>
+				</div>
+				<br>
+
+				<section id="directives-calendar" >
+					<div class="calendar" ng-model="eventSources" calendar="myCalendar1" ui-calendar="uiConfig.calendar">
+					</div>
+				</section>
+			</div>
+		</div>
+	</body>
+
+</html>

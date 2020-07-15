@@ -224,22 +224,23 @@
             }
 				};
 		  /********** 更改路径后去掉当前文件夹再渲染*********/
-			FileNavigator.prototype.selectFolderRefresh = function (item) {
+			/* FileNavigator.prototype.selectFolderRefresh = function (item) {
 				var self = this;
 				var path = self.currentPath.join('/');
 				var fileList=[];
 				self.position = false;
 					return self.list().then(function (data) {
 						fileList = self.filterFileListById(data.result,item.model.id);
-						// self.currentParentId = data.parentId;
+						self.currentParentId = data.parentId;
 						self.fileList = (fileList || []).map(function (file) {
 							return new Item(file, self.currentPath);
 						});
 						self.buildTree(path);
 					});
-				};
-				
-			FileNavigator.prototype.filterFileListById = function (fileList,fileId){
+				}; */
+			
+			/*******************根据id过滤文件列表******/
+			/* FileNavigator.prototype.filterFileListById = function (fileList,fileId){
 					var fileListTemp = [];
 					for (var i = 0; i < fileList.length; i++) {
 						if (fileId != fileList[i].id) {
@@ -247,7 +248,7 @@
 						}
 					}
 					return fileListTemp;
-				}
+				} */
 				
 
 
@@ -402,6 +403,7 @@
                 }
             };
 
+				/**点击文件夹导航栏实现跳转 */
         FileNavigator.prototype.goTo = function(index) {
             this.currentPath = this.currentPath.slice(0, index + 1);
             this.currentParentId = '';
@@ -439,8 +441,9 @@
                 self.requesting = false;
             });
 
-        };
-
+				};
+		
+	
         FileNavigator.prototype.fileNameExists = function(fileName) {
             for (var item in this.fileList) {
                 item = this.fileList[item];
