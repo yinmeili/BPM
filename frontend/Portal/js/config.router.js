@@ -689,7 +689,24 @@ angular.module('app')
                                     }
                                 ]
                             }
-                        })
+												})
+												
+												//————工作日历————
+									.state('app.workCalendar', {
+										url: '',
+										controller: "",
+										templateUrl: 'workCalendar/index.html',
+										resolve: {
+											deps: ['$ocLazyLoad',
+												function ($ocLazyLoad) {
+													return $ocLazyLoad.load([
+														// 'fileManage2/src/js/controllers/main.js',
+														// 'fileManage2/bower_components/jquery-uploadfile/js/jquery.uploadfile.js'
+													]);
+												}
+											]
+										}
+									})
 
                 // End
             }
