@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import com.h3bpm.web.mapper.BusinessExceptionMapper;
 import com.h3bpm.web.vo.BusinessExceptionVo;
-import com.h3bpm.web.vo.FilePermissionVo;
 
 @Service
 public class BusinessExceptionService {
