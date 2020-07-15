@@ -13,6 +13,14 @@
 
         $scope.fileNavigator = new FileNavigator();
         $rootScope.select = function(item, temp) {
+
+					// 自己不能放在自己的文件夹下面
+					if (temp.tempModel.id == item.model.id){
+						//弹出框
+						$.notify({ message: '修改路径不能选择自己', status: "danger" });
+						return;
+					} 
+
 					// 修改过路径的id赋值给旧的parentId
           temp.tempModel.parentId = item.model.id;
 					// temp.tempModel.path = item.model.fullPath().split('/');
@@ -32,7 +40,8 @@
                 $scope.fileNavigator.currentFileId = item.model.parentId;
             }
 						$scope.fileNavigator.currentPath = item.model.path.slice();
-            $scope.fileNavigator.selectFolderRefresh(item);
+						$scope.fileNavigator.refresh();
+            // $scope.fileNavigator.selectFolderRefresh(item);
             //弹出更改路径模态框
             (function (data) {
                 var AgencyID;
