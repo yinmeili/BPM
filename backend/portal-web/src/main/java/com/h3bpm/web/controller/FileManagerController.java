@@ -1044,4 +1044,20 @@ public class FileManagerController extends ControllerBase {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@RequestMapping(value = "/collectToMyFile", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public FileDescSingle collectToMyFile(@RequestBody ReqCollectToMyFile reqBean) {
+		com.h3bpm.web.entity.File shareFile = fileService.getFileById(reqBean.getFileId());
+		com.h3bpm.web.entity.File myParentFile = myFileService.getMyFileById(reqBean.getMyFileParentId());
+		
+		UserSessionInfo userSessionInfo = UserSessionUtils.get(Constants.SESSION_USER, UserSessionInfo.class);
+		String userId = userSessionInfo.getUser().getObjectID();
+		
+		shareFile.setId(UUID.randomUUID().toString());
+		shareFile.setCreateUserId(userId);
+		shareFile.setDir(myParentFile.getDir()+shareFile.getName()+"");
+		
+		return null;
+	}
 }
