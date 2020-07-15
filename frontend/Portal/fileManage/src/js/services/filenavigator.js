@@ -229,17 +229,29 @@
 				var path = self.currentPath.join('/');
 				var fileList=[];
 				self.position = false;
-					return self.list().then(function (data) {
-						fileList = self.filterFileListById(data.result,item.model.id);
-						// self.currentParentId = data.parentId;
-						self.fileList = (fileList || []).map(function (file) {
-							return new Item(file, self.currentPath);
-						});
-						self.buildTree(path);
-					});
-				};
-				
-			FileNavigator.prototype.filterFileListById = function (fileList,fileId){
+
+                // 判断不同的页面弹出相应的数据
+                if(($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['myFiles'])){
+                    return self.myList().then(function (data) {
+                        fileList = self.filterFileListById(data.result, item.model.id);
+                        self.fileList = (fileList || []).map(function (file) {
+                            return new Item(file, self.currentPath);
+                        });
+                        self.buildTree(path);
+                    });
+                }else if(($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['allFiles'])) {
+                    return self.list().then(function (data) {
+                        fileList = self.filterFileListById(data.result, item.model.id);
+                        self.fileList = (fileList || []).map(function (file) {
+                            return new Item(file, self.currentPath);
+                        });
+                        self.buildTree(path);
+                    });
+                }
+            };
+
+
+        FileNavigator.prototype.filterFileListById = function (fileList,fileId){
 					var fileListTemp = [];
 					for (var i = 0; i < fileList.length; i++) {
 						if (fileId != fileList[i].id) {
@@ -249,7 +261,6 @@
 					return fileListTemp;
 				}
 				
-
 
         FileNavigator.prototype.myFolderRefresh = function() {
             var self = this;
@@ -311,7 +322,7 @@
             }
         };
 
-         FileNavigator.prototype.myFolderBuildTree = function(path) {
+        FileNavigator.prototype.myFolderBuildTree = function(path) {
             var flatNodes = [], selectedNode = {};
 
             function recursive(parent, item, path) {
@@ -372,18 +383,18 @@
             }
             this.refresh();
 				}; */
-				FileNavigator.prototype.folderClick = function (item) {
-					this.currentPath = [];
-					this.currentFileId = '';
-					this.currentParentId='';
+        FileNavigator.prototype.folderClick = function (item) {
+            this.currentPath = [];
+            this.currentFileId = '';
+            this.currentParentId='';
 
-					if (item && item.isFolder()) {
-						this.currentFileId = item.model.id;
-						this.currentParentId=item.model.parentId;
-						this.currentPath = item.model.fullPath().split('/').splice(1);
-					}
-					this.refresh();
-				};
+            if (item && item.isFolder()) {
+                this.currentFileId = item.model.id;
+                this.currentParentId=item.model.parentId;
+                this.currentPath = item.model.fullPath().split('/').splice(1);
+            }
+            this.refresh();
+        };
 
         FileNavigator.prototype.myFolderClick = function(item) {
             //this.myFolderCurrentPath = [];

@@ -380,7 +380,7 @@
             return deferred.promise;
         };
 
-        Item.prototype.remove = function () {
+        Item.prototype.removeFile = function () {
             var self = this;
             var deferred = $q.defer();
             var data = {
@@ -402,7 +402,7 @@
             return deferred.promise;
         };
 
-        Item.prototype.myRemove = function () {
+        Item.prototype.myRemoveFile = function () {
             var self = this;
             var deferred = $q.defer();
             var data = {
