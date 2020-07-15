@@ -399,6 +399,26 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
 
 </script>
 
+<!--共享文件删除-->
+<script type="text/ng-template" id="deleteFile.html">
+    <form ng-submit="removeFile(temp)" style="color:#778CA2;">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true" ng-click="cancel();">&times;</span>
+            </button>
+            <h4 class="modal-title">确认框</h4>
+        </div>
+        <div class="modal-body">
+            确定删除 <b>{{temp.model.name}}</b> ?
+            <div ng-include data-src="'error-bar'" class="clearfix"></div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
+            <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess" autofocus="autofocus">确定</button>
+        </div>
+    </form>
+</script>
+
 <!--共享文件更新名称模态框-->
 <script type="text/ng-template" id="updateFile.html">
     <form ng-submit="updateFile(temp)" class="bs-example form-horizontal">
@@ -430,9 +450,6 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
                             <div ng-include data-src="'path-selector'" class="clearfix col-md-12"></div>
                         </div>
                         <div class="row" style="margin-bottom: 10px;">
-                            <div ng-include data-src="'error-bar'" class="clearfix col-md-12"></div>
-                        </div>
-                        <div class="row" style="margin-bottom: 10px;">
                             <div class="col-md-12">权限选择</div>
                         </div>
                         <div class="row">
@@ -453,7 +470,7 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
     </form>
 </script>
 
-<!--共享文件编辑路径模态框-->
+<!--编辑路径模态框-->
 <script type="text/ng-template" id="editPath.html">
     <div class="modal-header">
         <button type="button" class="close"
@@ -464,33 +481,13 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
             选择目录
         </h4>
     </div>
-    <div class="modal-body" style="padding-left:50px;padding-right:50px;">
+    <div class="modal-body">
         <div ng-include="config.tplPath + '/current-folder-breadcrumb.html'"></div>
         <div ng-include="config.tplPath + '/main-table-modal.html'"></div>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess">关闭</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel()">关闭</button>
     </div>
-</script>
-
-<!--共享文件删除-->
-<script type="text/ng-template" id="delete.html">
-    <form ng-submit="remove(temp)" style="color:#778CA2;">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">
-                <span aria-hidden="true" ng-click="cancel();">&times;</span>
-            </button>
-            <h4 class="modal-title">确认框</h4>
-        </div>
-        <div class="modal-body">
-            确定删除 <b>{{temp.model.name}}</b> ?
-            <div ng-include data-src="'error-bar'" class="clearfix"></div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
-            <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess" autofocus="autofocus">确定</button>
-        </div>
-    </form>
 </script>
 
 <!--我的文件新建文件夹的模态框-->
@@ -501,7 +498,7 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
                     data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
                 ×
             </button>
-            <h4 class="modal-title" id="myModalLabel0" style="color:#778CA2;">
+            <h4 class="modal-title" style="color:#778CA2;">
                 新建文件夹
             </h4>
         </div>
@@ -531,7 +528,7 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
                 data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
             ×
         </button>
-        <h4 class="modal-title" id="myModalLabel10" style="color:#778CA2;">
+        <h4 class="modal-title" style="color:#778CA2;">
             上传
         </h4>
     </div>
@@ -540,12 +537,12 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
         <div class="row">
             <div class="col-md-1"></div>
             <div class="col-md-10">
-                <div id="fileuploader10" jquery-upload="">选择</div>
+                <div jquery-upload="">选择</div>
             </div>
         </div>
     </div>
     <div class="modal-footer">
-        <div id="extrabutton10" class="ajax-file-upload-green" ng-click="myStartUploadFile(temp)">开始上传</div>
+        <div class="ajax-file-upload-green" ng-click="myStartUploadFile(temp)">开始上传</div>
     </div>
 </script>
 
@@ -576,11 +573,8 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
                                        ng-model="temp.tempModel.name" autofocus="autofocus"/>
                             </div>
                         </div>
-                        <div class="row" style="margin-bottom: 20px;">
-                            <div ng-include data-src="'path-selector'" class="clearfix col-md-12"></div>
-                        </div>
                         <div class="row">
-                            <div ng-include data-src="'error-bar'" class="clearfix col-md-12"></div>
+                            <div ng-include data-src="'path-selector'" class="clearfix col-md-12"></div>
                         </div>
                     </div>
                 </div>
@@ -594,8 +588,8 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
 </script>
 
 <!--我的文件删除-->
-<script type="text/ng-template" id="myDelete.html">
-    <form ng-submit="myRemove(temp)" style="color:#778CA2;">
+<script type="text/ng-template" id="myDeleteFile.html">
+    <form ng-submit="myRemoveFile(temp)" style="color:#778CA2;">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">
                 <span aria-hidden="true" ng-click="cancel();">&times;</span>
@@ -604,7 +598,7 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
         </div>
         <div class="modal-body">
             确定删除 <b>{{temp.model.name}}</b> ?
-            <div ng-include data-src="'error-bar'" class="clearfix"></div>
+            <!--<div ng-include data-src="'error-bar'" class="clearfix"></div>-->
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
