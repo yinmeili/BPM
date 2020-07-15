@@ -15,7 +15,7 @@ import com.h3bpm.web.mapper.sqlprovider.MyFileSqlProvider;
 public interface MyFileMapper {
 
 	@SelectProvider(type = MyFileSqlProvider.class, method = "findMyFileByParentIdAndKeyword")
-	public List<File> findMyFileByParentIdAndKeyword(@Param("parentId") String parentId, @Param("keyword") String keyword, @Param("userId") String userId);
+	public List<File> findMyFileByParentIdAndKeyword(@Param("parentId") String parentId, @Param("keyword") String keyword, @Param("searchPath") String searchPath, @Param("userId") String userId);
 
 	//根据用户id和已删除状态获取文件，author:lhl
 	@SelectProvider(type = FileSqlProvider.class, method = "findDeletedMyFileByUserId")

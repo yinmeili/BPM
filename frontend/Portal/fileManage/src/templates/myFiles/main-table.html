@@ -53,8 +53,8 @@
                 </a>
             </td>
             <!-- 路径位置 -->
-            <td class="hidden-xs" title="{{item.model.fullPath()}}" ng-show="fileNavigator.position">
-                {{item.model.fullPath()}}
+            <td class="hidden-xs" title="{{item.model.dir}}" ng-show="fileNavigator.position">
+                {{item.model.dir}}
             </td>
             <td class="hidden-sm hidden-xs " >
                 <span ng-show="item.model.type === 'file'">{{item.model.sizeKb()}}KB</span>
@@ -100,8 +100,8 @@
                 </a>
             </td>
             <!-- 路径位置 -->
-            <td class="hidden-xs" ng-show="fileNavigator.position" title="item.model.fullPath()">
-                {{item.model.fullPath()}}
+            <td class="hidden-xs" ng-show="fileNavigator.position" title="item.model.dir">
+                {{item.model.dir}}
             </td>
             <td class="hidden-sm hidden-xs " >
                 <span ng-show="item.model.type === 'file'">{{item.model.sizeKb()}}KB</span>

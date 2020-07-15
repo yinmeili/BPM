@@ -108,7 +108,7 @@
             var self = this;
             var deferred = $q.defer();
             var data = {
-                "path":$rootScope.rootdir + '/' + self.tempModel.path.join('/'),
+                "path":$rootScope.rootdir + (self.tempModel.path.join('/') == ''? '':'/' + self.tempModel.path.join('/')),
                 "name":self.tempModel.name,
                 "parentId": self.tempModel.id,
                 "filePermission": self.tempModel.filePermission

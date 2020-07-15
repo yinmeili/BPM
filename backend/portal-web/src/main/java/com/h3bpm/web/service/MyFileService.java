@@ -19,8 +19,20 @@ public class MyFileService extends ApiDataService {
 
 	public List<File> findMyFileByParentIdAndKeyword(String parentId, String keyword, String userId) {
 		List<File> fileList = null;
+		String searchPath = null;
+
 		try {
-			fileList = myFileMapper.findMyFileByParentIdAndKeyword(parentId, keyword, userId);
+			// 如果关键字不为空，则查询该目录开头的所有文件及文件夹
+			if (keyword != null && !keyword.isEmpty()) {
+				// 根目录则查询下面所有文件
+				if (parentId == null || parentId.isEmpty()) {
+					searchPath = "";
+				} else {
+					searchPath = myFileMapper.getMyFileById(parentId).getDir();
+				}
+			}
+
+			fileList = myFileMapper.findMyFileByParentIdAndKeyword(parentId, keyword, searchPath, userId);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

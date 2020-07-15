@@ -8,9 +8,9 @@
                 </a>
             </th>
             <th class="hidden-sm hidden-xs" ng-show="fileNavigator.position">
-                <a href="" ng-click="order('model.fullPath()')">
+                <a href="" ng-click="order('model.dir')">
                     位置
-                    <span class="sortorder" ng-show="predicate[1] === 'model.fullPath()'" ng-class="{reverse:reverse}"></span>
+                    <span class="sortorder" ng-show="predicate[1] === 'model.dir'" ng-class="{reverse:reverse}"></span>
                 </a>
             </th>
             <th class="hidden-sm hidden-xs">
@@ -59,8 +59,8 @@
                 </a>
             </td>
             <!-- 路径位置 -->
-            <td class="hidden-xs" title="{{item.model.fullPath()}}" ng-show="fileNavigator.position">
-                {{item.model.fullPath()}}
+            <td class="hidden-xs" title="{{item.model.dir}}" ng-show="fileNavigator.position">
+                {{item.model.dir}}
             </td>
             <td class="hidden-sm hidden-xs " >
                 <span ng-show="item.model.type === 'file'">{{item.model.sizeKb()}}KB</span>
