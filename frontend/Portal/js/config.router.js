@@ -213,7 +213,24 @@ angular.module('app')
                         }
                     })
 
-                    //————流程中心————
+										//————流程中心————
+									//————工作日历————
+									.state('app.workCalendar', {
+										url: '/workCalendar',
+										controller: "",
+										templateUrl: 'workCalendar/index.html',
+										resolve: {
+											deps: ['$ocLazyLoad',
+												function ($ocLazyLoad) {
+													return $ocLazyLoad.load([
+
+													]);
+												}
+											]
+										}
+									})
+
+
                     //待办
                     .state('app.MyUnfinishedWorkItem', {
                         url: '/MyUnfinishedWorkItem?rn=' + Math.random(),
@@ -578,7 +595,10 @@ angular.module('app')
 
                     /*
                      自定义页面
-                     */
+										 */
+
+									
+
                     //应用中心-任务列表
                     .state('app.MyWorkItem', {
                         url: '/MyWorkItem/:SchemaCode/:State/:FunctionCode',
@@ -690,23 +710,9 @@ angular.module('app')
                                 ]
                             }
 												})
-												
-												//————工作日历————
-									.state('app.workCalendar', {
-										url: '',
-										controller: "",
-										templateUrl: 'workCalendar/index.html',
-										resolve: {
-											deps: ['$ocLazyLoad',
-												function ($ocLazyLoad) {
-													return $ocLazyLoad.load([
-														// 'fileManage2/src/js/controllers/main.js',
-														// 'fileManage2/bower_components/jquery-uploadfile/js/jquery.uploadfile.js'
-													]);
-												}
-											]
-										}
-									})
+
+										
+									
 
                 // End
             }

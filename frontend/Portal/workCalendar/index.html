@@ -1,54 +1,82 @@
-<!DOCTYPE html>
-<html lang="en" data-ng-app="WorkCalendarApp">
+<!-- <!doctype html>
+<html lang="en" data-ng-app="workCalendarApp">
 
-	<head>
-		<meta charset="utf-8" />
-		<title>AngularUI Calendar for AngularJS</title>
-		<!-- <link rel="icon" href="favicon.ico" /> -->
-		<link rel="stylesheet" href="css/bootstrap.css" />
-		<link rel="stylesheet" href="css/fullcalendar.css">
+<head>
+	<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+	<meta charset="utf-8">
+	<title>协办平台</title> -->
 
-		<script src="js/jquery.js"></script>
-		<script src="js/angular.js"></script>
-		<script src="js/ui-bootstrap-tpls-0.9.0.js"></script>
-		<script src="js/moment.js"></script>
-		<script src="js/fullcalendar.js"></script>
-		<script src="js/gcal.js"></script>
-		<script src="js/calendar.js"></script>
-		<script src="js/angular-locale_zh-cn.js" type="text/javascript" charset="utf-8"></script>
-		<script src="js/calendarDemo.js"></script>
-	</head>
+	<!-- third party -->
+	<!-- <script src="bower_components/jquery/dist/jquery.min.js"></script> -->
+	<!-- <script src="js/vendor/jquery/jquery.min.js"></script> -->
+	<!-- <script src="vendor/jquery/jquery.min.js"></script>
+	<script src="vendor/angular/angular.min.js"></script> -->
+	<!-- <script src="bower_components/angular/angular.min.js"></script> -->
+	
 
-	<body>
-		<div id="calendar" ng-controller="workCalendarCtrl">
-			
-			<!-- <div class="fc-button-group">
-				<input id="monthpicker" type="text"
-					class="fc-prev-button fc-button fc-state-default fc-corner-left" style="width:100px;height:20px;"
-					placeholder="输入年-月"><button type="button" id="monthbutton"
-					class="fc-next-button fc-button fc-state-default fc-corner-right">goto</button>
-			</div> -->
 
-			<div class="container">
-				<div>
-					<select class="fc-button fc-state-default fc-corner-left" ng-model="selectYear" ng-options="year for year in years">
-						<option value="">请选择</option>
-					</select>
-					<span>年</span>
-					<select class="fc-button fc-state-default fc-corner-right" ng-model="selectMonth" ng-options="month for month 	in months">
-						<option value="">请选择</option>
-					</select>
-					<span>月</span>
-					<button type="button" class="fc fc-button-group fc-next-button fc-button fc-state-default fc-corner-left fc-corner-right" ng-click="goToByDate()">选择</button>
+	<!-- Uncomment if you need to use raw source code-->
+
+
+	<!-- 日历 -->
+	
+
+	<!-- <script src="bower_components/moment/moment.js" type="text/javascript"></script> -->
+	<!-- <script src="workCalendar/bower_components/moment/moment.js" type="text/javascript"></script> -->
+	<!-- <script src="workCalendar/bower_components/fullcalendar/dist/fullcalendar.js" type="text/javascript"></script> -->
+	<!-- <script src="workCalendar/bower_components/moment/locale/zh-cn.js"></script> -->
+	<!-- <script src="workCalendar/bower_components/fullcalendar/dist/gcal.js" type="text/javascript"></script> -->
+	<!-- <script src="workCalendar/bower_components/angular-ui-calendar/src/calendar.js" type="text/javascript"></script> -->
+
+	<!-- <link href="workCalendar/bower_components/fullcalendar/dist/fullcalendar.css" rel="stylesheet"> -->
+
+	<!-- <script src="workCalendar/src/js/app.js" type="text/javascript"></script> -->
+	<!-- <script src="workCalendar/src/js/main.js" type="text/javascript"></script> -->
+
+	<!-- Comment if you need to use raw source code -->
+
+<!-- </head> -->
+
+<!-- <body>
+	hhhh
+	<div ng-controller="workCalendarCtrl" class="table mb0 table-files">
+		<div class="container-fluid">
+			<section id="directives-calendar">
+				<div class="calendar" ng-model="eventSources" calendar="myCalendar" ui-calendar="uiConfig.calendar">
 				</div>
-				<br>
+			</section>
+		</div>
+	</div>
+</body> -->
 
-				<section id="directives-calendar" >
-					<div class="calendar" ng-model="eventSources" calendar="myCalendar1" ui-calendar="uiConfig.calendar">
+<!-- <body> -->
+	<div class="hbox hbox-auto-xs hbox-auto-sm">
+		<!-- main -->
+		<!--<form>-->
+		<div class="col">
+			<!-- main header -->
+			<div class="bg-light lter b-b wrapper-md">
+				<div ng-controller="workCalendarCtrl">
+	
+					<div ng-include="'workCalendar/navbar.html'"></div>
+					<div class="container-fluid">
+						<div class="row">
+							<div class="main" ng-class="'col-sm-12 col-sm-offset-3 col-md-12 col-md-offset-2'">
+								<div ng-include="'workCalendar/main-table.html'">
+								</div>
+							</div>
+						</div>
 					</div>
-				</section>
+				</div>
 			</div>
 		</div>
-	</body>
+	</div>
+<!-- 	
+	<script type="text/javascript">
+		var controllerScope = $('div[ng-controller="workCalendarCtrl"]').scope();
+		controllerScope.fileMemuTile = '工作日志';
 
-</html>
+	</script>
+</body>
+
+</html> -->
