@@ -273,18 +273,14 @@
                 $scope.fileNavigator.position = true;
                 var keyword = $("#"+searchId).val();
                 var url = fileManagerConfig.searchListMyFileUrl;
-                if(keyword){
-                    var path = $scope.fileNavigator.currentPath.join('/');
-                    $scope.fileNavigator.mySearch(keyword).then(function (data) {
-                        $scope.fileNavigator.currentParentId = data.parentId;
-                        $scope.fileNavigator.fileList = (data.result || []).map(function(file) {
-                            return new Item(file, $scope.fileNavigator.currentPath);
-                        });
-                        $scope.fileNavigator.buildTree(path);
+                var path = $scope.fileNavigator.currentPath.join('/');
+                $scope.fileNavigator.mySearch(keyword).then(function (data) {
+                    $scope.fileNavigator.currentParentId = data.parentId;
+                    $scope.fileNavigator.fileList = (data.result || []).map(function(file) {
+                        return new Item(file, $scope.fileNavigator.currentPath);
                     });
-                }else{
-                    alert('请输入查询名称');
-                }
+                    $scope.fileNavigator.buildTree(path);
+                });
 
             };
 
@@ -303,7 +299,9 @@
                         $scope.fileNavigator.buildTree(path);
                     });
                 }else{
-                    alert('请输入查询名称');
+                    $.notify({ message: "请输入搜索的内容", status: "danger" });
+                    $scope.fileNavigator.position = false;
+                    return false;
                 }
             }
 
@@ -593,7 +591,7 @@
             }
 
 // ************************共享文件删除模态框****************************************
-            $scope.toDelete = function (data) {
+            $scope.toDeleteFile = function (data) {
                 $scope.fileNavigator = $rootScope.scope.fileNavigator;//参数
                 $rootScope.temp = data;
                 var lenOrgList = data.model.filePermission.orgList.length;//组织的长度
@@ -611,7 +609,7 @@
                     var Agency = result.Rows[0];
                     // 弹出模态框
                     var modalInstance = $modal.open({
-                        templateUrl: 'delete.html',    // 指向上面创建的视图
+                        templateUrl: 'deleteFile.html',    // 指向上面创建的视图
                         controller: 'ModalsController',// 初始化模态范围
                         size: "md",
                         resolve: {
@@ -838,7 +836,7 @@
                 }, 50);
             }
 // ************************我的文件删除模态框*****************************************
-            $scope.toMyDelete = function (data) {
+            $scope.toMyDeleteFile = function (data) {
                 $scope.fileNavigator = $rootScope.scope.fileNavigator;//参数
                 $rootScope.temp = data;
                 data = "";
@@ -855,7 +853,7 @@
                     var Agency = result.Rows[0];
                     // 弹出模态框
                     var modalInstance = $modal.open({
-                        templateUrl: 'myDelete.html',    // 指向上面创建的视图
+                        templateUrl: 'myDeleteFile.html',    // 指向上面创建的视图
                         controller: 'ModalsController',// 初始化模态范围
                         size: "md",
                         resolve: {
@@ -997,11 +995,9 @@
                             // if(IsUser){userList.push({})}
                         }
                     }else{
-                        alert('请选择权限');//未
                         return;
                     }
                 }else{
-                    alert('请选择权限....');
                     return;
                 }
                 return {
@@ -1027,12 +1023,25 @@
 
                 // var permission = $("#folderPer").SheetUIManager().GetValue();
 
-                if (foldername && ! _newscope.fileNavigator.fileNameExists(foldername) && item.tempModel.filePermission) {
+				var msg = '';
+				if(!foldername){
+				    msg +='请输入名称 | ';
+				}
+                if(_newscope.fileNavigator.fileNameExists(foldername)){
+                    msg +='有重名文件，请重新命名 | ';
+                }
+
+                if(!item.tempModel.filePermission){
+                    msg +='请选择权限 | ';
+                }
+                msg = msg.substr(0,msg.length-3);
+				
+                if (!msg) {
                     item.createFolder().then(function () {
                         _newscope.fileNavigator.refresh();
                     });
                 } else {
-                    item.error = $translate.instant('没有选择权限或者文件夹名称重复');
+                    $.notify({ message: msg, status: "danger" });
                     return false;
                 }
                 $scope.cancel();
@@ -1044,8 +1053,7 @@
                 if(permission){
                     $scope.fileNavigator.filePermission = permission.join(',');
                 }else{
-                    alert('请选择权限');
-                    e.error = $translate.instant('没有选择权限');
+                    $.notify({ message: "请上传文件和选择权限", status: "danger" });
                     return false;
                 }
                 extraObj.startUpload();
@@ -1057,7 +1065,7 @@
                 $scope.fileNavigator = _newscope.fileNavigator;
                 var samePath = item.tempModel.path.join() === item.model.path.join();
                 if (samePath && $scope.fileNavigator.fileNameExists(item.tempModel.name)) {
-                    item.error = $translate.instant('error_invalid_filename');
+                    $.notify({ message: "请编辑名称或更改路径", status: "danger" });
                     return false;
                 }
                 item.updateFile().then(function () {
@@ -1066,8 +1074,8 @@
                 $scope.cancel();
             };
             //删除文件
-            $scope.remove = function(item){
-                item.remove().then(function () {
+            $scope.removeFile = function(item){
+                item.removeFile().then(function () {
                     $scope.fileNavigator.refresh();
                 });
                 $scope.cancel();
@@ -1093,7 +1101,7 @@
                         _newscope.fileNavigator.refresh();
                     });
                 } else {
-                    item.error = $translate.instant('文件夹名称重复');
+                    $.notify({ message: "文件夹名称不能重复且不能为空", status: "danger" });
                     return false;
                 }
                 $scope.cancel();
@@ -1105,11 +1113,10 @@
             };
             //更改路径数据交互 ok
             $scope.myUpdateFile = function (item) {
-                // item.tempModel.filePermission = $scope.getPermission($("#editPer"));
                 $scope.fileNavigator = _newscope.fileNavigator;
                 var samePath = item.tempModel.path.join() === item.model.path.join();
                 if (samePath && $scope.fileNavigator.fileNameExists(item.tempModel.name)) {
-                    item.error = $translate.instant('error_invalid_filename');
+                    $.notify({ message: "请编辑名称或更改路径", status: "danger" });
                     return false;
                 }
                 item.myUpdateFile().then(function () {
@@ -1118,8 +1125,8 @@
                 $scope.cancel();
             };
             //删除文件
-            $scope.myRemove = function(item){
-                item.myRemove().then(function () {
+            $scope.myRemoveFile = function(item){
+                item.myRemoveFile().then(function () {
                     $scope.fileNavigator.refresh();
                 });
                 $scope.cancel();

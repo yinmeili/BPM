@@ -8,14 +8,22 @@ public class MyFileSqlProvider {
 		String keyword = para.get("keyword") == null ? "" : (String) para.get("keyword");
 		String userId = (String) para.get("userId");
 		
+		String searchPath = para.get("searchPath") == null ? "" : (String) para.get("searchPath");
+
 		String parentIdSqlStr = (parentId == null || parentId.isEmpty()) ? " AND parent_id is null" : " AND parent_id='" + parentId + "'";
-		
+
 		/*
-		 * 关键字不为空时，模糊搜索所有目录名称和文件名 
+		 * 关键字不为空时，模糊搜索所有目录名称和文件名，不再使用parentId查询
 		 */
 		String keywordSqlStr = "";
-		if(!keyword.isEmpty()){
-			keywordSqlStr = " AND name like '%" + keyword + "%'";
+		if (!keyword.isEmpty()) {
+			parentIdSqlStr = "";
+			//排除本级目录
+			keywordSqlStr += " AND dir <> '" + searchPath + "'";
+			
+			keywordSqlStr += " AND dir like '" + searchPath + "%'";
+			keywordSqlStr += " AND name like '%" + keyword + "%'";
+			
 		}
 		
 		String userIdSqlStr = "";

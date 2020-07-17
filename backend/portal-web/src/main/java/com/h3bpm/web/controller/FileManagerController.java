@@ -125,16 +125,12 @@ public class FileManagerController extends ControllerBase {
 		try {
 			ReqParam param = paramList.getParams();
 
-			String id = param.getFileId();
-
 			String pathStr = param.getPath();
 			pathStr = pathStr.replace("\\", File.separator);
 
 			String fileId = param.getFileId();
 
-			FileDesc desc = null;
-
-			com.h3bpm.web.entity.File fileDb = fileService.getFileById(id);
+			com.h3bpm.web.entity.File fileDb = fileService.getFileById(fileId);
 			List<com.h3bpm.web.entity.File> fileList = fileService.findFileByParentIdAndKeyword(fileId, param.getKeyword());
 			Map<String, Object> userMap = this._getCurrentUser();
 			OThinker.Common.Organization.Models.User user = (User) userMap.get("User");
@@ -182,8 +178,6 @@ public class FileManagerController extends ControllerBase {
 		try {
 			ReqParam param = paramList.getParams();
 
-			String id = param.getFileId();
-
 			String pathStr = param.getPath();
 			pathStr = pathStr.replace("\\", File.separator);
 
@@ -191,7 +185,7 @@ public class FileManagerController extends ControllerBase {
 
 			Map<String, Object> userMap = this._getCurrentUser();
 			OThinker.Common.Organization.Models.User user = (User) userMap.get("User");
-			com.h3bpm.web.entity.File fileDb = myFileService.getMyFileById(id);
+			com.h3bpm.web.entity.File fileDb = myFileService.getMyFileById(fileId);
 			List<com.h3bpm.web.entity.File> fileList = myFileService.findMyFileByParentIdAndKeyword(fileId, param.getKeyword(), user.getObjectId());
 
 			if (fileList != null) {
@@ -358,11 +352,16 @@ public class FileManagerController extends ControllerBase {
 
 		// Path sourcePath = Paths.get(uploadPath + pathStr);
 		// Path desPath = Paths.get(uploadPath + newPathStr);
+		
+		String parentId = reqUpdateFile.getParentId();
+		if(parentId != null && parentId.isEmpty()){
+			parentId = null;
+		}
 
 		com.h3bpm.web.entity.File fileEntity = fileService.getFileById(reqUpdateFile.getFileId());
 		FileVo fileVo = new FileVo(fileEntity);
 
-		fileVo.setParentId(reqUpdateFile.getParentId());
+		fileVo.setParentId(parentId);
 		fileVo.setName(reqUpdateFile.getFileName());
 		fileVo.setDir(newPathStr != null ? newPathStr : pathStr);
 		fileVo.setFilePermission(reqUpdateFile.getFilePermission());
@@ -387,10 +386,16 @@ public class FileManagerController extends ControllerBase {
 		// Path sourcePath = Paths.get(uploadPath + pathStr);
 		// Path desPath = Paths.get(uploadPath + newPathStr);
 
+		String parentId = reqUpdateFile.getParentId();
+		if(parentId != null && parentId.isEmpty()){
+			parentId = null;
+		}
+		
 		com.h3bpm.web.entity.File fileEntity = myFileService.getMyFileById(reqUpdateFile.getFileId());
 		FileVo fileVo = new FileVo(fileEntity);
 
-		fileVo.setParentId(reqUpdateFile.getParentId());
+		fileVo.setParentId(parentId);
+		fileVo.setName(reqUpdateFile.getFileName());
 		fileVo.setDir(newPathStr != null ? newPathStr : pathStr);
 		fileVo.setFilePermission(reqUpdateFile.getFilePermission());
 
@@ -551,11 +556,15 @@ public class FileManagerController extends ControllerBase {
 		String pathStr = reqParam.getPath();
 		pathStr = pathStr.replace("\\", "/");
 		// Path sourcePath = Paths.get(uploadPath + File.separator + pathStr + File.separator + reqParam.getName());
-		logger.info(pathStr);
+		
+		String parentId = reqParam.getParentId();
+		if(parentId != null && parentId.isEmpty()){
+			parentId = null;
+		}
 
 		fileVo.setName(reqParam.getName()); // 获取名字存入fileVo
 		fileVo.setFilePermission(reqParam.getFilePermission()); // 获取权限存入fileVo
-		fileVo.setParentId(reqParam.getParentId());// 获取Id存入
+		fileVo.setParentId(parentId);// 获取Id存入
 		fileVo.setDir(pathStr + "/" + fileVo.getName() + "/");// 地址存入
 
 		fileVo.setType(FileType.DIR.getValue());// 存入类型
@@ -577,12 +586,15 @@ public class FileManagerController extends ControllerBase {
 		// 获取地址
 		String pathStr = reqParam.getPath();
 		pathStr = pathStr.replace("\\", "/");
-		// Path sourcePath = Paths.get(uploadPath + File.separator + pathStr + File.separator + reqParam.getName());
-		logger.info(pathStr);
+		
+		String parentId = reqParam.getParentId();
+		if(parentId != null && parentId.isEmpty()){
+			parentId = null;
+		}
 
 		fileVo.setName(reqParam.getName()); // 获取名字存入fileVo
 		fileVo.setFilePermission(reqParam.getFilePermission()); // 获取权限存入fileVo
-		fileVo.setParentId(reqParam.getParentId());// 获取Id存入
+		fileVo.setParentId(parentId);// 获取Id存入
 		fileVo.setDir(pathStr + "/" + fileVo.getName() + "/");// 地址存入
 
 		fileVo.setType(FileType.DIR.getValue());// 存入类型
@@ -861,6 +873,10 @@ public class FileManagerController extends ControllerBase {
 
 				sftp.upload(ftpDir, downloadFileId, in);
 				sftp.logout();
+				
+				if(parentId != null && parentId.isEmpty()){
+					parentId = null;
+				}
 
 				FileVo fileVo = new FileVo();
 				fileVo.setId(fileId);
@@ -939,6 +955,10 @@ public class FileManagerController extends ControllerBase {
 				sftp.upload(ftpDir, downloadFileId, in);
 				sftp.logout();
 
+				if(parentId != null && parentId.isEmpty()){
+					parentId = null;
+				}
+				
 				FileVo fileVo = new FileVo();
 				fileVo.setId(fileId);
 				fileVo.setParentId(parentId);
@@ -1042,6 +1062,22 @@ public class FileManagerController extends ControllerBase {
 	@Override
 	public String getFunctionCode() {
 		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@RequestMapping(value = "/collectToMyFile", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public FileDescSingle collectToMyFile(@RequestBody ReqCollectToMyFile reqBean) {
+		com.h3bpm.web.entity.File shareFile = fileService.getFileById(reqBean.getFileId());
+		com.h3bpm.web.entity.File myParentFile = myFileService.getMyFileById(reqBean.getMyFileParentId());
+		
+		UserSessionInfo userSessionInfo = UserSessionUtils.get(Constants.SESSION_USER, UserSessionInfo.class);
+		String userId = userSessionInfo.getUser().getObjectID();
+		
+		shareFile.setId(UUID.randomUUID().toString());
+		shareFile.setCreateUserId(userId);
+		shareFile.setDir(myParentFile.getDir()+shareFile.getName()+"");
+		
 		return null;
 	}
 }

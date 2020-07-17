@@ -108,7 +108,7 @@
             var self = this;
             var deferred = $q.defer();
             var data = {
-                "path":$rootScope.rootdir + '/' + self.tempModel.path.join('/'),
+                "path":$rootScope.rootdir + (self.tempModel.path.join('/') == ''? '':'/' + self.tempModel.path.join('/')),
                 "name":self.tempModel.name,
                 "parentId": self.tempModel.id,
                 "filePermission": self.tempModel.filePermission
@@ -380,7 +380,7 @@
             return deferred.promise;
         };
 
-        Item.prototype.remove = function () {
+        Item.prototype.removeFile = function () {
             var self = this;
             var deferred = $q.defer();
             var data = {
@@ -402,7 +402,7 @@
             return deferred.promise;
         };
 
-        Item.prototype.myRemove = function () {
+        Item.prototype.myRemoveFile = function () {
             var self = this;
             var deferred = $q.defer();
             var data = {

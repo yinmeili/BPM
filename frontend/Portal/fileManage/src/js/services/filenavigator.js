@@ -251,7 +251,6 @@
 				} */
 				
 
-
         FileNavigator.prototype.myFolderRefresh = function() {
             var self = this;
             var path = self.myFolderCurrentPath.join('/');
@@ -312,7 +311,7 @@
             }
         };
 
-         FileNavigator.prototype.myFolderBuildTree = function(path) {
+        FileNavigator.prototype.myFolderBuildTree = function(path) {
             var flatNodes = [], selectedNode = {};
 
             function recursive(parent, item, path) {
@@ -373,18 +372,18 @@
             }
             this.refresh();
 				}; */
-				FileNavigator.prototype.folderClick = function (item) {
-					this.currentPath = [];
-					this.currentFileId = '';
-					this.currentParentId='';
+        FileNavigator.prototype.folderClick = function (item) {
+            this.currentPath = [];
+            this.currentFileId = '';
+            this.currentParentId='';
 
-					if (item && item.isFolder()) {
-						this.currentFileId = item.model.id;
-						this.currentParentId=item.model.parentId;
-						this.currentPath = item.model.fullPath().split('/').splice(1);
-					}
-					this.refresh();
-				};
+            if (item && item.isFolder()) {
+                this.currentFileId = item.model.id;
+                this.currentParentId=item.model.parentId;
+                this.currentPath = item.model.fullPath().split('/').splice(1);
+            }
+            this.refresh();
+        };
 
         FileNavigator.prototype.myFolderClick = function(item) {
             //this.myFolderCurrentPath = [];
