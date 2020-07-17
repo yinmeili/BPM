@@ -16,6 +16,7 @@ public class FileDesc {
 	private long size;
 	private Date date;
 	private String type;
+	private String dir;
 
 	private String parentId;
 
@@ -40,6 +41,15 @@ public class FileDesc {
 		this.date = file.getCreateTime();
 		this.type = file.getType();
 		this.parentId = file.getParentId();
+		this.dir = file.getDir();
+	}
+
+	public String getDir() {
+		return dir;
+	}
+
+	public void setDir(String dir) {
+		this.dir = dir;
 	}
 
 	public String getId() {
