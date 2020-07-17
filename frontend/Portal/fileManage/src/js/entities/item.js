@@ -153,7 +153,7 @@
             var data = {
                 fileId: self.model.id,
                 parentId: self.tempModel.parentId,
-                fileName: self.tempModel.name,
+                fileName: self.tempModel.name,// 修改文件夹名称
                 oldPath: self.model.fullPath()+'/',
                 newPath: self.tempModel.fullPath() + '/',
                 //self.tempModel.path.join('/') + '/' + self.tempModel.name,
