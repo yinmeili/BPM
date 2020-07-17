@@ -376,7 +376,7 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
                 <div class="col-md-1"></div>
                 <div class="col-md-10">
                     <div class="form-group" style="color:#778CA2;">
-                        <div class="row" style="margin-bottom: 20px;">
+                        <div class="row" style="margin-bottom: 20px;" id="selectFile">
                             <div id="fileuploader1" jquery-upload="">选择</div>
                         </div>
                         <div class="row">
@@ -481,9 +481,53 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
             选择目录
         </h4>
     </div>
-    <div class="modal-body">
+    <div class="modal-body" style="color:#778CA2;height:300px;overflow: auto;">
         <div ng-include="config.tplPath + '/current-folder-breadcrumb.html'"></div>
         <div ng-include="config.tplPath + '/main-table-modal.html'"></div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel()">关闭</button>
+    </div>
+</script>
+
+<!--分享文件-->
+<script type="text/ng-template" id="shareFile.html">
+    <div class="modal-header" style="color:#778CA2;">
+        <button type="button" class="close"
+                data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+            ×
+        </button>
+        <h4 class="modal-title">
+            选择目录
+        </h4>
+    </div>
+    <div class="modal-body" style="color:#778CA2; height:300px;overflow: auto;">
+        <div style="margin-bottom: 10px;">权限选择</div>
+        <div ui-jq="SheetUser" ui-options="WasAgentOptions"
+             class="" style="margin-bottom: 20px;" data-orgunitvisible="true" data-groupvisible="true">
+        </div>
+        <div ng-include="config.tplPath + '/current-folder-permission.html'"></div>
+        <div ng-include="config.tplPath + '/table-permission-modal.html'"></div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel()">关闭</button>
+    </div>
+</script>
+
+<!--收藏文件-->
+<script type="text/ng-template" id="collectFile.html">
+    <div class="modal-header" style="color:#778CA2;">
+        <button type="button" class="close"
+                data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+            ×
+        </button>
+        <h4 class="modal-title">
+            选择目录
+        </h4>
+    </div>
+    <div class="modal-body" style="color:#778CA2;height:300px;overflow: auto;">
+        <div ng-include="config.tplPath + '/current-folder-permission.html'"></div>
+        <div ng-include="config.tplPath + '/table-permission-modal.html'"></div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel()">关闭</button>
@@ -536,7 +580,7 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
     <div class="modal-body">
         <div class="row">
             <div class="col-md-1"></div>
-            <div class="col-md-10">
+            <div class="col-md-10" id="selectMyFile">
                 <div jquery-upload="">选择</div>
             </div>
         </div>

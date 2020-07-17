@@ -21,6 +21,11 @@
                 filePermission: model && model.filePermission,
                 sizeKb: function () {
                     var sizeKB = Math.ceil(this.fileSize / 1024);
+                    if($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['recycle']){
+                        sizeKB = Math.ceil(this.fileSize / 1024);
+                    }else{
+                        sizeKB = Math.ceil(this.size / 1024);
+                    }
 
                     return formatSize(sizeKB, 0);
                     //return Math.round(this.size / 1024, 1);
@@ -177,8 +182,9 @@
             var data = {
                 fileId: self.model.id,
                 parentId: self.tempModel.parentId,
-                oldPath: self.model.fullPath(),
-                newPath: self.tempModel.path.join('/') + self.tempModel.name,
+                fileName: self.tempModel.name,
+                oldPath: self.model.fullPath() + '/',
+                newPath: self.tempModel.fullPath() + '/',
                 filePermission: null
             };
 
