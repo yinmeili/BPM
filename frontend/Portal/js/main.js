@@ -285,7 +285,7 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$translate', '$localStorage'
                             }
 
                             if(currLocation.indexOf('/platform/login') != -1 || currLocation.endWith('/index.html') || window.location.pathname == '/Portal/'){
-                                window.top.location.href = "./#/app/Workflow/MyUnfinishedWorkItem";
+                                window.top.location.href = "./#/app/Workflow/workCalendar";
                             }
                         }
                     },
@@ -425,7 +425,7 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$translate', '$localStorage'
                 if (args.Success) {
                     // console.log("$rootScope.PageId:" + $rootScope.PageId);
                     $rootScope.PageId = args.pageId;
-                    $scope.Name = $translate.instant("HomePage.Workspace_MyUnfinishedWorkItem");
+										$scope.Name = $translate.instant("HomePage.Workspace_MyUnfinishedWorkItem");
                     $scope.user = args.User;
                     $scope.user.ManagerName = args.ManagerName;
                     $scope.user.OUDepartName = args.OUDepartName;
