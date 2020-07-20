@@ -44,13 +44,10 @@
             restrict: 'A',
             link: function ($scope, element, attrs, ngModel) {
                 var url = "/Portal/fileManage/";
-                var jsonData = {};
                 if($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['allFiles']){
                     url += "uploadFile";
-                    jsonData = {"path": $rootScope.rootdir + '/' + $scope.fileNavigator.currentPath.join('/'), "parentId": $scope.fileNavigator.currentFileId, "filePermission":$scope.fileNavigator.filePermission};
                 }else if($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['myFiles']){
                     url += "uploadMyFile";
-                    jsonData = {"path": $rootScope.rootdir + '/' + $scope.fileNavigator.currentPath.join('/'), "parentId": $scope.fileNavigator.currentFileId};
                 }
                 extraObj = $(element).uploadFile({
                     url: url,
@@ -66,6 +63,12 @@
                     abortStr: "终止",
                     deleteStr: "删除",
                     dynamicFormData: function () {
+                        var jsonData = {};
+                        if($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['allFiles']){
+                            jsonData = {"path": $rootScope.rootdir + '/' + $scope.fileNavigator.currentPath.join('/'), "parentId": $scope.fileNavigator.currentFileId, "filePermission":$scope.fileNavigator.filePermission};
+                        }else if($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['myFiles']){
+                            jsonData = {"path": $rootScope.rootdir + '/' + $scope.fileNavigator.currentPath.join('/'), "parentId": $scope.fileNavigator.currentFileId};
+                        }
                         return jsonData;
                     },
                     onSuccess: function (files, data, xhr, pd) {

@@ -20,12 +20,22 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 	/* config object */
 	$scope.uiConfig = {
 		calendar: {
-			height: 450,
-			editable: true,
+			height: 'auto',
+			// 是否可编辑，即进行可拖动和缩放操作,默认false
+			editable: false,
 			// 设置一周中显示的第一天是哪天，周日是0
 			firstDay: 1,
 			// 设置周数不固定
 			weekMode: 'liquid',
+			//在agenda视图模式下，是否在日历上方显示all-day(全天)
+			allDaySlot:false,
+			// 强调日历中的某些时间段，
+			businessHours: {
+				dow: [1, 2, 3, 4, 5], // 周一 - 周四
+
+				start: '9:00', // 上午9点开始
+				end: '17:00', // 下午17点结束
+			},
 			// 自定义按钮
 			customButtons: {
 				buttonCreate: {

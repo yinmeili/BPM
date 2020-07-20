@@ -1,7 +1,4 @@
 <div ng-show="!item.inprocess" >
-    <!--<button class="btn btn-sm btn-default" data-toggle="modal" data-target="#updateFile" ng-show="config.allowedActions.rename" ng-click="touch(item)" title="编辑">-->
-    <!--<i class="glyphicon glyphicon-edit"></i>-->
-    <!--</button>-->
     <button class="btn btn-sm btn-default" ng-click="myToUpdateFile(item)" ng-show="config.allowedActions.rename" title="编辑">
         <i class="glyphicon glyphicon-edit"></i>
     </button>
@@ -11,7 +8,7 @@
     <button class="btn btn-sm btn-default" data-toggle="modal" data-target="#edit" ng-show="config.allowedActions.edit && item.isEditable()" ng-click="item.getContent(); touch(item)" title="{{'edit' | translate}}">
         <i class="glyphicon glyphicon-pencil"></i>
     </button>
-    <button class="btn btn-sm btn-default" data-toggle="modal" data-target="#changepermissions" ng-show="config.allowedActions.changePermissions" ng-click="touch(item)" title="分享">
+    <button class="btn btn-sm btn-default" ng-show="config.allowedActions.changePermissions" ng-click="toShareFile(item)" title="分享到共享文件">
         <i class="glyphicon glyphicon-share"></i>
     </button>
     <button class="btn btn-sm btn-default" data-toggle="modal" data-target="#compress" ng-show="config.allowedActions.compress && item.isCompressible()" ng-click="touch(item)" title="{{'compress' | translate}}">
@@ -26,7 +23,7 @@
     <button class="btn btn-sm btn-default" ng-show="config.allowedActions.preview && item.isImage()" ng-click="openImagePreview(item)" title="{{'图片' | translate}}">
         <i class="glyphicon glyphicon-picture"></i>
     </button>
-    <button class="btn btn-sm btn-danger" data-toggle="modal" ng-show="config.allowedActions.remove" ng-click="toMyDeleteFile(item)" title="删除">
+    <button class="btn btn-sm btn-danger" ng-show="config.allowedActions.remove" ng-click="toMyDeleteFile(item)" title="删除">
         <i class="glyphicon glyphicon-trash"></i>
     </button>
 </div>
