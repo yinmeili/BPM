@@ -97,8 +97,9 @@ public class FileManagerController extends ControllerBase {
 	public ResponseVo listRecycleFile() {
 		List<FileVo> descList = new ArrayList<>();
 		try {
-			UserSessionInfo userSessionInfo = UserSessionUtils.get(Constants.SESSION_USER, UserSessionInfo.class);
-			String userId = userSessionInfo.getUser().getObjectID();
+			Map<String, Object> userMap = this._getCurrentUser();
+			OThinker.Common.Organization.Models.User user = (User) userMap.get("User");
+			String userId = user.getObjectId();
 
 			List<com.h3bpm.web.entity.File> fileList = fileService.findDeletedFileByUserId(userId);
 			for (com.h3bpm.web.entity.File file : fileList) {
@@ -130,7 +131,10 @@ public class FileManagerController extends ControllerBase {
 
 			String fileId = param.getFileId();
 
-			com.h3bpm.web.entity.File fileDb = fileService.getFileById(fileId);
+			com.h3bpm.web.entity.File fileDb = null;
+			if (fileId != null && !fileId.equals("")) {
+				fileDb = fileService.getFileById(fileId.equals("") ? null : fileId);
+			}
 			List<com.h3bpm.web.entity.File> fileList = fileService.findFileByParentIdAndKeyword(fileId, param.getKeyword());
 			Map<String, Object> userMap = this._getCurrentUser();
 			OThinker.Common.Organization.Models.User user = (User) userMap.get("User");
@@ -141,7 +145,7 @@ public class FileManagerController extends ControllerBase {
 					/*
 					 * 判断当前用户是否有文件的访问权限
 					 */
-					if (file.getCreateUserId().equals(user.getObjectID()) || fileService.validateFilePermission(file.getId(), user.getObjectId())) {
+					if (file.getCreateUserId().equals(user.getObjectID()) || filePermissionService.validateFilePermission(file.getId(), user.getObjectId())) {
 						FileDesc fileDesc = new FileDesc(file);
 						fileDesc.setFilePermission(filePermissionService.getFilePermissionByFileId(file.getId()));
 
@@ -185,7 +189,10 @@ public class FileManagerController extends ControllerBase {
 
 			Map<String, Object> userMap = this._getCurrentUser();
 			OThinker.Common.Organization.Models.User user = (User) userMap.get("User");
-			com.h3bpm.web.entity.File fileDb = myFileService.getMyFileById(fileId);
+			com.h3bpm.web.entity.File fileDb = null;
+			if (fileId != null && !fileId.equals("")) {
+				fileDb = myFileService.getMyFileById(fileId.equals("") ? null : fileId);
+			}
 			List<com.h3bpm.web.entity.File> fileList = myFileService.findMyFileByParentIdAndKeyword(fileId, param.getKeyword(), user.getObjectId());
 
 			if (fileList != null) {
@@ -236,7 +243,7 @@ public class FileManagerController extends ControllerBase {
 					/*
 					 * 判断当前用户是否有文件的访问权限
 					 */
-					if (file.getCreateUserId().equals(user.getObjectID()) || fileService.validateFilePermission(file.getId(), user.getObjectId())) {
+					if (file.getCreateUserId().equals(user.getObjectID()) || filePermissionService.validateFilePermission(file.getId(), user.getObjectId())) {
 						FileDesc fileDesc = new FileDesc(file);
 						fileDesc.setFilePermission(filePermissionService.getFilePermissionByFileId(file.getId()));
 
@@ -352,9 +359,9 @@ public class FileManagerController extends ControllerBase {
 
 		// Path sourcePath = Paths.get(uploadPath + pathStr);
 		// Path desPath = Paths.get(uploadPath + newPathStr);
-		
+
 		String parentId = reqUpdateFile.getParentId();
-		if(parentId != null && parentId.isEmpty()){
+		if (parentId != null && parentId.isEmpty()) {
 			parentId = null;
 		}
 
@@ -387,10 +394,10 @@ public class FileManagerController extends ControllerBase {
 		// Path desPath = Paths.get(uploadPath + newPathStr);
 
 		String parentId = reqUpdateFile.getParentId();
-		if(parentId != null && parentId.isEmpty()){
+		if (parentId != null && parentId.isEmpty()) {
 			parentId = null;
 		}
-		
+
 		com.h3bpm.web.entity.File fileEntity = myFileService.getMyFileById(reqUpdateFile.getFileId());
 		FileVo fileVo = new FileVo(fileEntity);
 
@@ -548,7 +555,8 @@ public class FileManagerController extends ControllerBase {
 	@RequestMapping(value = "/createFolder", produces = "application/json;charset=utf8")
 	@ResponseBody
 	public ReqCreateFolder createFolder(@RequestBody ReqCreateFolder reqParam) throws Exception {
-		UserSessionInfo userSessionInfo = UserSessionUtils.get(Constants.SESSION_USER, UserSessionInfo.class);
+		Map<String, Object> userMap = this._getCurrentUser();
+		OThinker.Common.Organization.Models.User user = (User) userMap.get("User");
 
 		FileVo fileVo = new FileVo();
 
@@ -556,9 +564,9 @@ public class FileManagerController extends ControllerBase {
 		String pathStr = reqParam.getPath();
 		pathStr = pathStr.replace("\\", "/");
 		// Path sourcePath = Paths.get(uploadPath + File.separator + pathStr + File.separator + reqParam.getName());
-		
+
 		String parentId = reqParam.getParentId();
-		if(parentId != null && parentId.isEmpty()){
+		if (parentId != null && parentId.isEmpty()) {
 			parentId = null;
 		}
 
@@ -568,7 +576,7 @@ public class FileManagerController extends ControllerBase {
 		fileVo.setDir(pathStr + "/" + fileVo.getName() + "/");// 地址存入
 
 		fileVo.setType(FileType.DIR.getValue());// 存入类型
-		fileVo.setCreateUserId(userSessionInfo.getUser().getObjectId());// 存入用户Id
+		fileVo.setCreateUserId(user.getObjectId());// 存入用户Id
 		fileVo.setCreateTime(new Date());
 
 		fileService.createFile(fileVo);
@@ -579,16 +587,17 @@ public class FileManagerController extends ControllerBase {
 	@RequestMapping(value = "/createMyFolder", produces = "application/json;charset=utf8")
 	@ResponseBody
 	public ReqCreateFolder createMyFolder(@RequestBody ReqCreateFolder reqParam) throws Exception {
-		UserSessionInfo userSessionInfo = UserSessionUtils.get(Constants.SESSION_USER, UserSessionInfo.class);
+		Map<String, Object> userMap = this._getCurrentUser();
+		OThinker.Common.Organization.Models.User user = (User) userMap.get("User");
 
 		FileVo fileVo = new FileVo();
 
 		// 获取地址
 		String pathStr = reqParam.getPath();
 		pathStr = pathStr.replace("\\", "/");
-		
+
 		String parentId = reqParam.getParentId();
-		if(parentId != null && parentId.isEmpty()){
+		if (parentId != null && parentId.isEmpty()) {
 			parentId = null;
 		}
 
@@ -598,7 +607,7 @@ public class FileManagerController extends ControllerBase {
 		fileVo.setDir(pathStr + "/" + fileVo.getName() + "/");// 地址存入
 
 		fileVo.setType(FileType.DIR.getValue());// 存入类型
-		fileVo.setCreateUserId(userSessionInfo.getUser().getObjectId());// 存入用户Id
+		fileVo.setCreateUserId(user.getObjectId());// 存入用户Id
 		fileVo.setCreateTime(new Date());
 
 		myFileService.createMyFile(fileVo);
@@ -843,7 +852,15 @@ public class FileManagerController extends ControllerBase {
 	public ResponseVo uploadFileHandler(@RequestParam("file") MultipartFile file, @RequestParam("filePermission") String filePermission, @RequestParam("path") String path, @RequestParam("parentId") String parentId, HttpServletResponse response) throws IOException {
 
 		if (!file.isEmpty()) {
-			UserSessionInfo userSessionInfo = UserSessionUtils.get(Constants.SESSION_USER, UserSessionInfo.class);
+			Map<String, Object> userMap = null;
+			try {
+				userMap = this._getCurrentUser();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			OThinker.Common.Organization.Models.User user = (User) userMap.get("User");
+
 			String fileId = UUID.randomUUID().toString();
 			String downloadFileId = UUID.randomUUID().toString();
 
@@ -873,8 +890,8 @@ public class FileManagerController extends ControllerBase {
 
 				sftp.upload(ftpDir, downloadFileId, in);
 				sftp.logout();
-				
-				if(parentId != null && parentId.isEmpty()){
+
+				if (parentId != null && parentId.isEmpty()) {
 					parentId = null;
 				}
 
@@ -885,7 +902,7 @@ public class FileManagerController extends ControllerBase {
 				fileVo.setName(fileFullName);
 				fileVo.setDir(path + "/" + fileFullName);
 				fileVo.setFileSize(file.getSize());
-				fileVo.setCreateUserId(userSessionInfo.getUser().getObjectId());
+				fileVo.setCreateUserId(user.getObjectId());
 				fileVo.setCreateTime(new Date());
 				fileVo.setDownloadFileId(downloadFileId);
 
@@ -924,7 +941,15 @@ public class FileManagerController extends ControllerBase {
 	public ResponseVo uploadMyFileHandler(@RequestParam("file") MultipartFile file, @RequestParam("path") String path, @RequestParam("parentId") String parentId, HttpServletResponse response) throws IOException {
 
 		if (!file.isEmpty()) {
-			UserSessionInfo userSessionInfo = UserSessionUtils.get(Constants.SESSION_USER, UserSessionInfo.class);
+			Map<String, Object> userMap = null;
+			try {
+				userMap = this._getCurrentUser();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			OThinker.Common.Organization.Models.User user = (User) userMap.get("User");
+
 			String fileId = UUID.randomUUID().toString();
 			String downloadFileId = UUID.randomUUID().toString();
 
@@ -955,10 +980,10 @@ public class FileManagerController extends ControllerBase {
 				sftp.upload(ftpDir, downloadFileId, in);
 				sftp.logout();
 
-				if(parentId != null && parentId.isEmpty()){
+				if (parentId != null && parentId.isEmpty()) {
 					parentId = null;
 				}
-				
+
 				FileVo fileVo = new FileVo();
 				fileVo.setId(fileId);
 				fileVo.setParentId(parentId);
@@ -966,7 +991,7 @@ public class FileManagerController extends ControllerBase {
 				fileVo.setName(fileFullName);
 				fileVo.setDir(path + "/" + fileFullName);
 				fileVo.setFileSize(file.getSize());
-				fileVo.setCreateUserId(userSessionInfo.getUser().getObjectId());
+				fileVo.setCreateUserId(user.getObjectId());
 				fileVo.setCreateTime(new Date());
 				fileVo.setDownloadFileId(downloadFileId);
 
@@ -1064,20 +1089,33 @@ public class FileManagerController extends ControllerBase {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	@RequestMapping(value = "/collectToMyFile", produces = "application/json;charset=utf8")
 	@ResponseBody
-	public FileDescSingle collectToMyFile(@RequestBody ReqCollectToMyFile reqBean) {
-		com.h3bpm.web.entity.File shareFile = fileService.getFileById(reqBean.getFileId());
-		com.h3bpm.web.entity.File myParentFile = myFileService.getMyFileById(reqBean.getMyFileParentId());
-		
-		UserSessionInfo userSessionInfo = UserSessionUtils.get(Constants.SESSION_USER, UserSessionInfo.class);
-		String userId = userSessionInfo.getUser().getObjectID();
-		
-		shareFile.setId(UUID.randomUUID().toString());
-		shareFile.setCreateUserId(userId);
-		shareFile.setDir(myParentFile.getDir()+shareFile.getName()+"");
-		
+	public ResponseVo collectToMyFile(@RequestBody ReqCollectToMyFile reqBean) {
+		try {
+			com.h3bpm.web.entity.File shareFile = fileService.getFileById(reqBean.getFileId());
+			com.h3bpm.web.entity.File myParentFile = myFileService.getMyFileById(reqBean.getMyFileParentId());
+
+			Map<String, Object> userMap = this._getCurrentUser();
+			OThinker.Common.Organization.Models.User user = (User) userMap.get("User");
+			String userId = user.getObjectId();
+
+			List<com.h3bpm.web.entity.File> myFileList = myFileService.buildCollectFileList(reqBean.getFileId(), reqBean.getMyFileParentId(), userId);
+
+			// if(myFileList != null){
+			// for(com.h3bpm.web.entity.File myFile:myFileList){
+			// myFileService.createMyFile(new FileVo(myFile));
+			// }
+			// }
+
+			return new ResponseVo("收藏成功");
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return null;
 	}
 }

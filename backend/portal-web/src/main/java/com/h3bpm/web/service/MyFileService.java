@@ -1,5 +1,6 @@
 package com.h3bpm.web.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -9,13 +10,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.h3bpm.web.entity.File;
+import com.h3bpm.web.mapper.FileMapper;
 import com.h3bpm.web.mapper.MyFileMapper;
+import com.h3bpm.web.vo.FileDesc;
 import com.h3bpm.web.vo.FileVo;
 
 @Service
 public class MyFileService extends ApiDataService {
 	@Autowired
 	private MyFileMapper myFileMapper;
+
+	@Autowired
+	private FileMapper fileMapper;
+
+	@Autowired
+	private FilePermissionService filePermissionService;
 
 	public List<File> findMyFileByParentIdAndKeyword(String parentId, String keyword, String userId) {
 		List<File> fileList = null;
@@ -125,4 +134,61 @@ public class MyFileService extends ApiDataService {
 	public void updateMyFile(FileVo fileVo) {
 		myFileMapper.updateMyFile(new File(fileVo));
 	}
+
+	/**
+	 * 根据共享文件ID，构建出我的文件List，主要用于收藏共享文件 下钻所有的文件夹和文件
+	 * 
+	 * @return
+	 */
+	public List<File> buildCollectFileList(String shareFileId, String myFileParentId, String userId) {
+		List<File> myFileList = new ArrayList<>();
+
+		com.h3bpm.web.entity.File shareFile = fileMapper.getFileById(shareFileId);
+		com.h3bpm.web.entity.File myParentFile = this.getMyFileById(myFileParentId);
+
+		String rootShareFileDir = shareFile.getDir().replace(shareFile.getName() + "/", "");
+		String rootMyFileDir = myParentFile.getDir();
+
+		String parentMyfileId = UUID.randomUUID().toString();
+
+		shareFile.setId(parentMyfileId);
+		shareFile.setParentId(myFileParentId);
+		shareFile.setCreateUserId(userId);
+		shareFile.setDir(myParentFile.getDir() + shareFile.getName() + "");
+		shareFile.setCreateTime(new Date());
+
+		myFileList.add(shareFile);
+
+		this.findShareFileChild(myFileList, rootShareFileDir, rootMyFileDir, shareFileId, parentMyfileId, userId);
+
+		return myFileList;
+	}
+
+	private void findShareFileChild(List<File> myFileList, String rootShareFileDir, String rootMyFileDir, String shareFileId, String myFileParentId, String userId) {
+		List<File> shareFileList = fileMapper.findFileByParentIdAndKeyword(shareFileId, null, null);
+		String myFileId = UUID.randomUUID().toString();
+
+		File myFile = fileMapper.getFileById(shareFileId);
+
+		myFile.setId(myFileId);
+		myFile.setParentId(myFileParentId);
+		myFile.setCreateUserId(userId);
+
+		String myfileDir = rootMyFileDir + myFile.getDir().replace(rootShareFileDir, "");
+
+		myFile.setDir(myfileDir);
+		myFile.setCreateTime(new Date());
+		
+		myFileList.add(myFile);
+		
+		if (shareFileList != null && !shareFileList.isEmpty()) {
+			for (File shareFile : shareFileList) {
+				if (shareFile.getCreateUserId().equals(userId) || filePermissionService.validateFilePermission(shareFile.getId(), userId)) {
+					findShareFileChild(myFileList, rootShareFileDir, rootMyFileDir, shareFile.getId(), myFileId, userId);
+				}
+			}
+
+		}
+	}
+
 }

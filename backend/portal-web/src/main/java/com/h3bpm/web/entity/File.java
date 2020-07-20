@@ -1,6 +1,5 @@
 package com.h3bpm.web.entity;
 
-import java.sql.Timestamp;
 import java.util.Date;
 
 import com.h3bpm.web.vo.FileVo;
