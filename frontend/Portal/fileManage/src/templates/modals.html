@@ -501,13 +501,15 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
             选择目录
         </h4>
     </div>
-    <div class="modal-body" style="color:#778CA2; height:300px;overflow: auto;">
+    <div class="modal-body bs-example form-horizontal" style="color:#778CA2;">
         <div style="margin-bottom: 10px;">权限选择</div>
-        <div ui-jq="SheetUser" ui-options="WasAgentOptions"
+        <div ui-jq="SheetUser" ui-options="WasAgentOptions" id="shareFile"
              class="" style="margin-bottom: 20px;" data-orgunitvisible="true" data-groupvisible="true">
         </div>
         <div ng-include="config.tplPath + '/current-folder-permission.html'"></div>
-        <div ng-include="config.tplPath + '/table-permission-modal.html'"></div>
+        <div style="height:200px;overflow: auto;">
+            <div ng-include="config.tplPath + '/myFiles/share-modal.html'"></div>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel()">关闭</button>
@@ -525,9 +527,11 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
             选择目录
         </h4>
     </div>
-    <div class="modal-body" style="color:#778CA2;height:300px;overflow: auto;">
+    <div class="modal-body" style="color:#778CA2;">
         <div ng-include="config.tplPath + '/current-folder-permission.html'"></div>
-        <div ng-include="config.tplPath + '/table-permission-modal.html'"></div>
+        <div style="height:200px;overflow: auto;">
+            <div ng-include="config.tplPath + '/collect-modal.html'"></div>
+        </div>
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel()">关闭</button>

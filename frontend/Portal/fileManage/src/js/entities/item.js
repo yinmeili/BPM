@@ -200,6 +200,48 @@
             return deferred.promise;
         };
 
+        // 收藏的请求
+        Item.prototype.selectCollect = function(){
+            var self = this;
+            var deferred = $q.defer();
+            var data = {
+                myFileParentId: self.model.id,
+                fileId: self.tempModel.id
+            };
+            self.inprocess = true;
+            self.error = '';
+            $http.post(fileManagerConfig.collectToMyFileUrl, data).success(function (data) {
+                self.deferredHandler(data, deferred);
+                $.notify({ message: data.msg, status: "success" });
+            }).error(function (data) {
+                self.deferredHandler(data, deferred, $translate.instant('error_renaming'));
+            })['finally'](function () {
+                self.inprocess = false;
+            });
+            return deferred.promise;
+        }
+
+        //分享的请求
+        Item.prototype.selectShare = function(){
+            var self = this;
+            var deferred = $q.defer();
+            var data = {
+                shareFileParentId: self.model.parentId,
+                fileId: self.tempModel.id,
+                filePermission: self.tempModel.filePermission
+            };
+            self.inprocess = true;
+            self.error = '';
+            $http.post(fileManagerConfig.shareFileUrl, data).success(function (data) {
+                self.deferredHandler(data, deferred);
+                $.notify({ message: data.msg, status: "success" });
+            }).error(function (data) {
+                self.deferredHandler(data, deferred, $translate.instant('error_renaming'));
+            })['finally'](function () {
+                self.inprocess = false;
+            });
+            return deferred.promise;
+        }
 
         Item.prototype.copy = function () {
             var self = this;

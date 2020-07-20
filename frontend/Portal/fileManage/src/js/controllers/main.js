@@ -27,7 +27,6 @@
             
             // $scope.temp = new Item();
 
-
             $rootScope.temp = new Item();
             $rootScope.rootdir = $scope.fileMemuTile;
             $scope.fileNavigator = new FileNavigator();
@@ -582,7 +581,7 @@
                 }, 800);
             }
 
-// ************************共享文件删除模态框****************************************
+// ************************共享文件删除模态框*****************************************
             $scope.toDeleteFile = function (data) {
                 $scope.fileNavigator = $rootScope.scope.fileNavigator;//参数
                 $rootScope.temp = data;
@@ -886,9 +885,9 @@
             }
 
 
-//            新加一个页面，不让文件列表页面和弹出的模态框的文件列表页共用
-// ************************收藏到我的文件模态框****************************************
+// ************************收藏到我的文件模态框***************************************
             $scope.toCollectFile = function (data) {
+                $rootScope.temp = data;
                 $scope.fileNavigator.currentModalFileId = '';//收藏直接弹出根路径
                 $scope.fileNavigator.currentModalPath = [];//每次收藏都跳到根路径
                 $scope.fileNavigator.isPrivate = true;//收藏进来
@@ -944,16 +943,16 @@
                     });
             }
 
-// *************************共享文件--分享文件模态框***********************************
+// *************************分享到共享文件模态框**************************************
             $scope.toShareFile = function (data) {
+                $rootScope.temp = data;
                 $scope.fileNavigator.currentModalFileId = '';//分享直接弹出根路径
                 $scope.fileNavigator.currentModalPath = [];//每次分享都跳到根路径
                 $scope.fileNavigator.isPrivate = false;//分享出去
                 $scope.fileNavigator.refreshShareFile();
 
-                var tempData = "";
+                var tempData;
                 var AgencyID;
-                tempData = "";
                 if (tempData == undefined) AgencyID = "";
                 else AgencyID = tempData;
                 $http({
@@ -1116,6 +1115,27 @@
                 };
             }
 
+            //选择收藏数据交互
+            $rootScope.selectCollect = function(item, temp) {//item目前的新数据，temp以前的旧数据
+                item.tempModel.id = temp.model.id;
+                item.selectCollect().then(function () {
+                    //收藏之后要刷新--没有进来
+                    _newscope.fileNavigator.refreshCollectFile();
+                });
+                // $rootScope.cancel();
+            }
+
+            //选择分享数据交互
+            $rootScope.selectShare = function(item, temp) {//item目前的新数据，temp以前的旧数据没有权限
+                item.tempModel.id = temp.model.id;
+                item.tempModel.filePermission = getPermission($("#shareFile"));
+                item.selectShare().then(function () {
+                    //没有进来
+                    _newscope.fileNavigator.refreshShareFile();
+                });
+                // $rootScope.cancel();
+            }
+
             //-----共享文件 start
             //新建文件夹数据交互
             $scope.createFolder = function (item) {
@@ -1208,7 +1228,7 @@
 
 
             //-----我的文件 start
-            //新建文件夹数据交互 ok
+            //新建文件夹数据交互
             $scope.myCreateFolder = function (item) {
                 var foldername = item.tempModel.name && item.tempModel.name.trim();//文件夹名称
                 item.tempModel.type = 'dir';
@@ -1254,7 +1274,7 @@
                 }
                 $scope.cancel();
             };
-            //更改路径数据交互 不能更改名称
+            //更改路径数据交互
             $scope.myUpdateFile = function (item) {
                 var foldername = item.tempModel.name && item.tempModel.name.trim();//文件夹名称
                 $scope.fileNavigator = _newscope.fileNavigator;
@@ -1285,6 +1305,7 @@
                 $scope.cancel();
             }
             //------我的文件 end
+
             $scope.cancel = function () {
                 $modalInstance.dismiss('cancel'); // 退出
             }

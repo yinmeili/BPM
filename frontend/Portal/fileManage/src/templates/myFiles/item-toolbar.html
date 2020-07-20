@@ -8,7 +8,7 @@
     <button class="btn btn-sm btn-default" data-toggle="modal" data-target="#edit" ng-show="config.allowedActions.edit && item.isEditable()" ng-click="item.getContent(); touch(item)" title="{{'edit' | translate}}">
         <i class="glyphicon glyphicon-pencil"></i>
     </button>
-    <button class="btn btn-sm btn-default" ng-show="config.allowedActions.changePermissions" ng-click="toShareFile(item)" title="分享">
+    <button class="btn btn-sm btn-default" ng-show="config.allowedActions.changePermissions" ng-click="toShareFile(item)" title="分享到共享文件">
         <i class="glyphicon glyphicon-share"></i>
     </button>
     <button class="btn btn-sm btn-default" data-toggle="modal" data-target="#compress" ng-show="config.allowedActions.compress && item.isCompressible()" ng-click="touch(item)" title="{{'compress' | translate}}">

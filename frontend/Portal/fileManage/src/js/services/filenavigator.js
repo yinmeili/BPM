@@ -113,31 +113,22 @@
             return deferred.promise;
         };
 
-        FileNavigator.prototype.myTempList = function(fileId,parentId,path) {
-            var self = this;;
+        //分享模态框的请求
+        FileNavigator.prototype.shareModalList = function() {
+            var self = this;
             var deferred = $q.defer();
-            var destination = "";
-            var url = "";
-            if(self.isPrivate){//收藏--是收藏到我的文件
-                destination = $rootScope.scope.config.fileMemuTitle['myFiles'];
-                url = fileManagerConfig.listMyFileUrl;
-            }else{
-                destination = $rootScope.scope.config.fileMemuTitle['allFiles'];
-                url = fileManagerConfig.listUrl;
-            }
             var data = {params: {
-                    fileId: fileId,
-                    parentId: parentId,
+                    fileId: self.currentModalFileId,
+                    parentId: self.currentModalParentId,
                     mode: 'list',
                     onlyFolders: false,
-                    path: destination + '/' + path
+                    path: $rootScope.scope.config.fileMemuTitle['allFiles'] + '/' + self.currentModalPath.join('/')
                 }};
 
             self.requesting = true;
             self.error = '';
             self.showList('showFolder');
-
-            $http.post(url, data).success(function(data) {
+            $http.post(fileManagerConfig.listUrl, data).success(function(data) {
                 self.deferredHandler(data, deferred);
             }).error(function(data) {
                 self.deferredHandler(data, deferred, 'Unknown error listing, check the response');
@@ -146,6 +137,32 @@
             });
             return deferred.promise;
         };
+
+        //收藏模态框的请求
+        FileNavigator.prototype.collectModalList = function() {
+                var self = this;
+                var deferred = $q.defer();
+                var data = {params: {
+                        fileId: self.currentModalFileId,
+                        parentId: self.currentModalParentId,
+                        mode: 'list',
+                        onlyFolders: false,
+                        path: $rootScope.scope.config.fileMemuTitle['myFiles'] + '/' + self.currentModalPath.join('/')
+                    }};
+
+                self.requesting = true;
+                self.error = '';
+                self.showList('showFolder');
+                $http.post(fileManagerConfig.listMyFileUrl, data).success(function(data) {
+                    self.deferredHandler(data, deferred);
+                }).error(function(data) {
+                    self.deferredHandler(data, deferred, 'Unknown error listing, check the response');
+                })['finally'](function() {
+                    self.requesting = false;
+                });
+                return deferred.promise;
+        };
+
 			
 			/********************回收站列表*********************/
         FileNavigator.prototype.listRecycle = function () {
@@ -266,9 +283,8 @@
         //刷新分享数据
         FileNavigator.prototype.refreshShareFile = function() {
             var self = this;
-            var path = self.currentModalPath.join('/');
             self.position = false;
-            return self.myTempList(self.currentModalFileId,self.currentModalParentId,path).then(function (data) {
+            return self.shareModalList().then(function (data) {
                 self.currentModalParentId = data.parentId;
                 self.modalFileList = (data.result || []).map(function (file) {
                     return new Item(file, self.currentModalPath);
@@ -279,9 +295,8 @@
         //刷新收藏数据
         FileNavigator.prototype.refreshCollectFile = function() {
             var self = this;
-            var path = self.currentModalPath.join('/');
             self.position = false;
-            return self.myTempList(self.currentModalFileId,self.currentModalParentId,path).then(function (data) {
+            return self.collectModalList().then(function (data) {
                 self.currentModalParentId = data.parentId;
                 self.modalFileList = (data.result || []).map(function (file) {
                     return new Item(file, self.currentModalPath);
@@ -581,7 +596,6 @@
                 self.requesting = false;
             });
         };
-		
 	
         FileNavigator.prototype.fileNameExists = function(fileName) {
             for (var item in this.fileList) {
@@ -599,6 +613,8 @@
                 }
             }
         };
+
+        //判断弹出的模态框数据是否有文件夹
         FileNavigator.prototype.listHasModalFolders = function() {
             for (var item in this.modalFileList) {
                 if (this.modalFileList[item].model.type === 'dir') {
