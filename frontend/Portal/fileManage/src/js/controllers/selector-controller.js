@@ -13,22 +13,20 @@
 
         $scope.fileNavigator = new FileNavigator();
         $rootScope.select = function(item, temp) {
+            // 自己不能放在自己的文件夹下面
+            if (temp.tempModel.id == item.model.id){
+                //弹出框
+                $.notify({ message: '修改路径不能选择自己', status: "danger" });
+                return;
+            }
 
-					// 自己不能放在自己的文件夹下面
-					if (temp.tempModel.id == item.model.id){
-						//弹出框
-						$.notify({ message: '修改路径不能选择自己', status: "danger" });
-						return;
-					} 
-
-					// 修改过路径的id赋值给旧的parentId
-          temp.tempModel.parentId = item.model.id;
-					// temp.tempModel.path = item.model.fullPath().split('/');
-					temp.tempModel.path = item.model.fullPath().split('/').slice(1);//删除第一个元素
+            // 修改过路径的id赋值给旧的parentId
+            temp.tempModel.parentId = item.model.id;
+            // temp.tempModel.path = item.model.fullPath().split('/');
+            temp.tempModel.path = item.model.fullPath().split('/').slice(1);//删除第一个元素
             $rootScope.cancel();
         };
-				
-				/***************点击更改路径 弹出路径选择框 ***************/
+                /***************点击更改路径 弹出路径选择框 ***************/
         $rootScope.openNavigator = function(item) {
             $scope.fileNavigator = $rootScope.scope.fileNavigator;// 参数问题
             // 判断是根目录下文件路径还是子文件路径

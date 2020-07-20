@@ -25,6 +25,8 @@ app.config(['fileManagerConfigProvider', function (config) {
         removeMyUrl: fileManagerApiUrl + 'removeMyFile',
         createMyFolderUrl: fileManagerApiUrl + 'createMyFolder',
         updateMyUrl: fileManagerApiUrl + 'updateMyFile',
+        collectToMyFileUrl:fileManagerApiUrl + 'collectToMyFile',
+        shareFileUrl:fileManagerApiUrl + 'shareFile',
 
         allowedActions: angular.extend(defaults.allowedActions, {
             copy : false,

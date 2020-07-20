@@ -1,0 +1,46 @@
+<table class="table table-condensed table-modal-condensed mb0">
+    <thead>
+    <tr>
+        <th>
+            <a href="" ng-click="order('model.name')">
+                名称
+                <span class="sortorder" ng-show="predicate[1] === 'model.name'" ng-class="{reverse:reverse}"></span>
+            </a>
+        </th>
+        <th class="text-right"></th>
+    </tr>
+    </thead>
+    <tbody class="file-item">
+    <tr ng-show="fileNavigator.requesting">
+        <td colspan="2">
+            <div ng-include="config.tplPath + '/spinner.html'"></div>
+        </td>
+    </tr>
+    <tr ng-show="!fileNavigator.requesting && !fileNavigator.listHasModalFolders() && !fileNavigator.error">
+        <td colspan="2">
+            {{"no_folders_in_folder" | translate}}...
+        </td>
+        <td class="text-right">
+            <button class="btn btn-sm btn-default" ng-click="fileNavigator.upModalDir()">返回</button>
+        </td>
+    </tr>
+    <tr ng-show="!fileNavigator.requesting && fileNavigator.error">
+        <td colspan="2">
+            {{ fileNavigator.error }}
+        </td>
+    </tr>
+    <tr ng-repeat="item in fileNavigator.modalFileList | orderBy:predicate:reverse" ng-show="!fileNavigator.requesting && item.model.type === 'dir'">
+        <td>
+            <a href="" ng-click="fileNavigator.folderModalClick(item)" title="{{item.model.name}}">
+                <i class="glyphicon glyphicon-folder-close"></i>
+                {{item.model.name | strLimit : 32}}
+            </a>
+        </td>
+        <td class="text-right">
+            <button class="btn btn-sm btn-default" ng-click="selectCollect(item, temp)">
+                <i class="glyphicon glyphicon-hand-up"></i> 选择
+            </button>
+        </td>
+    </tr>
+    </tbody>
+</table>
