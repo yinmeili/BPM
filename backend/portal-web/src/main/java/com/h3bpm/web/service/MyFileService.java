@@ -164,7 +164,7 @@ public class MyFileService extends ApiDataService {
 		return myFileList;
 	}
 
-	private void findShareFileChild(List<File> myFileList, String rootShareFileDir, String rootMyFileDir, String shareFileId, String myFileParentId, String userId) {
+	private File findShareFileChild(List<File> myFileList, String rootShareFileDir, String rootMyFileDir, String shareFileId, String myFileParentId, String userId) {
 		List<File> shareFileList = fileMapper.findFileByParentIdAndKeyword(shareFileId, null, null);
 		String myFileId = UUID.randomUUID().toString();
 
@@ -179,16 +179,16 @@ public class MyFileService extends ApiDataService {
 		myFile.setDir(myfileDir);
 		myFile.setCreateTime(new Date());
 		
-		myFileList.add(myFile);
-		
 		if (shareFileList != null && !shareFileList.isEmpty()) {
 			for (File shareFile : shareFileList) {
 				if (shareFile.getCreateUserId().equals(userId) || filePermissionService.validateFilePermission(shareFile.getId(), userId)) {
-					findShareFileChild(myFileList, rootShareFileDir, rootMyFileDir, shareFile.getId(), myFileId, userId);
+					myFileList.add(findShareFileChild(myFileList, rootShareFileDir, rootMyFileDir, shareFile.getId(), myFileId, userId));
 				}
 			}
 
 		}
+
+		return myFile;
 	}
 
 }
