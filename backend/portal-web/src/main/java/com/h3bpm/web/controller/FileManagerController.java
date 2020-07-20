@@ -1103,11 +1103,11 @@ public class FileManagerController extends ControllerBase {
 
 			List<com.h3bpm.web.entity.File> myFileList = myFileService.buildCollectFileList(reqBean.getFileId(), reqBean.getMyFileParentId(), userId);
 
-			// if(myFileList != null){
-			// for(com.h3bpm.web.entity.File myFile:myFileList){
-			// myFileService.createMyFile(new FileVo(myFile));
-			// }
-			// }
+			if (myFileList != null) {
+				for (com.h3bpm.web.entity.File myFile : myFileList) {
+					myFileService.createMyFile(new FileVo(myFile));
+				}
+			}
 
 			return new ResponseVo("收藏成功");
 
