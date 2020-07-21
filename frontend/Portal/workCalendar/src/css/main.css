@@ -1,0 +1,72 @@
+.ui-dialog{
+	margin-top:100px;
+	z-index: 999;
+}
+
+p{
+	margin: 0 0 10px;
+}
+
+p .checkbox{
+	padding-left: 0;
+  margin-bottom: 0;
+  vertical-align: middle;
+}
+.checkbox label::before {
+	display: none;
+}
+
+.checkbox input[type="checkbox"]{
+	opacity: 1;
+}
+.form-search .radio input[type="radio"], .form-search .checkbox input[type="checkbox"], .form-inline .radio input[type="radio"], .form-inline .checkbox input[type="checkbox"] {
+    float: left;
+    margin-right: 3px;
+		margin-left: 0;
+		margin-top: 3px
+}
+
+#calendar{
+			width:900px;
+			margin:0 auto;
+		}
+		.taxt{
+			width:440px;
+		}
+		.time{
+			width:100px;
+		}
+		.sear{
+			width:85px;
+		}
+		.select{
+			width:150px;
+		}
+		.textarea{
+			width:300px;
+		}
+		.check{
+			padding:8px;
+		}
+		.slidertext{
+			padding-top:40px;
+		}
+		.timepicki{
+			position:relative;
+			z-index: 999;
+		}
+		#edit{
+			position:relative;
+			width:300px;
+		}
+		#edittitle{
+			padding-bottom:10px;
+			font-weight: bold;
+			font-size: 18px;
+		}
+		#edittype{
+			position:absolute;
+			top:5px;
+			right:5px;
+			width:80px;
+		}

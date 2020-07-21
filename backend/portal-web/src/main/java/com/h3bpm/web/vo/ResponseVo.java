@@ -21,6 +21,10 @@ public class ResponseVo {
 	public ResponseVo(Object data) {
 		this.data = data;
 	}
+	
+	public ResponseVo(String msg) {
+		this.msg = msg;
+	}
 
 	public int getErrorCode() {
 		return errorCode;
