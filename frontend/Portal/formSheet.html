@@ -26,7 +26,7 @@
     <!--PC端框架总是加载-->
     <div class="main-container sheetContent" id="sheetContent" style="display: none">
         <div class="panel">
-            <div id="main-navbar" class="navbar navbar-inverse toolBar mainnavbar" role="navigation">
+            <div id="main-navbar" class="navbar navbar-inverse toolBar mainnavbar" role="navigation">						
                 <div class="navbar-inner">
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar-collapse">
@@ -34,15 +34,26 @@
                         </button>
                     </div>
                     <div id="main-navbar-collapse"
-                         class="collapse navbar-collapse main-navbar-collapse">
+												 class="collapse navbar-collapse main-navbar-collapse">
+
+												 <!-- <ul class="nav navbar-nav">
+													 <li title="分享" id="share">
+														 <a href="" class="btn-action">
+															 <span class="toolText">分享</span>
+														 </a>
+													 </li>
+												 </ul> -->
+
                         <ul class="nav navbar-nav SheetToolBar test" id="divTopBars">
                         </ul>
                     </div>
-                </div>
+								</div>
+								
                 <a href="/Portal/#/app/Workflow/MyUnfinishedWorkItem" target="_blank" class="form-logo">
                     <img src="img/H3-BPMLogo.png" alt="">
                 </a>
-            </div>
+						</div>
+						
             <div id="content-wrapper">
             </div>
             <div  class="back-top" style=""><i  class="icon aufontAll h-icon-all-up-o"></i></div>
@@ -113,6 +124,15 @@
 
 <script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/pcSheet.js?v=20191108"></script>
 
+
+
+
+<!-- <script type="text/javascript">
+	var li=document.querySelector('#share');
+	li.onclick=function(){
+		alert('111');
+	}
+</script> -->
 
 
 </body>
