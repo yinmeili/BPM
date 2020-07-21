@@ -313,7 +313,6 @@
             $translate.refresh('cn');
             //$translate.use('cn');
 
-
             /*新建文件夹弹出框*/
             // $scope.loadScroll = function() {
             //     $scope.myScroll = new IScroll('.dataTables_scrollBody', {
@@ -1119,21 +1118,24 @@
             $rootScope.selectCollect = function(item, temp) {//item目前的新数据，temp以前的旧数据
                 item.tempModel.id = temp.model.id;
                 item.selectCollect().then(function () {
-                    //收藏之后要刷新--没有进来
+                    //收藏之后要刷新
                     _newscope.fileNavigator.refreshCollectFile();
                 });
-                // $rootScope.cancel();
             }
 
             //选择分享数据交互
             $rootScope.selectShare = function(item, temp) {//item目前的新数据，temp以前的旧数据没有权限
                 item.tempModel.id = temp.model.id;
-                item.tempModel.filePermission = getPermission($("#shareFile"));
+                var permission = $scope.getPermission($("#shareFile"))
+                item.tempModel.filePermission = permission;
+                if(!permission){
+                    $.notify({ message: "请选择权限！", status: "danger" });
+                    return false;
+                }
                 item.selectShare().then(function () {
                     //没有进来
                     _newscope.fileNavigator.refreshShareFile();
                 });
-                // $rootScope.cancel();
             }
 
             //-----共享文件 start

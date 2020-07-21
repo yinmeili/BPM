@@ -710,9 +710,21 @@ angular.module('app')
                                 ]
                             }
 												})
+                        //共享流程
+                        .state('app.allFlows', {
+                            url: '',
+                            controller: "",
+                            templateUrl: 'fileManage/src/templates/allFlows/index.html',
+                            resolve: {
+                                deps: ['$ocLazyLoad',
+                                    function ($ocLazyLoad) {
+                                        return $ocLazyLoad.load([
 
-										
-									
+                                        ]);
+                                    }
+                                ]
+                            }
+                        })
 
                 // End
             }

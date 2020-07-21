@@ -16,14 +16,22 @@ public class MyFileSqlProvider {
 		 * 关键字不为空时，模糊搜索所有目录名称和文件名，不再使用parentId查询
 		 */
 		String keywordSqlStr = "";
+		String searchPathSqlStr = "";
+		
+		if(!searchPath.isEmpty()){
+			parentIdSqlStr = "";
+			
+			//排除本级目录
+			searchPathSqlStr += " AND dir <> '" + searchPath + "'";
+			
+			searchPathSqlStr += " AND dir like '" + searchPath + "%'";
+		}
+		
+		
 		if (!keyword.isEmpty()) {
 			parentIdSqlStr = "";
-			//排除本级目录
-			keywordSqlStr += " AND dir <> '" + searchPath + "'";
 			
-			keywordSqlStr += " AND dir like '" + searchPath + "%'";
 			keywordSqlStr += " AND name like '%" + keyword + "%'";
-			
 		}
 		
 		String userIdSqlStr = "";
@@ -46,6 +54,7 @@ public class MyFileSqlProvider {
 			"				ot_my_file"+
 			"				WHERE is_delete=0 "+
 						parentIdSqlStr +
+						searchPathSqlStr + 
 						keywordSqlStr +
 						userIdSqlStr +
 			"			ORDER BY"+

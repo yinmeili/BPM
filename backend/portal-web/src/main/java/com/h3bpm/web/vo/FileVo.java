@@ -34,6 +34,7 @@ public class FileVo {
 		this.createTime = entity.getCreateTime();
 		this.isDelete = entity.getIsDelete();
 		this.deleteTime = entity.getDeleteTime();
+		this.downloadFileId = entity.getDownloadFileId();
 	}
 
 	public String getDownloadFileId() {
