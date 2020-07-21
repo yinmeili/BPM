@@ -8345,27 +8345,40 @@ $.MvcSheetToolbar.FinishInstance.Inherit($.MvcSheetToolbar.IButton, {
 
 //#region 转发
 $.MvcSheetToolbar.Forward = function (element, option, sheetInfo) {
-    return $.MvcSheetToolbar.Forward.Base.constructor.call(this, element, option, sheetInfo);
+	return $.MvcSheetToolbar.Forward.Base.constructor.call(this, element, option, sheetInfo);
 };
 $.MvcSheetToolbar.Forward.Inherit($.MvcSheetToolbar.IButton, {
-    DoAction: function () {
-    	if(dropMenu1){dropMenu1.hide();}
-    	if(dropMenu2){dropMenu2.hide();}
-        if (this.SheetInfo.WorkItemType == -1) {
-            return;
-        } else {
-            var option = undefined;
-            if (this.SheetInfo.OptionalRecipients) {
-                option = this.SheetInfo.OptionalRecipients[this.Action];
-            } else {
-                option = {
-                    OrgUnitVisible: false
-                }
-            }
-            this.FetchUser.apply(this, [SheetLanguages.Current.SelectForwardUser, false, option]);
-        }
-    }
+	DoAction: function () {
+		if (dropMenu1) { dropMenu1.hide(); }
+		if (dropMenu2) { dropMenu2.hide(); }
+		if (this.SheetInfo.WorkItemType == -1) {
+			return;
+		} else {
+			var option = undefined;
+			if (this.SheetInfo.OptionalRecipients) {
+				option = this.SheetInfo.OptionalRecipients[this.Action];
+			} else {
+				option = {
+					OrgUnitVisible: false
+				}
+			}
+			this.FetchUser.apply(this, [SheetLanguages.Current.SelectForwardUser, false, option]);
+		}
+	}
 });
+//#endregion
+
+//#region 分享
+/* $.MvcSheetToolbar.Share = function (element, option, sheetInfo) {
+    return $.MvcSheetToolbar.Share.Base.constructor.call(this, element, option, sheetInfo);
+};
+$.MvcSheetToolbar.Share.Inherit($.MvcSheetToolbar.IButton, {
+    DoAction: function () {
+		var option = undefined;
+		this.FetchUser.apply(this, [SheetLanguages.Current.SelectForwardUser, false, option]);
+        
+    }
+}); */
 //#endregion
 
 //#region 协办
