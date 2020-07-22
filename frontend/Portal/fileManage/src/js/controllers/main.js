@@ -1128,7 +1128,7 @@
             //选择分享数据交互
             $rootScope.selectShare = function(item, temp) {//item目前的新数据，temp以前的旧数据没有权限
                 item.tempModel.id = temp.model.id;
-                item.tempModel.filePermission = getPermission($("#shareFile"));
+                item.tempModel.filePermission = $scope.getPermission($("#shareFile"));
                 item.selectShare().then(function () {
                     //没有进来
                     _newscope.fileNavigator.refreshShareFile();

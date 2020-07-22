@@ -149,16 +149,6 @@ public class MyFileService extends ApiDataService {
 		String rootShareFileDir = shareFile.getDir().replace(shareFile.getName() + "/", "");
 		String rootMyFileDir = myParentFile.getDir();
 
-		String parentMyfileId = UUID.randomUUID().toString();
-
-//		shareFile.setId(parentMyfileId);
-//		shareFile.setParentId(myFileParentId);
-//		shareFile.setCreateUserId(userId);
-//		shareFile.setDir(myParentFile.getDir() + shareFile.getName() + "");
-//		shareFile.setCreateTime(new Date());
-//
-//		myFileList.add(shareFile);
-
 		this.findShareFileChild(myFileList, rootShareFileDir, rootMyFileDir, shareFileId, myFileParentId, userId);
 
 		return myFileList;
