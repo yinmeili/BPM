@@ -213,6 +213,7 @@
             $http.post(fileManagerConfig.collectToMyFileUrl, data).success(function (data) {
                 self.deferredHandler(data, deferred);
                 $.notify({ message: data.msg, status: "success" });
+                $rootScope.cancel();
             }).error(function (data) {
                 self.deferredHandler(data, deferred, $translate.instant('error_renaming'));
             })['finally'](function () {
@@ -226,7 +227,7 @@
             var self = this;
             var deferred = $q.defer();
             var data = {
-                shareFileParentId: self.model.parentId,
+                shareFileParentId: self.model.id,
                 fileId: self.tempModel.id,
                 filePermission: self.tempModel.filePermission
             };
@@ -235,6 +236,7 @@
             $http.post(fileManagerConfig.shareFileUrl, data).success(function (data) {
                 self.deferredHandler(data, deferred);
                 $.notify({ message: data.msg, status: "success" });
+                $rootScope.cancel();
             }).error(function (data) {
                 self.deferredHandler(data, deferred, $translate.instant('error_renaming'));
             })['finally'](function () {
@@ -347,7 +349,7 @@
 
                 //window.open("uploadFiles" + path, '_blank', '');
 
-               // downloadFile(path, "uploadFiles" + path);
+                // downloadFile(path, "uploadFiles" + path);
 
                 //var path = this.model.fullPath();
                 //downloadFile2("uploadFiles" + path);
@@ -356,6 +358,22 @@
                 window.open(this.getUrl(preview), '_blank', '');
 
 
+            }
+        };
+
+        Item.prototype.getMyUrl = function (preview) {
+            var path = this.model.fullPath();
+            var data = {
+                mode: 'download',
+                preview: preview,
+                path: path,
+                fileId: this.tempModel.id
+            };
+            return path && [fileManagerConfig.downlaodMyFileUrl, $.param(data)].join('?');
+        };
+        Item.prototype.downloadMyFile = function (preview) {
+            if (this.model.type !== 'dir') {
+                window.open(this.getMyUrl(preview), '_blank', '');
             }
         };
 

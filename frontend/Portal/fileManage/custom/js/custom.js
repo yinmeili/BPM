@@ -7,6 +7,7 @@ app.config(['fileManagerConfigProvider', function (config) {
         getFileIdByPathUrl: fileManagerApiUrl + 'getFileIdByPath',//根据文件id获取路径
         removeUrl: fileManagerApiUrl + 'removeFile',
         downloadFileUrl: fileManagerApiUrl + 'previewFile',
+        downlaodMyFileUrl: fileManagerApiUrl + 'previewMyFile',
         createFolderUrl: fileManagerApiUrl + 'createFolder',
         searchListFileUrl: fileManagerApiUrl + 'searchListFile',
 

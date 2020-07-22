@@ -3,171 +3,186 @@
 //属性定义
 //定义MvcSheet命名控件
 jQuery.extend({
-    MvcSheet: {
-        Version: "V1.0",
-        AjaxUrl: "MvcDefaultSheet/OnLoad",
-        LOADKEY: "load", // 加载表单
-        Actions: [], // 执行事件:保存、提交...
-        InitFunctions: [], // 初始化之前的函数集合
-        ReadyFunctions: [], // 加载完成需要执行事件集合
-        //ActionKey
-        Action_Save: "Save",
-        Action_WorkflowComment: "WorkflowComment", // 评论
-        Action_ViewInstance: "ViewInstance",
-        Action_PreviewParticipant: "PreviewParticipant",
-        Action_Print: "Print",
-        Action_CancelInstance: "CancelInstance",
-        Action_Reject: "Reject",
-        Action_Submit: "Submit",
-        Action_FinishInstance: "FinishInstance",
-        Action_Forward: "Forward",
-        Action_Assist: "Assist",
-        Action_Consult: "Consult",
-        Action_Circulate: "Circulate",
-        Action_AdjustParticipant: "AdjustParticipant",
-        Action_LockInstance: "LockInstance",
-        Action_UnLockInstance: "UnLockInstance",
-        Action_Close: "Close",
-        Action_RetrieveInstance: "RetrieveInstance",
-        Action_Viewed: "Viewed", //已阅
+  MvcSheet: {
+    Version: "V1.0",
+    AjaxUrl: "MvcDefaultSheet/OnLoad",
+    LOADKEY: "load", // 加载表单
+    Actions: [], // 执行事件:保存、提交...
+    InitFunctions: [], // 初始化之前的函数集合
+    ReadyFunctions: [], // 加载完成需要执行事件集合
+    //ActionKey
+    /* Action_Share: "Share", //分享
+    Action_Collect: "Collect", //收藏 */
+    Action_Save: "Save",
+    Action_WorkflowComment: "WorkflowComment", // 评论
+    Action_ViewInstance: "ViewInstance", //流程状态
+    Action_PreviewParticipant: "PreviewParticipant",
+    Action_Print: "Print", //打印
+    Action_CancelInstance: "CancelInstance",
+    Action_Reject: "Reject",
+    Action_Submit: "Submit",
+    Action_FinishInstance: "FinishInstance",
+    Action_Forward: "Forward",//转办
+    Action_Assist: "Assist",
+    Action_Consult: "Consult",
+    Action_Circulate: "Circulate",
+    Action_AdjustParticipant: "AdjustParticipant",
+    Action_LockInstance: "LockInstance",
+    Action_UnLockInstance: "UnLockInstance",
+    Action_Close: "Close", //关闭
+    Action_RetrieveInstance: "RetrieveInstance",
+    Action_Viewed: "Viewed", //已阅
 
-        //默认Actions
-        SaveAction: {
-            Action: "Save",
-            Icon: "fa-save",
-            Text: "保存",
-            en_us: "Save",
-            OnActionPreDo: null,
-            OnActionDone: null
-        },
-        WorkflowCommentAction: {
-            Action: "WorkflowComment",
-            Icon: "fa-urgent",
-            Text: "评论",
-            en_us: "WorkflowComment",
-            OnActionPreDo: null,
-            OnActionDone: null
-        },
-        PrintAction: {
-            Action: "Print",
-            Icon: "fa-print",
-            Text: "打印",
-            en_us: "Print",
-            OnActionDone: function () {
-            }
-        },
-        ViewedAction: {
-            Action: "Viewed",
-            Icon: "fa-check",
-            Text: "已阅",
-            en_us: "View",
-            OnActionDone: function () {
-            }
-        },
-        CancelInstanceAction: {
-            Action: "CancelInstance",
-            Icon: "fa-square-o",
-            en_us: "Cancel",
-            Text: "取消流程"
-        },
-        SubmitAction: {
-            Action: "Submit",
-            Icon: "fa-check",
-            Text: "提交",
-            en_us: "Submit",
-            OnActionDone: function () {
-            }
-        },
-        RejectAction: {
-            Action: "Reject",
-            Icon: "fa-mail-reply",
-            Text: "驳回",
-            en_us: "Reject",
-            OnActionDone: function () {
-            }
-        },
-        RetrieveInstanceAction: {
-            Action: "RetrieveInstance",
-            Icon: "fa-sign-in",
-            en_us: "Retrieve",
-            Text: "取回"
-        },
-        ViewInstanceAction: {
-            Action: "ViewInstance",
-            Icon: "fa-ellipsis-v",
-            Text: "流程状态",
-            en_us: "State"
-        },
-        PreviewParticipantAction: {
-            Action: "PreviewParticipant",
-            Icon: "fa-coumns",
-            Text: "预览",
-            en_us: "Preview"
-        },
-        FinishInstanceAction: {
-            Action: "FinishInstance",
-            Icon: "fa-square",
-            Text: "结束流程",
-            en_us: "Finish Instance"
-        },
-        // UrgentAction: {
-        //     Action: "Urgent",
-        //     Icon: "fa-urgent",
-        //     Text: "评论",
-        //     en_us: "Urgent",
-        //     OnActionPreDo: null,
-        //     OnActionDone: function () {
-        //     }
-        // },
-        ForwardAction: {
-            Action: "Forward",
-            Icon: "fa-mail-forward",
-            Text: "转办",
-            en_us: "Forward"
-        },
-        AssistAction: {
-            Action: "Assist",
-            Icon: "fa-qrcode",
-            Text: "协办", // zaf
-            en_us: "Assist"
-        },
-        ConsultAction: {
-            Action: "Consult",
-            Icon: "fa-phone",
-            Text: "征询意见",
-            en_us: "Consult"
-        },
-        CirculateAction: {
-            Action: "Circulate",
-            Icon: "fa-share-square-o",
-            Text: "传阅",  // zaf
-            en_us: "Circulate"
-        },
-        AdjustParticipantAction: {
-            Action: "AdjustParticipant",
-            Icon: "fa-random",
-            Text: "加签",
-            en_us: "Plus"
-        },
-        LockInstanceAction: {
-            Action: "LockInstance",
-            Icon: "fa-unlock-alt",
-            Text: "锁定",
-            en_us: "Lock"
-        },
-        UnLockInstanceAction: {
-            Action: "UnLockInstance",
-            Icon: "fa-unlock-alt",
-            Text: "解锁",
-            en_us: "UnLock"
-        },
-        CloseAction: {
-            Action: "Close",
-            Icon: "fa-times",
-            Text: "关闭",
-            en_us: "Close"
-        }
-    }
+    //默认Actions
+    /* ShareAction: {
+      Action: "Share",
+      // Icon: "fa-check",
+      Text: "分享",
+      // en_us: "Submit",
+			OnActionPreDo: function () { alert('111')},
+			OnActionDone: function () { alert('222') },
+    },
+    CollectAction: {
+      Action: "Collect",
+      // Icon: "fa-check",
+      Text: "收藏",
+      // en_us: "Submit",
+      // OnActionPreDo: null,
+      // OnActionDone: null,
+    }, */
+    SaveAction: {
+      Action: "Save",
+      Icon: "fa-save",
+      Text: "保存",
+      en_us: "Save",
+      OnActionPreDo: null,
+      OnActionDone: null,
+    },
+    WorkflowCommentAction: {
+      Action: "WorkflowComment",
+      Icon: "fa-urgent",
+      Text: "评论",
+      en_us: "WorkflowComment",
+      OnActionPreDo: null,
+      OnActionDone: null,
+    },
+    PrintAction: {
+      Action: "Print",
+      Icon: "fa-print",
+      Text: "打印",
+      en_us: "Print",
+      OnActionDone: function () {},
+    },
+    ViewedAction: {
+      Action: "Viewed",
+      Icon: "fa-check",
+      Text: "已阅",
+      en_us: "View",
+      OnActionDone: function () {},
+    },
+    CancelInstanceAction: {
+      Action: "CancelInstance",
+      Icon: "fa-square-o",
+      en_us: "Cancel",
+      Text: "取消流程",
+    },
+    SubmitAction: {
+      Action: "Submit",
+      Icon: "fa-check",
+      Text: "提交",
+      en_us: "Submit",
+      OnActionDone: function () {
+			},
+    },
+    RejectAction: {
+      Action: "Reject",
+      Icon: "fa-mail-reply",
+      Text: "驳回",
+      en_us: "Reject",
+      OnActionDone: function () {},
+    },
+    RetrieveInstanceAction: {
+      Action: "RetrieveInstance",
+      Icon: "fa-sign-in",
+      en_us: "Retrieve",
+      Text: "取回",
+    },
+    ViewInstanceAction: {
+      Action: "ViewInstance",
+      Icon: "fa-ellipsis-v",
+      Text: "流程状态",
+      en_us: "State",
+    },
+    PreviewParticipantAction: {
+      Action: "PreviewParticipant",
+      Icon: "fa-coumns",
+      Text: "预览",
+      en_us: "Preview",
+    },
+    FinishInstanceAction: {
+      Action: "FinishInstance",
+      Icon: "fa-square",
+      Text: "结束流程",
+      en_us: "Finish Instance",
+    },
+    // UrgentAction: {
+    //     Action: "Urgent",
+    //     Icon: "fa-urgent",
+    //     Text: "评论",
+    //     en_us: "Urgent",
+    //     OnActionPreDo: null,
+    //     OnActionDone: function () {
+    //     }
+    // },
+    ForwardAction: {
+      Action: "Forward",
+      Icon: "fa-mail-forward",
+      Text: "转办",
+      en_us: "Forward",
+    },
+    AssistAction: {
+      Action: "Assist",
+      Icon: "fa-qrcode",
+      Text: "协办", // zaf
+      en_us: "Assist",
+    },
+    ConsultAction: {
+      Action: "Consult",
+      Icon: "fa-phone",
+      Text: "征询意见",
+      en_us: "Consult",
+    },
+    CirculateAction: {
+      Action: "Circulate",
+      Icon: "fa-share-square-o",
+      Text: "传阅", // zaf
+      en_us: "Circulate",
+    },
+    AdjustParticipantAction: {
+      Action: "AdjustParticipant",
+      Icon: "fa-random",
+      Text: "加签",
+      en_us: "Plus",
+    },
+    LockInstanceAction: {
+      Action: "LockInstance",
+      Icon: "fa-unlock-alt",
+      Text: "锁定",
+      en_us: "Lock",
+    },
+    UnLockInstanceAction: {
+      Action: "UnLockInstance",
+      Icon: "fa-unlock-alt",
+      Text: "解锁",
+      en_us: "UnLock",
+    },
+    CloseAction: {
+      Action: "Close",
+      Icon: "fa-times",
+      Text: "关闭",
+      en_us: "Close",
+    },
+  },
 });
 
 // 装载JSON文件
@@ -1418,7 +1433,9 @@ jQuery.extend(
         AddDefaultActions: function () {
             if ($.MvcSheetUI.SheetInfo && $.MvcSheetUI.SheetInfo.IsMobile) {
                 this.Actions.splice(0, this.Actions.length,
-                    this.RetrieveInstanceAction,
+										this.RetrieveInstanceAction,
+										/* this.ShareAction,//分享
+										this.CollectAction,//收藏 */
                     this.SaveAction,
                     this.ViewInstanceAction,
                     this.PreviewParticipantAction,
@@ -1440,24 +1457,26 @@ jQuery.extend(
                 );
             } else {
                 this.Actions.splice(0, this.Actions.length,
-                    this.RetrieveInstanceAction,
-                    this.SaveAction,
-                    this.ViewInstanceAction,
-                    this.PreviewParticipantAction,
-                    this.PrintAction,
-                    this.ViewedAction,
-                    this.CancelInstanceAction,
-                    this.SubmitAction,
-                    this.RejectAction,
-                    this.FinishInstanceAction,
-                    this.ForwardAction,
-                    this.AssistAction,
-                    this.ConsultAction,
-                    this.CirculateAction,
-                    this.AdjustParticipantAction,
-                    this.LockInstanceAction,
-                    this.UnLockInstanceAction,
-                    this.CloseAction
+                  this.RetrieveInstanceAction,
+                  /* this.ShareAction, //分享
+                  this.CollectAction, //收藏 */
+                  this.SaveAction,
+                  this.ViewInstanceAction,
+                  this.PreviewParticipantAction,
+                  this.PrintAction,
+                  this.ViewedAction,
+                  this.CancelInstanceAction,
+                  this.SubmitAction,
+                  this.RejectAction,
+                  this.FinishInstanceAction,
+                  this.ForwardAction,
+                  this.AssistAction,
+                  this.ConsultAction,
+                  this.CirculateAction,
+                  this.AdjustParticipantAction,
+                  this.LockInstanceAction,
+                  this.UnLockInstanceAction,
+                  this.CloseAction
                 );
             }
         },
