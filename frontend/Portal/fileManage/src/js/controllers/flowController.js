@@ -21,7 +21,7 @@
             $scope.getLanguage = function () {
                 $scope.LanJson = {
                     search: $translate.instant("uidataTable.search"),
-                    ProcessName: $translate.instant("QueryTableColumn.ProcessName"),
+                    ProcessName: $translate.instant("QueryTableColumn.Name"),
                     WorkFlow: $translate.instant("QueryTableColumn.WorkFlow"),
                     StartTime: $translate.instant("QueryTableColumn.StartTime"),
                     FinishTime: $translate.instant("QueryTableColumn.FinishTime"),
@@ -30,7 +30,7 @@
                     sZeroRecords: $translate.instant("uidataTable.sZeroRecords"),
                     sInfo: $translate.instant("uidataTable.sInfo"),
                     sProcessing: $translate.instant("uidataTable.sProcessing")
-                }
+                };
             }
             $scope.getLanguage();
             //初始化流程模板
@@ -112,10 +112,10 @@
                 "iScrollLoadGap": 50,
                 "language": {           // 语言设置
                     "sLengthMenu": $scope.LanJson.sLengthMenu,
-                    "sZeroRecords": "<div class='no-data'><p class='no-data-img'></p><p>"+$scope.LanJson.sZeroRecords+"</p></div>",
+                    "sZeroRecords": "<div class='no-data'><p class='no-data-img'></p><p>" + $scope.LanJson.sZeroRecords + "</p></div>", 
                     "sInfo": $scope.LanJson.sInfo,
                     "infoEmpty": "",
-                    "sProcessing": '<div class="loading-box"><i class="icon-loading"></i><p>'+$scope.LanJson.sProcessing+'</p></div> ',
+                    "sProcessing": '<div class="loading-box"><i class="icon-loading"></i><p>' + $scope.LanJson.sProcessing + '</p></div> ', 
                     "paginate": {
                         "first": "<<",
                         "last": ">>",
@@ -124,13 +124,66 @@
                     }
                 },
                 "sAjaxSource": ControllerConfig.WorkItem.GetFinishWorkItems,
-                "fnServerData": function (sSource, aDataSet, fnCallback) {
+                "fnServerData": function (sSource, aDataSet, fnCallback) {//WorkItem/GetFinishWorkItems,点击查询
                     $.ajax({
                         "dataType": 'json',
                         "type": 'POST',
                         "url": sSource,
                         "data": aDataSet,
-                        "success": function (json) {
+                        "success": function (json) {//返回数据列表
+                            //-----标签-start  为了下拉框有数据，所以此处引用了json的数据，也可挪到其他地方使用-----
+                            var sltCategoryComBox;//拿到所有数据，然后再重新加载页面数据
+                            var pageData = json.Rows//后台接收的列表数据，发送请求的时候吧数据拿过来
+                            var initId = "";
+                            var initValue = "";
+                            if (pageData.length != 0) {
+                                initId = pageData[0].InstanceId;//标签的id
+                                initValue = pageData[0].DisplayName;//拿到标签的名称
+                            }
+
+                            var tmpData = [];
+                            pageData.forEach(function (item) {
+                                var tmpObj = {};
+                                tmpObj.id = item.InstanceId;
+                                tmpObj.text = item.DisplayName;
+                                tmpData.push(tmpObj);
+                            })
+
+                            sltCategoryComBox = $("#proName").ligerComboBox({
+                                initValue: initId,//这个请求/Portal/MasterData/GetMasterDataList，要传这个id
+                                initText: initValue,
+                                data: tmpData,
+                                valueFieldID: 'category',
+                                url: '/Portal/MasterData/GetMasterDataList',
+                                ajaxType: 'GET',
+                                valueField: 'id',
+                                textField: 'text',
+                                autocomplete: true,
+                                setTextBySource: true,
+                                keySupport: true
+                            });
+                            //设置想要的样式
+                            $("#proName").parent().removeClass();
+                            var inputHeight = $("#proName").outerHeight();
+                            var inputWidth = $("#proName").outerWidth();
+                            $("#proName").css({"border":"1px solid #d9d9d9","border-radius":"4px"});
+                            //下拉框的内容样式设置
+                            $("div.l-box-select-inner").parent().css({"margin-top": inputHeight + 'px'},{"width": inputWidth + 'px'});
+                            $("div.l-box-select").css({"width": inputWidth + 'px'});
+                            $("#proName").mouseleave(function (e) {
+                                var x = e.pageX - $("#proName").offset().left;
+                                var y = e.pageY - $("#proName").offset().top;
+                                if(x < 0 || y < 0 || x > inputWidth){
+                                    $("div.l-box-select-inner").parent().hide();
+                                }
+                            });
+
+                            //update by zhangj
+                            $("#proName").change(function () {//按回车键触发该函数
+                                var id = $("#category").val();//为空，好像都是空的
+                            });
+                            //-------标签end -------
+
                             if (json.ExceptionCode == 1 && json.Success == false) {
                                 json.Rows = [];
                                 json.sEcho = 1;
@@ -151,29 +204,29 @@
                 "fnServerParams": function (aoData) {
                     // 增加自定义查询条件
                     //ie9不兼容placeholder属性 ie9下当value为空时，其value取placeholder值
-                    if($("#StartTime").attr("placeholder")==$("#StartTime").val()){
-                        $scope.StartTime="";
-                    }else{
+                    if ($("#StartTime").attr("placeholder") == $("#StartTime").val()) { 
+                        $scope.StartTime = ""; 
+                    } else { 
                         $scope.StartTime = $("#StartTime").val();
                     }
-                    if($("#EndTime").attr("placeholder")==$("#EndTime").val()){
-                        $scope.EndTime="";
-                    }else{
+                    if ($("#EndTime").attr("placeholder") == $("#EndTime").val()) { 
+                        $scope.EndTime = ""; 
+                    } else { 
                         $scope.EndTime = $("#EndTime").val();
                     }
                     //将时间转化为时间戳
-                    var startTimes = new Date($scope.StartTime.replace(/-/g,"/")).getTime();
-                    var EndTimes = new Date($scope.EndTime.replace(/-/g,"/")).getTime();
-                    if(startTimes>EndTimes){
-                        $.notify({message:"时间区间错误",status:"danger"});
-                        $("#EndTime").css("color","red");
+                    var startTimes = new Date($scope.StartTime.replace(/-/g, "/")).getTime(); 
+                    var EndTimes = new Date($scope.EndTime.replace(/-/g, "/")).getTime(); 
+                    if (startTimes > EndTimes) { 
+                        $.notify({message: "时间区间错误", status: "danger"}); 
+                        $("#EndTime").css("color", "red"); 
                         return false;
                     }
                     aoData.push(
-                        { "name": "startTime", "value": $filter("date")($scope.StartTime, "yyyy-MM-dd") },
-                        { "name": "endTime", "value": $filter("date")($scope.EndTime, "yyyy-MM-dd") },
-                        { "name": "workflowCodes", "value": $scope.WorkflowCodes },
-                        { "name": "instanceName", "value": $scope.InstanceName }
+                        {"name": "startTime", "value": $filter("date")($scope.StartTime, "yyyy-MM-dd")}, 
+                        {"name": "endTime", "value": $filter("date")($scope.EndTime, "yyyy-MM-dd")}, 
+                        {"name": "workflowCodes", "value": $scope.WorkflowCodes},
+                        {"name": "instanceName", "value": $scope.InstanceName }
                     );
                 },
                 "aoColumns": $scope.getColumns(), // 字段定义
