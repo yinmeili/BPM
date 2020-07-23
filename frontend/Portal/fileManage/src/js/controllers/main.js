@@ -25,7 +25,16 @@
                 $scope.predicate[1] = predicate;
             };
             
-            // $scope.temp = new Item();
+						// $scope.temp = new Item();
+						
+						/********回收站 ***********/
+						/* $scope.types = [
+							{value:'1',name:'共享文件'}, 
+							{ value: '2', name: '我的文件' },
+							{ value: '3', name:'共享知识'},
+							{ value: '4', name: '我的知识' }]; */
+					$scope.types = ['共享文件', '我的文件', '共享知识','我的知识']
+						/******** ****************/
 
             $rootScope.temp = new Item();
             $rootScope.rootdir = $scope.fileMemuTile;
@@ -267,13 +276,13 @@
                 });
             };
 
-            //我的搜索
+            //我的文件搜索
             $scope.mySearch = function (searchId){
                 $scope.fileNavigator.position = true;
                 var keyword = $("#"+searchId).val();
                 var path = $scope.fileNavigator.currentPath.join('/');
                 $scope.fileNavigator.mySearch(keyword).then(function (data) {
-                    $scope.fileNavigator.currentParentId = data.parentId;
+                    // $scope.fileNavigator.currentParentId = data.parentId;
                     $scope.fileNavigator.fileList = (data.result || []).map(function(file) {
                         return new Item(file, $scope.fileNavigator.currentPath);
                     });
@@ -282,7 +291,8 @@
 
             };
 
-            //搜索,先拿到数据，先发送请求http，在渲染refresh
+						// 共享文件搜索
+						// 先拿到数据，先发送请求http，在渲染refresh
             $scope.search = function(searchId){
                 $scope.fileNavigator.position = true;
                 var keyword = $("#"+searchId).val();
@@ -294,7 +304,24 @@
                     });
                     $scope.fileNavigator.buildTree(path);
                 });
-            }
+						}
+					
+					
+						// 回收站搜索
+					$scope.recycleSearch = function (type,searchId){
+						// $scope.fileNavigator.position = true;
+						//获取当前选择项的文本.
+						var type = $("#" + type +" option:selected").text();
+						var keyword = $("#" + searchId).val();
+						// var path = $scope.fileNavigator.currentPath.join('/');
+						$scope.fileNavigator.recycleSearch(type,keyword).then(function (data) {
+							// $scope.fileNavigator.currentParentId = data.parentId;
+							$scope.fileNavigator.fileList = (data.result || []).map(function (file) {
+								return new Item(file, $scope.fileNavigator.currentPath);
+							});
+							$scope.fileNavigator.buildTree(path);
+						});
+						}
 
             $scope.getQueryParam = function (param) {
                 var found;
@@ -397,7 +424,7 @@
                 $scope.myScroll = null
             });
             $scope.newFolder = function (data) {
-                $rootScope.temp.tempModel.name = "";
+								$rootScope.temp.tempModel.name = "";
                 var AgencyID;
                 if (data == undefined) AgencyID = "";
                 else AgencyID = data;
