@@ -48,8 +48,8 @@
             fileMemuTitle:{
                 "allFiles": '共享文件',
                 "myFiles": '我的文件',
-                "allFlows": '共享流程',
-                "myFlows": '我的流程',
+                "allFlows": '共享知识',
+                "myFlows": '我的知识',
                 "recycle": '回收站'
             }
         };

@@ -1,5 +1,6 @@
 package com.h3bpm.web.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -12,17 +13,16 @@ import com.h3bpm.web.entity.File;
 import com.h3bpm.web.entity.FilePermission;
 import com.h3bpm.web.mapper.FileMapper;
 import com.h3bpm.web.mapper.FilePermissionMapper;
-import com.h3bpm.web.utils.Constants;
-import com.h3bpm.web.utils.UserSessionUtils;
-import com.h3bpm.web.vo.FilePermissionVo;
+import com.h3bpm.web.mapper.MyFileMapper;
 import com.h3bpm.web.vo.FileVo;
-import com.h3bpm.web.vo.OrgInfoVo;
-import com.h3bpm.web.vo.UserSessionInfo;
 
 @Service
 public class FileService extends ApiDataService {
 	@Autowired
 	private FileMapper fileMapper;
+
+	@Autowired
+	private MyFileMapper myFileMapper;
 
 	@Autowired
 	private FilePermissionMapper filePermissionMapper;
@@ -31,16 +31,16 @@ public class FileService extends ApiDataService {
 		List<File> fileList = null;
 		String searchPath = null;
 		try {
-			//如果关键字不为空，则查询该目录开头的所有文件及文件夹
-			if(keyword != null && !keyword.isEmpty()){
-				//根目录则查询下面所有文件
-				if(parentId == null || parentId.isEmpty()){
+			// 如果关键字不为空，则查询该目录开头的所有文件及文件夹
+			if (keyword != null && !keyword.isEmpty()) {
+				// 根目录则查询下面所有文件
+				if (parentId == null || parentId.isEmpty()) {
 					searchPath = "";
-				}else{
+				} else {
 					searchPath = fileMapper.getFileById(parentId).getDir();
 				}
 			}
-			
+
 			fileList = fileMapper.findFileByParentIdAndKeyword(parentId, keyword, searchPath);
 
 		} catch (Exception e) {
@@ -149,4 +149,47 @@ public class FileService extends ApiDataService {
 			filePermissionMapper.createFilePermission(new FilePermission(fileVo.getFilePermission()));
 		}
 	}
+
+	/**
+	 * 根据我的文件ID，构建出共享文件List，主要用于共享到共享文件 下钻所有的文件夹和文件
+	 * 
+	 * @return
+	 */
+	public List<File> buildShareFileList(String myFileId, String shareFileParentId, String userId) {
+		List<File> shareFileList = new ArrayList<>();
+
+		com.h3bpm.web.entity.File myFile = myFileMapper.getMyFileById(myFileId);
+		com.h3bpm.web.entity.File shareParentFile = this.getFileById(shareFileParentId);
+
+		String rootMyFileDir = myFile.getDir().replace(myFile.getName() + "/", "");
+		String rootShareFileDir = shareParentFile.getDir();
+
+		this.findMyFileChild(shareFileList, rootMyFileDir, rootShareFileDir, myFileId, shareFileParentId, userId);
+
+		return shareFileList;
+	}
+
+	private void findMyFileChild(List<File> shareFileList, String rootShareFileDir, String rootMyFileDir, String myFileId, String shareFileParentId, String userId) {
+		List<File> myFileList = myFileMapper.findMyFileByParentIdAndKeyword(myFileId, null, null, userId);
+		String shareFileId = UUID.randomUUID().toString();
+
+		File shareFile = myFileMapper.getMyFileById(myFileId);
+
+		shareFile.setId(shareFileId);
+		shareFile.setParentId(shareFileParentId);
+		shareFile.setCreateUserId(userId);
+
+		String myfileDir = rootMyFileDir + shareFile.getDir().replace(rootShareFileDir, "");
+
+		shareFile.setDir(myfileDir);
+		shareFile.setCreateTime(new Date());
+
+		if (myFileList != null && !myFileList.isEmpty()) {
+			for (File myFile : myFileList) {
+				findMyFileChild(shareFileList, rootShareFileDir, rootMyFileDir, myFile.getId(), shareFileId, userId);
+			}
+		}
+		shareFileList.add(shareFile);
+	}
+
 }
