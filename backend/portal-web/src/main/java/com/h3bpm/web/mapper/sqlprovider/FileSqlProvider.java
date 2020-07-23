@@ -75,5 +75,47 @@ public class FileSqlProvider {
 						"				ORDER BY delete_time DESC";
 		return sql;
 	}
+
+
+	public String findFileNameByParentId(Map<String, Object> para) {
+		String parentId = (String) para.get("parentId");
+		String parentIdSqlStr = (parentId == null || parentId.isEmpty()) ?
+				" parent_id is null" : " parent_id = '" + parentId + "'";
+
+		String fileType = " And type = 'file' ";
+
+		String sql =
+				"SELECT"+
+						"			 name"+
+						"			 FROM"+
+						"				ot_file"+
+						"				WHERE " +
+						parentIdSqlStr +
+						fileType +
+						"			ORDER BY"+
+						"				name";
+		return sql;
+	}
+
+
+	public String findFolderNameByParentId(Map<String, Object> para) {
+		String parentId = (String) para.get("parentId");
+		String parentIdSqlStr = (parentId == null || parentId.isEmpty()) ?
+				" parent_id is null" : " parent_id = '" + parentId + "'";
+
+		String fileType = " And type = 'dir' ";
+
+		String sql =
+				"SELECT"+
+						"			 name"+
+						"			 FROM"+
+						"				ot_file"+
+						"				WHERE " +
+						parentIdSqlStr +
+						fileType +
+						"			ORDER BY"+
+						"				name";
+		return sql;
+	}
 	
 }
