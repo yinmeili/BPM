@@ -27,4 +27,10 @@ public interface FileMapper {
 	@Update({ "UPDATE `h3bpm`.`ot_file` SET `parent_id`=#{parentId}, `type`=#{type}, `name`=#{name}, `dir`=#{dir}, `file_size`=#{fileSize}, `create_user_id`=#{createUserId}, `create_time`=#{createTime}, `is_delete`=#{isDelete} ,`delete_time` = #{deleteTime},`download_file_id`=#{downloadFileId} WHERE `id`=#{id}" })
 	public void updateFile(File file);
 
+	@SelectProvider(type = FileSqlProvider.class, method = "findFileNameByParentId")
+	public List<String> findFileNameByParentId(@Param("parentId") String parentId);
+
+	@SelectProvider(type = FileSqlProvider.class, method = "findFolderNameByParentId")
+	public List<String> findFolderNameByParentId(@Param("parentId") String parentId);
+
 }

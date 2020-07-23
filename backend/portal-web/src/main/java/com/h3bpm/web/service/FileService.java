@@ -1,9 +1,6 @@
 package com.h3bpm.web.service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -190,6 +187,98 @@ public class FileService extends ApiDataService {
 			}
 		}
 		shareFileList.add(shareFile);
+	}
+
+
+	/**
+	 * 根据parentId查询出所有的文件名称
+	 *
+	 * @param parentId
+	 * @return
+	 */
+
+	public List<String> findFileNameByParentId(String parentId){
+		List<String> res = new ArrayList<>();
+		try {
+			res = fileMapper.findFileNameByParentId(parentId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+	/**
+	 * 根据parentId查询出所有的文件夹名称
+	 *
+	 * @param parentId
+	 * @return
+	 */
+	public List<String> findFolderNameByParentId(String parentId){
+		List<String> res = new ArrayList<>();
+		try {
+			res = fileMapper.findFolderNameByParentId(parentId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return res;
+	}
+
+
+	/**
+	 * 校验文件夹名的名字
+	 *
+	 * @param parentId
+	 * @param name
+	 * @return
+	 */
+	public String validateFolderName(String parentId, String name){
+		boolean is_first = true;
+		List<String> fileNames = findFolderNameByParentId(parentId);
+		if(fileNames == null) return name;
+		int index = 1;
+		for (String fileName : fileNames) {
+			if(name.equals(fileName)){
+				if(!is_first) name = name.substring(0,name.length() - 3);
+				name = name + '(' + index + ')';
+				index ++ ;
+				is_first = false;
+			}
+		}
+		return name;
+	}
+
+
+	/**
+	 * 校验文件的名字
+	 *
+	 * @param parentId
+	 * @param name
+	 * @return
+	 */
+	public String validateFileName(String parentId, String name, String fileSuffix){
+		boolean is_first = true;
+		List<String> fileNames = findFileNameByParentId(parentId);
+		Collections.sort(fileNames);	//升序排序->test(1).txt,test(2).txt.....test.txt
+		String fileFullName = name + '.' + fileSuffix;	//文件全名
+		if(fileNames == null) return name;
+		int index = 2;
+		for (String fileName : fileNames) {
+			if(fileFullName.equals(fileName)){
+				name = name + "(1)";
+				fileFullName = name + '.' + fileSuffix;
+				break;	//找到了
+			}
+		}
+		for (String fileName : fileNames) {
+			if(fileFullName.equals(fileName)){
+				name = name.substring(0,name.length() - 3);
+				name = name + '(' + index + ')';
+				index++;
+				fileFullName = name + '.' + fileSuffix;
+			}
+		}
+
+		return fileFullName;
 	}
 
 }
