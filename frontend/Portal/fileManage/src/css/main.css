@@ -342,3 +342,11 @@ table th > a:focus {
     margin-top: 2px;
     margin-bottom: 2px;
 }
+
+
+
+.form-control-select{
+	width: 116px;
+  padding-top: 5px;
+  height: 32px;
+} 

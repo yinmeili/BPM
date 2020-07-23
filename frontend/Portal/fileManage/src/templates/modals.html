@@ -655,6 +655,71 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
     </form>
 </script>
 
+<!-- 共享知识模块新建知识模态框 -->
+<script type="text/ng-template" id="newFlow.html">
+    <form class="bs-example form-horizontal" ng-submit="createFlow(temp)">
+        <div class="modal-header">
+            <button type="button" class="close"
+                    data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+                ×
+            </button>
+            <h4 class="modal-title" id="myModalLabel" style="color:#778CA2;">
+                新建知识
+            </h4>
+        </div>
+        <div class="modal-body" style="color:#778CA2;">
+            <div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">名称</div>
+                <div class="col-md-8 input-group">
+                    <input class="form-control" type="text" id="flowName" style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                    ng-model="temp.tempModel.name" autofocus="autofocus"/>
+                </div>
+						</div>
+						<div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">描述</div>
+                <div class="col-md-8 input-group">
+										<textarea id="flowDes" ng-model="temp.tempModel.des" class="form-control" rows="4" required></textarea>
+                </div>
+						</div>
+						<div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">开始时间</div>
+                <div class="col-md-8 input-group">
+                    <input ng-model="StartTime" id="StartTime"
+                      autocomplete="off"
+                      ui-jq="wdatePicker" style="width:120px;"
+                      class="input form-control"/>
+                </div>
+						</div>
+						<div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">结束时间</div>
+                <div class="col-md-8 input-group">
+                    <input ng-model="EndTime" id="EndTime"
+                      autocomplete="off"
+                      class="input form-control" style="width:120px;"
+                      ui-jq="wdatePicker"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">权限选择</div>
+                <div class="col-md-8 input-group">
+                    <div ui-jq="SheetUser" ui-options="WasAgentOptions" id="folderPer"
+                         class="" style="" data-orgunitvisible="true" data-groupvisible="true" data-sheetusercontrol="true">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
+            <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess">保存</button>
+        </div>
+    </form>
+
+</script>
 
 <!--<div class="modal animated fadeIn" id="uploadfile">
   <div class="modal-dialog">
