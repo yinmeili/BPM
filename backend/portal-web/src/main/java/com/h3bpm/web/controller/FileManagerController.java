@@ -1118,4 +1118,36 @@ public class FileManagerController extends ControllerBase {
 
 		return null;
 	}
+	
+	@RequestMapping(value = "/shareFile", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public ResponseVo shareFile(@RequestBody ReqShareFile reqBean) {
+		try {
+			com.h3bpm.web.entity.File myFile = myFileService.getMyFileById(reqBean.getFileId());
+			com.h3bpm.web.entity.File shareParentFile = myFileService.getMyFileById(reqBean.getShareFileParentId());
+
+			Map<String, Object> userMap = this._getCurrentUser();
+			OThinker.Common.Organization.Models.User user = (User) userMap.get("User");
+			String userId = user.getObjectId();
+
+			List<com.h3bpm.web.entity.File> shareFileList = fileService.buildShareFileList(reqBean.getFileId(), reqBean.getShareFileParentId(), userId);
+
+			if (shareFileList != null) {
+				for (com.h3bpm.web.entity.File shareFile : shareFileList) {
+					FileVo fileVo = new FileVo(shareFile);
+					fileVo.setFilePermission(reqBean.getFilePermission());
+					
+					fileService.createFile(fileVo);
+				}
+			}
+
+			return new ResponseVo("分享成功");
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return null;
+	}
 }
