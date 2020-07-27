@@ -27,7 +27,9 @@ app.config(['fileManagerConfigProvider', function (config) {
         createMyFolderUrl: fileManagerApiUrl + 'createMyFolder',
         updateMyUrl: fileManagerApiUrl + 'updateMyFile',
         collectToMyFileUrl:fileManagerApiUrl + 'collectToMyFile',
-        shareFileUrl:fileManagerApiUrl + 'shareFile',
+				shareFileUrl:fileManagerApiUrl + 'shareFile',
+				
+				searchListRecycleUrl: fileManagerApiUrl + 'searchListRecycle',//回收站搜索
 
         allowedActions: angular.extend(defaults.allowedActions, {
             copy : false,

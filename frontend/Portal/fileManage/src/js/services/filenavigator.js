@@ -212,6 +212,7 @@
             return deferred.promise;
         };
 
+				// 共享文件搜索
         FileNavigator.prototype.search = function(keyword){
             var self = this;
             var deferred = $q.defer();
@@ -230,6 +231,7 @@
             return deferred.promise;
         }
 
+				// 我的文件搜索
         FileNavigator.prototype.mySearch = function(keyword){
                 var self = this;
                 var deferred = $q.defer();
@@ -246,7 +248,28 @@
                     // self.position = false;
                 });
                 return deferred.promise;
-            }
+						}
+						
+				// 回收站搜索
+				FileNavigator.prototype.recycleSearch = function (type,keyword) {
+					var self = this;
+					var deferred = $q.defer();
+					var path = self.currentPath.join('/');
+					var data = {
+						// parentId: self.currentFileId,
+						type:type,
+						keyword: keyword
+					}
+					$http.post(fileManagerConfig.searchListRecycleUrl, data).success(function (data) {
+						self.deferredHandler(data, deferred);
+					}).error(function (data) {
+						self.deferredHandler(data, deferred, 'Unknown error listing, check the response');
+					})['finally'](function () {
+						// self.position = false;
+					});
+					return deferred.promise;
+			}
+
 
         FileNavigator.prototype.refresh = function() {
             var self = this;

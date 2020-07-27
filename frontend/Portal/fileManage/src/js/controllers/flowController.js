@@ -1,7 +1,7 @@
 (function(window, angular, $) {
     'use strict';
-    app.controller('FlowCtrl', ['$scope', "$rootScope", "$translate", "$compile", "$http", "$timeout", "$state", "$interval", "$filter", "ControllerConfig", "datecalculation", "jq.datables",
-        function ($scope, $rootScope, $translate, $compile, $http, $timeout, $state, $interval, $filter, ControllerConfig, datecalculation, jqdatables) {
+	app.controller('FlowCtrl', ['$scope', "$rootScope", "$translate", "$compile", "$http", "$timeout", "$state", "$interval", "$filter", "ControllerConfig", "datecalculation", "jq.datables", '$modal',
+		function ($scope, $rootScope, $translate, $compile, $http, $timeout, $state, $interval, $filter, ControllerConfig, datecalculation, jqdatables, $modal) {
             $scope.$on('$viewContentLoaded', function (event) {
                 $scope.init();
                 $scope.myScroll = null
@@ -250,7 +250,66 @@
                 // "fnDrawCallback": function () {
                 //     jqdatables.trcss();
                 // }
-            }
+						}
+						
+					/*************共享知识新建知识模态框*****************/
+					$scope.newFlow = function (data) {
+						// 清空原始输入数据
+						$rootScope.temp.tempModel.name = "";
+						$rootScope.temp.tempModel.des = "";
+						var AgencyID;
+						if (data == undefined) AgencyID = "";
+						else AgencyID = data;
+						$http({
+							url: ControllerConfig.Agents.GetAgency,
+							params: {
+								agentID: AgencyID,
+								random: new Date().getTime()
+							}
+						}).success(function (result, header, config, status) {
+								var Agency = result.Rows[0];
+
+								// 弹出模态框
+								var modalInstance = $modal.open({
+									templateUrl: 'newFlow.html',    // 指向上面创建的视图
+									controller: 'ModalsController',// 初始化模态范围
+									size: "md",
+									resolve: {
+										params: function () {
+											return {
+												user: $scope.user,
+												Agency: Agency,
+												AgencyID: AgencyID
+											};
+										},
+										deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+											return $ocLazyLoad.load([
+												'WFRes/_Content/themes/ligerUI/Aqua/css/ligerui-all.min.css',
+												'WFRes/assets/stylesheets/sheet.css',
+												'WFRes/_Scripts/jquery/jquery.lang.js',
+												'WFRes/_Scripts/ligerUI/ligerui.all.min.js',
+												'WFRes/_Scripts/MvcSheet/SheetControls.js',
+												'WFRes/_Scripts/MvcSheet/MvcSheetUI.js'
+											]).then(function () {
+												return $ocLazyLoad.load([
+													'WFRes/_Scripts/MvcSheet/Controls/SheetWorkflow.js',
+													'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js'
+												]);
+											});
+										}]
+									}
+								});
+						}) 
+						
+						var times = setInterval(function () {
+							if ($("#WorkflowCodes").length > 0) {//id没有改过来，因为没有用到
+								clearInterval(times);
+								$(".select2-search-field").find("input").css("z-index", 0);
+								//console.log($("#WorkflowCodes"));
+								$("#WorkflowCodes").css("width", "246px");
+							}
+						}, 50);
+					}
 
         }]);
 
