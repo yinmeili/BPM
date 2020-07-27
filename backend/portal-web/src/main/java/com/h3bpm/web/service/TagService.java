@@ -15,20 +15,39 @@ public class TagService extends ApiDataService {
 	private TagMapper tagMapper;
 
 	/**
-	 * 根据Name获取文件
+	 * 根据Type和like Name获取标签
 	 *
 	 * @param tagName
+	 * @param tagType
 	 * @return
 	 */
-	public List<Tag> findTagByName(String tagName) {
+	public List<Tag> findTagByTypeAndName(String tagName, String tagType) {
 		List<Tag> tagList = null;
 		try {
-			tagList = tagMapper.findTagByName(tagName);
+			tagList = tagMapper.findTagByTypeAndName(tagName, tagType);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return tagList;
+	}
+
+	/**
+	 * 根据Type和指定Name获取标签
+	 *
+	 * @param tagName
+	 * @param tagType
+	 * @return
+	 */
+	public Tag getTagByTypeAndName(String tagName, String tagType) {
+
+		if (tagName == null || tagName.isEmpty()){
+			return null;
+		}
+		if (tagType == null || tagType.isEmpty()){
+			return null;
+		}
+		return tagMapper.getTagByTypeAndName(tagName, tagType);
 	}
 
 	/**
