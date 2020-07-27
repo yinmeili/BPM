@@ -40,7 +40,7 @@
                                     <div ui-jq="SheetWorkflow" ui-options="WorkflowOptions" id="sheetWorkflow" style="width:270px;min-height: 32px !important;"></div>
                                 </div>
                             </div>
-                            <!--完成时间-->
+                            <!--开始时间-->
                             <div class="header-search-item">
                                 <span class="search-title-text">{{LanJson.FinishTime}}</span>
                                 <div class="form-group search-time-box">
@@ -52,6 +52,25 @@
                                                placeholder="{{LanJson.StartTime}}" />
                                         <span class="input-group-addon" style="border-left:0;border-right:0;" translate="QueryTableColumn.To"></span>
                                         <input ng-model="EndTime" id="EndTime"
+                                               autocomplete="off"
+                                               class="input form-control" style="width:120px;"
+                                               ui-jq="wdatePicker"
+                                               placeholder="{{LanJson.EndTime}}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <!--结束时间-->
+                            <div class="header-search-item">
+                                <span class="search-title-text">{{LanJson.FinishTime}}</span>
+                                <div class="form-group search-time-box">
+                                    <div class="input-group">
+                                        <input ng-model="StartTime" id="StartTime0"
+                                               autocomplete="off"
+                                               ui-jq="wdatePicker" style="width:120px;"
+                                               class="input form-control"
+                                               placeholder="{{LanJson.StartTime}}" />
+                                        <span class="input-group-addon" style="border-left:0;border-right:0;" translate="QueryTableColumn.To"></span>
+                                        <input ng-model="EndTime" id="EndTime0"
                                                autocomplete="off"
                                                class="input form-control" style="width:120px;"
                                                ui-jq="wdatePicker"
