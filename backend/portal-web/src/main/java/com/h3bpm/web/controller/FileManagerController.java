@@ -578,7 +578,8 @@ public class FileManagerController extends ControllerBase {
 		fileVo.setType(FileType.DIR.getValue());// 存入类型
 		fileVo.setCreateUserId(user.getObjectId());// 存入用户Id
 		fileVo.setCreateTime(new Date());
-
+		String name = fileService.validateFolderName(parentId,fileVo.getName());
+		fileVo.setName(name);
 		fileService.createFile(fileVo);
 
 		return reqParam;
@@ -870,6 +871,7 @@ public class FileManagerController extends ControllerBase {
 			// 获取文件后缀
 			String[] strArray = fileFullName.split("\\.");
 			int suffixIndex = strArray.length - 1;
+			String fileName = strArray[0];
 			String fileSuffix = strArray[suffixIndex];
 
 			// :TODO 判断文件是否已存在
@@ -912,6 +914,8 @@ public class FileManagerController extends ControllerBase {
 				// 设置FilePermission
 				fileVo.setFilePermission(filePermissionVo);
 
+				String name = fileService.validateFileName(parentId,fileName,fileSuffix);
+				fileVo.setName(name);
 				fileService.createFile(fileVo);
 
 				// 设置返回数据格式
@@ -1019,8 +1023,6 @@ public class FileManagerController extends ControllerBase {
 	@RequestMapping(value = "/uploadMultiFile", method = RequestMethod.POST, produces = "application/json;charset=utf8")
 	@ResponseBody
 	public List<FileDesc> uploadMultiFileHandler(@RequestParam("file") MultipartFile[] files, @RequestParam("path") String path, HttpServletResponse response) throws IOException {
-
-		logger.info(path);
 		FileDesc desc = null;
 		List<FileDesc> fileDescList = new ArrayList<>();
 		for (MultipartFile file : files) {

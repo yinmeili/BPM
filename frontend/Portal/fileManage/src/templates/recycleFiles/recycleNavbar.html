@@ -1,7 +1,7 @@
 <!--<nav class="navbar navbar-inverse navbar-fixed-top">-->
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
-    <div class="navbar-header">
+    <div>
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
         <span class="sr-only">Toggle</span>
         <span class="icon-bar"></span>
@@ -10,7 +10,15 @@
       </button>
       <!-- <a class="navbar-brand hidden-xs" href="" ng-click="fileNavigator.goTo(-1)">{{config.appName}}</a> -->
       <div class="navbar-form navbar-left">
-        <input type="text" class="form-control " placeholder="搜索..." ng-model="$parent.query">
+				<span class="search-title-text">类型</span>
+				<select id="recycleTypeSearch" class="input form-control form-control-select"
+					ng-model="recycleTypeChoose" ng-options="type for type in types">
+					<option value="" >请选择类型</option>
+				</select>
+				<span class="search-title-text">名称</span>
+				<input type="text" class="form-control " placeholder="请输入名称..." id="recycleNameSearch">
+				<input type="button" class="form-control" value="搜索" ng-click="recycleSearch('recycleTypeSearch','recycleNameSearch')">
+				
       </div>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
