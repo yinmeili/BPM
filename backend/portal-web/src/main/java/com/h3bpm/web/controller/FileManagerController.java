@@ -1023,8 +1023,6 @@ public class FileManagerController extends ControllerBase {
 	@RequestMapping(value = "/uploadMultiFile", method = RequestMethod.POST, produces = "application/json;charset=utf8")
 	@ResponseBody
 	public List<FileDesc> uploadMultiFileHandler(@RequestParam("file") MultipartFile[] files, @RequestParam("path") String path, HttpServletResponse response) throws IOException {
-
-		logger.info(path);
 		FileDesc desc = null;
 		List<FileDesc> fileDescList = new ArrayList<>();
 		for (MultipartFile file : files) {

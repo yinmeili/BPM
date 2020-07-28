@@ -2,7 +2,7 @@ package com.h3bpm.web.vo;
 
 public class RespListKnowledgePageVo extends ReqPageVo {
 	private String id = null;// 知识id
-	private String flowId = null;// 流程Code，中文描述
+	private String flowId = null;// 流程id
 	private String flowCodeStr = null;// 流程Code，中文描述
 	private String name = null;// 知识名称
 	private String tagName = null;// 标签
