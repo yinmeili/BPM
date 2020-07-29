@@ -9,7 +9,7 @@ public class ReqCreateKnowledge {
     private String endTime;
     private String flowCodeDesc;
 
-    private FilePermissionVo permission = null;
+    private KnowledgePermissionVo permission = null;
 
     public String getFlowCodeDesc() {
         return flowCodeDesc;
@@ -67,11 +67,11 @@ public class ReqCreateKnowledge {
         this.endTime = endTime;
     }
 
-    public FilePermissionVo getPermission() {
+    public KnowledgePermissionVo getPermission() {
         return permission;
     }
 
-    public void setPermission(FilePermissionVo permission) {
-        this.permission = permission;
+    public void setPermission(KnowledgePermissionVo knowledgePermissionVo) {
+        this.permission = knowledgePermissionVo;
     }
 }

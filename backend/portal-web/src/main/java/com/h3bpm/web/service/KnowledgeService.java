@@ -1,12 +1,10 @@
 package com.h3bpm.web.service;
 
-import com.h3bpm.web.entity.File;
-import com.h3bpm.web.entity.FilePermission;
-import com.h3bpm.web.entity.Knowledge;
-import com.h3bpm.web.entity.Tag;
+import com.h3bpm.web.entity.*;
 import com.h3bpm.web.enumeration.TagType;
 import com.h3bpm.web.mapper.FilePermissionMapper;
 import com.h3bpm.web.mapper.KnowledgeMapper;
+import com.h3bpm.web.mapper.KnowledgePermissionMapper;
 import com.h3bpm.web.vo.KnowledgeVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +19,7 @@ public class KnowledgeService {
     private KnowledgeMapper knowledgeMapper;
 
     @Autowired
-    private FilePermissionMapper filePermissionMapper;
+    private KnowledgePermissionMapper knowledgePermissionMapper;
 
     @Autowired
     private TagService tagService;
@@ -49,8 +47,8 @@ public class KnowledgeService {
             tagService.createTag(tag);
         }
         if (knowledgeVo.getPermission() != null) {
-            knowledgeVo.getPermission().setFileId(uuid);
-            filePermissionMapper.createFilePermission(new FilePermission(knowledgeVo.getPermission()));
+            knowledgeVo.getPermission().setKnowledgeId(uuid);
+            knowledgePermissionMapper.createKnowledgePermission(new KnowledgePermission(knowledgeVo.getPermission()));
         }
 
         return uuid;
@@ -69,12 +67,12 @@ public class KnowledgeService {
         }
 
         if (knowledgeVo.getPermission() != null) {
-            filePermissionMapper.deleteFilePermissionByFileId(knowledgeVo.getId());
+            knowledgePermissionMapper.deleteKnowledgePermissionByKnowledgeId(knowledgeVo.getId());
 
-            if (knowledgeVo.getPermission().getFileId() == null) {
-                knowledgeVo.getPermission().setFileId(knowledgeVo.getId());
+            if (knowledgeVo.getPermission().getKnowledgeId() == null) {
+                knowledgeVo.getPermission().setKnowledgeId(knowledgeVo.getId());
             }
-            filePermissionMapper.createFilePermission(new FilePermission(knowledgeVo.getPermission()));
+            knowledgePermissionMapper.createKnowledgePermission(new KnowledgePermission(knowledgeVo.getPermission()));
         }
     }
 
