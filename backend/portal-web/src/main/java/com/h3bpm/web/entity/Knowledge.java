@@ -19,27 +19,13 @@ public class Knowledge {
     private String flowId = null;
     private String flowCode = null;
     private String flowCodeDesc = null;
-
-    public String getCreateUserName() {
-        return createUserName;
-    }
-
-    public void setCreateUserName(String createUserName) {
-        this.createUserName = createUserName;
-    }
-
-    public String getFlowCodeDesc() {
-        return flowCodeDesc;
-    }
-
-    public void setFlowCodeDesc(String flowCodeDesc) {
-        this.flowCodeDesc = flowCodeDesc;
-    }
-
     private Date startTime = null;
     private Date endTime = null;
 
+    @Deprecated
+    public Knowledge() {
 
+    }
 
     public Knowledge(KnowledgeVo knowledgeVo) {
         this.id = knowledgeVo.getId();
@@ -55,9 +41,20 @@ public class Knowledge {
         this.flowCodeDesc = knowledgeVo.getFlowCodeDesc();
     }
 
-    @Deprecated
-    public Knowledge() {
+    public String getCreateUserName() {
+        return createUserName;
+    }
 
+    public void setCreateUserName(String createUserName) {
+        this.createUserName = createUserName;
+    }
+
+    public String getFlowCodeDesc() {
+        return flowCodeDesc;
+    }
+
+    public void setFlowCodeDesc(String flowCodeDesc) {
+        this.flowCodeDesc = flowCodeDesc;
     }
 
     public String getId() {
