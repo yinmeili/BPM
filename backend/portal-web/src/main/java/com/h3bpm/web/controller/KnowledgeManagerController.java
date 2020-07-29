@@ -1,39 +1,33 @@
 package com.h3bpm.web.controller;
 
-import OThinker.Common.Organization.Models.User;
-import OThinker.H3.Controller.ControllerBase;
-import com.h3bpm.web.entity.Knowledge;
-import com.h3bpm.web.enumeration.FileType;
-import com.h3bpm.web.mapper.KnowledgeMapper;
-import com.h3bpm.web.service.FilePermissionService;
-import com.h3bpm.web.service.FileService;
-import com.h3bpm.web.service.KnowledgeService;
-import com.h3bpm.web.service.MyFileService;
-import com.h3bpm.web.utils.Constants;
-import com.h3bpm.web.utils.FtUtils;
-import com.h3bpm.web.utils.SFTPUtil;
-import com.h3bpm.web.utils.UserSessionUtils;
-import com.h3bpm.web.vo.*;
-import com.jcraft.jsch.SftpException;
-import org.apache.xmlbeans.impl.xb.ltgfmt.FileDesc;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
+import com.h3bpm.web.entity.Knowledge;
+import com.h3bpm.web.mapper.KnowledgeMapper;
+import com.h3bpm.web.service.KnowledgeService;
+import com.h3bpm.web.vo.KnowledgeVo;
+import com.h3bpm.web.vo.ReqCreateKnowledge;
+import com.h3bpm.web.vo.ReqListKnowledgePageVo;
+import com.h3bpm.web.vo.ReqUpdateKnowledge;
+import com.h3bpm.web.vo.RespPageVo;
+import com.h3bpm.web.vo.ResponseVo;
+import com.h3bpm.web.vo.query.QueryKnowledgeList;
+
+import OThinker.Common.Organization.Models.User;
+import OThinker.H3.Controller.ControllerBase;
 
 /**
  * Created by tonghao on 2020/3/1.
@@ -112,5 +106,27 @@ public class KnowledgeManagerController extends ControllerBase {
 		}
 		knowledgeVo.setPermission(reqUpdateKnowledge.getPermission());
 		knowledgeService.updateKnowledge(knowledgeVo);
+	}
+	
+//	@RequestParam(value = "path") String path
+	@RequestMapping(value = "/listKnowledgeByPage", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public RespPageVo listKnowledgeByPage(@ModelAttribute ReqListKnowledgePageVo requestBean) {
+//		Map<String, Object> userMap = null;
+//		try {
+//			userMap = this._getCurrentUser();
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		User user = (User) userMap.get("User");
+		
+		QueryKnowledgeList queryKnowledgeList = new QueryKnowledgeList(requestBean);
+//		queryKnowledgeList.setQueryUserId(user.getObjectId());
+		
+		PageInfo<KnowledgeVo> pageInfo = knowledgeService.findKnowledgeByPage(queryKnowledgeList);
+		
+		return new RespPageVo(requestBean.getsEcho(),pageInfo.getTotal(),pageInfo.getList());
 	}
 }

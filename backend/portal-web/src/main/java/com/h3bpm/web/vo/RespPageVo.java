@@ -2,9 +2,9 @@ package com.h3bpm.web.vo;
 
 public class RespPageVo {
 	private int sEcho = 1;
-	private int iTotalDisplayRecords = 0;
-	private int iTotalRecords = 0;
-	private int Total = 0;
+	private long iTotalDisplayRecords = 0;
+	private long iTotalRecords = 0;
+	private long Total = 0;
 
 	private Object Rows = null;
 
@@ -13,8 +13,16 @@ public class RespPageVo {
 
 	}
 
-	public RespPageVo(int total, Object datas) {
+	public RespPageVo(long total, Object datas) {
 		this.sEcho = 1;
+		this.iTotalDisplayRecords = total;
+		this.iTotalRecords = total;
+		this.Total = total;
+		this.Rows = datas;
+	}
+
+	public RespPageVo(int sEcho, long total, Object datas) {
+		this.sEcho = sEcho;
 		this.iTotalDisplayRecords = total;
 		this.iTotalRecords = total;
 		this.Total = total;
@@ -29,7 +37,7 @@ public class RespPageVo {
 		this.sEcho = sEcho;
 	}
 
-	public int getiTotalDisplayRecords() {
+	public long getiTotalDisplayRecords() {
 		return iTotalDisplayRecords;
 	}
 
@@ -37,7 +45,7 @@ public class RespPageVo {
 		this.iTotalDisplayRecords = iTotalDisplayRecords;
 	}
 
-	public int getiTotalRecords() {
+	public long getiTotalRecords() {
 		return iTotalRecords;
 	}
 
@@ -45,7 +53,7 @@ public class RespPageVo {
 		this.iTotalRecords = iTotalRecords;
 	}
 
-	public int getTotal() {
+	public long getTotal() {
 		return Total;
 	}
 
