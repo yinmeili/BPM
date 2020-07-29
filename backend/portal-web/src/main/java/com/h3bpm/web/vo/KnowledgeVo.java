@@ -21,24 +21,7 @@ public class KnowledgeVo {
 	private Date createTime;
 	private String createUserName;
 	private String flowCodeDesc;
-
-	public String getCreateUserName() {
-		return createUserName;
-	}
-
-	public void setCreateUserName(String createUserName) {
-		this.createUserName = createUserName;
-	}
-
-	public String getFlowCodeDesc() {
-		return flowCodeDesc;
-	}
-
-	public void setFlowCodeDesc(String flowCodeDesc) {
-		this.flowCodeDesc = flowCodeDesc;
-	}
-
-	private FilePermissionVo permission = null;
+	private KnowledgePermissionVo permission = null;
 
 	public KnowledgeVo() {
 	}
@@ -56,6 +39,24 @@ public class KnowledgeVo {
 		this.createUserName = knowledge.getCreateUserName();
 		this.flowCodeDesc = knowledge.getFlowCodeDesc();
 	}
+
+	public String getCreateUserName() {
+		return createUserName;
+	}
+
+	public void setCreateUserName(String createUserName) {
+		this.createUserName = createUserName;
+	}
+
+	public String getFlowCodeDesc() {
+		return flowCodeDesc;
+	}
+
+	public void setFlowCodeDesc(String flowCodeDesc) {
+		this.flowCodeDesc = flowCodeDesc;
+	}
+
+
 
 	public String getId() {
 		return id;
@@ -129,11 +130,11 @@ public class KnowledgeVo {
 		this.createTime = createTime;
 	}
 
-	public FilePermissionVo getPermission() {
+	public KnowledgePermissionVo getPermission() {
 		return permission;
 	}
 
-	public void setPermission(FilePermissionVo permission) {
+	public void setPermission(KnowledgePermissionVo permission) {
 		this.permission = permission;
 	}
 }

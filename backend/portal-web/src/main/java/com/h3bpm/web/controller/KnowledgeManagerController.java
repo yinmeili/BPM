@@ -90,7 +90,7 @@ public class KnowledgeManagerController extends ControllerBase {
 
 	@RequestMapping(value = "/updateKnowledge", produces = "application/json;charset=utf8")
 	@ResponseBody
-	public void updateKnowledge(@RequestBody ReqUpdateKnowledge reqUpdateKnowledge) {
+	public ResponseVo updateKnowledge(@RequestBody ReqUpdateKnowledge reqUpdateKnowledge) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");	//String与Date之间进行相互转换
 		Knowledge knowledgeEntity = knowledgeService.getKnowledgeById(reqUpdateKnowledge.getId());
 		KnowledgeVo knowledgeVo = new KnowledgeVo(knowledgeEntity);
@@ -112,5 +112,7 @@ public class KnowledgeManagerController extends ControllerBase {
 		}
 		knowledgeVo.setPermission(reqUpdateKnowledge.getPermission());
 		knowledgeService.updateKnowledge(knowledgeVo);
+
+		return new ResponseVo("修改成功");
 	}
 }
