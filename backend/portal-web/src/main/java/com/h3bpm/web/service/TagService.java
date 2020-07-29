@@ -58,6 +58,9 @@ public class TagService extends ApiDataService {
 	 */
 	@Transactional
 	public String createTag(Tag tag) {
+		if(tag.getName() == null || tag.getName().isEmpty())
+			return null;
+
 		String uuid = tag.getId();
 		if (uuid == null) {
 			uuid = UUID.randomUUID().toString();
