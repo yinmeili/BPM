@@ -1,7 +1,5 @@
 package com.h3bpm.web.service;
 
-import com.h3bpm.web.entity.*;
-import com.h3bpm.web.enumeration.TagType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -13,23 +11,20 @@ import org.springframework.transaction.annotation.Transactional;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.h3bpm.web.entity.FilePermission;
 import com.h3bpm.web.entity.Knowledge;
-import com.h3bpm.web.mapper.FilePermissionMapper;
+import com.h3bpm.web.entity.KnowledgePermission;
+import com.h3bpm.web.entity.Tag;
+import com.h3bpm.web.enumeration.TagType;
 import com.h3bpm.web.mapper.KnowledgeMapper;
 import com.h3bpm.web.mapper.KnowledgePermissionMapper;
 import com.h3bpm.web.vo.KnowledgeVo;
 import com.h3bpm.web.vo.query.QueryKnowledgeList;
 
-/**
- * @author 86135
- *
- */
 @Service
 public class KnowledgeService {
 
-	@Autowired
-	private KnowledgeMapper knowledgeMapper;
+    @Autowired
+    private KnowledgeMapper knowledgeMapper;
 
     @Autowired
     private KnowledgePermissionMapper knowledgePermissionMapper;
@@ -50,19 +45,7 @@ public class KnowledgeService {
             knowledgeVo.setId(uuid);
         }
 
-	/**
-	 * 新增Knowledge
-	 *
-	 * @param knowledgeVo
-	 * @return
-	 */
-	@Transactional
-	public String createKnowledge(KnowledgeVo knowledgeVo) {
-		String uuid = knowledgeVo.getId();
-		if (uuid == null) {
-			uuid = UUID.randomUUID().toString();
-			knowledgeVo.setId(uuid);
-		}
+        knowledgeMapper.createKnowledge(new Knowledge(knowledgeVo));
 
         //对tag的处理
         if(tagService.getTagByTypeAndName(knowledgeVo.getTagName(), TagType.KNOWLEDGE.getValue()) == null){
@@ -79,13 +62,9 @@ public class KnowledgeService {
         return uuid;
     }
 
-		// 与权限相关的东西---->不是很了解
-		if (knowledgeVo.getPermission() != null) {
-			knowledgeVo.getPermission().setFileId(uuid);
-			filePermissionMapper.createFilePermission(new FilePermission(knowledgeVo.getPermission()));
-		}
-		return uuid;
-	}
+    @Transactional
+    public void updateKnowledge(KnowledgeVo knowledgeVo){
+        knowledgeMapper.updateKnowledge(new Knowledge(knowledgeVo));
 
         //对tag的处理
         if(tagService.getTagByTypeAndName(knowledgeVo.getTagName(), TagType.KNOWLEDGE.getValue()) == null){
@@ -105,16 +84,9 @@ public class KnowledgeService {
         }
     }
 
-			if (knowledgeVo.getPermission().getFileId() == null) {
-				knowledgeVo.getPermission().setFileId(knowledgeVo.getId());
-			}
-			filePermissionMapper.createFilePermission(new FilePermission(knowledgeVo.getPermission()));
-		}
-	}
-
-	public Knowledge getKnowledgeById(String id) {
-		return knowledgeMapper.getKnowledgeById(id);
-	}
+    public Knowledge getKnowledgeById(String id){
+        return knowledgeMapper.getKnowledgeById(id);
+    }
 
 	/**
 	 * 分页查询知识库信息
