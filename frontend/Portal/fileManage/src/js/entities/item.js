@@ -7,6 +7,7 @@
                 id: model && model.id,
                 parentId:model && model.parentId,
                 name: model && model.name || '',
+                tag: model && model.tag || '',
                 path: path || [],
                 type: model && model.type || 'file',
                 dir:model && model.dir,//回收站路径
@@ -14,10 +15,13 @@
                 fileSize: model && parseInt(model.fileSize || 0),//回收站文件大小
                 date: model && model.date,
                 createTime: model && model.createTime,
+                startTime: model && model.startTime,
+                endTime: model && model.endTime,
                 deleteTime: model && model.deleteTime,
                 perms: new Chmod(model && model.rights),
                 content: model && model.content || '',
                 recursive: false,
+                desc: model && model.desc,
                 filePermission: model && model.filePermission,
                 sizeKb: function () {
                     var sizeKB = Math.ceil(this.fileSize / 1024);
@@ -239,6 +243,33 @@
                 $rootScope.cancel();
             }).error(function (data) {
                 self.deferredHandler(data, deferred, $translate.instant('error_renaming'));
+            })['finally'](function () {
+                self.inprocess = false;
+            });
+            return deferred.promise;
+        }
+        
+        //新建知识的请求
+        Item.prototype.createFlow = function() {
+            var self = this;
+            var deferred = $q.defer();
+            var data = {
+                flowId: null,
+                name:self.tempModel.name,
+                tagName: self.tempModel.tag,
+                startTime: self.tempModel.startTime,
+                endTime: self.tempModel.endTime,
+                desc: self.tempModel.desc,
+                permission: self.tempModel.filePermission,
+                // flowCodeDesc: null,
+            };
+            self.inprocess = true;
+            self.error = '';
+            $http.post(fileManagerConfig.createFlowrUrl, data).success(function (data) {
+                self.deferredHandler(data, deferred);
+                $.notify({ message: data.msg, status: "success" });
+            }).error(function (data) {
+                self.deferredHandler(data, deferred, $translate.instant('error_creating_folder'));
             })['finally'](function () {
                 self.inprocess = false;
             });
