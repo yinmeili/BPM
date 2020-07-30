@@ -10,12 +10,12 @@ public class ReqUpdateKnowledge {
     private String endTime;
     private String flowCodeDesc;
 
-    private FilePermissionVo permission = null;
+    private KnowledgePermissionVo permission = null;
 
     public ReqUpdateKnowledge() {
     }
 
-    public ReqUpdateKnowledge(String id, String flowId, String name, String desc, String tagName, String startTime, String endTime, FilePermissionVo permission) {
+    public ReqUpdateKnowledge(String id, String flowId, String name, String desc, String tagName, String startTime, String endTime, KnowledgePermissionVo permission) {
         this.id = id;
         this.flowId = flowId;
         this.name = name;
@@ -90,25 +90,11 @@ public class ReqUpdateKnowledge {
         this.endTime = endTime;
     }
 
-    public FilePermissionVo getPermission() {
+    public KnowledgePermissionVo getPermission() {
         return permission;
     }
 
-    public void setPermission(FilePermissionVo permission) {
-        this.permission = permission;
-    }
-
-    @Override
-    public String toString() {
-        return "ReqUpdateKnowledge{" +
-                "id='" + id + '\'' +
-                ", flowId='" + flowId + '\'' +
-                ", name='" + name + '\'' +
-                ", desc='" + desc + '\'' +
-                ", tagName='" + tagName + '\'' +
-                ", startTime='" + startTime + '\'' +
-                ", endTime='" + endTime + '\'' +
-                ", permission=" + permission +
-                '}';
+    public void setPermission(KnowledgePermissionVo knowledgePermissionVo) {
+        this.permission = knowledgePermissionVo;
     }
 }

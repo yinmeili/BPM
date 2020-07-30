@@ -11,7 +11,9 @@ public interface FileMapper {
 	@SelectProvider(type = FileSqlProvider.class, method = "findFileByParentIdAndKeyword")
 	public List<File> findFileByParentIdAndKeyword(@Param("parentId") String parentId, @Param("keyword") String keyword, @Param("searchPath") String searchPath);
 
-	//根据用户id和已删除状态获取文件，author:lhl
+	/*
+	 * 根据用户id和已删除状态获取文件，author:lhl
+	 */
 	@SelectProvider(type = FileSqlProvider.class, method = "findDeletedFileByUserId")
 	public List<File> findDeletedFileByUserId(@Param("userId") String userId);
 
