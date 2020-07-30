@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.h3bpm.web.entity.Knowledge;
 import com.h3bpm.web.mapper.KnowledgeMapper;
@@ -34,7 +33,7 @@ import OThinker.H3.Controller.ControllerBase;
  */
 @Controller
 @RequestMapping(value = "/Portal/knowledgeManage")
-public class KnowledgeManagerController extends ControllerBase {
+public class KnowledgeManagerController extends AbstractController{
 
 	private static final Logger logger = LoggerFactory.getLogger(KnowledgeManagerController.class);
 
@@ -114,18 +113,18 @@ public class KnowledgeManagerController extends ControllerBase {
 	@RequestMapping(value = "/listKnowledgeByPage", produces = "application/json;charset=utf8")
 	@ResponseBody
 	public RespPageVo listKnowledgeByPage(@ModelAttribute ReqListKnowledgePageVo requestBean) {
-//		Map<String, Object> userMap = null;
-//		try {
-//			userMap = this._getCurrentUser();
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//		User user = (User) userMap.get("User");
+		Map<String, Object> userMap = null;
+		try {
+			userMap = this._getCurrentUser();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		User user = (User) userMap.get("User");
 		
 		QueryKnowledgeList queryKnowledgeList = new QueryKnowledgeList(requestBean);
-//		queryKnowledgeList.setQueryUserId(user.getObjectId());
+		queryKnowledgeList.setQueryUserId(user.getObjectId());
 		
 		PageInfo<KnowledgeVo> pageInfo = knowledgeService.findKnowledgeByPage(queryKnowledgeList);
 		

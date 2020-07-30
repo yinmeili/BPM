@@ -9,16 +9,16 @@ public class ReqListKnowledgePageVo extends ReqPageVo {
 	private String name = null;// 知识名称
 	private String tagName = null;// 标签
 
-	@JsonFormat(pattern = "YYYY-MM-dd")
+	@JsonFormat(pattern="YYYY-MM-dd HH:mm:ss")
 	private Date startTimeStart = null;// 发生时间开始
 
-	@JsonFormat(pattern = "YYYY-MM-dd")
+	@JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
 	private Date startTimeEnd = null;// 发生时间结束
 
-	@JsonFormat(pattern = "YYYY-MM-dd")
+	@JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
 	private Date endTimeStart = null;// 结束时间开始
 
-	@JsonFormat(pattern = "YYYY-MM-dd")
+	@JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
 	private Date endTimeEnd = null;// 结束时间结束
 
 	@Deprecated
