@@ -6,6 +6,11 @@ public class KnowledgePermissionVo {
 	private String knowledgeId = null;
 	private String[] orgs = null;
 
+	@Deprecated
+	public KnowledgePermissionVo(){
+		
+	}
+	
 	public KnowledgePermissionVo(KnowledgePermission knowledgePermission) {
 		if (knowledgePermission != null) {
 			String[] str = knowledgePermission.getOrgs().split(",");
