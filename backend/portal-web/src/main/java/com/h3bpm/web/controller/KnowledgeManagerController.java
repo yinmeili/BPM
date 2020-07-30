@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
 
+import com.h3bpm.web.vo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,6 @@ import com.github.pagehelper.PageInfo;
 import com.h3bpm.web.entity.Knowledge;
 import com.h3bpm.web.mapper.KnowledgeMapper;
 import com.h3bpm.web.service.KnowledgeService;
-import com.h3bpm.web.vo.KnowledgeVo;
-import com.h3bpm.web.vo.ReqCreateKnowledge;
-import com.h3bpm.web.vo.ReqListKnowledgePageVo;
-import com.h3bpm.web.vo.ReqUpdateKnowledge;
-import com.h3bpm.web.vo.RespPageVo;
-import com.h3bpm.web.vo.ResponseVo;
 import com.h3bpm.web.vo.query.QueryKnowledgeList;
 
 import OThinker.Common.Organization.Models.User;
@@ -131,4 +126,11 @@ public class KnowledgeManagerController extends ControllerBase {
 		
 		return new RespPageVo(requestBean.getsEcho(),pageInfo.getTotal(),pageInfo.getList());
 	}
+
+    @RequestMapping(value = "/deleteKnowledge", produces = "application/json;charset=utf8")
+    @ResponseBody
+    public ResponseVo deleteKnowledge(@RequestBody ReqDeleteKnowledgeVo reqDeleteKnowledgeVo) {
+        knowledgeService.deleteKnowledge(reqDeleteKnowledgeVo.getId());
+        return new ResponseVo("删除成功");
+    }
 }
