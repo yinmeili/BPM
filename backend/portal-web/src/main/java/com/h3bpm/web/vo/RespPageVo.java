@@ -5,8 +5,10 @@ public class RespPageVo {
 	private long iTotalDisplayRecords = 0;
 	private long iTotalRecords = 0;
 	private long Total = 0;
+	private String ExtendProperty = null;
+	private String ObjectID = null;
 
-	private Object Rows = null;
+	private Object datas = null;
 
 	@Deprecated
 	public RespPageVo() {
@@ -18,7 +20,7 @@ public class RespPageVo {
 		this.iTotalDisplayRecords = total;
 		this.iTotalRecords = total;
 		this.Total = total;
-		this.Rows = datas;
+		this.datas = datas;
 	}
 
 	public RespPageVo(int sEcho, long total, Object datas) {
@@ -26,7 +28,7 @@ public class RespPageVo {
 		this.iTotalDisplayRecords = total;
 		this.iTotalRecords = total;
 		this.Total = total;
-		this.Rows = datas;
+		this.datas = datas;
 	}
 
 	public int getsEcho() {
@@ -35,6 +37,34 @@ public class RespPageVo {
 
 	public void setsEcho(int sEcho) {
 		this.sEcho = sEcho;
+	}
+
+	public String getExtendProperty() {
+		return ExtendProperty;
+	}
+
+	public void setExtendProperty(String extendProperty) {
+		ExtendProperty = extendProperty;
+	}
+
+	public String getObjectID() {
+		return ObjectID;
+	}
+
+	public void setObjectID(String objectID) {
+		ObjectID = objectID;
+	}
+
+	public void setiTotalDisplayRecords(long iTotalDisplayRecords) {
+		this.iTotalDisplayRecords = iTotalDisplayRecords;
+	}
+
+	public void setiTotalRecords(long iTotalRecords) {
+		this.iTotalRecords = iTotalRecords;
+	}
+
+	public void setTotal(long total) {
+		Total = total;
 	}
 
 	public long getiTotalDisplayRecords() {
@@ -61,11 +91,12 @@ public class RespPageVo {
 		Total = total;
 	}
 
-	public Object getRows() {
-		return Rows;
+	public Object getDatas() {
+		return datas;
 	}
 
-	public void setRows(Object rows) {
-		Rows = rows;
+	public void setDatas(Object datas) {
+		this.datas = datas;
 	}
+
 }
