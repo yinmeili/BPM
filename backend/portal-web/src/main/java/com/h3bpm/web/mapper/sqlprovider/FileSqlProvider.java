@@ -55,7 +55,6 @@ public class FileSqlProvider {
 
 	public String findDeletedFileByUserId(Map<String, Object> para) {
 		String userId = (String)para.get("userId");
-
 		String sql =
 				"SELECT"+
 						"			 id,"+
@@ -74,6 +73,7 @@ public class FileSqlProvider {
 						"           create_user_id = '" + userId + "'"+
 						"				ORDER BY delete_time DESC";
 		return sql;
+
 	}
 
 

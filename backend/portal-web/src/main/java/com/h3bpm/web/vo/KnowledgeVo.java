@@ -1,5 +1,9 @@
 package com.h3bpm.web.vo;
 
+import com.h3bpm.web.entity.Knowledge;
+
+import java.util.Date;
+
 /**
  * Created by tonghao on 2020/3/1.
  */
@@ -11,13 +15,48 @@ public class KnowledgeVo {
 	private String name;
 	private String desc;
 	private String tagName;
-	private String startTime;
-	private String endTime;
-
-	private FilePermissionVo permission = null;
+	private Date startTime;
+	private Date endTime;
+	private String createUserId;
+	private Date createTime;
+	private String createUserName;
+	private String flowCodeDesc;
+	private KnowledgePermissionVo permission = null;
 
 	public KnowledgeVo() {
 	}
+
+	public KnowledgeVo(Knowledge knowledge){
+		this.id = knowledge.getId();
+		this.flowId = knowledge.getFlowId();
+		this.name = knowledge.getName();
+		this.desc = knowledge.getDesc();
+		this.tagName = knowledge.getTagName();
+		this.startTime = knowledge.getStartTime();
+		this.endTime = knowledge.getEndTime();
+		this.createUserId = knowledge.getCreateUserId();
+		this.createTime = knowledge.getCreateTime();
+		this.createUserName = knowledge.getCreateUserName();
+		this.flowCodeDesc = knowledge.getFlowCodeDesc();
+	}
+
+	public String getCreateUserName() {
+		return createUserName;
+	}
+
+	public void setCreateUserName(String createUserName) {
+		this.createUserName = createUserName;
+	}
+
+	public String getFlowCodeDesc() {
+		return flowCodeDesc;
+	}
+
+	public void setFlowCodeDesc(String flowCodeDesc) {
+		this.flowCodeDesc = flowCodeDesc;
+	}
+
+
 
 	public String getId() {
 		return id;
@@ -59,27 +98,43 @@ public class KnowledgeVo {
 		this.tagName = tagName;
 	}
 
-	public String getStartTime() {
+	public Date getStartTime() {
 		return startTime;
 	}
 
-	public void setStartTime(String startTime) {
+	public void setStartTime(Date startTime) {
 		this.startTime = startTime;
 	}
 
-	public String getEndTime() {
+	public Date getEndTime() {
 		return endTime;
 	}
 
-	public void setEndTime(String endTime) {
+	public void setEndTime(Date endTime) {
 		this.endTime = endTime;
 	}
 
-	public FilePermissionVo getPermission() {
+	public String getCreateUserId() {
+		return createUserId;
+	}
+
+	public void setCreateUserId(String createUserId) {
+		this.createUserId = createUserId;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public KnowledgePermissionVo getPermission() {
 		return permission;
 	}
 
-	public void setPermission(FilePermissionVo permission) {
+	public void setPermission(KnowledgePermissionVo permission) {
 		this.permission = permission;
 	}
 }
