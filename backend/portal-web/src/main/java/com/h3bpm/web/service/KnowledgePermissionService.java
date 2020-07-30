@@ -9,9 +9,11 @@ import com.h3bpm.web.vo.KnowledgePermissionVo;
 import com.h3bpm.web.vo.OrgInfoVo;
 import com.h3bpm.web.vo.UserSessionInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class KnowledgePermissionService {
 
     @Autowired
