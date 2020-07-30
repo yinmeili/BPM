@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.UUID;
 
 @Service
@@ -25,6 +26,7 @@ public class KnowledgeService {
 
     @Autowired
     private TagService tagService;
+
     /**
      * 新增Knowledge
      *
@@ -32,7 +34,7 @@ public class KnowledgeService {
      * @return
      */
     @Transactional
-    public String createKnowledge(KnowledgeVo knowledgeVo){
+    public String createKnowledge(KnowledgeVo knowledgeVo) {
         String uuid = knowledgeVo.getId();
         if (uuid == null) {
             uuid = UUID.randomUUID().toString();
@@ -42,7 +44,7 @@ public class KnowledgeService {
         knowledgeMapper.createKnowledge(new Knowledge(knowledgeVo));
 
         //对tag的处理
-        if(tagService.getTagByTypeAndName(knowledgeVo.getTagName(), TagType.KNOWLEDGE.getValue()) == null){
+        if (tagService.getTagByTypeAndName(knowledgeVo.getTagName(), TagType.KNOWLEDGE.getValue()) == null) {
             Tag tag = new Tag();
             tag.setName(knowledgeVo.getTagName());
             tag.setType(TagType.KNOWLEDGE.getValue());
@@ -57,11 +59,11 @@ public class KnowledgeService {
     }
 
     @Transactional
-    public void updateKnowledge(KnowledgeVo knowledgeVo){
+    public void updateKnowledge(KnowledgeVo knowledgeVo) {
         knowledgeMapper.updateKnowledge(new Knowledge(knowledgeVo));
 
         //对tag的处理
-        if(tagService.getTagByTypeAndName(knowledgeVo.getTagName(), TagType.KNOWLEDGE.getValue()) == null){
+        if (tagService.getTagByTypeAndName(knowledgeVo.getTagName(), TagType.KNOWLEDGE.getValue()) == null) {
             Tag tag = new Tag();
             tag.setName(knowledgeVo.getTagName());
             tag.setType(TagType.KNOWLEDGE.getValue());
@@ -78,7 +80,21 @@ public class KnowledgeService {
         }
     }
 
-    public Knowledge getKnowledgeById(String id){
+    /**
+     * 删除Knowledge
+     *
+     * @param knowledgeId
+     */
+    @Transactional
+    public void deleteKnowledge(String knowledgeId) {
+        Knowledge knowledge = knowledgeMapper.getKnowledgeById(knowledgeId);
+        knowledge.setDelete(true);
+        knowledge.setDeleteTime(new Date());
+
+        knowledgeMapper.updateKnowledge(knowledge);
+    }
+
+    public Knowledge getKnowledgeById(String id) {
         return knowledgeMapper.getKnowledgeById(id);
     }
 
