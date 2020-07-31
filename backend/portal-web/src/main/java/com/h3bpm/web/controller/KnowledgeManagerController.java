@@ -2,6 +2,7 @@ package com.h3bpm.web.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 import com.h3bpm.web.entity.MyKnowledge;
@@ -16,22 +17,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageInfo;
 import com.h3bpm.web.entity.Knowledge;
-
+import com.h3bpm.web.service.KnowledgePermissionService;
 import com.h3bpm.web.service.KnowledgeService;
+import com.h3bpm.web.vo.KnowledgeVo;
+import com.h3bpm.web.vo.ReqCreateKnowledge;
+import com.h3bpm.web.vo.ReqDeleteKnowledgeVo;
+import com.h3bpm.web.vo.ReqListKnowledgePageVo;
+import com.h3bpm.web.vo.ReqUpdateKnowledge;
+import com.h3bpm.web.vo.RespPageVo;
+import com.h3bpm.web.vo.ResponseVo;
 import com.h3bpm.web.vo.query.QueryKnowledgeList;
 
 import OThinker.Common.Organization.Models.User;
-import OThinker.H3.Controller.ControllerBase;
 
 /**
  * Created by tonghao on 2020/3/1.
  */
 @Controller
 @RequestMapping(value = "/Portal/knowledgeManage")
-public class KnowledgeManagerController extends ControllerBase {
+public class KnowledgeManagerController extends AbstractController {
 
 	private static final Logger logger = LoggerFactory.getLogger(KnowledgeManagerController.class);
 
@@ -40,6 +46,9 @@ public class KnowledgeManagerController extends ControllerBase {
 
 	@Autowired
 	private MyKnowledgeService myKnowledgeService;
+
+	@Autowired
+	private KnowledgePermissionService knowledgePermissionService;
 
 	@Override
 	public String getFunctionCode() {
@@ -57,20 +66,20 @@ public class KnowledgeManagerController extends ControllerBase {
 		KnowledgeVo knowledgeVo = new KnowledgeVo();
 
 		knowledgeVo.setCreateUserName(user._Name);
-		knowledgeVo.setCreateUserId(user.getObjectID());	//存入用户id
+		knowledgeVo.setCreateUserId(user.getObjectID()); // 存入用户id
 		knowledgeVo.setFlowId(reqParam.getFlowId());
 		knowledgeVo.setName(reqParam.getName());
 		knowledgeVo.setDesc(reqParam.getDesc());
 		knowledgeVo.setTagName(reqParam.getTagName());
 		knowledgeVo.setFlowCodeDesc(reqParam.getFlowCodeDesc());
-		try{
+		try {
 			knowledgeVo.setStartTime(format.parse(reqParam.getStartTime()));
-		}catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		try{
+		try {
 			knowledgeVo.setEndTime(format.parse(reqParam.getEndTime()));
-		}catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		knowledgeVo.setCreateTime(new Date());
@@ -120,7 +129,7 @@ public class KnowledgeManagerController extends ControllerBase {
 	@RequestMapping(value = "/updateKnowledge", produces = "application/json;charset=utf8")
 	@ResponseBody
 	public ResponseVo updateKnowledge(@RequestBody ReqUpdateKnowledge reqUpdateKnowledge) {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");	//String与Date之间进行相互转换
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // String与Date之间进行相互转换
 		Knowledge knowledgeEntity = knowledgeService.getKnowledgeById(reqUpdateKnowledge.getId());
 		KnowledgeVo knowledgeVo = new KnowledgeVo(knowledgeEntity);
 
@@ -129,14 +138,14 @@ public class KnowledgeManagerController extends ControllerBase {
 		knowledgeVo.setDesc(reqUpdateKnowledge.getDesc());
 		knowledgeVo.setTagName(reqUpdateKnowledge.getTagName());
 		knowledgeVo.setFlowCodeDesc(reqUpdateKnowledge.getFlowCodeDesc());
-		try{	 //将前端传过来的'yyyy-MM-dd'样式的String转换成Date类型
+		try { // 将前端传过来的'yyyy-MM-dd'样式的String转换成Date类型
 			knowledgeVo.setStartTime(format.parse(reqUpdateKnowledge.getStartTime()));
-		}catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		try{
+		try {
 			knowledgeVo.setEndTime(format.parse(reqUpdateKnowledge.getEndTime()));
-		}catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		knowledgeVo.setPermission(reqUpdateKnowledge.getPermission());
@@ -174,25 +183,37 @@ public class KnowledgeManagerController extends ControllerBase {
 	}
 
 	
-//	@RequestParam(value = "path") String path
 	@RequestMapping(value = "/listKnowledgeByPage", produces = "application/json;charset=utf8")
 	@ResponseBody
 	public RespPageVo listKnowledgeByPage(@ModelAttribute ReqListKnowledgePageVo requestBean) {
-//		Map<String, Object> userMap = null;
-//		try {
-//			userMap = this._getCurrentUser();
-//		} catch (Exception e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//		User user = (User) userMap.get("User");
-		
+		Map<String, Object> userMap = null;
+		try {
+			userMap = this._getCurrentUser();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		User user = (User) userMap.get("User");
+
 		QueryKnowledgeList queryKnowledgeList = new QueryKnowledgeList(requestBean);
-//		queryKnowledgeList.setQueryUserId(user.getObjectId());
-		
+		queryKnowledgeList.setQueryUserId(user.getObjectId());
+
 		PageInfo<KnowledgeVo> pageInfo = knowledgeService.findKnowledgeByPage(queryKnowledgeList);
-		
-		return new RespPageVo(requestBean.getsEcho(),pageInfo.getTotal(),pageInfo.getList());
+		List<KnowledgeVo> knowledgeList = pageInfo.getList();
+		if (knowledgeList != null) {
+			for (KnowledgeVo knowledge : knowledgeList) {
+				knowledge.setPermission(knowledgePermissionService.getKnowledgePermissionByKnowledgeId(knowledge.getId()));
+			}
+		}
+
+		return new RespPageVo(requestBean.getsEcho(), pageInfo.getTotal(), pageInfo.getList());
+	}
+
+	@RequestMapping(value = "/deleteKnowledge", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public ResponseVo deleteKnowledge(@RequestBody ReqDeleteKnowledgeVo reqDeleteKnowledgeVo) {
+		knowledgeService.deleteKnowledge(reqDeleteKnowledgeVo.getId());
+		return new ResponseVo("删除成功");
 	}
 }

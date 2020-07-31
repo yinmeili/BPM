@@ -38,7 +38,7 @@ public class KnowledgeSqlProvider {
 		if (startTimeStart != null) {
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			String dateString = format.format(startTimeStart);
-			startTimeStartSqlStr = " AND start_time >= TO_DATE('" + dateString + "', 'yyyy-MM-dd')";
+			startTimeStartSqlStr = " AND start_time >= '" + dateString + "'";
 		}
 
 		Date startTimeEnd = para.get("startTimeEnd") == null ? null : (Date) para.get("startTimeEnd");
@@ -46,7 +46,7 @@ public class KnowledgeSqlProvider {
 		if (startTimeEnd != null) {
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			String dateString = format.format(startTimeEnd);
-			startTimeEndSqlStr = " AND start_time <= TO_DATE('" + dateString + "', 'yyyy-MM-dd')";
+			startTimeEndSqlStr = " AND start_time <= '" + dateString + "'";
 		}
 
 		Date endTimeStart = para.get("endTimeStart") == null ? null : (Date) para.get("endTimeStart");
@@ -54,7 +54,7 @@ public class KnowledgeSqlProvider {
 		if (endTimeStart != null) {
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			String dateString = format.format(endTimeStart);
-			endTimeStartSqlStr = " AND end_time >= TO_DATE('" + dateString + "', 'yyyy-MM-dd')";
+			endTimeStartSqlStr = " AND end_time >= '" + dateString + "'";
 		}
 
 		Date endTimeEnd = para.get("endTimeEnd") == null ? null : (Date) para.get("endTimeEnd");
@@ -62,7 +62,7 @@ public class KnowledgeSqlProvider {
 		if (endTimeEnd != null) {
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			String dateString = format.format(endTimeEnd);
-			endTimeEndSqlStr = " AND end_time <= TO_DATE('" + dateString + "', 'yyyy-MM-dd')";
+			endTimeEndSqlStr = " AND end_time <= '" + dateString + "'";
 		}
 		
 		String sql =
@@ -79,7 +79,9 @@ public class KnowledgeSqlProvider {
 			"			 delete_time deleteTime,"+
 			"			 flow_id flowId,"+
 			"			 flow_code flowCode,"+
-			"			 flow_code_desc flowCodeDesc"+
+			"			 flow_code_desc flowCodeDesc,"+
+			"			 start_time startTime,"+
+			"			 end_time endTime"+
 			"			FROM"+
 			"				ot_knowledge"+
 			"				WHERE is_delete=0"+

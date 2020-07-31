@@ -1,6 +1,7 @@
 app.config(['fileManagerConfigProvider', function (config) {
     var defaults = config.$get();
     var fileManagerApiUrl = '/Portal/fileManage/';
+    var knowledgeManageApiUrl = '/Portal/knowledgeManage/';
     config.set({
         appName: '知识库',
         listUrl: fileManagerApiUrl + 'listFile',
@@ -27,9 +28,12 @@ app.config(['fileManagerConfigProvider', function (config) {
         createMyFolderUrl: fileManagerApiUrl + 'createMyFolder',
         updateMyUrl: fileManagerApiUrl + 'updateMyFile',
         collectToMyFileUrl:fileManagerApiUrl + 'collectToMyFile',
-				shareFileUrl:fileManagerApiUrl + 'shareFile',
-				
-				searchListRecycleUrl: fileManagerApiUrl + 'searchListRecycle',//回收站搜索
+        shareFileUrl:fileManagerApiUrl + 'shareFile',
+
+        searchListRecycleUrl: fileManagerApiUrl + 'searchListRecycle',//回收站搜索
+
+        createFlowrUrl: knowledgeManageApiUrl + 'createKnowledge',
+        listKnowledgeByPageUrl: knowledgeManageApiUrl + 'listKnowledgeByPage',
 
         allowedActions: angular.extend(defaults.allowedActions, {
             copy : false,
