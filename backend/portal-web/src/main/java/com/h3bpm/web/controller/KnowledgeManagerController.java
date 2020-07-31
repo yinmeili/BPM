@@ -5,6 +5,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.h3bpm.web.entity.MyKnowledge;
+import com.h3bpm.web.service.MyKnowledgeService;
+import com.h3bpm.web.vo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +45,9 @@ public class KnowledgeManagerController extends AbstractController {
 	private KnowledgeService knowledgeService;
 
 	@Autowired
+	private MyKnowledgeService myKnowledgeService;
+
+	@Autowired
 	private KnowledgePermissionService knowledgePermissionService;
 
 	@Override
@@ -56,7 +62,7 @@ public class KnowledgeManagerController extends AbstractController {
 	public ResponseVo createKnowledge(@RequestBody ReqCreateKnowledge reqParam) throws Exception {
 		Map<String, Object> userMap = this._getCurrentUser();
 		User user = (User) userMap.get("User");
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // String与Date之间进行相互转换
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");	//String与Date之间进行相互转换
 		KnowledgeVo knowledgeVo = new KnowledgeVo();
 
 		knowledgeVo.setCreateUserName(user._Name);
@@ -79,6 +85,43 @@ public class KnowledgeManagerController extends AbstractController {
 		knowledgeVo.setCreateTime(new Date());
 		knowledgeVo.setPermission(reqParam.getPermission());
 		knowledgeService.createKnowledge(knowledgeVo);
+
+		return new ResponseVo("创建成功");
+	}
+
+
+	@RequestMapping(value = "/createMyKnowledge", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public ResponseVo createMyKnowledge(@RequestBody ReqCreateMyKnowledge reqParam) throws Exception {
+		Map<String, Object> userMap = this._getCurrentUser();
+		User user = (User) userMap.get("User");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");	//String与Date之间进行相互转换
+		MyKnowledgeVo myKnowledgeVo = new MyKnowledgeVo();
+
+		myKnowledgeVo.setCreateUserName(user._Name);
+		myKnowledgeVo.setCreateUserId(user.getObjectID());	//存入用户id
+
+
+//		myKnowledgeVo.setCreateUserName("协办平台管理员");
+//		myKnowledgeVo.setCreateUserId("82237383-a18e-4055-8006-8c873e84e087");	//存入用户id
+
+		myKnowledgeVo.setFlowId(reqParam.getFlowId());
+		myKnowledgeVo.setName(reqParam.getName());
+		myKnowledgeVo.setDesc(reqParam.getDesc());
+		myKnowledgeVo.setTagName(reqParam.getTagName());
+		myKnowledgeVo.setFlowCodeDesc(reqParam.getFlowCodeDesc());
+		try{
+			myKnowledgeVo.setStartTime(format.parse(reqParam.getStartTime()));
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		try{
+			myKnowledgeVo.setEndTime(format.parse(reqParam.getEndTime()));
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		myKnowledgeVo.setCreateTime(new Date());
+		myKnowledgeService.createMyKnowledge(myKnowledgeVo);
 
 		return new ResponseVo("创建成功");
 	}
@@ -111,7 +154,35 @@ public class KnowledgeManagerController extends AbstractController {
 		return new ResponseVo("修改成功");
 	}
 
-	// @RequestParam(value = "path") String path
+
+	@RequestMapping(value = "/updateMyKnowledge", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public ResponseVo updateMyKnowledge(@RequestBody ReqUpdateMyKnowledge reqUpdateMyKnowledge) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");	//String与Date之间进行相互转换
+		MyKnowledge myKnowledgeEntity = myKnowledgeService.getMyKnowledgeById(reqUpdateMyKnowledge.getId());
+		MyKnowledgeVo myKnowledgeVo = new MyKnowledgeVo(myKnowledgeEntity);
+
+		myKnowledgeVo.setFlowId(reqUpdateMyKnowledge.getFlowId());
+		myKnowledgeVo.setName(reqUpdateMyKnowledge.getName());
+		myKnowledgeVo.setDesc(reqUpdateMyKnowledge.getDesc());
+		myKnowledgeVo.setTagName(reqUpdateMyKnowledge.getTagName());
+		myKnowledgeVo.setFlowCodeDesc(reqUpdateMyKnowledge.getFlowCodeDesc());
+		try{	 //将前端传过来的'yyyy-MM-dd'样式的String转换成Date类型
+			myKnowledgeVo.setStartTime(format.parse(reqUpdateMyKnowledge.getStartTime()));
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		try{
+			myKnowledgeVo.setEndTime(format.parse(reqUpdateMyKnowledge.getEndTime()));
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		myKnowledgeService.updateMyKnowledge(myKnowledgeVo);
+
+		return new ResponseVo("修改成功");
+	}
+
+	
 	@RequestMapping(value = "/listKnowledgeByPage", produces = "application/json;charset=utf8")
 	@ResponseBody
 	public RespPageVo listKnowledgeByPage(@ModelAttribute ReqListKnowledgePageVo requestBean) {
