@@ -19,6 +19,10 @@ public class KnowledgePermissionVo {
 		}
 	}
 
+	public KnowledgePermissionVo(String[] orgs){
+		this.orgs = orgs;
+	}
+
 	public KnowledgePermissionVo(String knowledgeId, String[] orgs) {
 		this.knowledgeId = knowledgeId;
 		this.orgs = orgs;

@@ -10,6 +10,7 @@ import com.h3bpm.web.service.MyKnowledgeService;
 import com.h3bpm.web.utils.Constants;
 import com.h3bpm.web.utils.UserSessionUtils;
 import com.h3bpm.web.vo.*;
+import com.h3bpm.web.vo.query.QueryMyKnowledgeList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,7 +90,7 @@ public class KnowledgeManagerController extends AbstractController {
 	public ResponseVo createMyKnowledge(@RequestBody ReqCreateMyKnowledge reqParam) throws Exception {
 		Map<String, Object> userMap = this._getCurrentUser();
 		User user = (User) userMap.get("User");
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); // String与Date之间进行相互转换
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");	//String与Date之间进行相互转换
 		MyKnowledgeVo myKnowledgeVo = new MyKnowledgeVo();
 
 		myKnowledgeVo.setCreateUserName(user._Name);
@@ -150,7 +151,7 @@ public class KnowledgeManagerController extends AbstractController {
 	@RequestMapping(value = "/updateMyKnowledge", produces = "application/json;charset=utf8")
 	@ResponseBody
 	public ResponseVo updateMyKnowledge(@RequestBody ReqUpdateMyKnowledge reqUpdateMyKnowledge) {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); // String与Date之间进行相互转换
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");	//String与Date之间进行相互转换
 		MyKnowledge myKnowledgeEntity = myKnowledgeService.getMyKnowledgeById(reqUpdateMyKnowledge.getId());
 		MyKnowledgeVo myKnowledgeVo = new MyKnowledgeVo(myKnowledgeEntity);
 
@@ -173,6 +174,38 @@ public class KnowledgeManagerController extends AbstractController {
 
 		return new ResponseVo("修改成功");
 	}
+
+	@RequestMapping(value = "/collectToMyKnowledge", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public ResponseVo collectToMyKnowledge(@RequestBody  ReqCollectToMyKnowledge reqParam){
+		try{
+			Map<String, Object> userMap = this._getCurrentUser();
+			User user = (User) userMap.get("User");
+			String createUserId = user.getObjectID();
+			String createUserName = user._Name;
+			myKnowledgeService.collectToMyKnowledge(reqParam.getId(),createUserId,createUserName);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return new ResponseVo("收藏成功");
+	}
+
+	@RequestMapping(value = "/shareMyKnowledge", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public ResponseVo shareMyKnowledge(@RequestBody ReqShareMyKnowledge reqParam ){
+		try{
+			MyKnowledge myKnowledge = myKnowledgeService.getMyKnowledgeById(reqParam.getId());
+			KnowledgeVo knowledgeVo = new KnowledgeVo(myKnowledge);
+			knowledgeVo.setPermission(reqParam.getPermission());
+			knowledgeService.createKnowledge(knowledgeVo);
+			return new ResponseVo("分享成功");
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+
 
 	@RequestMapping(value = "/listKnowledgeByPage", produces = "application/json;charset=utf8")
 	@ResponseBody
@@ -207,10 +240,42 @@ public class KnowledgeManagerController extends AbstractController {
 		return new RespPageVo(requestBean.getsEcho(), pageInfo.getTotal(), pageInfo.getList());
 	}
 
+	@RequestMapping(value = "/listMyKnowledgeByPage", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public RespPageVo listMyKnowledgeByPage(@ModelAttribute ReqListKnowledgePageVo requestBean) {
+		Map<String, Object> userMap = null;
+		try {
+			userMap = this._getCurrentUser();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		User user = (User) userMap.get("User");
+
+		QueryMyKnowledgeList queryMyKnowledgeList = new QueryMyKnowledgeList(requestBean);
+		queryMyKnowledgeList.setQueryUserId(user.getObjectId());
+
+		PageInfo<MyKnowledgeVo> pageInfo = myKnowledgeService.findMyKnowledgeByPage(queryMyKnowledgeList);
+		List<MyKnowledgeVo> myKnowledgeVoList = pageInfo.getList();
+
+		return new RespPageVo(requestBean.getsEcho(), pageInfo.getTotal(), pageInfo.getList());
+	}
+
+
 	@RequestMapping(value = "/deleteKnowledge", produces = "application/json;charset=utf8")
 	@ResponseBody
 	public ResponseVo deleteKnowledge(@RequestBody ReqDeleteKnowledgeVo reqDeleteKnowledgeVo) {
 		knowledgeService.deleteKnowledge(reqDeleteKnowledgeVo.getId());
 		return new ResponseVo("删除成功");
 	}
+
+
+	@RequestMapping(value = "/deleteMyKnowledge", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public ResponseVo deleteMyKnowledge(@RequestBody ReqDeleteKnowledgeVo reqDeleteKnowledgeVo) {
+		myKnowledgeService.deleteMyKnowledge(reqDeleteKnowledgeVo.getId());
+		return new ResponseVo("删除成功");
+	}
+
 }

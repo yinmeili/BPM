@@ -3,17 +3,21 @@ package com.h3bpm.web.service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.h3bpm.web.entity.Knowledge;
 import com.h3bpm.web.entity.MyKnowledge;
 import com.h3bpm.web.entity.Tag;
 import com.h3bpm.web.enumeration.TagType;
+import com.h3bpm.web.mapper.KnowledgeMapper;
 import com.h3bpm.web.mapper.MyKnowledgeMapper;
 import com.h3bpm.web.vo.MyKnowledgeVo;
+import com.h3bpm.web.vo.ResponseVo;
 import com.h3bpm.web.vo.query.QueryMyKnowledgeList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,6 +28,9 @@ public class MyKnowledgeService {
 
     @Autowired
     private TagService tagService;
+
+    @Autowired
+    private KnowledgeMapper knowledgeMapper;
 
     /**
      * 新增MyKnowldge
@@ -65,6 +72,26 @@ public class MyKnowledgeService {
 
     }
 
+    @Transactional
+    public String collectToMyKnowledge(String knowledgeId, String createUserId, String createUserName){
+        Knowledge knowledge = knowledgeMapper.getKnowledgeById(knowledgeId);
+
+        MyKnowledge myKnowledge = new MyKnowledge(knowledge);
+        myKnowledge.setCreateUserId(createUserId);
+        myKnowledge.setCreateUserName(createUserName);
+        myKnowledge.setCreateTime(new Date());
+        String uuid = myKnowledge.getId();
+        if (uuid == null) {
+            uuid = UUID.randomUUID().toString();
+            myKnowledge.setId(uuid);
+            System.out.println(uuid);
+        }
+
+        myKnowledgeMapper.createMyKnowledge(myKnowledge);
+
+        return uuid;
+    }
+
     public MyKnowledge getMyKnowledgeById(String id){
         return myKnowledgeMapper.getMyKnowledgeById(id);
     }
@@ -74,7 +101,7 @@ public class MyKnowledgeService {
      *
      * @param queryBean
      */
-    public PageInfo<MyKnowledgeVo> findKnowledgeByPage(QueryMyKnowledgeList queryBean) {
+    public PageInfo<MyKnowledgeVo> findMyKnowledgeByPage(QueryMyKnowledgeList queryBean) {
         Page<MyKnowledge> page = PageHelper.startPage(queryBean.getiDisplayStart(), queryBean.getiDisplayLength());
         List<MyKnowledge> myKnowledgeList = myKnowledgeMapper.findMyKnowledge(queryBean.getName(), queryBean.getTagName(), queryBean.getFlowCodes(), queryBean.getStartTimeStart(), queryBean.getStartTimeEnd(), queryBean.getEndTimeStart(), queryBean.getEndTimeEnd());
 
@@ -88,6 +115,21 @@ public class MyKnowledgeService {
         pageInfo.setTotal(page.getTotal());
 
         return pageInfo;
+    }
+
+
+    /**
+     * 删除Knowledge
+     *
+     * @param knowledgeId
+     */
+    @Transactional
+    public void deleteMyKnowledge(String knowledgeId) {
+        MyKnowledge myKnowledge = myKnowledgeMapper.getMyKnowledgeById(knowledgeId);
+        myKnowledge.setDelete(true);
+        myKnowledge.setDeleteTime(new Date());
+
+        myKnowledgeMapper.updateMyKnowledge(myKnowledge);
     }
 
 

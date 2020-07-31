@@ -36,6 +36,7 @@ public class MyKnowledgeVo {
         this.flowCodeDesc = myKnowledge.getFlowCodeDesc();
     }
 
+
     public String getCreateUserName() {
         return createUserName;
     }
