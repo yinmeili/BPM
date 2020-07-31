@@ -730,7 +730,7 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
 
 <!--共享知识的更新模态框-->
 <script type="text/ng-template" id="updateFlow.html">
-    <form class="bs-example form-horizontal" ng-submit="editFlow(temp)">
+    <form class="bs-example form-horizontal" ng-submit="updateFlow(temp)">
         <div class="modal-header">
             <button type="button" class="close"
                     data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
@@ -823,7 +823,263 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
 
 <!--共享知识的删除模态框-->
 <script type="text/ng-template" id="deleteFlow.html">
-    <form ng-submit="removeFile(temp)" style="color:#778CA2;">
+    <form ng-submit="removeFlow(temp)" style="color:#778CA2;">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true" ng-click="cancel();">&times;</span>
+            </button>
+            <h4 class="modal-title">确认框</h4>
+        </div>
+        <div class="modal-body">
+            确定删除 <b>{{temp.model.name}}</b> ?
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
+            <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess" autofocus="autofocus">确定</button>
+        </div>
+    </form>
+</script>
+
+<!--共享知识的详情页-->
+<script type="text/ng-template" id="detail.html">
+    <form class="bs-example form-horizontal">
+        <div class="modal-header">
+            <button type="button" class="close"
+                    data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+                ×
+            </button>
+            <h4 class="modal-title" style="color:#778CA2;">
+                详情知识
+            </h4>
+        </div>
+        <div class="modal-body" style="color:#778CA2;">
+            <div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">名称</div>
+                <div class="col-md-8 input-group">
+                    <input class="form-control" readonly="readonly" type="text" style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                           ng-model="temp.model.name" autofocus="autofocus"/>
+                </div>
+            </div>
+            <div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">标签</div>
+                <div class="col-md-8 input-group">
+                    <input ng-model="temp.model.tag" readonly="readonly"
+                           style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                           autocomplete="off" maxlength="32" class="form-control"/>
+                </div>
+            </div>
+            <div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">描述</div>
+                <div class="col-md-8 input-group">
+                    <!--<textarea ng-model="temp.model.desc" readonly="readonly" class="form-control" rows="2"-->
+                              <!--style="resize: none;border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"></textarea>-->
+                    <p style="border:1px solid #d9d9d9; border-radius: 4px;box-shadow: none;color: #555;">{{temp.model.desc}}</p>
+                </div>
+            </div>
+            <div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">开始时间</div>
+                <div class="col-md-8 input-group">
+                    <input ng-model="temp.model.startTime"
+                           autocomplete="off" disabled
+                           ui-jq="wdatePicker" ui-options="DeltailStartTimeOption"
+                           style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                           class="input form-control"/>
+                </div>
+            </div>
+            <div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">结束时间</div>
+                <div class="col-md-8 input-group">
+                    <input ng-model="temp.model.endTime"
+                           autocomplete="off" disabled
+                           class="input form-control"
+                           style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                            />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">权限</div>
+                <div class="col-md-8 input-group">
+                    <div ui-jq="SheetUser" ui-options="DetailOptions" id="detailFlow"
+                         class="" style="border:1px solid #d9d9d9;border-radius: 4px; color: #555;" data-orgunitvisible="true" data-groupvisible="true" data-sheetusercontrol="true">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">关闭</button>
+        </div>
+    </form>
+
+</script>
+
+<!--我的知识新建知识模态框-->
+<script type="text/ng-template" id="newMyFlow.html">
+    <form class="bs-example form-horizontal" ng-submit="createMyFlow(temp)">
+        <div class="modal-header">
+            <button type="button" class="close"
+                    data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+                ×
+            </button>
+            <h4 class="modal-title" style="color:#778CA2;">
+                新建知识
+            </h4>
+        </div>
+        <div class="modal-body" style="color:#778CA2;">
+            <div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">名称</div>
+                <div class="col-md-8 input-group">
+                    <input class="form-control" type="text" id="myFlowName" style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                           ng-model="temp.tempModel.name" autofocus="autofocus"/>
+                </div>
+            </div>
+            <div class="row " style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">标签</div>
+                <div class="col-md-8 input-group">
+                    <input autocomplete="off" id="newMyTag" maxlength="32" class="input form-control" ng-model="temp.tempModel.tag"/>
+                </div>
+            </div>
+            <div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">描述</div>
+                <div class="col-md-8 input-group">
+                    <textarea id="myFlowDes" ng-model="temp.tempModel.desc" class="form-control" rows="2" style="resize: none;"></textarea>
+                </div>
+            </div>
+            <div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">开始时间</div>
+                <div class="col-md-8 input-group">
+                    <input id="MyStartTime"
+                           autocomplete="off"
+                           ui-jq="wdatePicker" ui-options="StartTimeOption"
+                           class="input form-control"/>
+                </div>
+            </div>
+            <div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">结束时间</div>
+                <div class="col-md-8 input-group">
+                    <input id="MyEndTime"
+                           autocomplete="off"
+                           class="input form-control"
+                           ui-jq="wdatePicker" ui-options="EndTimeOption"/>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
+            <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess">保存</button>
+        </div>
+    </form>
+
+</script>
+
+<!--我的知识的更新模态框-->
+<script type="text/ng-template" id="updateMyFlow.html">
+    <form class="bs-example form-horizontal" ng-submit="updateMyFlow(temp)">
+        <div class="modal-header">
+            <button type="button" class="close"
+                    data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+                ×
+            </button>
+            <h4 class="modal-title" style="color:#778CA2;">
+                编辑知识
+            </h4>
+        </div>
+        <div class="modal-body" style="color:#778CA2;">
+            <div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">名称</div>
+                <div class="col-md-8 input-group">
+                    <input class="form-control" type="text" style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                           ng-model="temp.model.name" autofocus="autofocus"/>
+                </div>
+            </div>
+            <div class="row " style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">标签</div>
+                <div class="col-md-8 input-group">
+                    <input ng-model="temp.model.tag" id="editMyTag" autocomplete="off" maxlength="32" class="input form-control"/>
+                </div>
+            </div>
+            <div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">描述</div>
+                <div class="col-md-8 input-group">
+                    <textarea ng-model="temp.model.desc" class="form-control" rows="2" style="resize: none;"></textarea>
+                </div>
+            </div>
+            <div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">开始时间</div>
+                <div class="col-md-8 input-group">
+                    <input ng-model="temp.model.startTime"
+                           autocomplete="off"
+                           ui-jq="wdatePicker" ui-options="EditStartTime"
+                           class="input form-control"/>
+                </div>
+            </div>
+            <div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">结束时间</div>
+                <div class="col-md-8 input-group">
+                    <input ng-model="temp.model.endTime"
+                           autocomplete="off"
+                           class="input form-control"
+                           ui-jq="wdatePicker" ui-options="EditEndTime" />
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
+            <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess">保存</button>
+        </div>
+    </form>
+
+</script>
+
+<!--我的知识的分享模态框-->
+<script type="text/ng-template" id="shareFlow.html">
+    <form ng-submit="shareFlow(temp)" style="color:#778CA2;">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true" ng-click="cancel();">&times;</span>
+            </button>
+            <h4 class="modal-title">确认框</h4>
+        </div>
+        <div class="modal-body">
+            <div class="row" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-11" style="padding:0;">确定分享<b>{{temp.model.name}}</b> ?</div>
+            </div>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">权限选择</div>
+                <div class="col-md-8 input-group form-horizontal">
+                    <div ui-jq="SheetUser" ui-options="WasAgentOptions" id="editMyFlowPer"
+                         class="" style="" data-orgunitvisible="true" data-groupvisible="true" data-sheetusercontrol="true">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
+            <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess" autofocus="autofocus">确定</button>
+        </div>
+    </form>
+</script>
+
+<!--我的知识的删除模态框-->
+<script type="text/ng-template" id="deleteMyFlow.html">
+    <form ng-submit="removeMyFlow(temp)" style="color:#778CA2;">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal">
                 <span aria-hidden="true" ng-click="cancel();">&times;</span>
@@ -839,6 +1095,73 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
             <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess" autofocus="autofocus">确定</button>
         </div>
     </form>
+</script>
+
+<!--我的知识的详情页-->
+<script type="text/ng-template" id="detailMyFlow.html">
+    <form class="bs-example form-horizontal">
+        <div class="modal-header">
+            <button type="button" class="close"
+                    data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+                ×
+            </button>
+            <h4 class="modal-title" style="color:#778CA2;">
+                详情知识
+            </h4>
+        </div>
+        <div class="modal-body" style="color:#778CA2;">
+            <div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">名称</div>
+                <div class="col-md-8 input-group">
+                    <input class="form-control" readonly="readonly" type="text" style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                           ng-model="temp.model.name" autofocus="autofocus"/>
+                </div>
+            </div>
+            <div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">标签</div>
+                <div class="col-md-8 input-group">
+                    <input ng-model="temp.model.tag" readonly="readonly"
+                           style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                           autocomplete="off" maxlength="32" class="form-control"/>
+                </div>
+            </div>
+            <div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">描述</div>
+                <div class="col-md-8 input-group">
+                    <p style="border:1px solid #d9d9d9; border-radius: 4px;box-shadow: none;color: #555;">{{temp.model.desc}}</p>
+                </div>
+            </div>
+            <div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">开始时间</div>
+                <div class="col-md-8 input-group">
+                    <input ng-model="temp.model.startTime"
+                           autocomplete="off" disabled
+                           ui-jq="wdatePicker" ui-options="DeltailStartTimeOption"
+                           style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                           class="input form-control"/>
+                </div>
+            </div>
+            <div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">结束时间</div>
+                <div class="col-md-8 input-group">
+                    <input ng-model="temp.model.endTime"
+                           autocomplete="off" disabled
+                           class="input form-control"
+                           style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                    />
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">关闭</button>
+        </div>
+    </form>
+
 </script>
 
 <!--<div class="modal animated fadeIn" id="uploadfile">

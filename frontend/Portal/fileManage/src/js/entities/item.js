@@ -265,11 +265,173 @@
             };
             self.inprocess = true;
             self.error = '';
-            $http.post(fileManagerConfig.createFlowrUrl, data).success(function (data) {
+            $http.post(fileManagerConfig.createFlowUrl, data).success(function (data) {
                 self.deferredHandler(data, deferred);
                 $.notify({ message: data.msg, status: "success" });
             }).error(function (data) {
                 self.deferredHandler(data, deferred, $translate.instant('error_creating_folder'));
+            })['finally'](function () {
+                self.inprocess = false;
+            });
+            return deferred.promise;
+        }
+
+        //编辑知识的请求
+        Item.prototype.updateFlow = function(){
+            var self = this;
+            var deferred = $q.defer();
+            var data = {
+                id: self.flow.id,
+                flowId: null,
+                name:self.model.name,
+                desc: self.model.desc,
+                tagName: self.model.tag,
+                startTime: self.model.startTime,
+                endTime: self.model.endTime,
+                permission: self.model.filePermission,
+            };
+            self.inprocess = true;
+            self.error = '';
+            $http.post(fileManagerConfig.updateKnowledgeUrl, data).success(function (data) {
+                self.deferredHandler(data, deferred);
+                $.notify({ message: data.msg, status: "success" });
+            }).error(function (data) {
+                self.deferredHandler(data, deferred, $translate.instant('error_creating_folder'));
+            })['finally'](function () {
+                self.inprocess = false;
+            });
+            return deferred.promise;
+        }
+
+        //收藏知识的请求
+        Item.prototype.collectFlow = function(){
+            var self = this;
+            var deferred = $q.defer();
+            var data = {
+                id: self.flow.id
+            };
+            self.inprocess = true;
+            self.error = '';
+            $http.post(fileManagerConfig.collectToMyKnowledgeUrl, data).success(function (data) {
+                self.deferredHandler(data, deferred);
+                $.notify({ message: data.msg, status: "success" });
+            }).error(function (data) {
+                self.deferredHandler(data, deferred, $translate.instant('error_creating_folder'));
+            })['finally'](function () {
+                self.inprocess = false;
+            });
+            return deferred.promise;
+        }
+
+        //删除知识的请求
+        Item.prototype.removeFlow = function(){
+            var self = this;
+            var deferred = $q.defer();
+            var data = {
+                id: self.flow.id
+            };
+            self.inprocess = true;
+            self.error = '';
+            $http.post(fileManagerConfig.deleteKnowledgeUrl, data).success(function (data) {
+                self.deferredHandler(data, deferred);
+                $.notify({ message: data.msg, status: "success" });
+            }).error(function (data) {
+                self.deferredHandler(data, deferred, $translate.instant('error_deleting'));
+            })['finally'](function () {
+                self.inprocess = false;
+            });
+            return deferred.promise;
+        }
+
+        //新建我的知识的请求
+        Item.prototype.createMyFlow = function(){
+            var self = this;
+            var deferred = $q.defer();
+            var data = {
+                flowId: null,
+                name:self.tempModel.name,
+                tagName: self.tempModel.tag,
+                startTime: self.tempModel.startTime,
+                endTime: self.tempModel.endTime,
+                desc: self.tempModel.desc,
+                // permission: self.tempModel.filePermission,
+                // flowCodeDesc: null,
+            };
+            self.inprocess = true;
+            self.error = '';
+            $http.post(fileManagerConfig.createMyKnowledgeUrl, data).success(function (data) {
+                self.deferredHandler(data, deferred);
+                $.notify({ message: data.msg, status: "success" });
+            }).error(function (data) {
+                self.deferredHandler(data, deferred, $translate.instant('error_creating_folder'));
+            })['finally'](function () {
+                self.inprocess = false;
+            });
+            return deferred.promise;
+        }
+
+        //编辑知识的请求
+        Item.prototype.updateMyFlow = function(){
+            var self = this;
+            var deferred = $q.defer();
+            var data = {
+                id: self.flow.id,
+                flowId: null,
+                name:self.model.name,
+                desc: self.model.desc,
+                tagName: self.model.tag,
+                startTime: self.model.startTime,
+                endTime: self.model.endTime,
+                // permission: self.model.filePermission,
+            };
+            self.inprocess = true;
+            self.error = '';
+            $http.post(fileManagerConfig.updateMyKnowledgeUrl, data).success(function (data) {
+                self.deferredHandler(data, deferred);
+                $.notify({ message: data.msg, status: "success" });
+            }).error(function (data) {
+                self.deferredHandler(data, deferred, $translate.instant('error_creating_folder'));
+            })['finally'](function () {
+                self.inprocess = false;
+            });
+            return deferred.promise;
+        }
+
+        //分享知识的请求
+        Item.prototype.shareFlow = function(){
+            var self = this;
+            var deferred = $q.defer();
+            var data = {
+                id: self.flow.id,
+                permission: self.model.filePermission
+            };
+            self.inprocess = true;
+            self.error = '';
+            $http.post(fileManagerConfig.shareMyKnowledgeUrl, data).success(function (data) {
+                self.deferredHandler(data, deferred);
+                $.notify({ message: data.msg, status: "success" });
+            }).error(function (data) {
+                self.deferredHandler(data, deferred, $translate.instant('error_creating_folder'));
+            })['finally'](function () {
+                self.inprocess = false;
+            });
+            return deferred.promise;
+        }
+
+        //删除我的知识的请求
+        Item.prototype.removeMyFlow = function(){
+            var self = this;
+            var deferred = $q.defer();
+            var data = {
+                id: self.flow.id
+            };
+            self.inprocess = true;
+            self.error = '';
+            $http.post(fileManagerConfig.deleteMyKnowledgeUrl, data).success(function (data) {
+                self.deferredHandler(data, deferred);
+                $.notify({ message: data.msg, status: "success" });
+            }).error(function (data) {
+                self.deferredHandler(data, deferred, $translate.instant('error_deleting'));
             })['finally'](function () {
                 self.inprocess = false;
             });
