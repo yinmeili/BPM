@@ -88,7 +88,7 @@ public class MyKnowledgeService {
         }
 
         myKnowledgeMapper.createMyKnowledge(myKnowledge);
-        
+
         return uuid;
     }
 
