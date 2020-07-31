@@ -32,8 +32,17 @@ app.config(['fileManagerConfigProvider', function (config) {
 
         searchListRecycleUrl: fileManagerApiUrl + 'searchListRecycle',//回收站搜索
 
-        createFlowrUrl: knowledgeManageApiUrl + 'createKnowledge',
+        createFlowUrl: knowledgeManageApiUrl + 'createKnowledge',
         listKnowledgeByPageUrl: knowledgeManageApiUrl + 'listKnowledgeByPage',
+        updateKnowledgeUrl: knowledgeManageApiUrl + 'updateKnowledge',
+        deleteKnowledgeUrl: knowledgeManageApiUrl + 'deleteKnowledge',
+        createMyKnowledgeUrl: knowledgeManageApiUrl + 'createMyKnowledge',
+        collectToMyKnowledgeUrl: knowledgeManageApiUrl + 'collectToMyKnowledge',
+        shareMyKnowledgeUrl: knowledgeManageApiUrl + 'shareMyKnowledge',
+
+        listMyKnowledgeByPageUrl: knowledgeManageApiUrl + 'listMyKnowledgeByPage',
+        updateMyKnowledgeUrl: knowledgeManageApiUrl + 'updateMyKnowledge',
+        deleteMyKnowledgeUrl: knowledgeManageApiUrl + 'deleteMyKnowledge',
 
         allowedActions: angular.extend(defaults.allowedActions, {
             copy : false,
