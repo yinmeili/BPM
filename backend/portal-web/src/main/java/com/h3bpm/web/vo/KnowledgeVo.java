@@ -1,6 +1,7 @@
 package com.h3bpm.web.vo;
 
 import com.h3bpm.web.entity.Knowledge;
+import com.h3bpm.web.entity.MyKnowledge;
 
 import java.util.Date;
 
@@ -38,6 +39,19 @@ public class KnowledgeVo {
 		this.createTime = knowledge.getCreateTime();
 		this.createUserName = knowledge.getCreateUserName();
 		this.flowCodeDesc = knowledge.getFlowCodeDesc();
+	}
+
+	public KnowledgeVo(MyKnowledge myKnowledge){
+		this.flowId = myKnowledge.getFlowId();
+		this.name = myKnowledge.getName();
+		this.desc = myKnowledge.getDesc();
+		this.tagName = myKnowledge.getTagName();
+		this.startTime = myKnowledge.getStartTime();
+		this.endTime = myKnowledge.getEndTime();
+		this.createUserId = myKnowledge.getCreateUserId();
+		this.createTime = myKnowledge.getCreateTime();
+		this.createUserName = myKnowledge.getCreateUserName();
+		this.flowCodeDesc = myKnowledge.getFlowCodeDesc();
 	}
 
 	public String getCreateUserName() {
