@@ -42,6 +42,19 @@ public class MyKnowledge{
         this.flowCodeDesc = myKnowledgeVo.getFlowCodeDesc();
     }
 
+    public MyKnowledge(Knowledge knowledge){
+        this.flowId = knowledge.getFlowId();
+        this.name = knowledge.getName();
+        this.desc = knowledge.getDesc();
+        this.tagName = knowledge.getTagName();
+        this.startTime = knowledge.getStartTime();
+        this.endTime = knowledge.getEndTime();
+        this.createTime = knowledge.getCreateTime();
+        this.createUserId = knowledge.getCreateUserId();
+        this.createUserName = knowledge.getCreateUserName();
+        this.flowCodeDesc = knowledge.getFlowCodeDesc();
+    }
+
     public String getCreateUserName() {
         return createUserName;
     }
