@@ -7,6 +7,8 @@ import java.util.Map;
 
 import com.h3bpm.web.entity.MyKnowledge;
 import com.h3bpm.web.service.MyKnowledgeService;
+import com.h3bpm.web.utils.Constants;
+import com.h3bpm.web.utils.UserSessionUtils;
 import com.h3bpm.web.vo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,13 +23,6 @@ import com.github.pagehelper.PageInfo;
 import com.h3bpm.web.entity.Knowledge;
 import com.h3bpm.web.service.KnowledgePermissionService;
 import com.h3bpm.web.service.KnowledgeService;
-import com.h3bpm.web.vo.KnowledgeVo;
-import com.h3bpm.web.vo.ReqCreateKnowledge;
-import com.h3bpm.web.vo.ReqDeleteKnowledgeVo;
-import com.h3bpm.web.vo.ReqListKnowledgePageVo;
-import com.h3bpm.web.vo.ReqUpdateKnowledge;
-import com.h3bpm.web.vo.RespPageVo;
-import com.h3bpm.web.vo.ResponseVo;
 import com.h3bpm.web.vo.query.QueryKnowledgeList;
 
 import OThinker.Common.Organization.Models.User;
@@ -62,7 +57,7 @@ public class KnowledgeManagerController extends AbstractController {
 	public ResponseVo createKnowledge(@RequestBody ReqCreateKnowledge reqParam) throws Exception {
 		Map<String, Object> userMap = this._getCurrentUser();
 		User user = (User) userMap.get("User");
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");	//String与Date之间进行相互转换
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // String与Date之间进行相互转换
 		KnowledgeVo knowledgeVo = new KnowledgeVo();
 
 		knowledgeVo.setCreateUserName(user._Name);
@@ -89,35 +84,33 @@ public class KnowledgeManagerController extends AbstractController {
 		return new ResponseVo("创建成功");
 	}
 
-
 	@RequestMapping(value = "/createMyKnowledge", produces = "application/json;charset=utf8")
 	@ResponseBody
 	public ResponseVo createMyKnowledge(@RequestBody ReqCreateMyKnowledge reqParam) throws Exception {
 		Map<String, Object> userMap = this._getCurrentUser();
 		User user = (User) userMap.get("User");
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");	//String与Date之间进行相互转换
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); // String与Date之间进行相互转换
 		MyKnowledgeVo myKnowledgeVo = new MyKnowledgeVo();
 
 		myKnowledgeVo.setCreateUserName(user._Name);
-		myKnowledgeVo.setCreateUserId(user.getObjectID());	//存入用户id
+		myKnowledgeVo.setCreateUserId(user.getObjectID()); // 存入用户id
 
-
-//		myKnowledgeVo.setCreateUserName("协办平台管理员");
-//		myKnowledgeVo.setCreateUserId("82237383-a18e-4055-8006-8c873e84e087");	//存入用户id
+		// myKnowledgeVo.setCreateUserName("协办平台管理员");
+		// myKnowledgeVo.setCreateUserId("82237383-a18e-4055-8006-8c873e84e087"); //存入用户id
 
 		myKnowledgeVo.setFlowId(reqParam.getFlowId());
 		myKnowledgeVo.setName(reqParam.getName());
 		myKnowledgeVo.setDesc(reqParam.getDesc());
 		myKnowledgeVo.setTagName(reqParam.getTagName());
 		myKnowledgeVo.setFlowCodeDesc(reqParam.getFlowCodeDesc());
-		try{
+		try {
 			myKnowledgeVo.setStartTime(format.parse(reqParam.getStartTime()));
-		}catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		try{
+		try {
 			myKnowledgeVo.setEndTime(format.parse(reqParam.getEndTime()));
-		}catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		myKnowledgeVo.setCreateTime(new Date());
@@ -154,11 +147,10 @@ public class KnowledgeManagerController extends AbstractController {
 		return new ResponseVo("修改成功");
 	}
 
-
 	@RequestMapping(value = "/updateMyKnowledge", produces = "application/json;charset=utf8")
 	@ResponseBody
 	public ResponseVo updateMyKnowledge(@RequestBody ReqUpdateMyKnowledge reqUpdateMyKnowledge) {
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");	//String与Date之间进行相互转换
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd"); // String与Date之间进行相互转换
 		MyKnowledge myKnowledgeEntity = myKnowledgeService.getMyKnowledgeById(reqUpdateMyKnowledge.getId());
 		MyKnowledgeVo myKnowledgeVo = new MyKnowledgeVo(myKnowledgeEntity);
 
@@ -167,14 +159,14 @@ public class KnowledgeManagerController extends AbstractController {
 		myKnowledgeVo.setDesc(reqUpdateMyKnowledge.getDesc());
 		myKnowledgeVo.setTagName(reqUpdateMyKnowledge.getTagName());
 		myKnowledgeVo.setFlowCodeDesc(reqUpdateMyKnowledge.getFlowCodeDesc());
-		try{	 //将前端传过来的'yyyy-MM-dd'样式的String转换成Date类型
+		try { // 将前端传过来的'yyyy-MM-dd'样式的String转换成Date类型
 			myKnowledgeVo.setStartTime(format.parse(reqUpdateMyKnowledge.getStartTime()));
-		}catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		try{
+		try {
 			myKnowledgeVo.setEndTime(format.parse(reqUpdateMyKnowledge.getEndTime()));
-		}catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		myKnowledgeService.updateMyKnowledge(myKnowledgeVo);
@@ -182,7 +174,6 @@ public class KnowledgeManagerController extends AbstractController {
 		return new ResponseVo("修改成功");
 	}
 
-	
 	@RequestMapping(value = "/listKnowledgeByPage", produces = "application/json;charset=utf8")
 	@ResponseBody
 	public RespPageVo listKnowledgeByPage(@ModelAttribute ReqListKnowledgePageVo requestBean) {
@@ -198,6 +189,12 @@ public class KnowledgeManagerController extends AbstractController {
 
 		QueryKnowledgeList queryKnowledgeList = new QueryKnowledgeList(requestBean);
 		queryKnowledgeList.setQueryUserId(user.getObjectId());
+
+		UserSessionInfo userSessionInfo = UserSessionUtils.get(Constants.SESSION_USER, UserSessionInfo.class);
+		List<String> parentIds = userSessionInfo.getParentIds();
+		if (parentIds != null) {
+			queryKnowledgeList.setUserAllParentIds(parentIds);
+		}
 
 		PageInfo<KnowledgeVo> pageInfo = knowledgeService.findKnowledgeByPage(queryKnowledgeList);
 		List<KnowledgeVo> knowledgeList = pageInfo.getList();

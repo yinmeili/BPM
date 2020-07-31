@@ -1096,9 +1096,6 @@ public class FileManagerController extends ControllerBase {
 	@ResponseBody
 	public ResponseVo collectToMyFile(@RequestBody ReqCollectToMyFile reqBean) {
 		try {
-			com.h3bpm.web.entity.File shareFile = fileService.getFileById(reqBean.getFileId());
-			com.h3bpm.web.entity.File myParentFile = myFileService.getMyFileById(reqBean.getMyFileParentId());
-
 			Map<String, Object> userMap = this._getCurrentUser();
 			OThinker.Common.Organization.Models.User user = (User) userMap.get("User");
 			String userId = user.getObjectId();
@@ -1125,9 +1122,6 @@ public class FileManagerController extends ControllerBase {
 	@ResponseBody
 	public ResponseVo shareFile(@RequestBody ReqShareFile reqBean) {
 		try {
-			com.h3bpm.web.entity.File myFile = myFileService.getMyFileById(reqBean.getFileId());
-			com.h3bpm.web.entity.File shareParentFile = myFileService.getMyFileById(reqBean.getShareFileParentId());
-
 			Map<String, Object> userMap = this._getCurrentUser();
 			OThinker.Common.Organization.Models.User user = (User) userMap.get("User");
 			String userId = user.getObjectId();

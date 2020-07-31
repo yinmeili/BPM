@@ -1,15 +1,15 @@
 package com.h3bpm.web.vo.query;
 
-import java.util.Date;
+import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.h3bpm.web.vo.ReqListKnowledgePageVo;
 
 @SuppressWarnings("deprecation")
 public class QueryKnowledgeList extends ReqListKnowledgePageVo {
 	private String queryUserId = null; // 当前查询的用户ID
-	
-	public QueryKnowledgeList(ReqListKnowledgePageVo voBean){
+	private List<String> userAllParentIds = null; // 用户的所有父部门ID
+
+	public QueryKnowledgeList(ReqListKnowledgePageVo voBean) {
 		this.setsEcho(voBean.getsEcho());
 		this.setiDisplayStart(voBean.getiDisplayStart());
 		this.setiDisplayLength(voBean.getiDisplayLength());
@@ -28,5 +28,13 @@ public class QueryKnowledgeList extends ReqListKnowledgePageVo {
 
 	public void setQueryUserId(String queryUserId) {
 		this.queryUserId = queryUserId;
+	}
+
+	public List<String> getUserAllParentIds() {
+		return userAllParentIds;
+	}
+
+	public void setUserAllParentIds(List<String> userAllParentIds) {
+		this.userAllParentIds = userAllParentIds;
 	}
 }
