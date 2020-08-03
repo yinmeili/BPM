@@ -14,9 +14,6 @@ public interface FilePermissionMapper {
 	@Insert({"INSERT INTO `ot_file_permission` (`file_id`, `orgs`, `users`) VALUES (#{fileId}, #{orgs}, #{users})"})
 	public void createFilePermission(FilePermission filePermission);
 
-//	@Insert({"INSERT INTO `h3bpm`.`ot_file_permission` (`file_id`) VALUES (#{fileId})"})
-//	public void createFilePermissionTest(@Param("fileId") String fileId);//测试
-	
 	@Delete({"DELETE FROM ot_file_permission WHERE file_id = #{fileId}"})
 	public void deleteFilePermissionByFileId(@Param("fileId") String fileId);
 
