@@ -64,6 +64,13 @@ public class MyKnowledgeSqlProvider {
 			String dateString = format.format(endTimeEnd);
 			endTimeEndSqlStr = " AND end_time <= '" + dateString + "'";
 		}
+
+
+		String userId = para.get("userId") == null ? "" : (String) para.get("userId");
+		String userIdSqlStr = "";
+		if (!userId.isEmpty()) {
+			userIdSqlStr += " and create_user_id = '" + userId + "'";
+		}
 		
 		String sql =
 				"SELECT"+
@@ -94,6 +101,7 @@ public class MyKnowledgeSqlProvider {
 						startTimeEndSqlStr +
 						endTimeStartSqlStr +
 						endTimeEndSqlStr +
+						userIdSqlStr +
 			"			ORDER BY"+
 			"				create_time DESC";
 		return sql;

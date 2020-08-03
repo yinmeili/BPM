@@ -102,8 +102,8 @@ public class MyKnowledgeService {
      * @param queryBean
      */
     public PageInfo<MyKnowledgeVo> findMyKnowledgeByPage(QueryMyKnowledgeList queryBean) {
-        Page<MyKnowledge> page = PageHelper.startPage(queryBean.getiDisplayStart(), queryBean.getiDisplayLength());
-        List<MyKnowledge> myKnowledgeList = myKnowledgeMapper.findMyKnowledge(queryBean.getName(), queryBean.getTagName(), queryBean.getFlowCodes(), queryBean.getStartTimeStart(), queryBean.getStartTimeEnd(), queryBean.getEndTimeStart(), queryBean.getEndTimeEnd());
+        Page<MyKnowledge> page = PageHelper.startPage(queryBean.getPageNum(), queryBean.getiDisplayLength());
+        List<MyKnowledge> myKnowledgeList = myKnowledgeMapper.findMyKnowledge(queryBean.getName(), queryBean.getTagName(), queryBean.getFlowCodes(), queryBean.getStartTimeStart(), queryBean.getStartTimeEnd(), queryBean.getEndTimeStart(), queryBean.getEndTimeEnd(), queryBean.getQueryUserId());
 
         List<MyKnowledgeVo> myKnowledgeVoList = new ArrayList<MyKnowledgeVo>();
         if(myKnowledgeList != null){
