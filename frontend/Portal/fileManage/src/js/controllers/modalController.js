@@ -26,24 +26,16 @@ app.controller("ModalsController", ["$scope", "$rootScope", "$http", "$translate
         });
 
         //控件初始化参数
-        $scope.EtartTimeOption = {
-            dateFmt: 'yyyy-MM-dd', realDateFmt: "yyyy-MM-dd", minDate: '2012-1-1', maxDate: '2099-12-31',
-            onpicked: function (e) {
-                $scope.StartTime = e.el.value;
-            }
-        }
-        $scope.EndTimeOption = {
-            dateFmt: 'yyyy-MM-dd',
-            realDateFmt: "yyyy-MM-dd", minDate: '2012-1-1', maxDate: '2099-12-31',
-            onpicked: function (e) {
-                $scope.EndTime = e.el.value;
-            }
-        }
         $scope.WorkflowOptions = {
             Editable: true, Visiable: true, Mode: "WorkflowTemplate", IsMultiple: true, PlaceHolder: $scope.LanJson.WorkFlow, IsSearch:true
         }
         $scope.WasAgentOptions = {
             Editable: true, Visiable: true, PlaceHolder: $scope.LanJson.Originator, IsMultiple: true //全选属性
+        }
+
+		//设置权限控件不可编辑
+        $scope.DetailOptions = {
+            Visiable: true, IsMultiple: true //全选属性
         }
         $scope.OriginatorRangeOptions = {
             Editable: true, Visiable: true, OrgUnitVisible: false, UserVisible: false, PlaceHolder: $scope.LanJson.Originator,GroupVisible:true,IsMultiple: true
@@ -330,32 +322,35 @@ app.controller("ModalsController", ["$scope", "$rootScope", "$http", "$translate
             }
         }
 
-        //共享知识
+        //-----共享知识 start ----------
         //新建知识数据交互
         $scope.createFlow = function (item) {
             item.tempModel.startTime = $scope.StartTime;
             item.tempModel.endTime = $scope.EndTime;
-            var org = $("#flowPermission").SheetUIManager().GetValue();
-            item.tempModel.filePermission = {
-                knowledgeId: null,
-                orgs: org,
-                userList: []
-            };
+            var permission = $("#flowPermission").SheetUIManager();
+            var orgs = permission.GetValue();
+
             var foldername = item.tempModel.name && item.tempModel.name.trim();//名称
             var msg = '';
-            if(!org){
+            if(!permission || !orgs){
                 msg += '请输入权限 | ';
+            }else{
+                item.tempModel.filePermission = {
+                    knowledgeId: null,
+                    orgs: orgs,
+                    userList: []
+                };
             }
             if(!foldername){
                 msg +='请输入知识名称 | ';
             }
-            if($rootScope.flowScope.fileNavigator.fileNameExists(foldername)){
+            if($rootScope.flowScope.fileNavigator.fileNameExists(foldername)){// 这个方法还未写似乎？
                 msg +='有重名知识，请重新命名 | ';
             }
             msg = msg.substr(0,msg.length-3);
             if (!msg) {
                 item.createFlow().then(function () {
-                    $("#tabfinishWorkitem").dataTable().fnDraw();//更新页面是/Portal/WorkItem/GetFinishWorkItems
+                    $("#tabfinishWorkitem").dataTable().fnDraw();
                 });
             } else {
                 $.notify({ message: msg, status: "danger" });
@@ -363,6 +358,138 @@ app.controller("ModalsController", ["$scope", "$rootScope", "$http", "$translate
             }
             $scope.cancel();
         };
+
+        //更新知识数据交互
+        $scope.updateFlow = function (item) {
+            var foldername = item.model.name && item.model.name.trim();//name
+            var desc = item.model.desc && item.model.desc.trim();//
+            var permission = $("#editFlowPer").SheetUIManager();
+            var orgs = permission.GetValue();
+            var msg = '';
+            if(!permission || !orgs){
+                msg += '请输入权限 | ';
+            }else{
+                item.model.filePermission = {
+                    knowledgeId: null,
+                    orgs: orgs,
+                    userList: []
+                };
+            }
+            if(!foldername){
+                msg +='请输入知识名称 | ';
+            }
+            if(!desc){
+                msg += '请输入描述 | ';
+            }
+            msg = msg.substr(0,msg.length-3);
+            if (!msg) {
+                item.updateFlow().then(function () {
+                    $("#tabfinishWorkitem").dataTable().fnDraw();
+                });
+            } else {
+                $.notify({ message: msg, status: "danger" });
+                return false;
+            }
+            $scope.cancel();
+        };
+
+        //收藏知识的数据交互
+        $scope.collectFlow = function(item){
+            item.collectFlow().then(function () {
+                $("#tabMyFlow").dataTable().fnDraw();//在共享知识中收藏到我的知识，刷新我的知识
+            });
+            $scope.cancel();
+        }
+
+        //删除知识的数据交互
+        $scope.removeFlow = function(item){
+            item.removeFlow().then(function () {
+                $("#tabfinishWorkitem").dataTable().fnDraw();
+            });
+            $scope.cancel();
+        }
+        //-----共享知识 end ----------
+
+        //-----我的知识 start ---------
+        $scope.createMyFlow = function(item){
+            item.tempModel.startTime = $scope.StartTime;
+            item.tempModel.endTime = $scope.EndTime;
+            var foldername = item.tempModel.name && item.tempModel.name.trim();//名称
+            var msg = '';
+            if(!foldername){
+                msg +='请输入知识名称 | ';
+            }
+            if($rootScope.flowScope.fileNavigator.fileNameExists(foldername)){// 这个方法还未写似乎？
+                msg +='有重名知识，请重新命名 | ';
+            }
+            msg = msg.substr(0,msg.length-3);
+            if (!msg) {
+                item.createMyFlow().then(function () {
+                    $("#tabMyFlow").dataTable().fnDraw();
+                });
+            } else {
+                $.notify({ message: msg, status: "danger" });
+                return false;
+            }
+            $scope.cancel();
+        };
+
+        //更新知识数据交互
+        $scope.updateMyFlow = function (item) {
+            var foldername = item.model.name && item.model.name.trim();//name
+            var desc = item.model.desc && item.model.desc.trim();//desc,temp.model.tag,
+            var msg="";
+            if(!foldername){
+                msg +='请输入知识名称 | ';
+            }
+            if(!desc){
+                msg += '请输入描述 | ';
+            }
+            msg = msg.substr(0,msg.length-3);
+            if (!msg) {
+                item.updateMyFlow().then(function () {
+                    $("#tabMyFlow").dataTable().fnDraw();
+                });
+            } else {
+                $.notify({ message: msg, status: "danger" });
+                return false;
+            }
+            $scope.cancel();
+        };
+
+        //分享知识的数据交互
+        $scope.shareFlow = function(item){
+            var permission = $("#editMyFlowPer").SheetUIManager();
+            var orgs = permission.GetValue();
+            var msg = '';
+            if(!permission || !orgs){
+                msg += '请输入权限 | ';
+            }else{
+                item.model.filePermission = {
+                    knowledgeId: null,
+                    orgs: orgs
+                };
+            }
+            msg = msg.substr(0,msg.length-3);
+            if (!msg) {
+                item.shareFlow().then(function () {
+                    $("#tabfinishWorkitem").dataTable().fnDraw();//在我的知识分享到共享知识，刷新共享知识，
+                });
+            } else {
+                $.notify({ message: msg, status: "danger" });
+                return false;
+            }
+            $scope.cancel();
+        }
+
+        //删除知识的数据交互
+        $scope.removeMyFlow = function(item){
+            item.removeMyFlow().then(function () {
+                $("#tabMyFlow").dataTable().fnDraw();
+            });
+            $scope.cancel();
+        }
+        //-----我的知识 end ----------
 
         $scope.cancel = function () {
             $modalInstance.dismiss('cancel'); // 退出
