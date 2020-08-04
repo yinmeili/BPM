@@ -15,7 +15,7 @@ import com.h3bpm.web.mapper.sqlprovider.KnowledgeSqlProvider;
 public interface KnowledgeMapper {
 
 	@SelectProvider(type = KnowledgeSqlProvider.class, method = "findKnowledge")
-	public List<Knowledge> findKnowledge(@Param("name") String name, @Param("tagName") String tagName, @Param("flowCodes") String flowCodes, @Param("startTimeStart") Date startTimeStart, @Param("startTimeEnd") Date startTimeEnd, @Param("endTimeStart") Date endTimeStart, @Param("endTimeEnd") Date endTimeEnd);
+	public List<Knowledge> findKnowledge(@Param("name") String name, @Param("tagName") String tagName, @Param("flowCodes") String flowCodes, @Param("startTimeStart") Date startTimeStart, @Param("startTimeEnd") Date startTimeEnd, @Param("endTimeStart") Date endTimeStart, @Param("endTimeEnd") Date endTimeEnd, @Param("userId") String userId, @Param("userAllParentIds") List<String> userAllParentIds);
 
 	/**
 	 * 查询当前用户所有已删除的知识列表

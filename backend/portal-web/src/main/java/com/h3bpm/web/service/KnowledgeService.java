@@ -23,70 +23,71 @@ import java.util.UUID;
 @Service
 public class KnowledgeService {
 
-    @Autowired
-    private KnowledgeMapper knowledgeMapper;
+	@Autowired
+	private KnowledgeMapper knowledgeMapper;
 
-    @Autowired
-    private KnowledgePermissionMapper knowledgePermissionMapper;
+	@Autowired
+	private KnowledgePermissionMapper knowledgePermissionMapper;
 
-    @Autowired
-    private TagService tagService;
-    /**
-     * 新增Knowledge
-     *
-     * @param knowledgeVo
-     * @return
-     */
-    @Transactional
-    public String createKnowledge(KnowledgeVo knowledgeVo){
-        String uuid = knowledgeVo.getId();
-        if (uuid == null) {
-            uuid = UUID.randomUUID().toString();
-            knowledgeVo.setId(uuid);
-        }
+	@Autowired
+	private TagService tagService;
 
-        knowledgeMapper.createKnowledge(new Knowledge(knowledgeVo));
+	/**
+	 * 新增Knowledge
+	 *
+	 * @param knowledgeVo
+	 * @return
+	 */
+	@Transactional
+	public String createKnowledge(KnowledgeVo knowledgeVo) {
+		String uuid = knowledgeVo.getId();
+		if (uuid == null) {
+			uuid = UUID.randomUUID().toString();
+			knowledgeVo.setId(uuid);
+		}
 
-        //对tag的处理
-        if(tagService.getTagByTypeAndName(knowledgeVo.getTagName(), TagType.KNOWLEDGE.getValue()) == null){
-            Tag tag = new Tag();
-            tag.setName(knowledgeVo.getTagName());
-            tag.setType(TagType.KNOWLEDGE.getValue());
-            tagService.createTag(tag);
-        }
-        if (knowledgeVo.getPermission() != null) {
-            knowledgeVo.getPermission().setKnowledgeId(uuid);
-            knowledgePermissionMapper.createKnowledgePermission(new KnowledgePermission(knowledgeVo.getPermission()));
-        }
+		knowledgeMapper.createKnowledge(new Knowledge(knowledgeVo));
 
-        return uuid;
-    }
+		// 对tag的处理
+		if (tagService.getTagByTypeAndName(knowledgeVo.getTagName(), TagType.KNOWLEDGE.getValue()) == null) {
+			Tag tag = new Tag();
+			tag.setName(knowledgeVo.getTagName());
+			tag.setType(TagType.KNOWLEDGE.getValue());
+			tagService.createTag(tag);
+		}
+		if (knowledgeVo.getPermission() != null) {
+			knowledgeVo.getPermission().setKnowledgeId(uuid);
+			knowledgePermissionMapper.createKnowledgePermission(new KnowledgePermission(knowledgeVo.getPermission()));
+		}
 
-    @Transactional
-    public void updateKnowledge(KnowledgeVo knowledgeVo){
-        knowledgeMapper.updateKnowledge(new Knowledge(knowledgeVo));
+		return uuid;
+	}
 
-        //对tag的处理
-        if(tagService.getTagByTypeAndName(knowledgeVo.getTagName(), TagType.KNOWLEDGE.getValue()) == null){
-            Tag tag = new Tag();
-            tag.setName(knowledgeVo.getTagName());
-            tag.setType(TagType.KNOWLEDGE.getValue());
-            tagService.createTag(tag);
-        }
+	@Transactional
+	public void updateKnowledge(KnowledgeVo knowledgeVo) {
+		knowledgeMapper.updateKnowledge(new Knowledge(knowledgeVo));
 
-        if (knowledgeVo.getPermission() != null) {
-            knowledgePermissionMapper.deleteKnowledgePermissionByKnowledgeId(knowledgeVo.getId());
+		// 对tag的处理
+		if (tagService.getTagByTypeAndName(knowledgeVo.getTagName(), TagType.KNOWLEDGE.getValue()) == null) {
+			Tag tag = new Tag();
+			tag.setName(knowledgeVo.getTagName());
+			tag.setType(TagType.KNOWLEDGE.getValue());
+			tagService.createTag(tag);
+		}
 
-            if (knowledgeVo.getPermission().getKnowledgeId() == null) {
-                knowledgeVo.getPermission().setKnowledgeId(knowledgeVo.getId());
-            }
-            knowledgePermissionMapper.createKnowledgePermission(new KnowledgePermission(knowledgeVo.getPermission()));
-        }
-    }
+		if (knowledgeVo.getPermission() != null) {
+			knowledgePermissionMapper.deleteKnowledgePermissionByKnowledgeId(knowledgeVo.getId());
 
-    public Knowledge getKnowledgeById(String id){
-        return knowledgeMapper.getKnowledgeById(id);
-    }
+			if (knowledgeVo.getPermission().getKnowledgeId() == null) {
+				knowledgeVo.getPermission().setKnowledgeId(knowledgeVo.getId());
+			}
+			knowledgePermissionMapper.createKnowledgePermission(new KnowledgePermission(knowledgeVo.getPermission()));
+		}
+	}
+
+	public Knowledge getKnowledgeById(String id) {
+		return knowledgeMapper.getKnowledgeById(id);
+	}
 
 	/**
 	 * 分页查询知识库信息
@@ -94,34 +95,34 @@ public class KnowledgeService {
 	 * @param knowledgeVo
 	 */
 	public PageInfo<KnowledgeVo> findKnowledgeByPage(QueryKnowledgeList queryBean) {
-		Page<Knowledge> page = PageHelper.startPage(queryBean.getiDisplayStart(), queryBean.getiDisplayLength());
-		List<Knowledge> knowledgeList = knowledgeMapper.findKnowledge(queryBean.getName(), queryBean.getTagName(), queryBean.getFlowCodes(), queryBean.getStartTimeStart(), queryBean.getStartTimeEnd(), queryBean.getEndTimeStart(), queryBean.getEndTimeEnd());
+		Page<Knowledge> page = PageHelper.startPage(queryBean.getPageNum(), queryBean.getiDisplayLength());
+		List<Knowledge> knowledgeList = knowledgeMapper.findKnowledge(queryBean.getName(), queryBean.getTagName(), queryBean.getFlowCodes(), queryBean.getStartTimeStart(), queryBean.getStartTimeEnd(), queryBean.getEndTimeStart(), queryBean.getEndTimeEnd(), queryBean.getQueryUserId(), queryBean.getUserAllParentIds());
 
 		List<KnowledgeVo> knowledgeVoList = new ArrayList<KnowledgeVo>();
-		if(knowledgeList != null){
-			for(Knowledge knowledge:knowledgeList){
+		if (knowledgeList != null) {
+			for (Knowledge knowledge : knowledgeList) {
 				knowledgeVoList.add(new KnowledgeVo(knowledge));
 			}
 		}
 		PageInfo<KnowledgeVo> pageInfo = new PageInfo<KnowledgeVo>(knowledgeVoList);
 		pageInfo.setTotal(page.getTotal());
-		
+
 		return pageInfo;
 	}
 
-    /**
-     * 删除Knowledge
-     *
-     * @param knowledgeId
-     */
-    @Transactional
-    public void deleteKnowledge(String knowledgeId) {
-        Knowledge knowledge = knowledgeMapper.getKnowledgeById(knowledgeId);
-        knowledge.setDelete(true);
-        knowledge.setDeleteTime(new Date());
+	/**
+	 * 删除Knowledge
+	 *
+	 * @param knowledgeId
+	 */
+	@Transactional
+	public void deleteKnowledge(String knowledgeId) {
+		Knowledge knowledge = knowledgeMapper.getKnowledgeById(knowledgeId);
+		knowledge.setDelete(true);
+		knowledge.setDeleteTime(new Date());
 
-        knowledgeMapper.updateKnowledge(knowledge);
-    }
+		knowledgeMapper.updateKnowledge(knowledge);
+	}
 
     /**
      * 分页查询当前用户所有已删除的知识列表
