@@ -541,6 +541,7 @@
 
 // *************************共享文件编辑路径和名称模态框******************************
             $scope.toUpdateFile = function (data) {
+                $scope.temp.tempModel.name = $scope.temp.model.name;
                 $scope.fileNavigator = $rootScope.scope.fileNavigator;//参数
                 $rootScope.temp = data;
                 var lenOrgList = data.model.filePermission.orgList.length;//组织的长度
@@ -794,6 +795,7 @@
 
 // *************************我的文件编辑路径和名称模态框******************************
             $scope.myToUpdateFile = function (data) {
+                $scope.temp.tempModel.name = $scope.temp.model.name;
                 $scope.fileNavigator = $rootScope.scope.fileNavigator;//参数
                 $rootScope.temp = data;
                 data = "";

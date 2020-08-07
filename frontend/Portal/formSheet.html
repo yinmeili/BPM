@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html lang="en" class="gt-ie8 gt-ie9 not-ie">
+<html lang="en" class="gt-ie8 gt-ie9 not-ie" data-ng-app="app">
 
 <head>
     <meta charset="utf-8">
@@ -19,14 +19,19 @@
     <link  rel="stylesheet" type="text/css" media="print" href="WFRes/css/MvcSheetPrint.min.css?v=20191108"/>
 
 
+    <!--选择-->
+    <link href="workCalendar/bower_components/jquery-ui-1.10.4.custom/css/base/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/less-app/app.css?v=201904081636" type="text/css" />
+
+
 </head>
 <body class="theme-default main-menu-animated">
 <!--onsubmit="return false":避免ENTER键回传页面-->
 <form id="form1" name="form1" onsubmit="return OnSubmitForm();" class="form1">
     <!--PC端框架总是加载-->
-    <div class="main-container sheetContent" id="sheetContent" style="display: none">
+    <div class="main-container sheetContent" id="sheetContent" style="display: none" ng-controller="formSheetServiceCtrl">
         <div class="panel">
-            <div id="main-navbar" class="navbar navbar-inverse toolBar mainnavbar" role="navigation">						
+            <div id="main-navbar" class="navbar navbar-inverse toolBar mainnavbar" role="navigation">
                 <div class="navbar-inner">
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-navbar-collapse">
@@ -36,27 +41,43 @@
                     <div id="main-navbar-collapse"
 												 class="collapse navbar-collapse main-navbar-collapse">
 
-												 <!-- <ul class="nav navbar-nav">
-													 <li title="分享" id="share">
-														 <a href="" class="btn-action">
-															 <span class="toolText">分享</span>
-														 </a>
-													 </li>
-												 </ul> -->
+
+                        <ul class="nav navbar-nav" style="float: right;" id="collect">
+                            <li>
+                                <a ng-click="toCollectFinishedFlow()"
+                                   class="btn-action" title="收藏到我的知识">
+                                    <span class="toolText">收藏到我的知识</span>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <ul class="nav navbar-nav" style="float: right;" id="share">
+                            <li>
+                                <a ng-click="toShareFinishedFlow()"
+                                   class="btn-action" title="分享到共享知识">
+                                    <span class="toolText">分享到共享知识</span>
+                                </a>
+                            </li>
+                        </ul>
+
+
 
                         <ul class="nav navbar-nav SheetToolBar test" id="divTopBars">
                         </ul>
                     </div>
-								</div>
-								
+
+                </div>
+
                 <a href="/Portal/#/app/Workflow/MyUnfinishedWorkItem" target="_blank" class="form-logo">
                     <img src="img/H3-BPMLogo.png" alt="">
                 </a>
-						</div>
-						
+            </div>
+
             <div id="content-wrapper">
             </div>
+
             <div  class="back-top" style=""><i  class="icon aufontAll h-icon-all-up-o"></i></div>
+            <div ng-include="'formSheetModals.html'"></div>
         </div>
     </div>
 
@@ -71,6 +92,10 @@
 <script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/sheet.js?v=20191108"></script>
 <script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/jquery/jquery.lang.min.js?v=20191108"></script>
 <script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/nicescroll/jquery.nicescroll.min.js?v=20191108"></script>
+<!--jquery-->
+<script src="workCalendar/bower_components/jquery-ui-1.10.4.custom/js/jquery-ui-1.10.4.custom.min.js"></script>
+
+
 
 <script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/ligerUI/ligerui.all.min.js?v=20191108"></script>
 <script type="text/javascript" charset="utf-8" src="WFRes/editor/kindeditor-all-min.js?v=20191108"></script>
@@ -80,7 +105,8 @@
     LazyLoad.js([
         'WFRes/_Scripts/jquery/ajaxfileupload.min.js?v=20191108',
         'WFRes/_Scripts/Calendar/WdatePicker.js?v=20191108',
-        'WFRes/_Scripts/jQuery.print.min.js?v=20191108'
+        'WFRes/_Scripts/jQuery.print.min.js?v=20191108',
+        'js/services/notify.js'
     ]);
 </script>
 <script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/MvcSheetUI.js?v=20191108"></script>
@@ -91,28 +117,28 @@
 <script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/MvcSheetControls.js?v=20191108"></script>
 
 <!-- 所有控件-->
-<!-- <script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetQuery.js?v=20191108"></script>
-<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetAttachment.js?v=20191108"></script>
-<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetCheckbox.js?v=20191108"></script>
-<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetCheckboxList.js?v=20191108"></script>
-<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetComment.js?v=20191108"></script>
-<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetDropDownList.js?v=20191108"></script>
-<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetGridView.js?v=20191108"></script>
-<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetHiddenField.js?v=20191108"></script>
-<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetHyperLink.js?v=20191108"></script>
-<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetInstancePrioritySelector.js?v=20191108"></script>
-<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetLabel.js?v=20191108"></script>
-<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetOffice.js?v=20191108"></script>
-<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetRadioButtonList.js?v=20191108"></script>
-<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetRichTextBox.js?v=20191108"></script>
-<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetTextBox.js?v=20191108"></script>
-<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetTime.js?v=20191108"></script>
-<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetToolbar.js?v=20191108"></script>
-<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetUser.js?v=20191108"></script>
-<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetTimeSpan.js?v=20191108"></script>
-<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetCountLabel.js?v=20191108"></script>
-<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetOriginatorUnit.js?v=20191108"></script>
-<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetRelationInstance.js?v=20191108"></script> -->
+ <!--<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetQuery.js?v=20191108"></script>-->
+<!--<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetAttachment.js?v=20191108"></script>-->
+<!--<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetCheckbox.js?v=20191108"></script>-->
+<!--<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetCheckboxList.js?v=20191108"></script>-->
+<!--<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetComment.js?v=20191108"></script>-->
+<!--<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetDropDownList.js?v=20191108"></script>-->
+<!--<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetGridView.js?v=20191108"></script>-->
+<!--<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetHiddenField.js?v=20191108"></script>-->
+<!--<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetHyperLink.js?v=20191108"></script>-->
+<!--<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetInstancePrioritySelector.js?v=20191108"></script>-->
+<!--<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetLabel.js?v=20191108"></script>-->
+<!--<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetOffice.js?v=20191108"></script>-->
+<!--<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetRadioButtonList.js?v=20191108"></script>-->
+<!--<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetRichTextBox.js?v=20191108"></script>-->
+<!--<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetTextBox.js?v=20191108"></script>-->
+<!--<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetTime.js?v=20191108"></script>-->
+<!--<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetToolbar.js?v=20191108"></script>-->
+<!--<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetUser.js?v=20191108"></script>-->
+<!--<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetTimeSpan.js?v=20191108"></script>-->
+<!--<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetCountLabel.js?v=20191108"></script>-->
+<!--<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetOriginatorUnit.js?v=20191108"></script>-->
+<!--<script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/MvcSheet/Controls/SheetRelationInstance.js?v=20191108"></script>-->
 <!-- 所有控件 -->
 
 <!-- 控件辅助校验 -->
@@ -125,16 +151,69 @@
 <script type="text/javascript" charset="utf-8" src="WFRes/_Scripts/pcSheet.js?v=20191108"></script>
 
 
+<!-- Angular -->
+<script src="vendor/angular/angular.min.js"></script>
+<script src="vendor/angular/angular-animate/angular-animate.min.js?v=201901241136"></script>
+<script src="vendor/angular/angular-cookies/angular-cookies.js?v=201901241136"></script>
+<script src="vendor/angular/angular-resource/angular-resource.min.js?v=201901241136"></script>
+<script src="vendor/angular/angular-sanitize/angular-sanitize.min.js?v=201901241136"></script>
+<script src="vendor/angular/angular-touch/angular-touch.min.js?v=201901241136"></script>
+<!--<script src="vendor/angular/angular-tooltips/angular-tooltips.min.js?v=201901241136"></script>-->
+<!-- Vendor -->
+<script src="vendor/angular/angular-ui-router/angular-ui-router.min.js?v=201901241136"></script>
+<script src="vendor/angular/ngstorage/ngStorage.min.js?v=201901241136"></script>
+
+<!-- bootstrap -->
+<script src="WFRes/assets/javascripts/bootstrap.min.js?v=201901241136"></script>
+<script src="vendor/angular/angular-bootstrap/ui-bootstrap-tpls.js?v=201901241136"></script>
 
 
-<!-- <script type="text/javascript">
-	var li=document.querySelector('#share');
-	li.onclick=function(){
-		alert('111');
-	}
-</script> -->
+<!-- lazyload -->
+<script src="vendor/angular/oclazyload/ocLazyLoad.min.js?v=201901241136"></script>
+
+<!-- translate -->
+<script src="vendor/angular/angular-translate/angular-translate.min.js?v=201901241136"></script>
+<script src="vendor/angular/angular-translate/loader-static-files.js?v=201812011636"></script>
+<script src="vendor/angular/angular-translate/storage-cookie.js?v=201812011636"></script>
+<script src="vendor/angular/angular-translate/storage-local.js?v=201812011636"></script>
 
 
+<script src="js/app.js?v=201812011636"></script>
+<script src="js/config.js?v=201812011636"></script>
+<script src="js/config.lazyload.js?v=201812011636"></script>
+<script src="js/config.router.js?v=201812011636"></script>
+
+<script src="js/config.router_report.js?v=201812011636"></script>
+<script src="js/factory/httpInterceptor.js"></script>
+<script src="js/services/ui-load.js?v=201812011636"></script>
+
+<script src="js/services/app-service.js?v=201812011636"></script>
+<script src="js/services/notify.js"></script>
+<script src="vendor/jquery/notify/jquery.notify.js?v=201812011636"></script>
+<script src="js/directives/ui-butterbar.js?v=201812011636"></script>
+<script src="js/directives/ui-focus.js?v=201812011636"></script>
+<script src="js/directives/ui-fullscreen.js?v=201812011636"></script>
+<script src="js/directives/ui-jq.js?v=201812011636"></script>
+<script src="js/directives/ui-module.js?v=201812011636"></script>
+<script src="js/directives/ui-nav.js?v=201812011636"></script>
+<script src="js/directives/ui-scroll.js?v=201812011636"></script>
+<script src="js/directives/ui-shift.js?v=201812011636"></script>
+<script src="js/directives/ui-toggleclass.js?v=201812011636"></script>
+<script src="js/directives/ui-validate.js?v=201812011636"></script>
+
+
+<script src="fileManage/src/js/providers/config.js" type="text/javascript"></script>
+<script src="fileManage/src/js/entities/chmod.js" type="text/javascript"></script>
+<script src="fileManage/src/js/entities/item.js" type="text/javascript"></script>
+<!--<script src="fileManage/src/js/directives/directives.js" type="text/javascript"></script>-->
+<script src="fileManage/src/js/services/filenavigator.js" type="text/javascript"></script>
+
+<!-- 工作日历 -->
+<script src="workCalendar/bower_components/angular-ui-calendar/src/calendar.js" type="text/javascript"></script>
+
+<!--在导航栏添加按钮-->
+<!--<script src="fileManage/src/js/controllers/testFormSheetController.js" type="text/javascript"></script>-->
+<script src="js/controllers/FormSheetController.js" type="text/javascript"></script>
 </body>
 
 
