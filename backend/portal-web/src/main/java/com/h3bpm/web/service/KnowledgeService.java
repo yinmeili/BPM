@@ -124,4 +124,25 @@ public class KnowledgeService {
 		knowledgeMapper.updateKnowledge(knowledge);
 	}
 
+    /**
+     * 分页查询当前用户所有已删除的知识列表
+     *
+     * @param queryBean
+     */
+    public PageInfo<KnowledgeVo> findDeleteKnowledgeByPage(QueryKnowledgeList queryBean) {
+        Page<Knowledge> page = PageHelper.startPage(queryBean.getiDisplayStart(), queryBean.getiDisplayLength());
+        List<Knowledge> knowledgeList = knowledgeMapper.findDeleteKnowledgeByUserId(queryBean.getName(), queryBean.getTagName(), queryBean.getFlowCodes(), queryBean.getStartTimeStart(), queryBean.getStartTimeEnd(), queryBean.getEndTimeStart(), queryBean.getEndTimeEnd(),queryBean.getQueryUserId());
+
+        List<KnowledgeVo> knowledgeVoList = new ArrayList<KnowledgeVo>();
+        if(knowledgeList != null){
+            for(Knowledge knowledge:knowledgeList){
+                knowledgeVoList.add(new KnowledgeVo(knowledge));
+            }
+        }
+        PageInfo<KnowledgeVo> pageInfo = new PageInfo<KnowledgeVo>(knowledgeVoList);
+        pageInfo.setTotal(page.getTotal());
+
+        return pageInfo;
+    }
+
 }

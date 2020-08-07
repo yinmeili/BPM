@@ -45,7 +45,7 @@
             size: 'Size',
             actions: 'Actions',
             date: 'Date',
-            no_files_in_folder: 'No files in this folder',
+            no_files_in_folder: '文件夹中没有文件',
             no_folders_in_folder: 'This folder not contains children folders',
             select_this: 'Select this',
             go_back: 'Go back',

@@ -278,4 +278,25 @@ public class KnowledgeManagerController extends AbstractController {
 		return new ResponseVo("删除成功");
 	}
 
+
+	@RequestMapping(value = "/listDeleteKnowledgeByPage", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public RespPageVo listDeleteKnowledgeByPage(@ModelAttribute ReqListKnowledgePageVo requestBean) {
+		Map<String, Object> userMap = null;
+		try {
+			userMap = this._getCurrentUser();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		User user = (User) userMap.get("User");
+
+		QueryKnowledgeList queryKnowledgeList = new QueryKnowledgeList(requestBean);
+		queryKnowledgeList.setQueryUserId(user.getObjectId());
+
+		PageInfo<KnowledgeVo> pageInfo = knowledgeService.findDeleteKnowledgeByPage(queryKnowledgeList);
+
+		return new RespPageVo(requestBean.getsEcho(),pageInfo.getTotal(),pageInfo.getList());
+	}
 }
