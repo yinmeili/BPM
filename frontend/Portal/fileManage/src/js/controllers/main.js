@@ -4,13 +4,12 @@
         '$scope', '$translate', '$cookies', 'fileManagerConfig', 'item', 'fileNavigator', 'fileUploader','$http', 'ControllerConfig', '$modal',
         "$rootScope", "$state", "$filter",  "$compile", "jq.datables",
         function ($scope, $translate, $cookies, fileManagerConfig, Item, FileNavigator, FileUploader, $http, ControllerConfig, $modal, $rootScope, $state, $filter, $compile, jqdatables) {
-					$scope.config = fileManagerConfig;
-					$rootScope.initRootDir = function () {
-						$scope.fileMemuTile = $scope.config.fileMemuTitle[$scope.fileMemuTile];
-						$rootScope.rootdir = $scope.fileMemuTile;
-					}
-					$rootScope.initRootDir();
-
+        $scope.config = fileManagerConfig;
+        $rootScope.initRootDir = function () {
+            $scope.fileMemuTile = $scope.config.fileMemuTitle[$scope.fileMemuTile];
+            $rootScope.rootdir = $scope.fileMemuTile;
+        }
+        $rootScope.initRootDir();
           $scope.reverse = false;
           $scope.query = '';
           //回收站按照删除时间默认排序
@@ -539,8 +538,10 @@
                 }, 50);
             }
 
+
 // *************************共享文件编辑路径和名称模态框******************************
             $scope.toUpdateFile = function (data) {
+                $scope.temp.tempModel.name = $scope.temp.model.name;
                 $scope.fileNavigator = $rootScope.scope.fileNavigator;//参数
                 $rootScope.temp = data;
                 var lenOrgList = data.model.filePermission.orgList.length;//组织的长度
@@ -794,6 +795,7 @@
 
 // *************************我的文件编辑路径和名称模态框******************************
             $scope.myToUpdateFile = function (data) {
+                $scope.temp.tempModel.name = $scope.temp.model.name;
                 $scope.fileNavigator = $rootScope.scope.fileNavigator;//参数
                 $rootScope.temp = data;
                 data = "";
