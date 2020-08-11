@@ -23,6 +23,7 @@
                 recursive: false,
                 desc: model && model.desc,
                 filePermission: model && model.filePermission,
+                createUserId: model && model.createUserId,
                 sizeKb: function () {
                     var sizeKB = Math.ceil(this.fileSize / 1024);
                     if($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['recycle']){
@@ -752,6 +753,15 @@
         Item.prototype.isExtractable = function () {
             return !this.isFolder() && fileManagerConfig.isExtractableFilePattern.test(this.model.name);
         };
+
+        /*是否有权限编辑删除*/
+        Item.prototype.isPermissionFile = function () {
+            var temp = false;
+            if(this.model.createUserId == $rootScope.loginUser.User.ObjectID){
+                temp = true;
+            }
+            return temp;
+        }
 
         return Item;
     }]);
