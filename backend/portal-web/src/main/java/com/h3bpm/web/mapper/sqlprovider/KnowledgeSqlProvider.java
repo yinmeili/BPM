@@ -1,5 +1,7 @@
 package com.h3bpm.web.mapper.sqlprovider;
 
+import OThinker.Common.Organization.Models.User;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -37,7 +39,7 @@ public class KnowledgeSqlProvider {
 		Date startTimeStart = para.get("startTimeStart") == null ? null : (Date) para.get("startTimeStart");
 		String startTimeStartSqlStr = "";
 		if (startTimeStart != null) {
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String dateString = format.format(startTimeStart);
 			startTimeStartSqlStr = " AND a.start_time >= '" + dateString + "'";
 		}
@@ -45,7 +47,7 @@ public class KnowledgeSqlProvider {
 		Date startTimeEnd = para.get("startTimeEnd") == null ? null : (Date) para.get("startTimeEnd");
 		String startTimeEndSqlStr = "";
 		if (startTimeEnd != null) {
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String dateString = format.format(startTimeEnd);
 			startTimeEndSqlStr = " AND a.start_time <= '" + dateString + "'";
 		}
@@ -53,7 +55,7 @@ public class KnowledgeSqlProvider {
 		Date endTimeStart = para.get("endTimeStart") == null ? null : (Date) para.get("endTimeStart");
 		String endTimeStartSqlStr = "";
 		if (endTimeStart != null) {
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String dateString = format.format(endTimeStart);
 			endTimeStartSqlStr = " AND a.end_time >= '" + dateString + "'";
 		}
@@ -61,11 +63,11 @@ public class KnowledgeSqlProvider {
 		Date endTimeEnd = para.get("endTimeEnd") == null ? null : (Date) para.get("endTimeEnd");
 		String endTimeEndSqlStr = "";
 		if (endTimeEnd != null) {
-			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String dateString = format.format(endTimeEnd);
 			endTimeEndSqlStr = " AND a.end_time <= '" + dateString + "'";
 		}
-		
+
 		String userId = para.get("userId") == null ? "" : (String) para.get("userId");
 		String permissionSqlStr = " AND ( ";
 		if (!userId.isEmpty()) {
@@ -79,6 +81,12 @@ public class KnowledgeSqlProvider {
 			}
 		}
 		permissionSqlStr += ") ";
+
+		String statusSqlStr = " AND ( status = 1 ";
+		if(!userId.isEmpty()){
+			statusSqlStr += "or create_user_id = '" + userId + "'";
+		}
+		statusSqlStr += " ) ";
 		
 		String sql =
 				"SELECT"+
@@ -96,11 +104,12 @@ public class KnowledgeSqlProvider {
 			"			 a.flow_code flowCode,"+
 			"			 a.flow_code_desc flowCodeDesc,"+
 			"			 a.start_time startTime,"+
-			"			 a.end_time endTime"+
+			"			 a.end_time endTime,"+
+			"			 a.status status" +
 			"			FROM"+
 			"				ot_knowledge a,ot_knowledge_permission b"+
 			"				WHERE a.is_delete=0"+
-			"				AND a.id = b.knowledge_id"+
+			"				AND a.id = b.knowledge_id "+	//a.id是查询用户的id,b.knowledge_id是文件分享者的id,所以导我的文件分享给别人，别人去查询的时候,这个条件一定不满足。
 						nameSqlStr +
 						tagNameSqlStr +
 						nameSqlStr +
@@ -110,6 +119,7 @@ public class KnowledgeSqlProvider {
 						startTimeEndSqlStr +
 						endTimeStartSqlStr +
 						endTimeEndSqlStr +
+						statusSqlStr +
 						permissionSqlStr +
 			"			ORDER BY"+
 			"				a.create_time DESC";
@@ -215,5 +225,4 @@ public class KnowledgeSqlProvider {
 						"				create_time DESC";
 		return sql;
 	}
-
 }
