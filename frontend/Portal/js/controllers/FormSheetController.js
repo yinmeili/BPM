@@ -222,10 +222,10 @@
                         startTime: $scope.StartTime,
                         endTime: $scope.EndTime,
                     };
-                    $http.post('/Portal/knowledgeManage/createMyKnowledge', data).success(function (data) {
-                        alert('收藏成功');
+                    $http.post('/Portal/knowledgeManage/collectFlowToMyKnowledge', data).success(function (data) {
+                        alert(data.msg);
                     }).error(function (data) {
-                        alert('收藏失败');
+                        alert(data.msg);
                     })['finally'](function () {
 
                     });
@@ -267,13 +267,14 @@
                         endTime: $scope.EndTime,
                         permission : {
                             knowledgeId: null,
-                            orgs: orgs
+                            orgs: orgs,
+                            userList: []
                         }
                     };
-                    $http.post('/Portal/knowledgeManage/createKnowledge', data).success(function (data) {
-                        alert('分享成功');
+                    $http.post('/Portal/knowledgeManage/shareFlowToKnowledge', data).success(function (data) {
+                        alert(data.msg);
                     }).error(function (data) {
-                        alert('分享失败');
+                        alert(data.msg);
                     })['finally'](function () {
 
                     });

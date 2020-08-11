@@ -241,7 +241,7 @@ app.controller('AppCtrl', ['$rootScope', '$scope', '$translate', '$localStorage'
                         random: new Date().getTime()
                     },
                     success: function (result, header, config, status) {
-
+                        $rootScope.loginUser = result;
                         if(result.casEnable){
                             window.localStorage.setItem("H3.casEnable", true);
                         } else {

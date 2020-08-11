@@ -2,7 +2,7 @@
     <!--<button class="btn btn-sm btn-default" data-toggle="modal" data-target="#updateFile" ng-show="config.allowedActions.rename" ng-click="touch(item)" title="编辑">-->
     <!--<i class="glyphicon glyphicon-edit"></i>-->
     <!--</button>-->
-    <button class="btn btn-sm btn-default" ng-click="toUpdateFile(item)" ng-show="config.allowedActions.rename" title="编辑">
+    <button class="btn btn-sm btn-default" ng-click="toUpdateFile(item)" ng-show="item.isPermissionFile()" title="编辑">
         <i class="glyphicon glyphicon-edit"></i>
     </button>
     <button class="btn btn-sm btn-default" data-toggle="modal" data-target="#copy" ng-show="config.allowedActions.copy && !item.isFolder()" ng-click="touch(item)" title="{{'copy' | translate}}">
@@ -26,7 +26,7 @@
     <button class="btn btn-sm btn-default" ng-show="config.allowedActions.preview && item.isImage()" ng-click="openImagePreview(item)" title="{{'图片' | translate}}">
         <i class="glyphicon glyphicon-picture"></i>
     </button>
-    <button class="btn btn-sm btn-danger" data-toggle="modal" ng-show="config.allowedActions.remove" ng-click="toDeleteFile(item)" title="删除">
+    <button class="btn btn-sm btn-danger" data-toggle="modal" ng-show="item.isPermissionFile()" ng-click="toDeleteFile(item)" title="删除">
         <i class="glyphicon glyphicon-trash"></i>
     </button>
 </div>
