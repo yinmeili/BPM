@@ -299,4 +299,76 @@ public class KnowledgeManagerController extends AbstractController {
 
 		return new RespPageVo(requestBean.getsEcho(),pageInfo.getTotal(),pageInfo.getList());
 	}
+
+	@RequestMapping(value = "/shareFlowToKnowledge", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public ResponseVo shareFlowToKnowledge(@RequestBody ReqCreateKnowledge reqParam) throws Exception {
+		Map<String, Object> userMap = this._getCurrentUser();
+		User user = (User) userMap.get("User");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		KnowledgeVo knowledgeVo = new KnowledgeVo();
+
+
+		knowledgeVo.setCreateUserName(user._Name);
+		knowledgeVo.setCreateUserId(user.getObjectID()); // 存入用户id
+		knowledgeVo.setFlowId(reqParam.getFlowId());
+		knowledgeVo.setName(reqParam.getName());
+		knowledgeVo.setDesc(reqParam.getDesc());
+		knowledgeVo.setTagName(reqParam.getTagName());
+		try {
+			knowledgeVo.setStartTime(format.parse(reqParam.getStartTime()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			knowledgeVo.setEndTime(format.parse(reqParam.getEndTime()));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		knowledgeVo.setCreateTime(new Date());
+		knowledgeVo.setPermission(reqParam.getPermission());
+		knowledgeService.shareFlow(knowledgeVo);
+		return new ResponseVo("流程分享成功");
+	}
+
+	@RequestMapping(value = "/collectFlowToMyKnowledge", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public ResponseVo collectFlowToMyKnowledge(@RequestBody ReqCreateMyKnowledge reqParam) throws Exception {
+		try{
+			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Map<String, Object> userMap = this._getCurrentUser();
+			User user = (User) userMap.get("User");
+			String createUserId = user.getObjectID();
+			String createUserName = user._Name;
+
+			MyKnowledgeVo myKnowledgeVo = new MyKnowledgeVo();
+
+			myKnowledgeVo.setCreateUserName(user._Name);
+			myKnowledgeVo.setCreateUserId(user.getObjectID()); // 存入用户id
+
+
+			myKnowledgeVo.setFlowId(reqParam.getFlowId());
+			myKnowledgeVo.setName(reqParam.getName());
+			myKnowledgeVo.setDesc(reqParam.getDesc());
+			myKnowledgeVo.setTagName(reqParam.getTagName());
+			myKnowledgeVo.setFlowCodeDesc(reqParam.getFlowCodeDesc());
+			try {
+				myKnowledgeVo.setStartTime(format.parse(reqParam.getStartTime()));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				myKnowledgeVo.setEndTime(format.parse(reqParam.getEndTime()));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			myKnowledgeVo.setCreateTime(new Date());
+			myKnowledgeService.collectFlowToMyKnowledge(myKnowledgeVo);
+
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return new ResponseVo("收藏成功");
+	}
+
 }
