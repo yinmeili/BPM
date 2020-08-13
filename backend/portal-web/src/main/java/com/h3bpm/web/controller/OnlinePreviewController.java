@@ -79,7 +79,6 @@ public class OnlinePreviewController extends ControllerBase {
 
                 ServletContext servletContext = request.getServletContext();
                 String mimeType = servletContext.getMimeType(fileName);
-                System.out.println(mimeType);
                 response.setHeader("content-type", mimeType + ";charset=utf-8");
 
                 if (fileType.toLowerCase().equals("txt") || fileType.toLowerCase().equals("md")) {
@@ -107,22 +106,7 @@ public class OnlinePreviewController extends ControllerBase {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            if (bos != null) {
-                try {
-                    bos.close();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-            if (bis != null) {
-                try {
-                    bis.close();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
+
             if (osw != null) {
                 try {
                     osw.close();
@@ -134,6 +118,22 @@ public class OnlinePreviewController extends ControllerBase {
             if (isr != null) {
                 try {
                     isr.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+            if (bos != null) {
+                try {
+                    bos.close();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+            }
+            if (bis != null) {
+                try {
+                    bis.close();
                 } catch (IOException e) {
                     // TODO Auto-generated catch block
                     e.printStackTrace();
