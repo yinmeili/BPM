@@ -21,6 +21,7 @@ public class Knowledge {
     private String flowCodeDesc = null;
     private Date startTime = null;
     private Date endTime = null;
+    private int status = 1;
 
     @Deprecated
     public Knowledge() {
@@ -39,6 +40,7 @@ public class Knowledge {
         this.createUserId = knowledgeVo.getCreateUserId();
         this.createUserName = knowledgeVo.getCreateUserName();
         this.flowCodeDesc = knowledgeVo.getFlowCodeDesc();
+        this.status = knowledgeVo.getStatus();
     }
 
     public String getCreateUserName() {
@@ -159,6 +161,14 @@ public class Knowledge {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.h3bpm.web.mapper;
 import java.util.Date;
 import java.util.List;
 
+import com.h3bpm.web.entity.FlowCode;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -24,13 +25,17 @@ public interface KnowledgeMapper {
 	@SelectProvider(type = KnowledgeSqlProvider.class, method = "findDeleteKnowledgeByUserId")
 	public List<Knowledge> findDeleteKnowledgeByUserId(@Param("name") String name, @Param("tagName") String tagName, @Param("flowCodes") String flowCodes, @Param("startTimeStart") Date startTimeStart, @Param("startTimeEnd") Date startTimeEnd, @Param("endTimeStart") Date endTimeStart, @Param("endTimeEnd") Date endTimeEnd, @Param("userId") String userId);
 
-	@Insert({ "INSERT INTO `h3bpm`.`ot_knowledge` (`id`, `type`, `name`, `desc`, `tag_name`, `create_user_id`, `create_user_name`, `create_time`, `is_delete`,`delete_time`,`flow_id`,`flow_code`, `flow_code_desc`, `start_time`,`end_time`) VALUES (#{id}, #{type}, #{name}, #{desc}, #{tagName}, #{createUserId}, #{createUserName}, #{createTime}, #{isDelete}, #{deleteTime}, #{flowId}, #{flowCode}, #{flowCodeDesc}, #{startTime}, #{endTime})" })
+	@Insert({ "INSERT INTO `h3bpm`.`ot_knowledge` (`id`, `type`, `name`, `desc`, `tag_name`, `create_user_id`, `create_user_name`, `create_time`, `is_delete`,`delete_time`,`flow_id`,`flow_code`, `flow_code_desc`, `start_time`,`end_time`,`status`) VALUES (#{id}, #{type}, #{name}, #{desc}, #{tagName}, #{createUserId}, #{createUserName}, #{createTime}, #{isDelete}, #{deleteTime}, #{flowId}, #{flowCode}, #{flowCodeDesc}, #{startTime}, #{endTime}, #{status})" })
 	public void createKnowledge(Knowledge knowledge);
 	
-    @Update({ "UPDATE `h3bpm`.`ot_knowledge` SET `type`=#{type}, `name`=#{name}, `desc`=#{desc}, `tag_name`=#{tagName}, `create_user_id`=#{createUserId}, `create_user_name`=#{createUserName},`create_time`=#{createTime}, `is_delete`=#{isDelete}, `delete_time` = #{deleteTime},`flow_id`=#{flowId}, `flow_code` = #{flowCode}, `flow_code_desc` = #{flowCodeDesc},`start_time` = #{startTime}, `end_time` = #{endTime} WHERE `id`=#{id}" })
+    @Update({ "UPDATE `h3bpm`.`ot_knowledge` SET `type`=#{type}, `name`=#{name}, `desc`=#{desc}, `tag_name`=#{tagName}, `create_user_id`=#{createUserId}, `create_user_name`=#{createUserName},`create_time`=#{createTime}, `is_delete`=#{isDelete}, `delete_time` = #{deleteTime},`flow_id`=#{flowId}, `flow_code` = #{flowCode}, `flow_code_desc` = #{flowCodeDesc},`start_time` = #{startTime}, `end_time` = #{endTime}, `status` = #{status} WHERE `id`=#{id}" })
     public void updateKnowledge(Knowledge knowledge);
 
-	@Select("SELECT `id`, `type`, `name`, `desc`,`tag_name` `tagName`, `create_user_id` `createUserId`, `create_user_name` `createUserName`, `create_time` `createTime`, `is_delete` `isDelete`, `flow_id` `flowId`, `flow_code` `flowCode`, `flow_code_desc` `flowCodeDesc`, `start_time` `startTime`, `end_time` `endTime` from `h3bpm`.`ot_knowledge` WHERE `id` = #{id}")
+	@Select("SELECT `id`, `type`, `name`, `desc`,`tag_name` `tagName`, `create_user_id` `createUserId`, `create_user_name` `createUserName`, `create_time` `createTime`, `is_delete` `isDelete`, `flow_id` `flowId`, `flow_code` `flowCode`, `flow_code_desc` `flowCodeDesc`, `start_time` `startTime`, `end_time` `endTime`, `status` `status` from `h3bpm`.`ot_knowledge` WHERE `id` = #{id}")
 	public Knowledge getKnowledgeById(@Param("id") String id);
+
+	@Select("select distinct b.`WorkflowCode` `flowCode`,c.`WorkflowName` `flowCodeDesc` from `ot_knowledge` a inner join `ot_workitemfinished` b on a.flow_id = b.ObjectID \n" +
+			"inner join `ot_workflowclause` c on b.`WorkflowCode` = c.`WorkflowCode` where a.`flow_id` = #{flowId}")
+	public FlowCode getFlowCodeByFlowId(@Param("flowId") String flowId);
 
 }

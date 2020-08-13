@@ -3,6 +3,7 @@ package com.h3bpm.web.service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.h3bpm.web.entity.FlowCode;
 import com.h3bpm.web.entity.Knowledge;
 import com.h3bpm.web.entity.MyKnowledge;
 import com.h3bpm.web.entity.Tag;
@@ -75,7 +76,6 @@ public class MyKnowledgeService {
     @Transactional
     public String collectToMyKnowledge(String knowledgeId, String createUserId, String createUserName){
         Knowledge knowledge = knowledgeMapper.getKnowledgeById(knowledgeId);
-
         MyKnowledge myKnowledge = new MyKnowledge(knowledge);
         myKnowledge.setCreateUserId(createUserId);
         myKnowledge.setCreateUserName(createUserName);
@@ -86,7 +86,23 @@ public class MyKnowledgeService {
             myKnowledge.setId(uuid);
             System.out.println(uuid);
         }
+        myKnowledgeMapper.createMyKnowledge(myKnowledge);
 
+        return uuid;
+    }
+
+
+    @Transactional
+    public String collectFlowToMyKnowledge(MyKnowledgeVo myKnowledgeVo){
+        String uuid = myKnowledgeVo.getId();
+        if (uuid == null) {
+            uuid = UUID.randomUUID().toString();
+            myKnowledgeVo.setId(uuid);
+        }
+        MyKnowledge myKnowledge = new MyKnowledge(myKnowledgeVo);
+        FlowCode flowCode = knowledgeMapper.getFlowCodeByFlowId(myKnowledgeVo.getFlowId());
+        myKnowledge.setFlowCode(flowCode.getFlowCode());
+        myKnowledge.setFlowCodeDesc(flowCode.getFlowCodeDesc());
         myKnowledgeMapper.createMyKnowledge(myKnowledge);
 
         return uuid;
