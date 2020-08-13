@@ -23,9 +23,9 @@
     <button class="btn btn-sm btn-default" ng-show="config.allowedActions.download && !item.isFolder()" ng-click="item.download()" title="{{'下载' | translate}}">
         <i class="glyphicon glyphicon-download"></i>
     </button>
-    <button class="btn btn-sm btn-default" ng-show="config.allowedActions.preview && item.isImage()" ng-click="openImagePreview(item)" title="{{'图片' | translate}}">
-        <i class="glyphicon glyphicon-picture"></i>
-    </button>
+    <!--<button class="btn btn-sm btn-default" ng-show="config.allowedActions.preview && item.isImage()" ng-click="openImagePreview(item)" title="{{'图片' | translate}}">-->
+        <!--<i class="glyphicon glyphicon-picture"></i>-->
+    <!--</button>-->
     <button class="btn btn-sm btn-danger" data-toggle="modal" ng-show="item.isPermissionFile()" ng-click="toDeleteFile(item)" title="删除">
         <i class="glyphicon glyphicon-trash"></i>
     </button>
