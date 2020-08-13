@@ -66,18 +66,22 @@
             };
 
             $scope.smartClick = function (item, e) {
+                var url = "";
+                e.target.target = "_blank";
+                if($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['myFiles']){
+                    url += "/Portal/onlinePreview/previewMyFile?fileId="+ item.model.id;
+                }else if($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['allFiles']){
+                    url += "/Portal/onlinePreview/previewFile?fileId="+ item.model.id;
+                }
+
                 if (item.isFolder()) {
                     return $scope.fileNavigator.folderClick(item);
                 }
                 if (item.isImage()) {
-                    var fileId = item.model.id;
-                    e.target.target = "_blank";
-                    e.target.href = "/Portal/onlinePreview/previewFile?fileId="+ fileId;
+                    e.target.href = url;
                 }
                 if (item.isEditable()) {
-                    var fileId = item.model.id;
-                    e.target.target = "_blank";
-                    e.target.href = "/Portal/onlinePreview/previewFile?fileId="+ fileId;
+                    e.target.href = url;
                 }
             };
 
