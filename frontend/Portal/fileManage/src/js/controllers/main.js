@@ -70,10 +70,14 @@
                     return $scope.fileNavigator.folderClick(item);
                 }
                 if (item.isImage()) {
-                    return $scope.openImagePreview(item);
+                    var fileId = item.model.id;
+                    e.target.target = "_blank";
+                    e.target.href = "/Portal/onlinePreview/previewFile?fileId="+ fileId;
                 }
                 if (item.isEditable()) {
-                    return $scope.openEditItem(item);
+                    var fileId = item.model.id;
+                    e.target.target = "_blank";
+                    e.target.href = "/Portal/onlinePreview/previewFile?fileId="+ fileId;
                 }
             };
 
