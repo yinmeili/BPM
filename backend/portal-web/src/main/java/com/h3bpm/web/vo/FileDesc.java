@@ -29,6 +29,8 @@ public class FileDesc {
 	private String result;
 
 	private FilePermissionVo filePermission = null;
+	
+	private String createUserId;
 
 	public FileDesc() {
 	}
@@ -42,6 +44,15 @@ public class FileDesc {
 		this.type = file.getType();
 		this.parentId = file.getParentId();
 		this.dir = file.getDir();
+		this.createUserId = file.getCreateUserId();
+	}
+
+	public String getCreateUserId() {
+		return createUserId;
+	}
+
+	public void setCreateUserId(String createUserId) {
+		this.createUserId = createUserId;
 	}
 
 	public String getDir() {
