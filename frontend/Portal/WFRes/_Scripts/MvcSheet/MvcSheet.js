@@ -11,8 +11,8 @@ jQuery.extend({
     InitFunctions: [], // 初始化之前的函数集合
     ReadyFunctions: [], // 加载完成需要执行事件集合
     //ActionKey
-    /* Action_Share: "Share", //分享
-    Action_Collect: "Collect", //收藏 */
+    // Action_Share: "Share", //分享
+    // Action_Collect: "Collect", //收藏
     Action_Save: "Save",
     Action_WorkflowComment: "WorkflowComment", // 评论
     Action_ViewInstance: "ViewInstance", //流程状态
@@ -34,22 +34,22 @@ jQuery.extend({
     Action_Viewed: "Viewed", //已阅
 
     //默认Actions
-    /* ShareAction: {
-      Action: "Share",
-      // Icon: "fa-check",
-      Text: "分享",
-      // en_us: "Submit",
-			OnActionPreDo: function () { alert('111')},
-			OnActionDone: function () { alert('222') },
-    },
-    CollectAction: {
-      Action: "Collect",
-      // Icon: "fa-check",
-      Text: "收藏",
-      // en_us: "Submit",
-      // OnActionPreDo: null,
-      // OnActionDone: null,
-    }, */
+    // ShareAction: {
+    //   Action: "Share",
+    //   // Icon: "fa-check",
+    //   Text: "分享",
+    //   // en_us: "Submit",
+		// 	OnActionPreDo: function () { alert('111')},
+		// 	// OnActionDone: function () { alert('222') },
+    // },
+    // CollectAction: {
+    //   Action: "Collect",
+    //   // Icon: "fa-collect",
+    //   Text: "收藏",
+    //   // en_us: "Submit",
+    //   // OnActionPreDo: null,
+    //   // OnActionDone: null,
+    // },
     SaveAction: {
       Action: "Save",
       Icon: "fa-save",
@@ -196,7 +196,7 @@ var loadJSON = function (key, url) {
             dataType: "JSON",
             type: "GET",
             async: false,//同步执行
-            success: function (data) {
+            success: function (data) {;
                 window.sessionStorage.setItem(key, JSON.stringify(data));
             }
         });
@@ -228,7 +228,7 @@ jQuery.extend(
             // console.timeEnd('testForEach');
         },
         //初始化工具栏
-        InitToolBar: function () {
+        InitToolBar: function () {//alert($.MvcSheetUI.QueryString("abc"))
             //工具栏
             if ($.MvcSheet.Actions.length == 0) {
                 $.MvcSheet.AddDefaultActions();
@@ -242,6 +242,12 @@ jQuery.extend(
                         return;
                     }
                 })
+            };
+
+            /*如果不是已办任务，就隐藏分享和收藏按钮*/
+            if($.MvcSheetUI.SheetInfo.WorkItemType !== 'Fill'){
+                $("#collect").hide();
+                $("#share").hide();
             }
 
             var manager = $(".SheetToolBar").SheetToolBar($.MvcSheet.Actions);
@@ -726,7 +732,6 @@ jQuery.extend(
                         text: SheetLanguages.Current.Confirm,
                         type: 'button-clear',
                         onTap: function (e) {
-                        //    debugger
                             console.log(e)
                             doneCallback();
                         }
@@ -792,8 +797,6 @@ jQuery.extend(
             if (!$.MvcSheet.ActionValidata(actionControl))
                 return false;
             var that = this;
-            // debugger
-            // console.log(text)
             $.MvcSheet.ConfirmAction(SheetLanguages.Current.ConfirmDo + "【" + text + "】" + SheetLanguages.Current.Operation + "?", function () {
                 //创建离职专兼职流程专用
                 // var InstanceId = "cf7b346c-3120-429f-bfdb-fb32ca5bc10e;5315d3be-b657-4f14-b1d9-928d6811634e;1a6c673d-be56-4480-ad5c-4a966bbcca56;93f73a16-fac4-4ac7-87fb-0a6970a1200c;";
@@ -1433,9 +1436,9 @@ jQuery.extend(
         AddDefaultActions: function () {
             if ($.MvcSheetUI.SheetInfo && $.MvcSheetUI.SheetInfo.IsMobile) {
                 this.Actions.splice(0, this.Actions.length,
-										this.RetrieveInstanceAction,
-										/* this.ShareAction,//分享
-										this.CollectAction,//收藏 */
+                    this.RetrieveInstanceAction,
+                    // this.ShareAction,//分享
+                    // this.CollectAction,//收藏
                     this.SaveAction,
                     this.ViewInstanceAction,
                     this.PreviewParticipantAction,
@@ -1458,8 +1461,8 @@ jQuery.extend(
             } else {
                 this.Actions.splice(0, this.Actions.length,
                   this.RetrieveInstanceAction,
-                  /* this.ShareAction, //分享
-                  this.CollectAction, //收藏 */
+                  // this.ShareAction, //分享
+                  // this.CollectAction, //收藏
                   this.SaveAction,
                   this.ViewInstanceAction,
                   this.PreviewParticipantAction,

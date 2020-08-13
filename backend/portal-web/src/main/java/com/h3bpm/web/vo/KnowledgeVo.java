@@ -2,6 +2,7 @@ package com.h3bpm.web.vo;
 
 import com.h3bpm.web.entity.Knowledge;
 import com.h3bpm.web.entity.MyKnowledge;
+import com.h3bpm.web.enumeration.KnowledgeStatus;
 
 import java.util.Date;
 
@@ -23,6 +24,7 @@ public class KnowledgeVo {
 	private String createUserName;
 	private String flowCodeDesc;
 	private KnowledgePermissionVo permission = null;
+	private int status = 1;
 
 	public KnowledgeVo() {
 	}
@@ -39,6 +41,7 @@ public class KnowledgeVo {
 		this.createTime = knowledge.getCreateTime();
 		this.createUserName = knowledge.getCreateUserName();
 		this.flowCodeDesc = knowledge.getFlowCodeDesc();
+		this.status = knowledge.getStatus();
 	}
 
 	public KnowledgeVo(MyKnowledge myKnowledge){
@@ -150,5 +153,17 @@ public class KnowledgeVo {
 
 	public void setPermission(KnowledgePermissionVo permission) {
 		this.permission = permission;
+	}
+
+	public String getStatusStr(){
+		return KnowledgeStatus.parse(this.status).getDisplayName();
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
 	}
 }

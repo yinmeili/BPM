@@ -165,6 +165,7 @@
                     $scope.$emit("LoginIn", result);
                     // 设置主界面
                     if (result.Success) {
+                        $rootScope.loginUser = result;
                         var redirectUrl = window.localStorage.getItem("H3.redirectUrl");
                         $scope.loginFail = false
                         if (redirectUrl && redirectUrl != "" && redirectUrl.indexOf("Redirect.html") != -1) {

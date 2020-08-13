@@ -443,7 +443,7 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
                             <div class="col-md-12">
                                 <input class="form-control" type="text" style="border:1px solid #d9d9d9;
     background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
-                                       ng-model="temp.model.name" autofocus="autofocus"/>
+                                       ng-model="temp.tempModel.name" autofocus="autofocus"/>
                             </div>
                         </div>
                         <div class="row" style="margin-bottom: 20px;">
@@ -618,7 +618,7 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
                             <div class="col-md-12">
                                 <input class="form-control" type="text" style="border:1px solid #d9d9d9;
     background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
-                                       ng-model="temp.model.name" autofocus="autofocus"/>
+                                       ng-model="temp.tempModel.name" autofocus="autofocus"/>
                             </div>
                         </div>
                         <div class="row">
@@ -783,7 +783,7 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
                            ui-jq="wdatePicker" ui-options="EditEndTime" />
                 </div>
             </div>
-            <div class="row">
+            <div class="row" style="margin-bottom: 20px;">
                 <div class="col-md-1"></div>
                 <div class="col-md-2">权限选择</div>
                 <div class="col-md-8 input-group">
@@ -792,7 +792,14 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
                     </div>
                 </div>
             </div>
+            <div class="row" ng-if="flowId">
+                <div class="col-md-1"></div>
+                <div class="col-md-2" style="padding:0;">关联流程</div>
+                <div class="col-md-6 " style="padding:0;"><span>{{flowCodeDesc}}</span></div>
+                <div class="col-md-2" style="text-align: right;"><a class="btn btn-default" target='_blank' href='WorkItemSheets.html?WorkItemID={{flowId}}'>查看</a></div>
+            </div>
         </div>
+
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
             <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess">保存</button>
@@ -876,7 +883,7 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
                 <div class="col-md-8 input-group">
                     <!--<textarea ng-model="temp.model.desc" readonly="readonly" class="form-control" rows="2"-->
                               <!--style="resize: none;border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"></textarea>-->
-                    <p style="border:1px solid #d9d9d9; border-radius: 4px;box-shadow: none;color: #555;">{{temp.model.desc}}</p>
+                    <p class="form-control">{{temp.model.desc}}</p>
                 </div>
             </div>
             <div class="row form-group" style="margin-bottom: 20px;">
@@ -901,7 +908,7 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
                             />
                 </div>
             </div>
-            <div class="row">
+            <div class="row" style="margin-bottom: 20px;">
                 <div class="col-md-1"></div>
                 <div class="col-md-2">权限</div>
                 <div class="col-md-8 input-group">
@@ -909,6 +916,12 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
                          class="" style="border:1px solid #d9d9d9;border-radius: 4px; color: #555;" data-orgunitvisible="true" data-groupvisible="true" data-sheetusercontrol="true">
                     </div>
                 </div>
+            </div>
+            <div class="row" ng-if="flowId">
+                <div class="col-md-1"></div>
+                <div class="col-md-2" style="padding:0;">关联流程</div>
+                <div class="col-md-6" style="padding:0;"><span>{{flowCodeDesc}}</span></div>
+                <div class="col-md-2" style="text-align: right;"><a class="btn btn-default" target='_blank' href='WorkItemSheets.html?WorkItemID={{flowId}}'>查看</a></div>
             </div>
         </div>
         <div class="modal-footer">
@@ -1037,6 +1050,12 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
                            ui-jq="wdatePicker" ui-options="EditEndTime" />
                 </div>
             </div>
+            <div class="row" ng-if="flowId">
+                <div class="col-md-1"></div>
+                <div class="col-md-2" style="padding:0;">关联流程</div>
+                <div class="col-md-6" style="padding:0;"><span>{{flowCodeDesc}}</span></div>
+                <div class="col-md-2" style="text-align: right;"><a class="btn btn-default" target='_blank' href='WorkItemSheets.html?WorkItemID={{flowId}}'>查看</a></div>
+            </div>
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
@@ -1131,7 +1150,7 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
                 <div class="col-md-1"></div>
                 <div class="col-md-2">描述</div>
                 <div class="col-md-8 input-group">
-                    <p style="border:1px solid #d9d9d9; border-radius: 4px;box-shadow: none;color: #555;">{{temp.model.desc}}</p>
+                    <p class="form-control">{{temp.model.desc}}</p>
                 </div>
             </div>
             <div class="row form-group" style="margin-bottom: 20px;">
@@ -1155,6 +1174,12 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
                            style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
                     />
                 </div>
+            </div>
+            <div class="row" ng-if="flowId">
+                <div class="col-md-1"></div>
+                <div class="col-md-2" style="padding:0;">关联流程</div>
+                <div class="col-md-6" style="padding:0;"><span>{{flowCodeDesc}}</span></div>
+                <div class="col-md-2" style="text-align: right;"><a class="btn btn-default" target='_blank' href='WorkItemSheets.html?WorkItemID={{flowId}}'>查看</a></div>
             </div>
         </div>
         <div class="modal-footer">

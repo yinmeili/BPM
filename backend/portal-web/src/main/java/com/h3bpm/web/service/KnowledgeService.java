@@ -3,6 +3,7 @@ package com.h3bpm.web.service;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.h3bpm.web.entity.FlowCode;
 import com.h3bpm.web.entity.Knowledge;
 import com.h3bpm.web.entity.KnowledgePermission;
 import com.h3bpm.web.entity.Tag;
@@ -45,7 +46,6 @@ public class KnowledgeService {
 			uuid = UUID.randomUUID().toString();
 			knowledgeVo.setId(uuid);
 		}
-
 		knowledgeMapper.createKnowledge(new Knowledge(knowledgeVo));
 
 		// 对tag的处理
@@ -85,6 +85,35 @@ public class KnowledgeService {
 		}
 	}
 
+
+	@Transactional
+	public void shareFlow(KnowledgeVo knowledgeVo){
+		String uuid = knowledgeVo.getId();
+		if (uuid == null) {
+			uuid = UUID.randomUUID().toString();
+			knowledgeVo.setId(uuid);
+		}
+		FlowCode flow = knowledgeMapper.getFlowCodeByFlowId(knowledgeVo.getFlowId());
+		Knowledge knowledge = new Knowledge(knowledgeVo);
+		knowledge.setFlowCode(flow.getFlowCode());
+		knowledge.setFlowCodeDesc(flow.getFlowCodeDesc());
+		knowledgeMapper.createKnowledge(knowledge);
+
+		// 对tag的处理
+		if (tagService.getTagByTypeAndName(knowledgeVo.getTagName(), TagType.KNOWLEDGE.getValue()) == null) {
+			Tag tag = new Tag();
+			tag.setName(knowledgeVo.getTagName());
+			tag.setType(TagType.KNOWLEDGE.getValue());
+			tagService.createTag(tag);
+		}
+		if (knowledgeVo.getPermission() != null) {
+			knowledgeVo.getPermission().setKnowledgeId(uuid);
+			knowledgePermissionMapper.createKnowledgePermission(new KnowledgePermission(knowledgeVo.getPermission()));
+		}
+
+	}
+
+
 	public Knowledge getKnowledgeById(String id) {
 		return knowledgeMapper.getKnowledgeById(id);
 	}
@@ -92,7 +121,7 @@ public class KnowledgeService {
 	/**
 	 * 分页查询知识库信息
 	 * 
-	 * @param knowledgeVo
+	 * @param queryBean
 	 */
 	public PageInfo<KnowledgeVo> findKnowledgeByPage(QueryKnowledgeList queryBean) {
 		Page<Knowledge> page = PageHelper.startPage(queryBean.getPageNum(), queryBean.getiDisplayLength());
@@ -127,7 +156,7 @@ public class KnowledgeService {
     /**
      * 分页查询当前用户所有已删除的知识列表
      *
-     * @param queryBean
+     * @param knowledgeVo
      */
     public PageInfo<KnowledgeVo> findDeleteKnowledgeByPage(QueryKnowledgeList queryBean) {
         Page<Knowledge> page = PageHelper.startPage(queryBean.getiDisplayStart(), queryBean.getiDisplayLength());

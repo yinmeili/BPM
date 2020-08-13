@@ -183,8 +183,10 @@
                 // });
                 columns.push({
                     "mRender": function (data, type, full) {
+                        var temp = full;
                         full = JSON.stringify(full);
-                        return `
+                        if(temp.createUserId == $rootScope.loginUser.User.ObjectID){//显示
+                            return `
                                 <button class='btn btn-sm btn-default' ng-click='toUpdateFlow(${full})' title='编辑'>
                                     <i class='glyphicon glyphicon-edit'></i>
                                 </button>
@@ -194,6 +196,13 @@
                                 <button class='btn btn-sm btn-danger' ng-click='toDeleteFlow(${full})' title='删除'>
                                     <i class='glyphicon glyphicon-trash'></i>
                                 </button>`;
+                        }else{
+                            return `
+                                <button class='btn btn-sm btn-default' ng-click='toCollectFlow(${full})' title='收藏到我的知识'>
+                                    <i class='glyphicon glyphicon-cloud-download'></i>
+                                </button>`;
+                        }
+
                     }
                 });
                 return columns;
@@ -663,6 +672,8 @@
                 $scope.temp.model.endTime = data.endTime.substring(0,10)+' '+data.endTime.substring(11,19);
                 $scope.temp.model.tag = data.tagName;
                 $scope.temp.model.desc = data.desc;
+                $rootScope.flowCodeDesc = data.flowCodeDesc;
+                $rootScope.flowId = data.flowId;
                 var arrOrgList = data.permission.orgs;
 
                 var tmpData;
@@ -868,6 +879,8 @@
                 $scope.temp.model.endTime = data.endTime.substring(0,10)+' '+data.endTime.substring(11,19);
                 $scope.temp.model.tag = data.tagName;
                 $scope.temp.model.desc = data.desc;
+                $rootScope.flowCodeDesc = data.flowCodeDesc;
+                $rootScope.flowId = data.flowId;
                 var arrOrgList = data.permission.orgs;
 
                 var tmpData;
@@ -1012,6 +1025,8 @@
                 $scope.temp.model.startTime = data.startTime.substring(0,10)+' '+data.startTime.substring(11,19);
                 $scope.temp.model.endTime = data.endTime.substring(0,10)+' '+data.endTime.substring(11,19);
                 $scope.temp.model.tag = data.tagName;
+                $rootScope.flowCodeDesc = data.flowCodeDesc;
+                $rootScope.flowId = data.flowId;
                 $scope.temp.model.desc = data.desc;
                 // var arrOrgList = data.permission.orgs;
 
@@ -1218,6 +1233,8 @@
                 $scope.temp.model.startTime = data.startTime.substring(0,10)+' '+data.startTime.substring(11,19);
                 $scope.temp.model.endTime = data.endTime.substring(0,10)+' '+data.endTime.substring(11,19);
                 $scope.temp.model.tag = data.tagName;
+                $rootScope.flowCodeDesc = data.flowCodeDesc;
+                $rootScope.flowId = data.flowId;
                 $scope.temp.model.desc = data.desc;
                 // var arrOrgList = data.permission.orgs;
 
