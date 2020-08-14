@@ -191,7 +191,8 @@
                                     <i class='glyphicon glyphicon-edit'></i>
                                 </button>
                                 <button class='btn btn-sm btn-default' ng-click='toCollectFlow(${full})' title='收藏到我的知识'>
-                                    <i class='glyphicon glyphicon-cloud-download'></i>
+                                    <!--<i class='glyphicon glyphicon-cloud-download'></i>-->
+                                    <i class="glyphicon glyphicon-star-empty"></i>
                                 </button>
                                 <button class='btn btn-sm btn-danger' ng-click='toDeleteFlow(${full})' title='删除'>
                                     <i class='glyphicon glyphicon-trash'></i>
@@ -199,7 +200,8 @@
                         }else{
                             return `
                                 <button class='btn btn-sm btn-default' ng-click='toCollectFlow(${full})' title='收藏到我的知识'>
-                                    <i class='glyphicon glyphicon-cloud-download'></i>
+                                    <!--<i class='glyphicon glyphicon-cloud-download'></i>-->
+                                    <i class="glyphicon glyphicon-star-empty"></i>
                                 </button>`;
                         }
 
