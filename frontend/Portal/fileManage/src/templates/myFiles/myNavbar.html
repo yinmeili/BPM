@@ -8,7 +8,7 @@
             <span class="icon-bar"></span>
         </button>
         <div class="navbar-form navbar-left">
-            <input type="text" class="form-control" id="mySearch">
+            <input type="text" class="form-control" id="mySearch" ng-keyup="mySearchKeyUp($event)">
             <input type="button" value="搜索" class="form-control" ng-click="mySearch('mySearch');">
         </div>
         <!--</div>-->
