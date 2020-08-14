@@ -871,8 +871,8 @@ public class FileManagerController extends ControllerBase {
 			// 获取文件后缀
 			String[] strArray = fileFullName.split("\\.");
 			int suffixIndex = strArray.length - 1;
-			String fileName = strArray[0];
 			String fileSuffix = strArray[suffixIndex];
+			String fileName = fileFullName.replace("." + fileSuffix, "");
 
 			// :TODO 判断文件是否已存在
 			// Path folderPath = Paths.get(uploadPath + File.separator + path);
@@ -961,10 +961,6 @@ public class FileManagerController extends ControllerBase {
 			String fileFullName = file.getOriginalFilename();
 
 			// 获取文件后缀
-			String[] strArray = fileFullName.split("\\.");
-			int suffixIndex = strArray.length - 1;
-			String fileSuffix = strArray[suffixIndex];
-
 			// :TODO 判断文件是否已存在
 			// Path folderPath = Paths.get(uploadPath + File.separator + path);
 			//
