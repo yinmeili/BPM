@@ -66,18 +66,22 @@
             };
 
             $scope.smartClick = function (item, e) {
+                var url = "";
+                e.target.target = "_blank";
+                if($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['myFiles']){
+                    url += "/Portal/onlinePreview/previewMyFile?fileId="+ item.model.id;
+                }else if($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['allFiles']){
+                    url += "/Portal/onlinePreview/previewFile?fileId="+ item.model.id;
+                }
+
                 if (item.isFolder()) {
                     return $scope.fileNavigator.folderClick(item);
                 }
                 if (item.isImage()) {
-                    var fileId = item.model.id;
-                    e.target.target = "_blank";
-                    e.target.href = "/Portal/onlinePreview/previewFile?fileId="+ fileId;
+                    e.target.href = url;
                 }
                 if (item.isEditable()) {
-                    var fileId = item.model.id;
-                    e.target.target = "_blank";
-                    e.target.href = "/Portal/onlinePreview/previewFile?fileId="+ fileId;
+                    e.target.href = url;
                 }
             };
 
@@ -278,6 +282,20 @@
                     $scope.temp.error = errorMsg;
                 });
             };
+
+            //回车搜索
+            $scope.searchKeyUp = function(e){
+                var keycode = window.event?e.keyCode:e.which;
+                if(keycode==13){
+                    $scope.search("allSearch");
+                }
+            }
+            $scope.mySearchKeyUp = function(e){
+                var keycode = window.event?e.keyCode:e.which;
+                if(keycode==13){
+                    $scope.mySearch("mySearch");
+                }
+            }
 
             //我的文件搜索
             $scope.mySearch = function (searchId){
