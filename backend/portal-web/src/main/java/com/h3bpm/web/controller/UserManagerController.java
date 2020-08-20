@@ -28,7 +28,7 @@ public class UserManagerController extends ControllerBase {
 
     @RequestMapping(value = "/listSubordinateByUserId", method = RequestMethod.GET, produces = "application/json;charset=utf8")
     @ResponseBody
-    public List<RespListSubordinateByUserIdVo> listKnowledgeTagByName() throws IOException {
+    public List<RespListSubordinateByUserIdVo> listSubordinateByUserId() throws IOException {
 
         List<RespListSubordinateByUserIdVo> list = new ArrayList<>();
 
