@@ -2,14 +2,11 @@
     <!--<button class="btn btn-sm btn-default" data-toggle="modal" data-target="#updateFile" ng-show="config.allowedActions.rename" ng-click="touch(item)" title="编辑">-->
     <!--<i class="glyphicon glyphicon-edit"></i>-->
     <!--</button>-->
-    <button class="btn btn-sm btn-default" ng-click="toUpdateFile(item)" ng-show="item.isPermissionFile()" title="编辑">
-        <i class="glyphicon glyphicon-edit"></i>
+    <button class="btn btn-sm btn-default" ng-show="config.allowedActions.download && !item.isFolder()" ng-click="item.download()" title="{{'下载' | translate}}">
+        <i class="glyphicon glyphicon-download"></i>
     </button>
-    <button class="btn btn-sm btn-default" data-toggle="modal" data-target="#copy" ng-show="config.allowedActions.copy && !item.isFolder()" ng-click="touch(item)" title="{{'copy' | translate}}">
-        <i class="glyphicon glyphicon-log-out"></i>
-    </button>
-    <!--<button class="btn btn-sm btn-default" data-toggle="modal" data-target="#edit" ng-show="config.allowedActions.edit && item.isEditable()" ng-click="item.getContent(); touch(item)" title="{{'edit' | translate}}">-->
-        <!--<i class="glyphicon glyphicon-pencil"></i>-->
+    <!--<button class="btn btn-sm btn-default" ng-show="config.allowedActions.preview && item.isImage()" ng-click="openImagePreview(item)" title="{{'图片' | translate}}">-->
+    <!--<i class="glyphicon glyphicon-picture"></i>-->
     <!--</button>-->
     <button class="btn btn-sm btn-default" ng-click="toCollectFile(item)" ng-show="config.allowedActions.changePermissions"title="收藏到我的文件">
         <!--<i class="glyphicon glyphicon-cloud-download"></i>-->
@@ -21,11 +18,14 @@
     <button class="btn btn-sm btn-default" data-toggle="modal" data-target="#extract" ng-show="config.allowedActions.extract && item.isExtractable()" ng-click="touch(item); item.tempModel.name=''" title="{{'extract' | translate}}">
         <i class="glyphicon glyphicon-export"></i>
     </button>
-    <button class="btn btn-sm btn-default" ng-show="config.allowedActions.download && !item.isFolder()" ng-click="item.download()" title="{{'下载' | translate}}">
-        <i class="glyphicon glyphicon-download"></i>
+    <button class="btn btn-sm btn-default" ng-click="toUpdateFile(item)" ng-show="item.isPermissionFile()" title="编辑">
+        <i class="glyphicon glyphicon-edit"></i>
     </button>
-    <!--<button class="btn btn-sm btn-default" ng-show="config.allowedActions.preview && item.isImage()" ng-click="openImagePreview(item)" title="{{'图片' | translate}}">-->
-        <!--<i class="glyphicon glyphicon-picture"></i>-->
+    <button class="btn btn-sm btn-default" data-toggle="modal" data-target="#copy" ng-show="config.allowedActions.copy && !item.isFolder()" ng-click="touch(item)" title="{{'copy' | translate}}">
+        <i class="glyphicon glyphicon-log-out"></i>
+    </button>
+    <!--<button class="btn btn-sm btn-default" data-toggle="modal" data-target="#edit" ng-show="config.allowedActions.edit && item.isEditable()" ng-click="item.getContent(); touch(item)" title="{{'edit' | translate}}">-->
+    <!--<i class="glyphicon glyphicon-pencil"></i>-->
     <!--</button>-->
     <button class="btn btn-sm btn-danger" data-toggle="modal" ng-show="item.isPermissionFile()" ng-click="toDeleteFile(item)" title="删除">
         <i class="glyphicon glyphicon-trash"></i>
