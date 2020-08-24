@@ -283,6 +283,20 @@
                 });
             };
 
+            //回车搜索
+            $scope.searchKeyUp = function(e){
+                var keycode = window.event?e.keyCode:e.which;
+                if(keycode==13){
+                    $scope.search("allSearch");
+                }
+            }
+            $scope.mySearchKeyUp = function(e){
+                var keycode = window.event?e.keyCode:e.which;
+                if(keycode==13){
+                    $scope.mySearch("mySearch");
+                }
+            }
+
             //我的文件搜索
             $scope.mySearch = function (searchId){
                 $scope.fileNavigator.position = true;
