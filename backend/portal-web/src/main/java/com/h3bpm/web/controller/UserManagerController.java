@@ -26,9 +26,9 @@ public class UserManagerController extends ControllerBase {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/listSubordinateByUserId", method = RequestMethod.GET, produces = "application/json;charset=utf8")
+    @RequestMapping(value = "/listSubordinate", method = RequestMethod.GET, produces = "application/json;charset=utf8")
     @ResponseBody
-    public List<RespListSubordinateByUserIdVo> listSubordinateByUserId() throws IOException {
+    public List<RespListSubordinateByUserIdVo> listSubordinate() throws IOException {
 
         List<RespListSubordinateByUserIdVo> list = new ArrayList<>();
 
