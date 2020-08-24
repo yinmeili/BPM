@@ -18,6 +18,13 @@ public enum ApiActionUrl {
 	 */
 	GET_PARENT_ORG("/orgs/%s/parents", HttpRequestType.GET),
 
+	/**
+	 * 发起流程
+	 */
+	CREATE_WORKFLOW("/workflows/%s", HttpRequestType.POST);
+
+
+
 	;
 
 	private final static Logger logger = LoggerFactory.getLogger(ApiActionUrl.class);

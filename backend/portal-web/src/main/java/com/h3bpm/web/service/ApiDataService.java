@@ -16,6 +16,15 @@ public abstract class ApiDataService {
 	@Value(value = "${application.api.service.url.org}")
 	private String apiServiceUrlOrg = null;
 
+	@Value(value = "${application.api.service.url.bpm}")
+	private String apiServiceUrlBpm = null;
+
+	@Value(value = "${application.api.systemCode}")
+	private String systemCode = null;
+
+	@Value(value = "${application.api.secret}")
+	private String secret = null;
+
 	public String getApiServiceUrl() {
 		return apiServiceUrlOrg;
 	}
@@ -44,6 +53,26 @@ public abstract class ApiDataService {
 		Request request = new Request(apiServiceUrlOrg, actionUrl, httpRequestType.getValue());
 
 		Map<String, Object> param = new HashMap<String, Object>();
+
+		if (data != null) {
+			param.putAll(data);
+		}
+
+		request.setData(param);
+
+		Response response = TransportUtils.processSync(request);
+		Map<String, Object> result = response.getResult();
+
+		return result;
+	}
+
+
+	public Map<String, Object> processSyncBpm(String actionUrl, HttpRequestType httpRequestType, Map<String, Object> data) throws IllegalArgumentException, TransportException {
+		Request request = new Request(apiServiceUrlBpm, actionUrl, httpRequestType.getValue());
+
+		Map<String, Object> param = new HashMap<String, Object>();
+		param.put("systemCode",systemCode);
+		param.put("secret",secret);
 
 		if (data != null) {
 			param.putAll(data);
