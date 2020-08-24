@@ -203,9 +203,9 @@ public class TransportUtils {
 		HttpPost httpRequest = null;
 
 		try {
-			JSONObject json = new JSONObject();
-			json.put(DataUtils.JSON_DATA_KEY, request.getData());
-			json.put(DataUtils.JSON_TIMESTAMP_KEY, new Date().getTime());
+			JSONObject json = new JSONObject((Map<String,Object>)request.getData());
+//			json.put(DataUtils.JSON_DATA_KEY, request.getData());
+//			json.put(DataUtils.JSON_TIMESTAMP_KEY, new Date().getTime());
 
 			StringEntity entity = new StringEntity(json.toJSONString(), DataUtils.CHARSET_UTF8);
 			// entity.setContentEncoding(DataUtils.CHARSET_UTF8);
