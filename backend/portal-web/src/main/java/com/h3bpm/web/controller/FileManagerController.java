@@ -578,7 +578,7 @@ public class FileManagerController extends ControllerBase {
 		fileVo.setType(FileType.DIR.getValue());// 存入类型
 		fileVo.setCreateUserId(user.getObjectId());// 存入用户Id
 		fileVo.setCreateTime(new Date());
-		String name = fileService.validateFolderName(parentId,fileVo.getName());
+		String name = fileService.validateFolderName(parentId, fileVo.getName());
 		fileVo.setName(name);
 		fileService.createFile(fileVo);
 
@@ -914,7 +914,7 @@ public class FileManagerController extends ControllerBase {
 				// 设置FilePermission
 				fileVo.setFilePermission(filePermissionVo);
 
-				String name = fileService.validateFileName(parentId,fileName,fileSuffix);
+				String name = fileService.validateFileName(parentId, fileName, fileSuffix);
 				fileVo.setName(name);
 				fileService.createFile(fileVo);
 
@@ -1113,7 +1113,7 @@ public class FileManagerController extends ControllerBase {
 
 		return null;
 	}
-	
+
 	@RequestMapping(value = "/shareFile", produces = "application/json;charset=utf8")
 	@ResponseBody
 	public ResponseVo shareFile(@RequestBody ReqShareFile reqBean) {
@@ -1128,7 +1128,7 @@ public class FileManagerController extends ControllerBase {
 				for (com.h3bpm.web.entity.File shareFile : shareFileList) {
 					FileVo fileVo = new FileVo(shareFile);
 					fileVo.setFilePermission(reqBean.getFilePermission());
-					
+
 					fileService.createFile(fileVo);
 				}
 			}
