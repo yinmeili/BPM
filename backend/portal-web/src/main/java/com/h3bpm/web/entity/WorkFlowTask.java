@@ -1,17 +1,38 @@
 package com.h3bpm.web.entity;
 
+import cn.afterturn.easypoi.excel.annotation.Excel;
+
 import java.util.Date;
 
-public class WorkFlowTask {
+public class WorkFlowTask implements java.io.Serializable{
+    @Excel(name = "id", orderNum = "0")
     private String id;
+
+    @Excel(name = "instance_id", orderNum = "1")
     private String instanceId;
+
+    @Excel(name = "workflow_code", orderNum = "2")
     private String workFlowCode;
+
+    @Excel(name = "user_login_name", orderNum = "3")
     private String userLoginName;
+
+    @Excel(name = "user_display_name", orderNum = "4")
     private String userDisplayName;
+
+    @Excel(name = "create_time", orderNum = "5")
     private Date createTime;
+
+    @Excel(name = "start_time", orderNum = "6", format = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
+
+    @Excel(name = "end_time", orderNum = "7", format = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
+
+    @Excel(name = "execute_type", orderNum = "8")
     private int executeType;
+
+    @Excel(name = "param_data", orderNum = "9")
     private String paramData;
 
     public WorkFlowTask(String id, String instanceId, String workFlowCode, String userLoginName, String userDisplayName, Date createTime, Date startTime, Date endTime, int executeType, String paramData) {
@@ -108,5 +129,21 @@ public class WorkFlowTask {
 
     public void setParamData(String paramData) {
         this.paramData = paramData;
+    }
+
+    @Override
+    public String toString() {
+        return "WorkFlowTask{" +
+                "id='" + id + '\'' +
+                ", instanceId='" + instanceId + '\'' +
+                ", workFlowCode='" + workFlowCode + '\'' +
+                ", userLoginName='" + userLoginName + '\'' +
+                ", userDisplayName='" + userDisplayName + '\'' +
+                ", createTime=" + createTime +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", executeType=" + executeType +
+                ", paramData='" + paramData + '\'' +
+                '}';
     }
 }
