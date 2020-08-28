@@ -3,6 +3,7 @@ package com.h3bpm.web.controller;
 import OThinker.Common.Organization.Models.User;
 import OThinker.H3.Controller.ControllerBase;
 import com.h3bpm.web.enumeration.FileType;
+import com.h3bpm.web.enumeration.KnowledgeType;
 import com.h3bpm.web.service.FilePermissionService;
 import com.h3bpm.web.service.FileService;
 import com.h3bpm.web.service.MyFileService;
@@ -92,16 +93,26 @@ public class FileManagerController extends ControllerBase {
 	// }
 
 	// author:lhl
-	@RequestMapping(value = "/listRecycleFile", produces = "application/json;charset=utf8")
+	@RequestMapping(value = "/listRecycleFile", method = RequestMethod.GET, produces = "application/json;charset=utf8")
 	@ResponseBody
-	public ResponseVo listRecycleFile() {
+	public ResponseVo listRecycleFile(@RequestParam(value = "knowledgeType") String knowledgeType) {
 		List<FileVo> descList = new ArrayList<>();
 		try {
 			Map<String, Object> userMap = this._getCurrentUser();
 			OThinker.Common.Organization.Models.User user = (User) userMap.get("User");
 			String userId = user.getObjectId();
 
-			List<com.h3bpm.web.entity.File> fileList = fileService.findDeletedFileByUserId(userId);
+			List<com.h3bpm.web.entity.File> fileList =null;
+
+			if (knowledgeType != null && !knowledgeType.equals("")) {
+				if (KnowledgeType.SHARE_FILE.getValue().equals(knowledgeType)){
+					fileList = fileService.findDeletedFileByUserId(userId);
+				}
+				if (KnowledgeType.MY_FILE.getValue().equals(knowledgeType)){
+					fileList = fileService.findDeletedMyFileByUserId(userId);
+				}
+			}
+
 			for (com.h3bpm.web.entity.File file : fileList) {
 				FileVo fileVo = new FileVo(file);
 				descList.add(fileVo);
