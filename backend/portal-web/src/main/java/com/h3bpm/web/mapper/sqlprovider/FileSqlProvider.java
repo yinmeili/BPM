@@ -76,6 +76,29 @@ public class FileSqlProvider {
 
 	}
 
+	public String findDeletedMyFileByUserId(Map<String, Object> para) {
+		String userId = (String)para.get("userId");
+		String sql =
+				"SELECT"+
+						"			 id,"+
+						"			 name,"+
+						"			 type,"+
+						"			 parent_id parentId,"+
+						"			 dir,"+
+						"			 file_size fileSize,"+
+						"			 create_user_id createUserId,"+
+						"			 create_time createTime,"+
+						"			 is_delete isDelete,"+
+						"			 delete_time deleteTime"+
+						"			FROM"+
+						"				ot_my_file"+
+						"				WHERE is_delete=1 AND "+
+						"           create_user_id = '" + userId + "'"+
+						"				ORDER BY delete_time DESC";
+		return sql;
+
+	}
+
 
 	public String findFileNameByParentId(Map<String, Object> para) {
 		String parentId = (String) para.get("parentId");

@@ -1,17 +1,20 @@
 package com.h3bpm.web.scheduler;
 
-import com.h3bpm.web.entity.File;
-import com.h3bpm.web.entity.WorkFlowTask;
-import com.h3bpm.web.service.WorkFlowService;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import com.h3bpm.web.entity.WorkFlowTask;
+import com.h3bpm.web.service.WorkFlowService;
 
 
 @Component
 public class WorkflowTask {
+	private static final Logger logger = LoggerFactory.getLogger(WorkflowTask.class);
 
 	@Autowired
 	private WorkFlowService workFlowService;
@@ -26,9 +29,13 @@ public class WorkflowTask {
 	 **/
 	@Scheduled(cron = "* */5 * * * ?")
 	private void process() {
+		logger.info("======== WorkflowTask start ========");
+		
 		List<WorkFlowTask> workflowTasks = workFlowService.findWorkFlowTask();
 		for (WorkFlowTask workFlowTask : workflowTasks) {
 			workFlowService.createWorkFlow(workFlowTask.getId());
 		}
+		
+		logger.info("======== WorkflowTask end ========");
 	}
 }
