@@ -87,9 +87,23 @@ public class FileService extends ApiDataService {
 
 	}
 
+	public List<File> findDeletedMyFileByUserId(String userId) {
+
+		List<File> fileList = null;
+		try {
+			fileList = fileMapper.findDeletedMyFileByUserId(userId);
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return fileList;
+
+	}
+
 	/**
 	 * 新增文件或文件夹
-	 * 
+	 *
 	 * @param fileVo
 	 * @return 文件ID
 	 */
