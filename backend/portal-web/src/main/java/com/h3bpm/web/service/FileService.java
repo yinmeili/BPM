@@ -295,4 +295,11 @@ public class FileService extends ApiDataService {
 		return fileFullName;
 	}
 
+
+	public void renewRecycleFile(String fileId){
+		File file = fileMapper.getFileById(fileId);
+		file.setIsDelete(false);
+		fileMapper.updateFile(file);
+	}
+
 }
