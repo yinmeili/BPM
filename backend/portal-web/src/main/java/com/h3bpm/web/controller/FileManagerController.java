@@ -128,6 +128,32 @@ public class FileManagerController extends ControllerBase {
 
 	}
 
+	/**
+	 * 还原回收站中的文件
+	 * @param knowledgeType
+	 * @param fileId
+	 * @return
+	 */
+	@RequestMapping(value = "/renewRecycleFile", method = RequestMethod.GET, produces = "application/json;charset=utf8")
+	@ResponseBody
+	public ResponseVo renewRecycleFile(@RequestParam(value = "knowledgeType") String knowledgeType, @RequestParam(value = "fileId") String fileId){
+		try{
+			if(knowledgeType != null && !knowledgeType.equals("")){
+				if (KnowledgeType.SHARE_FILE.getValue().equals(knowledgeType)){
+					fileService.renewRecycleFile(fileId);
+				}
+				if (KnowledgeType.MY_FILE.getValue().equals(knowledgeType)){
+					myFileService.renewRecycleFile(fileId);
+				}
+			}
+
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		return new ResponseVo("恢复成功");
+	}
+
+
 	@RequestMapping(value = "/listFile", produces = "application/json;charset=utf8")
 	@ResponseBody
 	public FileDescList listFile(@RequestBody ReqParamList paramList) {
