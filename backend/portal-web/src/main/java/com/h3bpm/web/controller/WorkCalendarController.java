@@ -1,6 +1,7 @@
 package com.h3bpm.web.controller;
 
 import OThinker.Common.Data.BoolMatchValue;
+import OThinker.Common.Data.Database.Parameter;
 import OThinker.Common.DateTimeUtil;
 import OThinker.Common.DotNetToJavaStringHelper;
 import OThinker.Common.Organization.Interface.IOrganization;
@@ -8,6 +9,7 @@ import OThinker.Common.Organization.Models.Unit;
 import OThinker.Common.Organization.Models.User;
 import OThinker.Common.Organization.enums.State;
 import OThinker.Common.Organization.enums.UserServiceState;
+import OThinker.Common.util.ListUtil;
 import OThinker.H3.Controller.ControllerBase;
 import OThinker.H3.Controller.Controllers.ProcessCenter.WorkItemController;
 import OThinker.H3.Controller.ViewModels.WorkItemViewModel;
@@ -19,8 +21,11 @@ import com.h3bpm.base.user.UserValidator;
 import com.h3bpm.base.user.UserValidatorFactory;
 import com.h3bpm.web.enumeration.WorkCalendarStatus;
 import com.h3bpm.web.vo.ResponseVo;
+import com.h3bpm.web.vo.ResponseWorkCalendarVo;
 import com.h3bpm.web.vo.WorkCalendarVo;
 import data.DataTable;
+import net.sf.json.JSONObject;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.security.sasl.AuthenticationException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,8 +52,6 @@ public class WorkCalendarController extends ControllerBase {
 
     @Value(value = "${application.api.secret}")
     private String secret = null;
-
-    public Authentication authentication;
 
     /**
      * 获取当前Controller的权限编码
@@ -106,17 +110,13 @@ public class WorkCalendarController extends ControllerBase {
     /**
      * @throws
      * @Title: findAll
-     * @Description: [GET] /workitems/findAll 查询用户的待办和已办
-     * @Param: systemCode 系统编码 必填
-     * @Param: secret 系统秘钥 必填
+     * @Description: [GET] /workitems/findAll 查询用户的待办、已办和超时任务
      * @Param: userId 用户id 必填
      * @param: startTime 开始时间
      * @param: endTime 结束时间
-     * @param: startIndex 开始索引
-     * @param: endIndex 结束索引
      * @param: workflowCode 流程编码
      * @param: instanceName 流程实例名称
-     * @Return: RestfulApiResult
+     * @Return: ResponseVo
      */
     @SuppressWarnings("static-access")
     @RequestMapping(value = "/workitems/findAll", method = RequestMethod.GET)
@@ -132,37 +132,31 @@ public class WorkCalendarController extends ControllerBase {
         int endIndex = -1;
 
         WorkItemController controller = new WorkItemController();
+        WorkCalendarVo workCalendarVo = null;
+        List<WorkCalendarVo> list = new ArrayList<>();
+        ResponseWorkCalendarVo responseWorkCalendarVo = null;
+
+        UserValidator validator = getUserValidator(userId);
+
+        /*
+         * **************查询已办任务**************
+         */
         List<WorkItemViewModel> griddataFinish = null;
-        List<WorkItemViewModel> griddataUnfinish = null;
 
         String[] conditions1 = getPortalQuery().GetWorkItemConditions(userId,
                 DateTimeUtil.getStringToDate(startTimeStr), DateTimeUtil.getDatePlusOne(endTimeStr),
                 WorkItemState.Finished, instanceName,
                 BoolMatchValue.Unspecified, workflowCode, true,
                 WorkItemFinished.TableName);
+
         String orderBy1 = "ORDER BY " + WorkItemFinished.TableName + "."
                 + WorkItemFinished.PropertyName_ReceiveTime + " DESC";
 
-        String[] conditions2 = getPortalQuery().GetWorkItemConditions(userId,
-                DateTimeUtil.getStringToDate(startTimeStr), DateTimeUtil.getDatePlusOne(endTimeStr),
-                WorkItemState.Unfinished, instanceName,
-                BoolMatchValue.Unspecified, workflowCode, true,
-                WorkItem.TableName);
-        String orderBy2 = " ORDER BY " + WorkItem.TableName + "." + WorkItem.PropertyName_Priority + " DESC,"
-                + WorkItem.TableName + "." + WorkItem.PropertyName_Urged + " DESC,"
-                + WorkItem.TableName + "." + WorkItem.PropertyName_ReceiveTime + " DESC";
-
         DataTable dtWorkItem1 = getPortalQuery().QueryWorkItem(conditions1,
                 startIndex, endIndex, orderBy1, WorkItemFinished.TableName);
-        DataTable dtWorkItem2 = getPortalQuery().QueryWorkItem(conditions2,
-                startIndex, endIndex, orderBy2, WorkItem.TableName);
+
         String[] columns = new String[]{WorkItemFinished.PropertyName_OrgUnit};
-
         griddataFinish = controller.Getgriddata(dtWorkItem1, columns, true);
-        griddataUnfinish = controller.Getgriddata(dtWorkItem2, columns, true);
-
-        List<WorkCalendarVo> list = new ArrayList<>();
-        WorkCalendarVo workCalendarVo = null;
 
         for (WorkItemViewModel workItemViewModel : griddataFinish) {
 
@@ -175,6 +169,29 @@ public class WorkCalendarController extends ControllerBase {
 
             list.add(workCalendarVo);
         }
+        int finishTotal = griddataFinish == null ? 0 : griddataFinish.size();
+
+        /******************************************/
+
+
+        /*
+         * **************查询待办任务**************
+         */
+        List<WorkItemViewModel> griddataUnfinish = null;
+
+        String[] conditions2 = getPortalQuery().GetWorkItemConditions(userId,
+                DateTimeUtil.getStringToDate(startTimeStr), DateTimeUtil.getDatePlusOne(endTimeStr),
+                WorkItemState.Unfinished, instanceName,
+                BoolMatchValue.Unspecified, workflowCode, true,
+                WorkItem.TableName);
+        String orderBy2 = " ORDER BY " + WorkItem.TableName + "." + WorkItem.PropertyName_Priority + " DESC,"
+                + WorkItem.TableName + "." + WorkItem.PropertyName_Urged + " DESC,"
+                + WorkItem.TableName + "." + WorkItem.PropertyName_ReceiveTime + " DESC";
+
+        DataTable dtWorkItem2 = getPortalQuery().QueryWorkItem(conditions2,
+                startIndex, endIndex, orderBy2, WorkItem.TableName);
+
+        griddataUnfinish = controller.Getgriddata(dtWorkItem2, columns, true);
 
         for (WorkItemViewModel workItemViewModel : griddataUnfinish) {
 
@@ -187,70 +204,60 @@ public class WorkCalendarController extends ControllerBase {
 
             list.add(workCalendarVo);
         }
-        return new ResponseVo(list);
-    }
+        int unfinishTotal = griddataUnfinish == null ? 0 : griddataUnfinish.size();
+
+        /******************************************/
 
 
-    protected boolean setAuthenticationValue(String systemCode, String secret)
-            throws Exception {
-        authentication = new Authentication(systemCode, secret);
-        return validateSoapHeader();
-    }
-
-    private boolean validateSoapHeader() throws Exception {
-        if (authentication == null) {
-            logger.info("请输入系统认证信息....");
-            return false;
-        }
-        boolean result = false;
-        try {
-            String systemCode = authentication.getSystemCode();
-            String secret = authentication.getSecret();
-            logger.info("开始系统认证 -> systemCode: " + systemCode + ", secret: "
-                    + secret);
-            result = getEngine().getSSOManager().ValidateSSOSystem(systemCode,
-                    secret);
-            if (!result) {
-                logger.info("系统认证信息不正确....");
-                return false;
-            }
-        } catch (Exception e) {
-            logger.info("系统认证失败...." + e.getMessage());
-            return false;
-        }
-        return result;
-    }
-
-    public class Authentication {
-
-        public Authentication() {
+        /*
+         * **************查询超时任务**************
+         */
+        JSONObject json = ExecuteFunctionRun(null);
+        if (json != null) {
+            return null;
         }
 
-        public Authentication(String systemCode, String secret)
-                throws AuthenticationException {
-            this.systemCode = systemCode;
-            this.secret = secret;
+        userId = StringEscapeUtils.escapeSql(userId);
+
+        List<WorkItemViewModel> griddataElapsed = null;
+
+        String[] orgs = DotNetToJavaStringHelper.isNullOrEmpty(userId) ? this.getUserValidator().getViewableOrgs() : userId.split(";");
+
+        instanceName = StringEscapeUtils.escapeSql(instanceName);
+        workflowCode = StringEscapeUtils.escapeSql(workflowCode);
+
+        instanceName = DotNetToJavaStringHelper.isNullOrEmpty(instanceName) ? null : instanceName.trim().replace("'", "").replace("--", "");
+
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        List<Parameter> params = new ArrayList<>();
+        String[] conditions = getEngine().getPortalQuery().GetQueryWorkItemConditionsForMonitor(params, orgs, workflowCode, DotNetToJavaStringHelper.isNullOrEmpty(startTimeStr) ? DateTimeUtil.minValue() : df.parse(startTimeStr), DotNetToJavaStringHelper.isNullOrEmpty(endTimeStr) ? DateTimeUtil.maxValue() : DateTimeUtil.addDates(df.parse(endTimeStr), 1), instanceName, WorkItemState.Unfinished, BoolMatchValue.Unspecified, BoolMatchValue.True);
+
+        DataTable dtWorkitem = getEngine().getPortalQuery().QueryWorkItem(conditions, ListUtil.toArray(params), -1, -1, "", WorkItem.TableName);
+
+        String[] columnsElapsed = new String[]{WorkItem.PropertyName_OrgUnit};
+        griddataElapsed = controller.Getgriddata(dtWorkitem, columnsElapsed, true);
+
+        for (WorkItemViewModel workItemViewModel : griddataElapsed) {
+
+            workCalendarVo = new WorkCalendarVo();
+
+            workCalendarVo.setId(workItemViewModel.getBaseObjectID());
+            workCalendarVo.setTitle(workItemViewModel.getInstanceName());
+            workCalendarVo.setStatus(WorkCalendarStatus.EXCEED_TIME_LIMIT.getValue());
+            workCalendarVo.setStart(DateTimeUtil.getStringToDate(workItemViewModel.getReceiveTime(), null));
+
+            list.add(workCalendarVo);
         }
+        int exceedTimeLimitTotal = griddataElapsed == null ? 0 : griddataElapsed.size();
 
-        private String systemCode;
-        private String secret;
+        /******************************************/
 
-        public String getSystemCode() {
-            return systemCode;
-        }
 
-        public void setSystemCode(String systemCode) {
-            this.systemCode = systemCode;
-        }
-
-        public String getSecret() {
-            return secret;
-        }
-
-        public void setSecret(String secret) {
-            this.secret = secret;
-        }
-
+        responseWorkCalendarVo = new ResponseWorkCalendarVo(list);
+        responseWorkCalendarVo.setFinishTotal(finishTotal);
+        responseWorkCalendarVo.setUnfinishTotal(unfinishTotal);
+        responseWorkCalendarVo.setExceedTimeLimitTotal(exceedTimeLimitTotal);
+        return new ResponseVo(responseWorkCalendarVo);
     }
 }
 
