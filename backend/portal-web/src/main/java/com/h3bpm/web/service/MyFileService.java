@@ -175,9 +175,14 @@ public class MyFileService extends ApiDataService {
 					findShareFileChild(myFileList, rootShareFileDir, rootMyFileDir, shareFile.getId(), myFileId, userId);
 				}
 			}
-
 		}
 		myFileList.add(myFile);
+	}
+
+	public void renewRecycleFile(String fileId){
+		File myFile = myFileMapper.getMyFileById(fileId);
+		myFile.setIsDelete(false);
+		myFileMapper.updateMyFile(myFile);
 	}
 
 }
