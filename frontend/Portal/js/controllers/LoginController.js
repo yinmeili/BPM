@@ -91,8 +91,8 @@
                                 var rUrl = window.location.href.replace(window.location.search, "")
                                 var index = rUrl.indexOf("#/");
                                 rUrl = rUrl.substring(0, index);
-                                window.location.href = rUrl + "#/app/Workflow/MyUnfinishedWorkItem"
-                                //window.location.href = rUrl + "#/app/Workflow/workCalendar"
+                                //window.location.href = rUrl + "#/app/Workflow/MyUnfinishedWorkItem"
+                                window.location.href = rUrl + "#/app/Workflow/workCalendar"
                             }
                             $scope.loginFail = false;
                         }
@@ -182,8 +182,8 @@
                                 $scope.loginDisabled = false;
                             }, 500)
                         } else {
-                            $state.go("app.MyUnfinishedWorkItem", {TopAppCode: "Workflow"});
-                            //$state.go("app.workCalendar", {TopAppCode: "Workflow"});
+                            //$state.go("app.MyUnfinishedWorkItem", {TopAppCode: "Workflow"});
+                            $state.go("app.workCalendar", {TopAppCode: "Workflow"});
                         }
                         $interval.cancel($scope.timeout_upd)
                         // $scope.LoginSuccess = true;
