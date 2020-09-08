@@ -139,6 +139,7 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 				editable: false,
 				firstDay: 1,
 				weekMode: "liquid",
+
 				//在agenda视图模式下，是否在日历上方显示all-day(全天)
 				allDaySlot: false,
 				// 强调日历中的某些时间段，
@@ -158,34 +159,10 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 					agendaWeek: "周",
 					agendaDay: "天",
 				},
-// 				eventMouseover: function (event, jsEvent, view) {
-// 					var data_text = event.title;
-// 					var top = jsEvent.pageY, left =jsEvent.pageX ;
-// 					var showbox = $('<div>' + data_text + '</div>').css({
-					
-// 						padding: '2px 5px',	
-// 						position: 'flexed',
-// 						top: top+18,
-				
-// 						left: left ,
-// 						color: '#fff',
-// 						border: '1px solid #CCC',
-// 						borderRadius: '5px',
-// 						background: '#cc33cc',		
-// 				  }).addClass("showbox");
-// 					showbox.insertAfter(".fc-event-container");
-		
-// },
 
- 
-
-		
-
-// 				eventMouseout: function (calEvent, jsEvent, view) {//鼠标从日程区块离开时触发
-// 					$(".showbox").remove();
-		
-
-// 				},
+				eventRender: function (event, element) {
+					$(element).tooltip({ title: event.title });
+				},
 				eventClick: function (calEvent, jsEvent, view) {//日程区块，单击时触发
 					window.open($scope.url = 'WorkItemSheets.html?WorkItemID=' + calEvent.id);
 				},
