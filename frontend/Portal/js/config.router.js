@@ -222,15 +222,19 @@ angular.module('app')
                                         resolve: {
                                             deps: ['$ocLazyLoad',
                                                 function ($ocLazyLoad) {
-                                                    return $ocLazyLoad.load([
-                                                       'workCalendar/src/css/main.css',
+                                                    return $ocLazyLoad.load([ 
+                                                      
+                                                        'workCalendar/src/css/main.css',
                                                         'workCalendar/src/js/main.js',
                                                         'WFRes/_Content/themes/ligerUI/Aqua/css/ligerui-all.min.css',
                                                         'WFRes/assets/stylesheets/sheet.css',
                                                         'WFRes/_Scripts/jquery/jquery.lang.js',
-                                                       'WFRes/_Scripts/ligerUI/ligerui.all.min.js',
+                                                        'WFRes/_Scripts/ligerUI/ligerui.all.min.js',
                                                         'WFRes/_Scripts/MvcSheet/SheetControls.js',
-                                                       
+                                                        'vendor/angular/angular-tooltips/angular-tooltips.js',
+                                                        'vendor/angular/angular-tooltips/angular-tooltips.min.js',
+                                                        'vendor/angular/angular-tooltips/angular-tooltips.css',
+                                                     
                                                     ]).then(function () {
                                                         return $ocLazyLoad.load([ 
                                                             
