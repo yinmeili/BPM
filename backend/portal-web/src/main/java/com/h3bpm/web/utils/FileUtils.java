@@ -11,12 +11,12 @@ import java.util.List;
 
 public class FileUtils {
 
-    public static void main(String[] args) {
-        File file = new File("/Users/liubinhui/Desktop/tmp.xlsx");
-        importExcel(file);
-
-    }
-    public static List<WorkFlowTask> importExcel(File file){
+//    public static void main(String[] args) {
+//        File file = new File("/Users/liubinhui/Desktop/tmp.xlsx");
+//        importExcel(file);
+//
+//    }
+    public static List<WorkFlowTask> importWorkFlowTaskExcel(File file){
         if(!validate(file)) {
             return null;
         }

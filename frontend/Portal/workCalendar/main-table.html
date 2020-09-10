@@ -1,8 +1,27 @@
 <div ng-controller="workCalendarCtrl" class="table mb0 table-files">
 	<div class="container-fluid">
+
 		<section id="directives-calendar">
-			<div class="calendar" ng-model="eventSources" calendar="myCalendar" ui-calendar="uiConfig.calendar">
+
+			<div class="col" style="display:inline-block;float:right;margin-top:14px">
+				<div style="width: 40px;height:20px;background-color: rgb(164,0,0);border-radius: 80px;
+					display:inline-block;text-align:center;color:white;" class="newval"></div>
+				<div style="display: inline-block;">待办&nbsp&nbsp;</div>
+
+
+				<div style="width: 40px;height:20px;background-color: rgb(81,184,13);border-radius: 80px;
+				display:inline-block;text-align:center;color:white;" class="newval1"></div>
+				<div style="display: inline-block;">已办&nbsp&nbsp</div>
+
+				<div style="width: 40px;height:20px;background-color: rgb(109,109,192,0.2);border-radius: 80px;
+				display:inline-block;text-align:center;color:black;" class="newval2"></div>
+				<div style="display: inline-block;">逾期</div>
 			</div>
+			<div class="calendar" ng-model="eventSources" calendar="myCalendar" ui-calendar="uiConfig.calendar" id="calendarview"
+
+			</div>
+
 		</section>
 	</div>
+
 </div>

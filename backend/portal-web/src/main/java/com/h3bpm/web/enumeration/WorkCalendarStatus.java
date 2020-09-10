@@ -12,7 +12,7 @@ public enum WorkCalendarStatus implements EnumerationInt {
 
 	FINISH(1, "已办"),
 
-	EXCEED_TIME_LIMIT(-1, "逾期"),
+	EXCEED_TIME_LIMIT(2, "逾期"),
 
 	;
 
