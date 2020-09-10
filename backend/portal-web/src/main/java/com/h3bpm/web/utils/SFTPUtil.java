@@ -290,6 +290,7 @@ public class SFTPUtil {
 		InputStream is = new FileInputStream(file);
 
 		sftp.upload("/data/ftp/file-manage", "important.txt", is);
+		sftp.delete("/data/ftp/file-manage","fee86143-b1ff-4c1a-b288-1f6707ff3f1b");
 		sftp.logout();
 	}
 }

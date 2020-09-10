@@ -2,6 +2,7 @@ package com.h3bpm.web.service;
 
 import java.util.*;
 
+import com.h3bpm.web.enumeration.DeletedFileType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,7 @@ public class FileService extends ApiDataService {
 
 	@Autowired
 	private FilePermissionMapper filePermissionMapper;
+
 
 	public List<File> findFileByParentIdAndKeyword(String parentId, String keyword) {
 		List<File> fileList = null;
@@ -135,7 +137,7 @@ public class FileService extends ApiDataService {
 	@Transactional
 	public void deleteFile(String fileId) {
 		File file = fileMapper.getFileById(fileId);
-		file.setIsDelete(true);
+		file.setIsDelete(DeletedFileType.DELETED.getValue());
 		file.setDeleteTime(new Date());
 
 		fileMapper.updateFile(file);
@@ -295,10 +297,14 @@ public class FileService extends ApiDataService {
 		return fileFullName;
 	}
 
-
+	/**
+	 * 重新恢复回收站中的文件
+	 * @param fileId
+	 */
 	public void renewRecycleFile(String fileId){
 		File file = fileMapper.getFileById(fileId);
-		file.setIsDelete(false);
+		file.setIsDelete(DeletedFileType.UNDELETED.getValue());
+		file.setDeleteTime(null);
 		fileMapper.updateFile(file);
 	}
 
