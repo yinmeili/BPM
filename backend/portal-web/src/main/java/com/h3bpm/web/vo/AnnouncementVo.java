@@ -2,7 +2,7 @@ package com.h3bpm.web.vo;
 
 import com.h3bpm.web.entity.Announcement;
 
-public class RespFindShowAllVo {
+public class AnnouncementVo {
     private String id = null;
     private String title = null;
     private String description = null;
@@ -10,8 +10,10 @@ public class RespFindShowAllVo {
     private long createTime = 0;
     private String link = null;
     private int type = 0;
+    private Long updateTime = null;
+    private String updateUserId = null;
 
-    public RespFindShowAllVo(Announcement announcement) {
+    public AnnouncementVo(Announcement announcement) {
         this.id = announcement.getId();
         this.title = announcement.getTitle();
         this.description = announcement.getDescription();
@@ -19,6 +21,10 @@ public class RespFindShowAllVo {
         this.createTime = announcement.getCreateTime().getTime();
         this.link = announcement.getLink();
         this.type = announcement.getType();
+        if (announcement.getUpdateTime() != null) {
+            this.updateTime = announcement.getUpdateTime().getTime();
+        }
+        this.updateUserId = announcement.getUpdateUserId();
     }
 
     public String getId() {
@@ -75,5 +81,21 @@ public class RespFindShowAllVo {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public Long getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Long updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getUpdateUserId() {
+        return updateUserId;
+    }
+
+    public void setUpdateUserId(String updateUserId) {
+        this.updateUserId = updateUserId;
     }
 }

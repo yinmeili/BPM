@@ -4,12 +4,9 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.h3bpm.web.entity.Announcement;
-import com.h3bpm.web.entity.Knowledge;
 import com.h3bpm.web.mapper.AnnouncementMapper;
-import com.h3bpm.web.vo.KnowledgeVo;
-import com.h3bpm.web.vo.RespFindShowAllVo;
+import com.h3bpm.web.vo.AnnouncementVo;
 import com.h3bpm.web.vo.query.QueryAnnouncementList;
-import com.h3bpm.web.vo.query.QueryKnowledgeList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -45,21 +42,21 @@ public class AnnouncementService {
      * @param queryBean
      * @return
      */
-    /*public PageInfo<RespFindShowAllVo> findKnowledgeByPage(QueryAnnouncementList queryBean) {
+    public PageInfo<AnnouncementVo> findKnowledgeByPage(QueryAnnouncementList queryBean) {
         Page<Announcement> page = PageHelper.startPage(queryBean.getPageNum(), queryBean.getiDisplayLength());
-        List<Announcement> announcementList = announcementMapper.findAnnouncementByPage(queryBean.getType(), queryBean.getTitle(), queryBean.getCreateTimeStart(), queryBean.getCreateTimeEnd(), queryBean.getQueryUserId(), queryBean.getUserAllParentIds());
+        List<Announcement> announcementList = announcementMapper.findAnnouncementByPage(queryBean.getType(), queryBean.getTitle(), queryBean.getCreateTimeStart(), queryBean.getCreateTimeEnd());
 
-        List<RespFindShowAllVo> respFindShowAllVoList = new ArrayList<RespFindShowAllVo>();
+        List<AnnouncementVo> respAnnouncementVoList = new ArrayList<AnnouncementVo>();
         if (announcementList != null) {
             for (Announcement announcement : announcementList) {
-                respFindShowAllVoList.add(new RespFindShowAllVo(announcement));
+                respAnnouncementVoList.add(new AnnouncementVo(announcement));
             }
         }
-        PageInfo<RespFindShowAllVo> pageInfo = new PageInfo<RespFindShowAllVo>(respFindShowAllVoList);
+        PageInfo<AnnouncementVo> pageInfo = new PageInfo<AnnouncementVo>(respAnnouncementVoList);
         pageInfo.setTotal(page.getTotal());
 
         return pageInfo;
-    }*/
+    }
 
     public List<Announcement> findAnnouncement() {
         List<Announcement> AnnouncementList = null;

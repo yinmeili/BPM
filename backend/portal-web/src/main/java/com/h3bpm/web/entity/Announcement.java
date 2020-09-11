@@ -9,10 +9,11 @@ public class Announcement {
     private String createUserId = null;
     private Date createTime = null;
     private String link = null;
-
     private Date startTime = null;
     private Date endTime = null;
     private int type = 0;
+    private Date updateTime = null;
+    private String updateUserId = null;
 
     public Announcement() {
 
@@ -88,5 +89,21 @@ public class Announcement {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public String getUpdateUserId() {
+        return updateUserId;
+    }
+
+    public void setUpdateUserId(String updateUserId) {
+        this.updateUserId = updateUserId;
     }
 }
