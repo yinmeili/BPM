@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
+import com.h3bpm.web.enumeration.DeletedFileType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -118,7 +119,7 @@ public class MyFileService extends ApiDataService {
 	@Transactional
 	public void deleteMyFile(String fileId) {
 		File file = myFileMapper.getMyFileById(fileId);
-		file.setIsDelete(true);
+		file.setIsDelete(DeletedFileType.DELETED.getValue());
 		file.setDeleteTime(new Date());
 
 		myFileMapper.updateMyFile(file);
@@ -181,7 +182,8 @@ public class MyFileService extends ApiDataService {
 
 	public void renewRecycleFile(String fileId){
 		File myFile = myFileMapper.getMyFileById(fileId);
-		myFile.setIsDelete(false);
+		myFile.setIsDelete(DeletedFileType.UNDELETED.getValue());
+		myFile.setDeleteTime(null);
 		myFileMapper.updateMyFile(myFile);
 	}
 
