@@ -24,7 +24,7 @@ public interface AnnouncementMapper {
     @SelectProvider(type = AnnouncementSqlProvider.class, method = "findAnnouncementByTime")
     public List<Announcement> findAnnouncementByTime(@Param("date") Date date);
 
-//    @SelectProvider(type = AnnouncementSqlProvider.class, method = "findAnnouncementByPage")
-//    public List<Announcement> findAnnouncementByPage(@Param("type") int type, @Param("title") String title, @Param("createTimeStart") String startTimeStart, @Param("createTimeEnd") String createTimeEnd, @Param("userId") String userId, @Param("userAllParentIds") List<String> userAllParentIds);
+    @SelectProvider(type = AnnouncementSqlProvider.class, method = "findAnnouncementByPage")
+    public List<Announcement> findAnnouncementByPage(@Param("type") Integer type, @Param("title") String title, @Param("createTimeStart") Date createTimeStart, @Param("createTimeEnd") Date createTimeEnd);
 
 }
