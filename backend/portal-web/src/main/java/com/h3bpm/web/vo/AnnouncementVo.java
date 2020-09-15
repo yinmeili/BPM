@@ -1,6 +1,7 @@
 package com.h3bpm.web.vo;
 
 import com.h3bpm.web.entity.Announcement;
+import com.h3bpm.web.enumeration.AnnouncementType;
 
 public class AnnouncementVo {
     private String id = null;
@@ -12,6 +13,11 @@ public class AnnouncementVo {
     private int type = 0;
     private Long updateTime = null;
     private String updateUserId = null;
+    private Long startTime = null;
+    private Long endTime = null;
+
+    public AnnouncementVo() {
+    }
 
     public AnnouncementVo(Announcement announcement) {
         this.id = announcement.getId();
@@ -21,10 +27,16 @@ public class AnnouncementVo {
         this.createTime = announcement.getCreateTime().getTime();
         this.link = announcement.getLink();
         this.type = announcement.getType();
+        this.updateUserId = announcement.getUpdateUserId();
         if (announcement.getUpdateTime() != null) {
             this.updateTime = announcement.getUpdateTime().getTime();
         }
-        this.updateUserId = announcement.getUpdateUserId();
+        if (announcement.getStartTime() != null){
+            this.startTime = announcement.getStartTime().getTime();
+        }
+        if (announcement.getEndTime() != null){
+            this.endTime = announcement.getEndTime().getTime();
+        }
     }
 
     public String getId() {
@@ -97,5 +109,25 @@ public class AnnouncementVo {
 
     public void setUpdateUserId(String updateUserId) {
         this.updateUserId = updateUserId;
+    }
+
+    public Long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Long startTime) {
+        this.startTime = startTime;
+    }
+
+    public Long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Long endTime) {
+        this.endTime = endTime;
+    }
+
+    public String getTypeStr() {
+        return AnnouncementType.parse(this.type).getDisplayName();
     }
 }
