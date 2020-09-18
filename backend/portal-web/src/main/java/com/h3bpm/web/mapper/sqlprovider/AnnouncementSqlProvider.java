@@ -21,8 +21,6 @@ public class AnnouncementSqlProvider {
                         "			 create_user_id createUserId," +
                         "			 create_time createTime," +
                         "			 link," +
-                        "			 start_time startTime," +
-                        "			 end_time endTime," +
                         "			 type" +
                         "			FROM" +
                         "				ot_announcement" +

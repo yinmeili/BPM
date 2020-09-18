@@ -9,10 +9,12 @@ import com.h3bpm.web.vo.AnnouncementVo;
 import com.h3bpm.web.vo.query.QueryAnnouncementList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class AnnouncementService {
@@ -26,6 +28,7 @@ public class AnnouncementService {
      * @return
      */
     public List<Announcement> findAnnouncementByTime(Date date) {
+
         List<Announcement> announcementList = null;
         try {
             announcementList = announcementMapper.findAnnouncementByTime(date);
@@ -43,6 +46,7 @@ public class AnnouncementService {
      * @return
      */
     public PageInfo<AnnouncementVo> findKnowledgeByPage(QueryAnnouncementList queryBean) {
+
         Page<Announcement> page = PageHelper.startPage(queryBean.getPageNum(), queryBean.getiDisplayLength());
         List<Announcement> announcementList = announcementMapper.findAnnouncementByPage(queryBean.getType(), queryBean.getTitle(), queryBean.getCreateTimeStart(), queryBean.getCreateTimeEnd());
 
@@ -58,35 +62,33 @@ public class AnnouncementService {
         return pageInfo;
     }
 
-    public List<Announcement> findAnnouncement() {
-        List<Announcement> AnnouncementList = null;
-        try {
-            AnnouncementList = announcementMapper.findAnnouncement();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return AnnouncementList;
+    public Announcement getAnnouncementById(String id) {
+
+        return announcementMapper.getAnnouncementById(id);
     }
 
-    /**
-     * 新增Announcement
-     *
-     * @param announcement
-     */
-    public void createAnnouncement(Announcement announcement) {
-        if (announcement.getId() != null && !announcement.getId().isEmpty())
-            announcementMapper.createAnnouncement(announcement);
+    @Transactional
+    public String createAnnouncement(AnnouncementVo announcementVo) {
+
+        String uuid = announcementVo.getId();
+        if (uuid == null) {
+            uuid = UUID.randomUUID().toString();
+            announcementVo.setId(uuid);
+        }
+        announcementMapper.createAnnouncement(new Announcement(announcementVo));
+
+        return uuid;
     }
 
     /**
      * 根据流程ID更新Announcement
      *
-     * @param announcement
+     * @param announcementVo
      */
-    public void updateAnnouncementById(String id, Announcement announcement) {
-        if (id != null && !id.isEmpty())
-            announcementMapper.updateAnnouncementById(id, announcement);
+    @Transactional
+    public void updateAnnouncement(AnnouncementVo announcementVo) {
+
+        announcementMapper.updateAnnouncement(new Announcement(announcementVo));
     }
 
     /**
@@ -94,9 +96,9 @@ public class AnnouncementService {
      *
      * @param id
      */
-    public void deleteAnnouncementById(String id) {
-        if (id != null && !id.isEmpty())
-            announcementMapper.deleteAnnouncementById(id);
-    }
+    @Transactional
+    public void deleteAnnouncement(String id) {
 
+        announcementMapper.deleteAnnouncement(id);
+    }
 }

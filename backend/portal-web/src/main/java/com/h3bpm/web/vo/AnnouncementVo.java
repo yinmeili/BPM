@@ -31,10 +31,10 @@ public class AnnouncementVo {
         if (announcement.getUpdateTime() != null) {
             this.updateTime = announcement.getUpdateTime().getTime();
         }
-        if (announcement.getStartTime() != null){
+        if (announcement.getStartTime() != null) {
             this.startTime = announcement.getStartTime().getTime();
         }
-        if (announcement.getEndTime() != null){
+        if (announcement.getEndTime() != null) {
             this.endTime = announcement.getEndTime().getTime();
         }
     }

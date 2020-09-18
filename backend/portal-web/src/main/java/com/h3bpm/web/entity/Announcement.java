@@ -1,5 +1,7 @@
 package com.h3bpm.web.entity;
 
+import com.h3bpm.web.vo.AnnouncementVo;
+
 import java.util.Date;
 
 public class Announcement {
@@ -17,6 +19,26 @@ public class Announcement {
 
     public Announcement() {
 
+    }
+
+    public Announcement(AnnouncementVo announcementVo) {
+        this.id = announcementVo.getId();
+        this.title = announcementVo.getTitle();
+        this.description = announcementVo.getDescription();
+        this.createUserId = announcementVo.getCreateUserId();
+        this.createTime = new Date(announcementVo.getCreateTime());
+        this.link = announcementVo.getLink();
+        if (announcementVo.getStartTime() != null) {
+            this.startTime = new Date(announcementVo.getStartTime());
+        }
+        if (announcementVo.getEndTime() != null) {
+            this.endTime = new Date(announcementVo.getEndTime());
+        }
+        this.type = announcementVo.getType();
+        if (announcementVo.getUpdateTime() != null) {
+            this.updateTime = new Date(announcementVo.getUpdateTime());
+        }
+        this.updateUserId = announcementVo.getUpdateUserId();
     }
 
     public String getId() {
