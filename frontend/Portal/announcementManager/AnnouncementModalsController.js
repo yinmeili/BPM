@@ -71,7 +71,7 @@ app.controller("AnnouncementModalsController", ["$scope", '$q', "$rootScope", "$
                 $scope.tag = $scope.type[params.AgencyID.type - 1];
                 $scope.description = params.AgencyID.description;
                 $scope.link = params.AgencyID.link;
-              
+
             }
         }
 
@@ -182,7 +182,7 @@ app.controller("AnnouncementModalsController", ["$scope", '$q', "$rootScope", "$
                 deferredHandler(data, deferred);
                 $.notify({ message: data.msg, status: "success" });
             }).error(function (data) {
-               
+
                 deferredHandler(data, deferred, $translate.instant('error_creating_folder'));
             })['finally'](function () {
                 // self.inprocess = false;
@@ -217,17 +217,17 @@ app.controller("AnnouncementModalsController", ["$scope", '$q', "$rootScope", "$
             $scope.cancel();
         };
 
-      
- 
- 
-         //新建公告
-        createannounce = function () {
-        var self = params.AgencyID;
-        var selecttype = document.getElementById('editMyTag');
-        $scope.index = selecttype.selectedIndex; //取类型的index值
-        var deferred = $q.defer();
-      
- 
+
+
+
+        //新建公告
+          	createannounce = function () {
+            var self = params.AgencyID;
+            var selecttype = document.getElementById('editMyTag');
+            $scope.index = selecttype.selectedIndex; //取类型的index值
+            var deferred = $q.defer();
+
+
             $scope.startTime = $rootScope.startTime;
             $scope.endTime = $rootScope.endTime;
             var myStartTimes = new Date($scope.startTime.replace(/-/g, "/")).getTime();
@@ -238,104 +238,103 @@ app.controller("AnnouncementModalsController", ["$scope", '$q', "$rootScope", "$
                 $("#EditEndTime").css("color", "red");
                 return false;
             };
-    
-     
-        var data = {
-            id: self.id,
-            title: $scope.name,
-            description: $scope.description,
-            type: $scope.index + 1,
-            link: $scope.link,
-            startTime: $scope.startTime,
-            endTime: $scope.endTime,
+
+
+            var data = {
+                id: self.id,
+                title: $scope.name,
+                description: $scope.description,
+                type: $scope.index + 1,
+                link: $scope.link,
+                startTime: $scope.startTime,
+                endTime: $scope.endTime,
+            };
+
+            $http.post('/Portal/announcement/createAnnouncement', data).success(function (data) {
+                deferredHandler(data, deferred);
+                $.notify({ message: data.msg, status: "success" });
+            }).error(function (data) {
+
+                deferredHandler(data, deferred, $translate.instant('error_creating_folder'));
+            })['finally'](function () {
+            });
+            return deferred.promise;
+        }
+
+
+        $scope.createannouncement = function () {
+            var foldername = $scope.name;
+            var type = $scope.tag;
+            var msg = "";
+            var createStartTime = $scope.startTime
+            var createEndTime = $scope.endTime
+            if (!foldername) {
+                msg += '请输入公告标题 | ';
+            }
+            if (!type) {
+                msg += '请选择类型 | ';
+            }
+            if (!createStartTime) {
+                msg += '请选择开始时间 | ';
+            }
+            if (!createEndTime) {
+                msg += '请选择结束时间 | ';
+            }
+            msg = msg.substr(0, msg.length - 3);
+            if (!msg) {
+                createannounce().then(function () {
+                    $("#tabMyFlow").dataTable().fnDraw();
+                });
+            } else {
+                $.notify({ message: msg, status: "danger" });
+                return false;
+            }
+            $scope.cancel();
         };
 
-        $http.post('/Portal/announcement/createAnnouncement', data).success(function (data) {
-            deferredHandler(data, deferred);
-            $.notify({ message: data.msg, status: "success" });
-        }).error(function (data) {
-          
-            deferredHandler(data, deferred, $translate.instant('error_creating_folder'));
-        })['finally'](function () {
-        });
-        return deferred.promise;
-    }
+        //删除操作
+
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel'); // 退出
+        }
+        $rootScope.cancel = $scope.cancel;
 
 
-    $scope.createannouncement = function () {
-        var foldername = $scope.name;
-        var type = $scope.tag;
-        var msg = "";
-        var createStartTime=$scope.startTime
-        var createEndTime=$scope.endTime
-        if (!foldername) {
-            msg += '请输入公告标题 | ';
+        //删除
+
+        removeAnnounce = function () {
+            var self = params.AgencyID;
+            var deferred = $q.defer();
+            var data = {
+                id: params.AgencyID.id
+            };
+
+            $http({
+                method: "GET",
+                url: '/Portal/announcement/deleteAnnouncement?id=' + params.AgencyID.id,
+            }).success(function (data) {
+                debugger;
+                deferredHandler(data, deferred);
+                $.notify({ message: data.msg, status: "success" });
+            }).error(function (data) {
+                deferredHandler(data, deferred, $translate.instant('error_deleting'));
+            })['finally'](function () {
+
+            });
+            return deferred.promise;
         }
-        if (!type) {
-            msg += '请选择类型 | ';
-        }
-        if (!createStartTime) {
-            msg += '请选择开始时间 | ';
-        }
-        if (!createEndTime) {
-            msg += '请选择开始时间 | ';
-        }
-        msg = msg.substr(0, msg.length - 3);
-        if (!msg) {
-           createannounce().then(function () {
+        $scope.removeAnnouncement = function () {
+            removeAnnounce().then(function () {
                 $("#tabMyFlow").dataTable().fnDraw();
             });
-        } else {
-            $.notify({ message: msg, status: "danger" });
-            return false;
+            $scope.cancel();
         }
-        $scope.cancel();
-    };
-
-    //删除操作
-
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel'); // 退出
-    }
-    $rootScope.cancel = $scope.cancel;
-
-
-    //删除
-
-   removeAnnounce = function(){
-        var self = params.AgencyID;
-        var deferred = $q.defer();
-        var data = {
-            id: params.AgencyID.id
-        };
-
-        $http({
-            method: "GET",
-            url:'/Portal/announcement/deleteAnnouncement?id='+ params.AgencyID.id,
-        }).success(function (data) {
-            debugger;
-            deferredHandler(data, deferred);  
-            $.notify({ message: data.msg, status: "success" });
-        }).error(function (data) {
-            deferredHandler(data, deferred, $translate.instant('error_deleting'));
-        })['finally'](function () {
-           
-        });
-        return deferred.promise;     
-    }
-    $scope.removeAnnouncement = function(){
-        removeAnnounce().then(function () {
-            $("#tabMyFlow").dataTable().fnDraw();
-        });
-        $scope.cancel();
-    }
-    $scope.cancel = function () {
-        $modalInstance.dismiss('cancel'); // 退出
-    }
-    $rootScope.cancel = $scope.cancel;
+        $scope.cancel = function () {
+            $modalInstance.dismiss('cancel'); // 退出
+        }
+        $rootScope.cancel = $scope.cancel;
 
     }]);
 
 
 
-   
