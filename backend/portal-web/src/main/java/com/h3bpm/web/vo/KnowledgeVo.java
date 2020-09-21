@@ -1,10 +1,12 @@
 package com.h3bpm.web.vo;
 
+import java.util.Date;
+import java.util.List;
+
+import com.alibaba.fastjson.JSONArray;
 import com.h3bpm.web.entity.Knowledge;
 import com.h3bpm.web.entity.MyKnowledge;
 import com.h3bpm.web.enumeration.KnowledgeStatus;
-
-import java.util.Date;
 
 /**
  * Created by tonghao on 2020/3/1.
@@ -25,11 +27,12 @@ public class KnowledgeVo {
 	private String flowCodeDesc;
 	private KnowledgePermissionVo permission = null;
 	private int status = 1;
+	private List<KnowledgeDescVo> descList = null;
 
 	public KnowledgeVo() {
 	}
 
-	public KnowledgeVo(Knowledge knowledge){
+	public KnowledgeVo(Knowledge knowledge) {
 		this.id = knowledge.getId();
 		this.flowId = knowledge.getFlowId();
 		this.name = knowledge.getName();
@@ -42,9 +45,13 @@ public class KnowledgeVo {
 		this.createUserName = knowledge.getCreateUserName();
 		this.flowCodeDesc = knowledge.getFlowCodeDesc();
 		this.status = knowledge.getStatus();
+
+		if (knowledge.getDescListData() != null) {
+			descList = JSONArray.parseArray(knowledge.getDescListData(), KnowledgeDescVo.class);
+		}
 	}
 
-	public KnowledgeVo(MyKnowledge myKnowledge){
+	public KnowledgeVo(MyKnowledge myKnowledge) {
 		this.flowId = myKnowledge.getFlowId();
 		this.name = myKnowledge.getName();
 		this.desc = myKnowledge.getDesc();
@@ -55,6 +62,14 @@ public class KnowledgeVo {
 		this.createTime = myKnowledge.getCreateTime();
 		this.createUserName = myKnowledge.getCreateUserName();
 		this.flowCodeDesc = myKnowledge.getFlowCodeDesc();
+	}
+
+	public List<KnowledgeDescVo> getDescList() {
+		return descList;
+	}
+
+	public void setDescList(List<KnowledgeDescVo> descList) {
+		this.descList = descList;
 	}
 
 	public String getCreateUserName() {
@@ -72,8 +87,6 @@ public class KnowledgeVo {
 	public void setFlowCodeDesc(String flowCodeDesc) {
 		this.flowCodeDesc = flowCodeDesc;
 	}
-
-
 
 	public String getId() {
 		return id;
@@ -155,7 +168,7 @@ public class KnowledgeVo {
 		this.permission = permission;
 	}
 
-	public String getStatusStr(){
+	public String getStatusStr() {
 		return KnowledgeStatus.parse(this.status).getDisplayName();
 	}
 

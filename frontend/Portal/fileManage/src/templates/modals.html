@@ -657,7 +657,7 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
 
 <!-- 共享知识模块新建知识模态框 -->
 <script type="text/ng-template" id="newFlow.html">
-    <form class="bs-example form-horizontal" ng-submit="createFlow(temp)">
+    <form class="bs-example form-horizontal" ng-submit="createFlow(temp)" style="overflow-y:scroll;">
         <div class="modal-header">
             <button type="button" class="close"
                     data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
@@ -683,12 +683,22 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
                     <input autocomplete="off" id="newTag" maxlength="32" class="input form-control" ng-model="temp.tempModel.tag"/>
                 </div>
             </div>
-            <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="row form-group" ng-repeat="describe in descList">
                 <div class="col-md-1"></div>
                 <div class="col-md-2">描述</div>
-                <div class="col-md-8 input-group">
-                    <textarea id="flowDes" ng-model="temp.tempModel.desc" class="form-control" rows="2" style="resize: none;"></textarea>
+               
+                <div class="col-md-7 input-group">
+                    <textarea id="newDesc{{$index+1}}" ng-model="describe.desc" class="form-control" rows="1" style="resize: none;overflow-y:scroll;"></textarea>
                 </div>
+                <br>
+                <div class="col-md-1"></div> 
+                <div class="col-md-2">详情</div>
+                <div class="col-md-7 input-group"style="float:left">
+                    <textarea id='newDetail{{$index+1}}'ng-model="describe.detail"class='form-control'col="5"rows="5" style="resize: none;overflow-y:scroll;"></textarea>
+                </div>
+                <input type="button"ng-click="increate($index)"value='+'class='btn btn-default'style="width:30px;padding-left:10px;margin-left:5px;border-radius:50%;"/>
+                <input type="button"ng-click="delete($index)"value="-"class='btn btn-default'style="margin-left:5px;border-radius:50%;"/>
+                <hr style="border:1px silver dashed;width:85%;margin-top:95px"> 
             </div>
             <div class="row form-group" style="margin-bottom: 20px;">
                 <div class="col-md-1"></div>
@@ -756,12 +766,22 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
                     <input ng-model="temp.model.tag" id="editTag" autocomplete="off" maxlength="32" class="input form-control"/>
                 </div>
             </div>
-            <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="row form-group" ng-repeat="describ in temp.model.descList">
                 <div class="col-md-1"></div>
                 <div class="col-md-2">描述</div>
-                <div class="col-md-8 input-group">
-                    <textarea ng-model="temp.model.desc" class="form-control" rows="2" style="resize: none;"></textarea>
+               
+                <div class="col-md-7 input-group">
+                    <textarea  ng-model="describ.desc" class="form-control" rows="1" style="resize: none;overflow-y:scroll;"></textarea>
                 </div>
+                <br>
+                <div class="col-md-1"></div> 
+                <div class="col-md-2">详情</div>
+                <div class="col-md-7 input-group"style="float:left">
+                    <textarea ng-model="describ.detail"class='form-control'col="5"rows="5" style="resize: none;overflow-y:scroll;"></textarea>
+                </div>
+                <input type="button"ng-click="increate2($index)"value='+'class='btn btn-default'style="width:30px;padding-left:10px;margin-left:5px;border-radius:50%;"/>
+                <input type="button"ng-click="delete2($index)"value="-"class='btn btn-default'style="margin-left:5px;border-radius:50%;"/>
+                <hr style="border:1px silver dashed;width:85%;margin-top:95px"> 
             </div>
             <div class="row form-group" style="margin-bottom: 20px;">
                 <div class="col-md-1"></div>
@@ -873,18 +893,29 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
                 <div class="col-md-2">标签</div>
                 <div class="col-md-8 input-group">
                     <input ng-model="temp.model.tag" readonly="readonly"
-                           style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                           style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;"
                            autocomplete="off" maxlength="32" class="form-control"/>
                 </div>
             </div>
-            <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="row form-group" ng-repeat="descri in temp.model.descList">
                 <div class="col-md-1"></div>
                 <div class="col-md-2">描述</div>
                 <div class="col-md-8 input-group">
-                    <!--<textarea ng-model="temp.model.desc" readonly="readonly" class="form-control" rows="2"-->
-                              <!--style="resize: none;border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"></textarea>-->
-                    <p class="form-control">{{temp.model.desc}}</p>
+                   
+                    <p class="form-control"readonly="readonly"
+                    style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;"
+                    >{{descri.desc}}</p>
                 </div>
+                <br>
+                <div class="col-md-1"></div>
+                <div class="col-md-2">详情</div>
+                <div class="col-md-8 input-group">
+                    
+                    <p class="form-control"readonly="readonly"
+                    style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;"
+                    >{{descri.detail}}</p>
+                </div>
+                <hr style="border:1px silver dashed;width:85%;"> 
             </div>
             <div class="row form-group" style="margin-bottom: 20px;">
                 <div class="col-md-1"></div>
@@ -959,12 +990,22 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
                     <input autocomplete="off" id="newMyTag" maxlength="32" class="input form-control" ng-model="temp.tempModel.tag"/>
                 </div>
             </div>
-            <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="row form-group" ng-repeat="describe in descList">
                 <div class="col-md-1"></div>
                 <div class="col-md-2">描述</div>
-                <div class="col-md-8 input-group">
-                    <textarea id="myFlowDes" ng-model="temp.tempModel.desc" class="form-control" rows="2" style="resize: none;"></textarea>
+               
+                <div class="col-md-7 input-group">
+                    <textarea id="myNewDesc{{$index+1}}" ng-model="describe.desc" class="form-control" rows="1" style="resize: none;overflow-y:scroll;"></textarea>
                 </div>
+                <br>
+                <div class="col-md-1"></div> 
+                <div class="col-md-2">详情</div>
+                <div class="col-md-7 input-group"style="float:left">
+                    <textarea id='myNewDetail{{$index+1}}'ng-model="describe.detail"class='form-control'col="5"rows="5" style="resize: none;overflow-y:scroll;"></textarea>
+                </div>
+                <input type="button"ng-click="increate($index)"value='+'class='btn btn-default'style="width:30px;padding-left:10px;margin-left:5px;border-radius:50%;"/>
+                <input type="button"ng-click="delete($index)"value="-"class='btn btn-default'style="margin-left:5px;border-radius:50%;"/>
+                <hr style="border:1px silver dashed;width:85%;margin-top:95px"> 
             </div>
             <div class="row form-group" style="margin-bottom: 20px;">
                 <div class="col-md-1"></div>
@@ -1023,12 +1064,22 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
                     <input ng-model="temp.model.tag" id="editMyTag" autocomplete="off" maxlength="32" class="input form-control"/>
                 </div>
             </div>
-            <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="row form-group" ng-repeat="describ in temp.model.descList">
                 <div class="col-md-1"></div>
                 <div class="col-md-2">描述</div>
-                <div class="col-md-8 input-group">
-                    <textarea ng-model="temp.model.desc" class="form-control" rows="2" style="resize: none;"></textarea>
+               
+                <div class="col-md-7 input-group">
+                    <textarea  ng-model="describ.desc" class="form-control" rows="1" style="resize: none;overflow-y:scroll;"></textarea>
                 </div>
+                <br>
+                <div class="col-md-1"></div> 
+                <div class="col-md-2">详情</div>
+                <div class="col-md-7 input-group"style="float:left">
+                    <textarea ng-model="describ.detail"class='form-control'col="5"rows="5" style="resize: none;overflow-y:scroll;"></textarea>
+                </div>
+                <input type="button"ng-click="increate2($index)"value='+'class='btn btn-default'style="width:30px;padding-left:10px;margin-left:5px;border-radius:50%;"/>
+                <input type="button"ng-click="delete2($index)"value="-"class='btn btn-default'style="margin-left:5px;border-radius:50%;"/>
+                <hr style="border:1px silver dashed;width:85%;margin-top:95px"> 
             </div>
             <div class="row form-group" style="margin-bottom: 20px;">
                 <div class="col-md-1"></div>
@@ -1142,16 +1193,29 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
                 <div class="col-md-2">标签</div>
                 <div class="col-md-8 input-group">
                     <input ng-model="temp.model.tag" readonly="readonly"
-                           style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                           style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;"
                            autocomplete="off" maxlength="32" class="form-control"/>
                 </div>
             </div>
-            <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="row form-group" ng-repeat="descri in temp.model.descList">
                 <div class="col-md-1"></div>
                 <div class="col-md-2">描述</div>
                 <div class="col-md-8 input-group">
-                    <p class="form-control">{{temp.model.desc}}</p>
+                   
+                    <p class="form-control"readonly="readonly"
+                    style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;"
+                    >{{descri.desc}}</p>
                 </div>
+                <br>
+                <div class="col-md-1"></div>
+                <div class="col-md-2">详情</div>
+                <div class="col-md-8 input-group">
+                    
+                    <p class="form-control"readonly="readonly"
+                    style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;"
+                    >{{descri.detail}}</p>
+                </div>
+                <hr style="border:1px silver dashed;width:85%;"> 
             </div>
             <div class="row form-group" style="margin-bottom: 20px;">
                 <div class="col-md-1"></div>

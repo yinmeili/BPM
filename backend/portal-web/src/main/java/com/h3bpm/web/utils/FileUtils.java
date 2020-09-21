@@ -3,6 +3,7 @@ package com.h3bpm.web.utils;
 import cn.afterturn.easypoi.excel.ExcelImportUtil;
 import cn.afterturn.easypoi.excel.entity.ImportParams;
 import cn.afterturn.easypoi.excel.entity.result.ExcelImportResult;
+import com.h3bpm.web.entity.LiquidationImportData;
 import com.h3bpm.web.entity.WorkFlowTask;
 
 
@@ -11,11 +12,30 @@ import java.util.List;
 
 public class FileUtils {
 
-//    public static void main(String[] args) {
-//        File file = new File("/Users/liubinhui/Desktop/tmp.xlsx");
-//        importExcel(file);
-//
-//    }
+    public static void main(String[] args) {
+        File file = new File("/Users/liubinhui/Desktop/last_day.xlsx");
+        try {
+            List<LiquidationImportData> list = importExcel(new FileInputStream(file));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static List<LiquidationImportData> importExcel(InputStream inputStream){
+        if(inputStream == null) return null;
+        ImportParams importParams = new ImportParams();
+        importParams.setTitleRows(0);   //excel中的表格名称的占用行数，0表示没有表格名称，为1表示占用一行，2表示占用两行.....(默认占用0行)
+        importParams.setHeadRows(1);    //excel中表格的列名称的占用行数行数，1表示占用1行，2表示占用两行......(默认占用1行)
+        importParams.setNeedVerfiy(false);  //是否使用Hibernate Validator对excel中的数据进行检测(默认为false,表示不检测)
+        try{
+            ExcelImportResult<LiquidationImportData> result = ExcelImportUtil.importExcelMore(inputStream, LiquidationImportData.class,importParams);
+            return result.getList();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static List<WorkFlowTask> importWorkFlowTaskExcel(File file){
         if(!validate(file)) {
             return null;

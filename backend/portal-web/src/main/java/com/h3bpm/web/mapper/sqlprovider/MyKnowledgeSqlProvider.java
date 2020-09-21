@@ -88,7 +88,8 @@ public class MyKnowledgeSqlProvider {
 			"			 flow_code flowCode,"+
 			"			 flow_code_desc flowCodeDesc,"+
 			"			 start_time startTime,"+
-			"			 end_time endTime"+
+			"			 end_time endTime,"+
+			"			 desc_list_data descListData"+
 			"			FROM"+
 			"				ot_my_knowledge"+
 			"				WHERE is_delete=0"+

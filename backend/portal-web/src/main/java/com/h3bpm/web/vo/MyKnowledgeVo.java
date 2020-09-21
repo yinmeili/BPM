@@ -1,9 +1,10 @@
 package com.h3bpm.web.vo;
 
-import com.h3bpm.web.entity.Knowledge;
-import com.h3bpm.web.entity.MyKnowledge;
-
 import java.util.Date;
+import java.util.List;
+
+import com.alibaba.fastjson.JSONArray;
+import com.h3bpm.web.entity.MyKnowledge;
 
 public class MyKnowledgeVo {
 
@@ -18,6 +19,7 @@ public class MyKnowledgeVo {
     private Date createTime;
     private String createUserName;
     private String flowCodeDesc;
+    private List<KnowledgeDescVo> descList = null;
 
     public MyKnowledgeVo() {
     }
@@ -34,10 +36,22 @@ public class MyKnowledgeVo {
         this.createTime = myKnowledge.getCreateTime();
         this.createUserName = myKnowledge.getCreateUserName();
         this.flowCodeDesc = myKnowledge.getFlowCodeDesc();
+        
+        if (myKnowledge.getDescListData() != null) {
+			descList = JSONArray.parseArray(myKnowledge.getDescListData(), KnowledgeDescVo.class);
+		}
     }
 
 
-    public String getCreateUserName() {
+    public List<KnowledgeDescVo> getDescList() {
+		return descList;
+	}
+
+	public void setDescList(List<KnowledgeDescVo> descList) {
+		this.descList = descList;
+	}
+
+	public String getCreateUserName() {
         return createUserName;
     }
 

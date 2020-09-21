@@ -4,6 +4,7 @@ import com.h3bpm.web.entity.File;
 import com.h3bpm.web.mapper.sqlprovider.FileSqlProvider;
 import org.apache.ibatis.annotations.*;
 
+import java.util.Date;
 import java.util.List;
 
 public interface FileMapper {
@@ -37,5 +38,17 @@ public interface FileMapper {
 
 	@SelectProvider(type = FileSqlProvider.class, method = "findFolderNameByParentId")
 	public List<String> findFolderNameByParentId(@Param("parentId") String parentId);
+
+	//根据download_file_id获取未被删除的共享文件
+	@Select("SELECT COUNT(*) FROM `ot_file` where is_delete = 0 AND download_file_id = #{downloadFileId}")
+	public int getCountOfUnDeletedFileByDownloadFileId(@Param("downloadFileId") String downloadFileId);
+
+	//查找回收站中delete_time 超期的文件
+	@Select("SELECT `id`, `parent_id` parentId, `type`, `name`, `dir`, `file_size` fileSize, `create_user_id` createUserId, `create_time` createTime, `is_delete` isDelete, `delete_time` `deleteTime`, `download_file_id` downloadFileId FROM `ot_file` where is_delete = 1 AND delete_time < #{deleteTime}")
+	public List<File> findDeleteFileByDeleteTime(@Param("deleteTime") Date deleteTime);
+
+	//根据download_file_id查找回收站中 还可以保留的文件的数量
+	@Select("SELECT COUNT(*) FROM `ot_file` where is_delete = 1 AND download_file_id = #{downloadFileId} AND delete_time > #{deleteTime}")
+	public int getCountOfSaveFileByDownloadFileId(@Param("downloadFileId") String downloadFileId, @Param("deleteTime") Date deleteTime);
 
 }

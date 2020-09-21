@@ -1,44 +1,23 @@
 package com.h3bpm.web.entity;
-
-import cn.afterturn.easypoi.excel.annotation.Excel;
-
 import java.util.Date;
 
 public class WorkFlowTask implements java.io.Serializable{
-    @Excel(name = "id", orderNum = "0")
     private String id;
-
-    @Excel(name = "instance_id", orderNum = "1")
     private String instanceId;
-
-    @Excel(name = "workflow_code", orderNum = "2")
-    private String workFlowCode;
-
-    @Excel(name = "user_login_name", orderNum = "3")
+    private String workflowCode;
     private String userLoginName;
-
-    @Excel(name = "user_display_name", orderNum = "4")
     private String userDisplayName;
-
-    @Excel(name = "create_time", orderNum = "5")
     private Date createTime;
-
-    @Excel(name = "start_time", orderNum = "6", format = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
-
-    @Excel(name = "end_time", orderNum = "7", format = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
-
-    @Excel(name = "execute_type", orderNum = "8")
     private int executeType;
-
-    @Excel(name = "param_data", orderNum = "9")
     private String paramData;
+
 
     public WorkFlowTask(String id, String instanceId, String workFlowCode, String userLoginName, String userDisplayName, Date createTime, Date startTime, Date endTime, int executeType, String paramData) {
         this.id = id;
         this.instanceId = instanceId;
-        this.workFlowCode = workFlowCode;
+        this.workflowCode = workFlowCode;
         this.userLoginName = userLoginName;
         this.userDisplayName = userDisplayName;
         this.createTime = createTime;
@@ -68,11 +47,11 @@ public class WorkFlowTask implements java.io.Serializable{
     }
 
     public String getWorkFlowCode() {
-        return workFlowCode;
+        return workflowCode;
     }
 
     public void setWorkFlowCode(String workFlowCode) {
-        this.workFlowCode = workFlowCode;
+        this.workflowCode = workFlowCode;
     }
 
     public String getUserLoginName() {
@@ -136,7 +115,7 @@ public class WorkFlowTask implements java.io.Serializable{
         return "WorkFlowTask{" +
                 "id='" + id + '\'' +
                 ", instanceId='" + instanceId + '\'' +
-                ", workFlowCode='" + workFlowCode + '\'' +
+                ", workFlowCode='" + workflowCode + '\'' +
                 ", userLoginName='" + userLoginName + '\'' +
                 ", userDisplayName='" + userDisplayName + '\'' +
                 ", createTime=" + createTime +

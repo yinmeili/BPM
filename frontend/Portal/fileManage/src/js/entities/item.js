@@ -21,7 +21,8 @@
                 perms: new Chmod(model && model.rights),
                 content: model && model.content || '',
                 recursive: false,
-                desc: model && model.desc,
+                // desc: model && model.desc,
+                descList:model&&model.descList,
                 filePermission: model && model.filePermission,
                 createUserId: model && model.createUserId,
                 sizeKb: function () {
@@ -260,8 +261,9 @@
                 tagName: self.tempModel.tag,
                 startTime: self.tempModel.startTime,
                 endTime: self.tempModel.endTime,
-                desc: self.tempModel.desc,
+                // desc: self.tempModel.desc,
                 permission: self.tempModel.filePermission,
+                descList:self.tempModel.descList           
                 // flowCodeDesc: null,
             };
             self.inprocess = true;
@@ -286,7 +288,8 @@
                 id: self.flow.id,
                 flowId: null,
                 name:self.model.name,
-                desc: self.model.desc,
+                // desc: self.model.desc,
+                descList:self.model.descList,
                 tagName: self.model.tag,
                 startTime: self.model.startTime,
                 endTime: self.model.endTime,
@@ -355,7 +358,8 @@
                 tagName: self.tempModel.tag,
                 startTime: self.tempModel.startTime,
                 endTime: self.tempModel.endTime,
-                desc: self.tempModel.desc,
+                // desc: self.tempModel.desc,
+                descList:self.tempModel.descList  
                 // permission: self.tempModel.filePermission,
                 // flowCodeDesc: null,
             };
@@ -380,7 +384,8 @@
                 id: self.flow.id,
                 flowId: null,
                 name:self.model.name,
-                desc: self.model.desc,
+                // desc: self.model.desc,
+                descList:self.model.descList,
                 tagName: self.model.tag,
                 startTime: self.model.startTime,
                 endTime: self.model.endTime,
