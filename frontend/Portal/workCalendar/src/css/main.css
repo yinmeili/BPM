@@ -1,72 +1,109 @@
-.ui-dialog{
-	margin-top:100px;
-	z-index: 999;
+.ui-dialog {
+  margin-top: 100px;
+  z-index: 999;
 }
 
-p{
-	margin: 0 0 10px;
+p {
+  margin: 0 0 10px;
 }
 
-p .checkbox{
-	padding-left: 0;
+p .checkbox {
+  padding-left: 0;
   margin-bottom: 0;
   vertical-align: middle;
 }
 .checkbox label::before {
-	display: none;
+  display: none;
 }
 
-.checkbox input[type="checkbox"]{
-	opacity: 1;
+.checkbox input[type="checkbox"] {
+  opacity: 1;
 }
-.form-search .radio input[type="radio"], .form-search .checkbox input[type="checkbox"], .form-inline .radio input[type="radio"], .form-inline .checkbox input[type="checkbox"] {
-    float: left;
-    margin-right: 3px;
-		margin-left: 0;
-		margin-top: 3px
+.form-search .radio input[type="radio"],
+.form-search .checkbox input[type="checkbox"],
+.form-inline .radio input[type="radio"],
+.form-inline .checkbox input[type="checkbox"] {
+  float: left;
+  margin-right: 3px;
+  margin-left: 0;
+  margin-top: 3px;
 }
 
-#calendar{
-			width:900px;
-			margin:0 auto;
-		}
-		.taxt{
-			width:440px;
-		}
-		.time{
-			width:100px;
-		}
-		.sear{
-			width:85px;
-		}
-		.select{
-			width:150px;
-		}
-		.textarea{
-			width:300px;
-		}
-		.check{
-			padding:8px;
-		}
-		.slidertext{
-			padding-top:40px;
-		}
-		.timepicki{
-			position:relative;
-			z-index: 999;
-		}
-		#edit{
-			position:relative;
-			width:300px;
-		}
-		#edittitle{
-			padding-bottom:10px;
-			font-weight: bold;
-			font-size: 18px;
-		}
-		#edittype{
-			position:absolute;
-			top:5px;
-			right:5px;
-			width:80px;
-		}
+#calendar {
+  width: 900px;
+  margin: 0 auto;
+}
+.taxt {
+  width: 440px;
+}
+.time {
+  width: 100px;
+}
+.sear {
+  width: 85px;
+}
+.select {
+  width: 150px;
+  
+}
+.textarea {
+  width: 300px;
+}
+.check {
+  padding: 8px;
+}
+.slidertext {
+  padding-top: 40px;
+}
+.timepicki {
+  position: relative;
+  z-index: 999;
+}
+#edit {
+  position: relative;
+  width: 300px;
+}
+#edittitle {
+  padding-bottom: 10px;
+  font-weight: bold;
+  font-size: 18px;
+}
+#edittype {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 80px;
+}
+
+
+.new{
+  padding-top: 17px;
+  display: flex;
+  flex-direction:row;
+}
+ .texttag{
+  padding-top: 1px;
+  font-size: 20px;
+  margin-left: 20px;
+} 
+ .onetag{
+  margin-left: 190px;
+  padding-top: 1px;
+  font-size: 20px;
+}  
+#newtag{
+	width:150px;
+  height:32px;
+  flex:2.5;
+  margin-bottom: 32px;
+  margin-left: 4px;
+}
+#sheet{
+  height: 22.8px;
+  margin-left: 4px;
+}
+#newbtn{
+  height:32px;
+  margin-left: 6px;
+  padding-left: 3px;
+}

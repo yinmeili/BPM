@@ -3,6 +3,7 @@ package com.h3bpm.web.controller;
 import OThinker.Common.Organization.Models.User;
 import OThinker.H3.Controller.ControllerBase;
 import com.h3bpm.web.enumeration.FileType;
+import com.h3bpm.web.enumeration.KnowledgeType;
 import com.h3bpm.web.service.FilePermissionService;
 import com.h3bpm.web.service.FileService;
 import com.h3bpm.web.service.MyFileService;
@@ -92,16 +93,26 @@ public class FileManagerController extends ControllerBase {
 	// }
 
 	// author:lhl
-	@RequestMapping(value = "/listRecycleFile", produces = "application/json;charset=utf8")
+	@RequestMapping(value = "/listRecycleFile", method = RequestMethod.GET, produces = "application/json;charset=utf8")
 	@ResponseBody
-	public ResponseVo listRecycleFile() {
+	public ResponseVo listRecycleFile(@RequestParam(value = "knowledgeType") String knowledgeType) {
 		List<FileVo> descList = new ArrayList<>();
 		try {
 			Map<String, Object> userMap = this._getCurrentUser();
 			OThinker.Common.Organization.Models.User user = (User) userMap.get("User");
 			String userId = user.getObjectId();
 
-			List<com.h3bpm.web.entity.File> fileList = fileService.findDeletedFileByUserId(userId);
+			List<com.h3bpm.web.entity.File> fileList =null;
+
+			if (knowledgeType != null && !knowledgeType.equals("")) {
+				if (KnowledgeType.SHARE_FILE.getValue().equals(knowledgeType)){
+					fileList = fileService.findDeletedFileByUserId(userId);
+				}
+				if (KnowledgeType.MY_FILE.getValue().equals(knowledgeType)){
+					fileList = fileService.findDeletedMyFileByUserId(userId);
+				}
+			}
+
 			for (com.h3bpm.web.entity.File file : fileList) {
 				FileVo fileVo = new FileVo(file);
 				descList.add(fileVo);
@@ -116,6 +127,32 @@ public class FileManagerController extends ControllerBase {
 		}
 
 	}
+
+	/**
+	 * 还原回收站中的文件
+	 * @param knowledgeType
+	 * @param fileId
+	 * @return
+	 */
+	@RequestMapping(value = "/renewRecycleFile", method = RequestMethod.GET, produces = "application/json;charset=utf8")
+	@ResponseBody
+	public ResponseVo renewRecycleFile(@RequestParam(value = "knowledgeType") String knowledgeType, @RequestParam(value = "fileId") String fileId){
+		try{
+			if(knowledgeType != null && !knowledgeType.equals("")){
+				if (KnowledgeType.SHARE_FILE.getValue().equals(knowledgeType)){
+					fileService.renewRecycleFile(fileId);
+				}
+				if (KnowledgeType.MY_FILE.getValue().equals(knowledgeType)){
+					myFileService.renewRecycleFile(fileId);
+				}
+			}
+
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+		return new ResponseVo("恢复成功");
+	}
+
 
 	@RequestMapping(value = "/listFile", produces = "application/json;charset=utf8")
 	@ResponseBody
@@ -578,7 +615,7 @@ public class FileManagerController extends ControllerBase {
 		fileVo.setType(FileType.DIR.getValue());// 存入类型
 		fileVo.setCreateUserId(user.getObjectId());// 存入用户Id
 		fileVo.setCreateTime(new Date());
-		String name = fileService.validateFolderName(parentId,fileVo.getName());
+		String name = fileService.validateFolderName(parentId, fileVo.getName());
 		fileVo.setName(name);
 		fileService.createFile(fileVo);
 
@@ -914,7 +951,7 @@ public class FileManagerController extends ControllerBase {
 				// 设置FilePermission
 				fileVo.setFilePermission(filePermissionVo);
 
-				String name = fileService.validateFileName(parentId,fileName,fileSuffix);
+				String name = fileService.validateFileName(parentId, fileName, fileSuffix);
 				fileVo.setName(name);
 				fileService.createFile(fileVo);
 
@@ -1113,7 +1150,7 @@ public class FileManagerController extends ControllerBase {
 
 		return null;
 	}
-	
+
 	@RequestMapping(value = "/shareFile", produces = "application/json;charset=utf8")
 	@ResponseBody
 	public ResponseVo shareFile(@RequestBody ReqShareFile reqBean) {
@@ -1128,7 +1165,7 @@ public class FileManagerController extends ControllerBase {
 				for (com.h3bpm.web.entity.File shareFile : shareFileList) {
 					FileVo fileVo = new FileVo(shareFile);
 					fileVo.setFilePermission(reqBean.getFilePermission());
-					
+
 					fileService.createFile(fileVo);
 				}
 			}

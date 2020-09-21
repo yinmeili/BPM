@@ -1,5 +1,7 @@
 package com.h3bpm.web.vo;
 
+import java.util.List;
+
 public class ReqCreateKnowledge {
     private String flowId;
     private String name;
@@ -8,6 +10,7 @@ public class ReqCreateKnowledge {
     private String startTime;
     private String endTime;
     private String flowCodeDesc;
+	private List<KnowledgeDescVo> descList = null;
 
     private KnowledgePermissionVo permission = null;
 
@@ -74,4 +77,12 @@ public class ReqCreateKnowledge {
     public void setPermission(KnowledgePermissionVo knowledgePermissionVo) {
         this.permission = knowledgePermissionVo;
     }
+
+	public List<KnowledgeDescVo> getDescList() {
+		return descList;
+	}
+
+	public void setDescList(List<KnowledgeDescVo> descList) {
+		this.descList = descList;
+	}
 }

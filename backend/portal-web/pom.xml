@@ -157,15 +157,15 @@
 			<version>1.2.3</version>
 		</dependency>
 
-		<!--SpringBoot_OpenOffice-->
+		<!--SpringBoot_OpenOffice -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
 		</dependency><!---->
-		<!--SpringBoot_OpenOffice-->
+		<!--SpringBoot_OpenOffice -->
 
-		<!--jobconverter-->
+		<!--jobconverter -->
 		<dependency>
 			<groupId>org.jodconverter</groupId>
 			<artifactId>jodconverter-core</artifactId>
@@ -181,7 +181,20 @@
 			<artifactId>jodconverter-local</artifactId>
 			<version>4.2.2</version>
 		</dependency>
-		<!--jobconverter-->
+		<!--jobconverter -->
+
+
+		<dependency>
+			<groupId>cn.afterturn</groupId>
+			<artifactId>easypoi-spring-boot-starter</artifactId>
+			<version>3.3.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.51</version>
+		</dependency>
 
 	</dependencies>
 

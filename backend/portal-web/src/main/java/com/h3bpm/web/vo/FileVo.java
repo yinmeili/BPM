@@ -13,7 +13,7 @@ public class FileVo {
 	private long fileSize;
 	private String createUserId = null;
 	private Date createTime = null;
-	private boolean isDelete = false;
+	private int isDelete = 0;
 	private Date deleteTime = null;
 	private String downloadFileId = null;
 
@@ -53,11 +53,11 @@ public class FileVo {
 		this.filePermission = filePermission;
 	}
 
-	public boolean getIsDelete() {
+	public int getIsDelete() {
 		return isDelete;
 	}
 
-	public void setIsDelete(boolean isDelete) {
+	public void setIsDelete(int isDelete) {
 		this.isDelete = isDelete;
 	}
 

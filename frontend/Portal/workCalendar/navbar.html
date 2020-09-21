@@ -12,29 +12,34 @@
 
 			<div ng-controller="workCalendarCtrl" class="selectDate-wrapper">
 				<div class="navbar-form navbar-left">
-					<select class="fc fc-button-group fc-next-button fc-button fc-state-default fc-corner-left fc-corner-right" ng-model="selectYear" ng-options="year for year in years">
-						<option value="">请选择</option>
+					<select class="fc fc-button-group fc-next-button fc-button fc-state-default fc-corner-left fc-corner-right"
+						ng-model="selectYear" ng-options="year for year in years" style="height:32px;font-size:15px">
+
 					</select>
-					<span>年</span>
-					<select class="fc fc-button-group fc-next-button  fc-button fc-state-default fc-corner-left fc-corner-right" ng-model="selectMonth"
-					ng-options="month for month 	in months">
-						<option value="">请选择</option>
+					<span style="height: 32px;font-size: 20px;">年</span>
+					<select class="fc fc-button-group fc-next-button fc-button fc-state-default fc-corner-left fc-corner-right"
+						ng-model="selectMonth" ng-options="month for month 	in months" style="height:32px;font-size:15px">
+
 					</select>
-					<span>月</span>
-					<button type="button"
-					class="fc fc-button-group fc-next-button fc-button fc-state-default fc-corner-left fc-corner-right"
-					ng-click="goToByDate()">选择
+					<span style="height: 32px;font-size: 20px;">月</span>
+
+				</div>
+				<div class="new">
+					<div class="texttag">人员</div>
+					<div><input autocomplete="off" ng-model="newtag" id="newtag" maxlength="32" /></div>
+					<span class="onetag">流程模式</span>
+					<div ui-jq="SheetWorkflow" ui-options="newWorkflowOptions" id="sheet" style="width: 170px;height:20px;">
+					</div>
+					<button type="button" id="newbtn"
+						class="fc fc-button-group fc-next-button fc-button fc-state-default fc-corner-left fc-corner-right"
+						ng-click="newway()">
+						查询
 					</button>
 				</div>
-				
-			</div>
-			
-			<br>
-		</div>
 
-		<div id="navbar" class="navbar-collapse collapse">
-			<div class="navbar-form navbar-right">
-
+				<div id="navbar" class="navbar-collapse collapse">
+					<div class="navbar-form navbar-right"></div>
+				</div>
 			</div>
 		</div>
 	</div>

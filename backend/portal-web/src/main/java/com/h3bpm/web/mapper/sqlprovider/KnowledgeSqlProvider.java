@@ -105,7 +105,8 @@ public class KnowledgeSqlProvider {
 			"			 a.flow_code_desc flowCodeDesc,"+
 			"			 a.start_time startTime,"+
 			"			 a.end_time endTime,"+
-			"			 a.status status" +
+			"			 a.status status," +
+			"			 a.desc_list_data descListData" +
 			"			FROM"+
 			"				ot_knowledge a,ot_knowledge_permission b"+
 			"				WHERE a.is_delete=0"+

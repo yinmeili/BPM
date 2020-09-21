@@ -13,7 +13,7 @@ public class File {
 	private long fileSize;
 	private String createUserId = null;
 	private Date createTime = null;
-	private boolean isDelete = false;
+	private int isDelete = 0;
 	private Date deleteTime = null; //显示删除时间
 	private String downloadFileId = null;	//下载文件id
 
@@ -47,11 +47,11 @@ public class File {
 		this.deleteTime = deleteTime;
 	}
 
-	public boolean getIsDelete() {
+	public int getIsDelete() {
 		return isDelete;
 	}
 
-	public void setIsDelete(boolean isDelete) {
+	public void setIsDelete(int isDelete) {
 		this.isDelete = isDelete;
 	}
 

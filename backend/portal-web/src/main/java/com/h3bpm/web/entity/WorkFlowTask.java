@@ -1,11 +1,10 @@
 package com.h3bpm.web.entity;
-
 import java.util.Date;
 
-public class WorkFlowTask {
+public class WorkFlowTask implements java.io.Serializable{
     private String id;
     private String instanceId;
-    private String workFlowCode;
+    private String workflowCode;
     private String userLoginName;
     private String userDisplayName;
     private Date createTime;
@@ -14,10 +13,11 @@ public class WorkFlowTask {
     private int executeType;
     private String paramData;
 
+
     public WorkFlowTask(String id, String instanceId, String workFlowCode, String userLoginName, String userDisplayName, Date createTime, Date startTime, Date endTime, int executeType, String paramData) {
         this.id = id;
         this.instanceId = instanceId;
-        this.workFlowCode = workFlowCode;
+        this.workflowCode = workFlowCode;
         this.userLoginName = userLoginName;
         this.userDisplayName = userDisplayName;
         this.createTime = createTime;
@@ -47,11 +47,11 @@ public class WorkFlowTask {
     }
 
     public String getWorkFlowCode() {
-        return workFlowCode;
+        return workflowCode;
     }
 
     public void setWorkFlowCode(String workFlowCode) {
-        this.workFlowCode = workFlowCode;
+        this.workflowCode = workFlowCode;
     }
 
     public String getUserLoginName() {
@@ -108,5 +108,21 @@ public class WorkFlowTask {
 
     public void setParamData(String paramData) {
         this.paramData = paramData;
+    }
+
+    @Override
+    public String toString() {
+        return "WorkFlowTask{" +
+                "id='" + id + '\'' +
+                ", instanceId='" + instanceId + '\'' +
+                ", workFlowCode='" + workflowCode + '\'' +
+                ", userLoginName='" + userLoginName + '\'' +
+                ", userDisplayName='" + userDisplayName + '\'' +
+                ", createTime=" + createTime +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", executeType=" + executeType +
+                ", paramData='" + paramData + '\'' +
+                '}';
     }
 }
