@@ -25,3 +25,27 @@
 	</div>
 
 </div>
+<div class= "announcement"style="width:97.8%;font-size:25px;border:solid 1px #e2e2e2;
+margin-left:16px;margin-top:16px;">
+<div class= "announcement"style="width:100%;height:25%;font-size:25px;border:solid 1px #e2e2e2;border-top:none;
+border-left:none;border-right:none;">&nbsp&nbsp公告</br></div>
+<div style="height:240px;overflow:scroll;overflow-x: hidden;">
+<ul class="anouncement-left"style="font-size:16px;margin-top:20px;"
+ng-repeat="x in announcement">
+	<li class="anounce-date"style="width:25%;font-size:14px;height:22px;display:inline-block;" >
+		&nbsp&nbsp&nbsp&nbsp{{x.createTime|date:'yyyy-MM-dd HH:mm:ss'}}
+  </li>
+	<li class="anounce-title"style="width:55%;font-size:14px;display:inline-block;height:22px;text-align:left;
+	padding-top:3.5px;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" 
+	title="{{x.title}}" >
+		{{x.title}}
+	</li>
+	<li class="anounce-des"id="anounce-des" ng-if="x.link"
+	style="width:10%;font-size:14px;height:22px;display:inline-block;float:right;margin-right:10px;margin-top:3.5px; " 
+	ng-click="desc($index)">查看详情
+	</li>
+
+
+</ul>
+</div>
+</div>

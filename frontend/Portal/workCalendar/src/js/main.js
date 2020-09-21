@@ -161,7 +161,8 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 				},
 
 				eventRender: function (event, element) {
-					$(element).tooltip({ title: event.title });
+					$(element).tooltip({ title: event.title});
+				
 				},
 				eventClick: function (calEvent, jsEvent, view) {//日程区块，单击时触发
 					window.open($scope.url = 'WorkItemSheets.html?WorkItemID=' + calEvent.id);
@@ -649,7 +650,7 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 			  }).showModal();
 		  } */
 	/*******************************************************/
-
+  
 
 	//执行分析时间方法
 
@@ -732,6 +733,39 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 		var my = s.getDate();
 		$scope.start = tYear + '-' + tMonth + '-' + my;
 	}
+
+
+
+
+
+	$scope.announceshow = function () {
+		$.ajax({
+			dataType: 'json',
+			type: 'GET',
+			url: 'announcement/findShowAll',
+			success: function (data) {//返回数据列表
+				
+				 $scope.announcement = data.data;
+				 $scope.item = data.data;
+				
+				
+				 
+					 $scope.desc = function(index) {
+					var item = $scope.item[index];
+					window.open(item.link);
+					};
+			
+				 
+				
+				
+
+			},
+			error: function () {
+				alert("Failed");
+			},
+		});
+	}
+	$scope.announceshow ();
 
 	// $scope.events = [
 	// 	{ title: '你好', start: new Date(y, m, d), },
