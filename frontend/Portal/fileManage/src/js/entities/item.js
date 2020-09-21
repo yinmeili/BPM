@@ -279,9 +279,10 @@
 
         //编辑知识的请求
         Item.prototype.updateFlow = function(){
-            var self = this;
-            var deferred = $q.defer();
+            var self = this;//传入的数据
+            var deferred = $q.defer();//异步方法
             var data = {
+                //获取的值
                 id: self.flow.id,
                 flowId: null,
                 name:self.model.name,
@@ -303,7 +304,7 @@
             });
             return deferred.promise;
         }
-
+        
         //收藏知识的请求
         Item.prototype.collectFlow = function(){
             var self = this;
