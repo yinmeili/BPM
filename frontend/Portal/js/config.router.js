@@ -770,9 +770,9 @@ angular.module('app')
                
                 //公告管理
                  .state('app.AnnouncementManager', {
-                    url: '/AnnouncementManager',
+                    url: '/announcementManager',
                     controller: "AnnouncementManageCtrl",
-                    templateUrl: 'AnnouncementManager/index.html',
+                    templateUrl: 'announcementManager/index.html',
                     resolve: {
                         deps: ['$ocLazyLoad',
                             function ($ocLazyLoad) {
