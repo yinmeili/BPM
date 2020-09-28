@@ -25,111 +25,113 @@ import java.util.Map;
 @RequestMapping(value = "/Portal/announcement")
 public class AnnouncementController extends ControllerBase {
 
-    private static final Logger logger = LoggerFactory.getLogger(AnnouncementController.class);
+	private static final Logger logger = LoggerFactory.getLogger(AnnouncementController.class);
 
-    @Autowired
-    private AnnouncementService announcementService;
+	@Autowired
+	private AnnouncementService announcementService;
 
-    @Override
-    public String getFunctionCode() {
-        // TODO Auto-generated method stub
-        return null;
-    }
+	@Override
+	public String getFunctionCode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    @RequestMapping(value = "/findShowAll", method = RequestMethod.GET, produces = "application/json;charset=utf8")
-    @ResponseBody
-    public ResponseVo findShowAll() throws IOException {
+	@RequestMapping(value = "/findShowAll", method = RequestMethod.GET, produces = "application/json;charset=utf8")
+	@ResponseBody
+	public ResponseVo findShowAll() throws IOException {
 
-        List<RespFindShowAllVo> list = new ArrayList<>();
+		List<RespFindShowAllVo> list = new ArrayList<>();
 
-        List<Announcement> announcementList = announcementService.findAnnouncementByTime(new Date());
-        if (announcementList != null) {
-            for (Announcement announcement : announcementList) {
-                list.add(new RespFindShowAllVo(announcement));
-            }
-        }
+		List<Announcement> announcementList = announcementService.findAnnouncementByTime(new Date());
+		if (announcementList != null) {
+			for (Announcement announcement : announcementList) {
+				list.add(new RespFindShowAllVo(announcement));
+			}
+		}
 
-        return new ResponseVo(list);
-    }
+		return new ResponseVo(list);
+	}
 
-    @RequestMapping(value = "/listAnnouncementByPage", produces = "application/json;charset=utf8")
-    @ResponseBody
-    public RespPageVo listAnnouncementByPage(@ModelAttribute ReqListAnnouncementPageVo requestBean) {
+	@RequestMapping(value = "/listAnnouncementByPage", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public RespPageVo listAnnouncementByPage(@ModelAttribute ReqListAnnouncementPageVo requestBean) {
 
-        QueryAnnouncementList queryAnnouncementList = new QueryAnnouncementList(requestBean);
+		QueryAnnouncementList queryAnnouncementList = new QueryAnnouncementList(requestBean);
 
-        PageInfo<AnnouncementVo> pageInfo = announcementService.findKnowledgeByPage(queryAnnouncementList);
+		PageInfo<AnnouncementVo> pageInfo = announcementService.findKnowledgeByPage(queryAnnouncementList);
 
-        return new RespPageVo(requestBean.getsEcho(), pageInfo.getTotal(), pageInfo.getList());
+		return new RespPageVo(requestBean.getsEcho(), pageInfo.getTotal(), pageInfo.getList());
 
-    }
+	}
 
-    @RequestMapping(value = "/createAnnouncement", produces = "application/json;charset=utf8")
-    @ResponseBody
-    public ResponseVo createAnnouncement(@RequestBody ReqCreateAnnouncementVo reqCreateAnnouncementVo) throws Exception {
-        Map<String, Object> userMap = this._getCurrentUser();
-        User user = (User) userMap.get("User");
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // String与Date之间进行相互转换
-        AnnouncementVo announcementVo = new AnnouncementVo();
+	@RequestMapping(value = "/createAnnouncement", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public ResponseVo createAnnouncement(@RequestBody ReqCreateAnnouncementVo reqCreateAnnouncementVo) throws Exception {
+		Map<String, Object> userMap = this._getCurrentUser();
+		User user = (User) userMap.get("User");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // String与Date之间进行相互转换
+		AnnouncementVo announcementVo = new AnnouncementVo();
 
-        announcementVo.setCreateUserId(user.getObjectID()); // 存入用户id
-        announcementVo.setTitle(reqCreateAnnouncementVo.getTitle());
-        announcementVo.setDescription(reqCreateAnnouncementVo.getDescription());
-        announcementVo.setLink(reqCreateAnnouncementVo.getLink());
-        announcementVo.setType(reqCreateAnnouncementVo.getType());
+		announcementVo.setCreateUserId(user.getObjectID()); // 存入用户id
+		announcementVo.setTitle(reqCreateAnnouncementVo.getTitle());
+		announcementVo.setDescription(reqCreateAnnouncementVo.getDescription());
+		announcementVo.setLink(reqCreateAnnouncementVo.getLink());
+		announcementVo.setType(reqCreateAnnouncementVo.getType());
+		announcementVo.setOrgId(reqCreateAnnouncementVo.getOrgId());
 
-        try {
-            announcementVo.setStartTime(format.parse(reqCreateAnnouncementVo.getStartTime()).getTime());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            announcementVo.setEndTime(format.parse(reqCreateAnnouncementVo.getEndTime()).getTime());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        announcementVo.setCreateTime(new Date().getTime());
-        announcementService.createAnnouncement(announcementVo);
+		try {
+			announcementVo.setStartTime(format.parse(reqCreateAnnouncementVo.getStartTime()).getTime());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			announcementVo.setEndTime(format.parse(reqCreateAnnouncementVo.getEndTime()).getTime());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		announcementVo.setCreateTime(new Date().getTime());
+		announcementService.createAnnouncement(announcementVo);
 
-        return new ResponseVo("创建成功");
-    }
+		return new ResponseVo("创建成功");
+	}
 
-    @RequestMapping(value = "/updateAnnouncement", produces = "application/json;charset=utf8")
-    @ResponseBody
-    public ResponseVo updateAnnouncement(@RequestBody ReqUpdateAnnouncementVo reqUpdateAnnouncementVo) throws Exception {
-        Map<String, Object> userMap = this._getCurrentUser();
-        User user = (User) userMap.get("User");
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // String与Date之间进行相互转换
+	@RequestMapping(value = "/updateAnnouncement", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public ResponseVo updateAnnouncement(@RequestBody ReqUpdateAnnouncementVo reqUpdateAnnouncementVo) throws Exception {
+		Map<String, Object> userMap = this._getCurrentUser();
+		User user = (User) userMap.get("User");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // String与Date之间进行相互转换
 
-        Announcement announcement = announcementService.getAnnouncementById(reqUpdateAnnouncementVo.getId());
-        AnnouncementVo announcementVo = new AnnouncementVo(announcement);
+		Announcement announcement = announcementService.getAnnouncementById(reqUpdateAnnouncementVo.getId());
+		AnnouncementVo announcementVo = new AnnouncementVo(announcement);
 
-        announcementVo.setUpdateUserId(user.getObjectID());
-        announcementVo.setTitle(reqUpdateAnnouncementVo.getTitle());
-        announcementVo.setDescription(reqUpdateAnnouncementVo.getDescription());
-        announcementVo.setLink(reqUpdateAnnouncementVo.getLink());
-        announcementVo.setType(reqUpdateAnnouncementVo.getType());
-        
-        try {
-            announcementVo.setStartTime(format.parse(reqUpdateAnnouncementVo.getStartTime()).getTime());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            announcementVo.setEndTime(format.parse(reqUpdateAnnouncementVo.getEndTime()).getTime());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        announcementVo.setUpdateTime(new Date().getTime());
-        announcementService.updateAnnouncement(announcementVo);
+		announcementVo.setUpdateUserId(user.getObjectID());
+		announcementVo.setTitle(reqUpdateAnnouncementVo.getTitle());
+		announcementVo.setDescription(reqUpdateAnnouncementVo.getDescription());
+		announcementVo.setLink(reqUpdateAnnouncementVo.getLink());
+		announcementVo.setType(reqUpdateAnnouncementVo.getType());
+		announcementVo.setOrgId(reqUpdateAnnouncementVo.getOrgId());
 
-        return new ResponseVo("修改成功");
-    }
+		try {
+			announcementVo.setStartTime(format.parse(reqUpdateAnnouncementVo.getStartTime()).getTime());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			announcementVo.setEndTime(format.parse(reqUpdateAnnouncementVo.getEndTime()).getTime());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		announcementVo.setUpdateTime(new Date().getTime());
+		announcementService.updateAnnouncement(announcementVo);
 
-    @RequestMapping(value = "/deleteAnnouncement", method = RequestMethod.GET, produces = "application/json;charset=utf8")
-    @ResponseBody
-    public ResponseVo deleteAnnouncement(@RequestParam("id") String id) {
-        announcementService.deleteAnnouncement(id);
-        return new ResponseVo("删除成功");
-    }
+		return new ResponseVo("修改成功");
+	}
+
+	@RequestMapping(value = "/deleteAnnouncement", method = RequestMethod.GET, produces = "application/json;charset=utf8")
+	@ResponseBody
+	public ResponseVo deleteAnnouncement(@RequestParam("id") String id) {
+		announcementService.deleteAnnouncement(id);
+		return new ResponseVo("删除成功");
+	}
 }
