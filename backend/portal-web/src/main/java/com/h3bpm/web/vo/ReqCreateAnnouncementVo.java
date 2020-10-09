@@ -7,12 +7,21 @@ public class ReqCreateAnnouncementVo {
     private String link;
     private String startTime = null;
     private String endTime = null;
+    private String orgId = null;
 
     public ReqCreateAnnouncementVo() {
 
     }
 
-    public String getTitle() {
+    public String getOrgId() {
+		return orgId;
+	}
+
+	public void setOrgId(String orgId) {
+		this.orgId = orgId;
+	}
+
+	public String getTitle() {
         return title;
     }
 

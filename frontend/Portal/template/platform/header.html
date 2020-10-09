@@ -40,22 +40,26 @@
 
 
             <div class="dropdown-menu animated fadeInUp">
-                <div class="apps-wrapper">
-                    <ul class="apps-box">
-                        <li ng-repeat="list in user.FunctionViewModels"class="header-login"
+                <div class="apps-wrapper"style="width:375px;height:150px;">
+                    <ul class="apps-box"style="justify-content:space-around">
+                        <li class="header-login"
                              ng-click="switchFunction(list)"
-                             class="app-item">
+                             ng-repeat="list in user.FunctionViewModels"
+                             class="app-item"style="position:relative;float:left;width:50%">
+                             
                             <a class="app-item-link"
                                ng-if="(list.Children[0].Url?list.Children[0].Url:list.Children[0].Children[0].Url).indexOf('http')==-1"
                                ui-sref="{{list.Children[0].Url?list.Children[0].Url:list.Children[0].Children[0].Url}}">
                                 <div class="app-item-left">
                                     <img ng-if="list.IconType==0&&list.IconUrl"
                                           ng-src="{{list.IconUrl}}"
+                                          style="width:36px;height:36px;"
                                          class="img-circle" alt="">
+                                    
                                     <i ng-if="(list.IconType==1||list.IconType==0)&&!list.IconUrl" class="defaultIcon user-a ng-scope"></i>
                                 </div>
 
-                                <div class="caption text-center" title="{{list.DisplayName}}">
+                                <div class="caption text-center" title="{{list.DisplayName}}"style="margin-left:10px;">
                                     <span translate="HomePage.{{list.Code}}" translate-default="{{list.DisplayName}}" class="app-item-text">
                                         {{list.DisplayName}}
                                     </span>
@@ -63,7 +67,7 @@
                             </a>
 
                             <!-- http地址 -->
-                            <a class="app-item-link"
+                            <a class="app-item-link"style="width:50px;"
                                ng-if="(list.Children[0].Url?list.Children[0].Url:list.Children[0].Children[0].Url).indexOf('http')!=-1"
                                ng-href="{{list.Children[0].Url?list.Children[0].Url:list.Children[0].Children[0].Url}}" target="_blank">
                                <div class="app-item-left">

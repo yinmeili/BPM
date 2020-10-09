@@ -64,52 +64,26 @@ public class FileManagerController extends ControllerBase {
 	@Autowired
 	private FilePermissionService filePermissionService;
 
-	// @RequestMapping(value = "/listFile", produces = "application/json;charset=utf8")
-	// @ResponseBody
-	// public FileDescList listFile(@RequestBody ReqParamList paramList) {
-	// ReqParam param = paramList.getParams();
-	// String pathStr = param.getPath();
-	// pathStr = pathStr.replace("\\", File.separator);
-	// Path currentPath = Paths.get(uploadPath + pathStr);
-	//
-	// FileDesc desc = null;
-	// List<FileDesc> descList = new ArrayList<>();
-	// FileDescList result = new FileDescList(descList);
-	// try (DirectoryStream<Path> stream = Files.newDirectoryStream(currentPath)) {
-	// for (Path entry : stream) {
-	//
-	// if (Files.isDirectory(entry)) {
-	// // 文件夹取不到文件大小
-	// desc = new FileDesc(entry.getFileName().toString(), Files.size(entry), new Date(Files.getLastModifiedTime(entry).toMillis()), FileType.DIR.toString());
-	// } else {
-	// desc = new FileDesc(entry.getFileName().toString(), Files.size(entry), new Date(Files.getLastModifiedTime(entry).toMillis()), FileType.File.toString());
-	// }
-	// descList.add(desc);
-	// }
-	// } catch (IOException e) {
-	// e.printStackTrace();
-	// }
-	// return result;
-	// }
-
 	// author:lhl
-	@RequestMapping(value = "/listRecycleFile", method = RequestMethod.GET, produces = "application/json;charset=utf8")
+	@RequestMapping(value = "/listRecycleFile", produces = "application/json;charset=utf8")
 	@ResponseBody
-	public ResponseVo listRecycleFile(@RequestParam(value = "knowledgeType") String knowledgeType) {
+	public ResponseVo listRecycleFile(@RequestBody ReqListRecycleFile requestBean) {
 		List<FileVo> descList = new ArrayList<>();
 		try {
 			Map<String, Object> userMap = this._getCurrentUser();
 			OThinker.Common.Organization.Models.User user = (User) userMap.get("User");
 			String userId = user.getObjectId();
 
-			List<com.h3bpm.web.entity.File> fileList =null;
+			List<com.h3bpm.web.entity.File> fileList = null;
+			String knowledgeType = requestBean.getKnowledgeType();
+			String keyword = requestBean.getKeyword();
 
 			if (knowledgeType != null && !knowledgeType.equals("")) {
-				if (KnowledgeType.SHARE_FILE.getValue().equals(knowledgeType)){
-					fileList = fileService.findDeletedFileByUserId(userId);
+				if (KnowledgeType.SHARE_FILE.getValue().equals(knowledgeType)) {
+					fileList = fileService.findDeletedFileByUserIdAndKeyword(userId, keyword);
 				}
-				if (KnowledgeType.MY_FILE.getValue().equals(knowledgeType)){
-					fileList = fileService.findDeletedMyFileByUserId(userId);
+				if (KnowledgeType.MY_FILE.getValue().equals(knowledgeType)) {
+					fileList = fileService.findDeletedMyFileByUserIdAndKeyword(userId, keyword);
 				}
 			}
 
@@ -130,29 +104,29 @@ public class FileManagerController extends ControllerBase {
 
 	/**
 	 * 还原回收站中的文件
+	 * 
 	 * @param knowledgeType
 	 * @param fileId
 	 * @return
 	 */
 	@RequestMapping(value = "/renewRecycleFile", method = RequestMethod.GET, produces = "application/json;charset=utf8")
 	@ResponseBody
-	public ResponseVo renewRecycleFile(@RequestParam(value = "knowledgeType") String knowledgeType, @RequestParam(value = "fileId") String fileId){
-		try{
-			if(knowledgeType != null && !knowledgeType.equals("")){
-				if (KnowledgeType.SHARE_FILE.getValue().equals(knowledgeType)){
+	public ResponseVo renewRecycleFile(@RequestParam(value = "knowledgeType") String knowledgeType, @RequestParam(value = "fileId") String fileId) {
+		try {
+			if (knowledgeType != null && !knowledgeType.equals("")) {
+				if (KnowledgeType.SHARE_FILE.getValue().equals(knowledgeType)) {
 					fileService.renewRecycleFile(fileId);
 				}
-				if (KnowledgeType.MY_FILE.getValue().equals(knowledgeType)){
+				if (KnowledgeType.MY_FILE.getValue().equals(knowledgeType)) {
 					myFileService.renewRecycleFile(fileId);
 				}
 			}
 
-		}catch (Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return new ResponseVo("恢复成功");
 	}
-
 
 	@RequestMapping(value = "/listFile", produces = "application/json;charset=utf8")
 	@ResponseBody

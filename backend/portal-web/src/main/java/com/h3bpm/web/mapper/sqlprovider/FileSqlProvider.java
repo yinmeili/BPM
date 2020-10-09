@@ -53,8 +53,16 @@ public class FileSqlProvider {
 		return sql;
 	}
 
-	public String findDeletedFileByUserId(Map<String, Object> para) {
+	public String findDeletedFileByUserIdAndKeyword(Map<String, Object> para) {
 		String userId = (String)para.get("userId");
+		String keyword = para.get("keyword") == null ? "" : (String) para.get("keyword");
+
+		String keywordSqlStr = "";
+		
+		if (!keyword.isEmpty()) {
+			keywordSqlStr += " AND name like '%" + keyword + "%'";
+		}
+		
 		String sql =
 				"SELECT"+
 						"			 id,"+
@@ -71,13 +79,22 @@ public class FileSqlProvider {
 						"				ot_file"+
 						"				WHERE is_delete=1 AND "+
 						"           create_user_id = '" + userId + "'"+
+									keywordSqlStr + 
 						"				ORDER BY delete_time DESC";
 		return sql;
 
 	}
 
-	public String findDeletedMyFileByUserId(Map<String, Object> para) {
+	public String findDeletedMyFileByUserIdAndKeyword(Map<String, Object> para) {
 		String userId = (String)para.get("userId");
+		String keyword = para.get("keyword") == null ? "" : (String) para.get("keyword");
+
+		String keywordSqlStr = "";
+		
+		if (!keyword.isEmpty()) {
+			keywordSqlStr += " AND name like '%" + keyword + "%'";
+		}
+		
 		String sql =
 				"SELECT"+
 						"			 id,"+
@@ -94,6 +111,7 @@ public class FileSqlProvider {
 						"				ot_my_file"+
 						"				WHERE is_delete=1 AND "+
 						"           create_user_id = '" + userId + "'"+
+									keywordSqlStr + 
 						"				ORDER BY delete_time DESC";
 		return sql;
 

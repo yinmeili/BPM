@@ -1,70 +1,79 @@
 package com.h3bpm.web.vo;
 
 public class ReqUpdateAnnouncementVo {
-    private String id;
-    private String title;
-    private String description;
-    private int type;
-    private String link;
-    private String startTime = null;
-    private String endTime = null;
+	private String id;
+	private String title;
+	private String description;
+	private int type;
+	private String link;
+	private String startTime = null;
+	private String endTime = null;
+	private String orgId = null;
 
-    public ReqUpdateAnnouncementVo() {
-    }
+	public ReqUpdateAnnouncementVo() {
+	}
 
-    public String getId() {
-        return id;
-    }
+	public String getOrgId() {
+		return orgId;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public void setOrgId(String orgId) {
+		this.orgId = orgId;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public String getDescription() {
-        return description;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public int getType() {
-        return type;
-    }
+	public String getDescription() {
+		return description;
+	}
 
-    public void setType(int type) {
-        this.type = type;
-    }
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
-    public String getLink() {
-        return link;
-    }
+	public int getType() {
+		return type;
+	}
 
-    public void setLink(String link) {
-        this.link = link;
-    }
+	public void setType(int type) {
+		this.type = type;
+	}
 
-    public String getStartTime() {
-        return startTime;
-    }
+	public String getLink() {
+		return link;
+	}
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
+	public void setLink(String link) {
+		this.link = link;
+	}
 
-    public String getEndTime() {
-        return endTime;
-    }
+	public String getStartTime() {
+		return startTime;
+	}
 
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
+	}
 }

@@ -5,49 +5,59 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
 
 public class ReqListAnnouncementPageVo extends ReqPageVo {
-    private Integer type = null;
-    private String title = null;
+	private Integer type = null;
+	private String title = null;
 
-    @JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
-    private Date createTimeStart = null;
+	@JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
+	private Date createTimeStart = null;
 
-    @JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
-    private Date createTimeEnd = null;
+	@JsonFormat(pattern = "YYYY-MM-dd HH:mm:ss")
+	private Date createTimeEnd = null;
 
-    @Deprecated
-    public ReqListAnnouncementPageVo() {
+	private String orgId = null;
 
-    }
+	@Deprecated
+	public ReqListAnnouncementPageVo() {
 
-    public Integer getType() {
-        return type;
-    }
+	}
 
-    public void setType(Integer type) {
-        this.type = type;
-    }
+	public String getOrgId() {
+		return orgId;
+	}
 
-    public String getTitle() {
-        return title;
-    }
+	public void setOrgId(String orgId) {
+		this.orgId = orgId;
+	}
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+	public Integer getType() {
+		return type;
+	}
 
-    public Date getCreateTimeStart() {
-        return createTimeStart;
-    }
+	public void setType(Integer type) {
+		this.type = type;
+	}
 
-    public void setCreateTimeStart(Date createTimeStart) {
-        this.createTimeStart = createTimeStart;
-    }
+	public String getTitle() {
+		return title;
+	}
 
-    public Date getCreateTimeEnd() {
-        return createTimeEnd;
-    }
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
-    public void setCreateTimeEnd(Date createTimeEnd) {
-        this.createTimeEnd = createTimeEnd;
-    }
+	public Date getCreateTimeStart() {
+		return createTimeStart;
+	}
+
+	public void setCreateTimeStart(Date createTimeStart) {
+		this.createTimeStart = createTimeStart;
+	}
+
+	public Date getCreateTimeEnd() {
+		return createTimeEnd;
+	}
+
+	public void setCreateTimeEnd(Date createTimeEnd) {
+		this.createTimeEnd = createTimeEnd;
+	}
 }

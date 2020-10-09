@@ -16,6 +16,8 @@ public class Announcement {
     private int type = 0;
     private Date updateTime = null;
     private String updateUserId = null;
+    private String orgId = null;
+    private String orgName = null;
 
     public Announcement() {
 
@@ -39,9 +41,27 @@ public class Announcement {
             this.updateTime = new Date(announcementVo.getUpdateTime());
         }
         this.updateUserId = announcementVo.getUpdateUserId();
+        this.orgId = announcementVo.getOrgId();
+        this.orgName = announcementVo.getOrgName();
     }
 
-    public String getId() {
+    public String getOrgId() {
+		return orgId;
+	}
+
+	public void setOrgId(String orgId) {
+		this.orgId = orgId;
+	}
+
+	public String getOrgName() {
+		return orgName;
+	}
+
+	public void setOrgName(String orgName) {
+		this.orgName = orgName;
+	}
+
+	public String getId() {
         return id;
     }
 
