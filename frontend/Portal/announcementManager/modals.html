@@ -44,6 +44,15 @@
                        ui-jq="wdatePicker" ui-options="EditcreateTime" />
             </div>
         </div> -->
+        <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">部门</div>
+            <div class="col-md-8 input-group">
+                <div ui-jq="SheetUser" ui-options="editWasAgentOptions" id="editcompany"
+                               class="form-horizontal" style="margin-bottom: 20px;" data-orgunitvisible="true"data-groupvisible="true" data-sheetusercontrol="true">
+              </div>
+            </div>
+        </div>
           <div class="row form-group" style="margin-bottom: 20px;">
               <div class="col-md-1"></div>
               <div class="col-md-2">开始时间</div>
@@ -68,7 +77,7 @@
             <div class="col-md-1"></div>
             <div class="col-md-2">链接</div>
             <div class="col-md-8 input-group">
-                <input ng-model="link" id="editMylink" autocomplete="off" maxlength="32" class="input form-control"/>
+                <input ng-model="link" id="editMylink" autocomplete="off" class="input form-control"/>
             </div>
         </div>
 
@@ -106,6 +115,15 @@
                   <input ng-model="tag" id="editMyTag" autocomplete="off" maxlength="32" class="input form-control"ng-disabled="true"/>
               </div>
           </div>
+          <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">部门</div>
+            <div class="col-md-8 input-group">
+                <input ui-jq="SheetUser" ui-options="WasAgentOptions" id="editcompany"ng-model="company"ng-disabled="true"
+                        class="form-control" style="margin-bottom: 20px;" data-orgunitvisible="true"data-groupvisible="true" data-sheetusercontrol="true">
+             
+            </div>
+        </div>
           <div class="row form-group" style="margin-bottom: 20px;">
               <div class="col-md-1"></div>
               <div class="col-md-2">描述</div>
@@ -147,7 +165,7 @@
               <div class="col-md-1"></div>
               <div class="col-md-2">链接</div>
               <div class="col-md-8 input-group">
-                  <input ng-model="link" id="editMylink" autocomplete="off" maxlength="32" class="input form-control"ng-disabled="true"/>
+                  <input ng-model="link" id="editMylink" autocomplete="off" class="input form-control"ng-disabled="true"/>
               </div>
           </div>
 
@@ -193,23 +211,23 @@
                   <textarea ng-model="description" class="form-control" rows="2" style="resize: none;"></textarea>
               </div>
           </div>
-          <!-- <div class="row form-group" style="margin-bottom: 20px;">
+          <div class="row form-group" style="margin-bottom: 20px;">
             <div class="col-md-1"></div>
-            <div class="col-md-2">发布时间</div>
+            <div class="col-md-2">部门</div>
             <div class="col-md-8 input-group">
-                <input ng-model="createTime"
-                       autocomplete="off"
-                       class="input form-control"
-                       ui-jq="wdatePicker" ui-options="EditEndTime" />
+                <div ui-jq="SheetUser" ui-options="WasAgentOptions" id="createcompany"
+                               class="form-horizontal" style="margin-bottom: 20px;" data-orgunitvisible="true"data-groupvisible="true" data-sheetusercontrol="true">
+              </div>
             </div>
-        </div> -->
+        </div>
+        
           <div class="row form-group" style="margin-bottom: 20px;">
               <div class="col-md-1"></div>
               <div class="col-md-2">开始时间</div>
               <div class="col-md-8 input-group">
-                  <input ng-model="startTime"
+                  <input 
                          autocomplete="off"
-                         ui-jq="wdatePicker" ui-options="EditStartTime"
+                         ui-jq="wdatePicker" ui-options="createStartTime "
                          class="input form-control"/>
               </div>
           </div>
@@ -217,17 +235,17 @@
               <div class="col-md-1"></div>
               <div class="col-md-2">结束时间</div>
               <div class="col-md-8 input-group">
-                  <input ng-model="endTime"
+                  <input 
                          autocomplete="off"
                          class="input form-control"
-                         ui-jq="wdatePicker" ui-options="EditEndTime" />
+                         ui-jq="wdatePicker" ui-options="createEndTime" />
               </div>
           </div>
           <div class="row " style="margin-bottom: 20px;">
               <div class="col-md-1"></div>
               <div class="col-md-2">链接</div>
               <div class="col-md-8 input-group">
-                  <input ng-model="link" id="editMylink" autocomplete="off" maxlength="32" class="input form-control"/>
+                  <input ng-model="link" id="editMylink" autocomplete="off"  class="input form-control"/>
               </div>
           </div>
 
