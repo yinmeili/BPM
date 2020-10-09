@@ -234,12 +234,11 @@ angular.module('app')
                                     'vendor/angular/angular-tooltips/angular-tooltips.js',
                                     'vendor/angular/angular-tooltips/angular-tooltips.min.js',
                                     'vendor/angular/angular-tooltips/angular-tooltips.css',
+                                    // 'WFRes/_Scripts/MvcSheet/MvcSheetUI.js',
+                                    // 'WFRes/_Scripts/MvcSheet/Controls/SheetWorkflow.js',
 
                                 ]).then(function () {
                                     return $ocLazyLoad.load([
-
-                                        'WFRes/_Scripts/MvcSheet/MvcSheetUI.js',
-                                        'WFRes/_Scripts/MvcSheet/Controls/SheetWorkflow.js',
 
 
                                     ]);
@@ -777,8 +776,7 @@ angular.module('app')
                         deps: ['$ocLazyLoad',
                             function ($ocLazyLoad) {
                                 return $ocLazyLoad.load([
-                                    'js/services/notify.js',
-                                  
+                                    'js/services/notify.js', 
                                 ]);
                             }
                         ]

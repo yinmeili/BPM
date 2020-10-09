@@ -2,29 +2,33 @@
     'use strict';
     app.controller('AnnouncementManageCtrl', ['$scope', "$rootScope", "$translate", "$compile", "$http", "$timeout", "$state", "$interval", "$filter", "ControllerConfig", "datecalculation", "jq.datables", '$modal', 'item', 'fileNavigator',
         function ($scope, $rootScope, $translate, $compile, $http, $timeout, $state, $interval, $filter, ControllerConfig, datecalculation, jqdatables, $modal, Item, FileNavigator) {
-            $rootScope.flowScope = $scope;
+            //$rootScope.flowScope = $scope;
             //实例化参数
-
+            
             $scope.types = [
                 // {name:'全部公告',id:"0"}, 
                 { name: '部门公告', id: "1" },
                 { name: '外部公告', id: "2" },];
 
-
-
-            
-
+            $scope.searchWasAgentOptions = {
+                Editable: true,
+                Visiable: true,
+                //IsMultiple: true,
+                UserVisible: false,//是否显示用户
+            }
+          
             //共享知识的日期控件初始化
-            $scope.StartTimeStartOption = {
-                dateFmt: 'yyyy-MM-dd HH:mm:ss', realDateFmt: "yyyy-MM-dd HH:mm:ss", minDate: '2012-1-1', maxDate: '2099-12-31',
+            $scope.searchStartTimeStart = {
+                dateFmt: 'yyyy-MM-dd', realDateFmt: "yyyy-MM-dd", minDate: '2012-1-1', maxDate: '2099-12-31',
                 onpicked: function (e) {
-                    $scope.StartTimeStart = e.el.value;
+                    $rootScope.searchStartTimeStart = e.el.value;
                 }
             }
-            $scope.StartTimeEndtOption = {
-                dateFmt: 'yyyy-MM-dd HH:mm:ss', realDateFmt: "yyyy-MM-dd HH:mm:ss", minDate: '2012-1-1', maxDate: '2099-12-31',
+            $scope.searchStartTimeEnd = {
+                dateFmt: 'yyyy-MM-dd', realDateFmt: "yyyy-MM-dd", minDate: '2012-1-1', maxDate: '2099-12-31',
                 onpicked: function (e) {
-                    $scope.StartTimeEnd = e.el.value;
+                    $rootScope.searchStartTimeEnd = e.el.value;
+                
                 }
             }
             // $scope.EndTimeStartOption = {
@@ -49,15 +53,15 @@
             $scope.init = function () {
                 $scope.name = $translate.instant("WorkItemController.FinishedWorkitem");
                 //  $scope.myName = $translate.instant("WorkItemController.FinishedWorkitem");
-                $scope.StartTimeStart = datecalculation.redDays(new Date(), 30);
-                $scope.StartTimeEnd = datecalculation.addDays(new Date(), 30);
-                $scope.EndTimeStart = datecalculation.redDays(new Date(), 30);
-                $scope.EndTimeEnd = datecalculation.addDays(new Date(), 30);
+                // $scope.StartTimeStart = datecalculation.redDays(new Date(), 30);
+                // $scope.StartTimeEnd = datecalculation.addDays(new Date(), 30);
+                // $scope.EndTimeStart = datecalculation.redDays(new Date(), 30);
+                // $scope.EndTimeEnd = datecalculation.addDays(new Date(), 30);
 
-                $scope.MyStartTimeStart = datecalculation.redDays(new Date(), 30);
-                $scope.MyStartTimeEnd = datecalculation.addDays(new Date(), 30);
-                $scope.MyEndTimeStart = datecalculation.redDays(new Date(), 30);
-                $scope.MyEndTimeEnd = datecalculation.addDays(new Date(), 30);
+                $scope.searchStartTimeStart = datecalculation.redDays(new Date(), 30);
+                $scope.searchStartTimeEnd = datecalculation.addDays(new Date(), 30);
+                // $scope.MyEndTimeStart = datecalculation.redDays(new Date(), 30);
+                // $scope.MyEndTimeEnd = datecalculation.addDays(new Date(), 30);
             }
             // 获取语言
             // $rootScope.$on('$translateChangeEnd', function () {
@@ -83,11 +87,10 @@
             //页面最初渲染的请求
             $scope.getMyColumns = function () {
                 var columns = [
-
+                   
                 ];
                 columns.push({
                     "mData": "title",//返回数据的键
-
                     "mRender": function (data, type, full) {
                         data = $scope.htmlEncode(data);
 
@@ -96,6 +99,20 @@
                         }
                         full = JSON.stringify(full);
                         return `<a style='cursor: pointer;' ng-click='toDetailMyAnnouncement(${full})' title='${data}'>${data}</a>`;
+                    }
+                });
+                columns.push({
+                    "mData": "orgName",
+                    "mRender": function (data, type, full) {
+                        //打开流程状态
+
+                        data = $scope.htmlEncode(data);
+                        // data=$scope.htmlEncode[data];
+                        if (data == 'null' || data == null) {
+                            data = '';
+                        }
+                        full = JSON.stringify(full);
+                        return "<span title=\"" + data + "\">" + data + "</span>";
                     }
                 });
                 columns.push({
@@ -124,7 +141,7 @@
                         else {
                             var time = new Date(data);
                             var year = time.getFullYear();
-                            var month = time.getMonth() + 1 < 10 ? "0" + (time.getMonth() + 1) : time.getMonth();
+                            var month = time.getMonth() + 1 
                             var date = time.getDate() < 10 ? "0" + time.getDate() : time.getDate();
                             var hours = time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
                             var minutes = time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
@@ -144,7 +161,7 @@
                         else {
                             var time = new Date(data);
                             var year = time.getFullYear();
-                            var month = time.getMonth() + 1 < 10 ? "0" + (time.getMonth() + 1) : time.getMonth();
+                            var month = time.getMonth() + 1
                             var date = time.getDate() < 10 ? "0" + time.getDate() : time.getDate();
                             var hours = time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
                             var minutes = time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
@@ -166,7 +183,7 @@
                         else {
                             var time = new Date(data);
                             var year = time.getFullYear();
-                            var month = time.getMonth() + 1 < 10 ? "0" + (time.getMonth() + 1) : time.getMonth();
+                            var month = time.getMonth() + 1
                             var date = time.getDate() < 10 ? "0" + time.getDate() : time.getDate();
                             var hours = time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
                             var minutes = time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
@@ -186,7 +203,7 @@
                         else {
                             var time = new Date(data);
                             var year = time.getFullYear();
-                            var month = time.getMonth() + 1 < 10 ? "0" + (time.getMonth() + 1) : time.getMonth();
+                            var month = time.getMonth() + 1 
                             var date = time.getDate() < 10 ? "0" + time.getDate() : time.getDate();
                             var hours = time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
                             var minutes = time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
@@ -223,9 +240,6 @@
                     fadeScrollbars: true
                 });
             };
-
-
-
             $scope.dtMyFlowOptions = {
                 "bProcessing": true,
                 "bServerSide": true,    // 是否读取服务器分页
@@ -241,8 +255,10 @@
                 "aLengthMenu": [[10, 20, 50, 100], [10, 20, 50, 100]],//设置每页显示数据条数的下拉选项
                 "pagingType": "full_numbers",  // 设置分页样式，这个是默认的值
                 "sScrollY": "330px",
-                // "sScrollX": true,
-                // "bAutoWidth":true,
+                // "responsive": false,
+                //     "sScrollX": true,
+                //   "sScrollXInner": "150%",
+                //    "bAutoWidth":true,
                 "bScrollCollapse": true,
                 "iScrollLoadGap": 50,
                 "language": {           // 语言设置
@@ -266,8 +282,6 @@
                         "url": sSource,
                         "data": aDataSet,
                         "success": function (json) {//返回数据列表
-                            // console.log(json)
-
                             if (json.ExceptionCode == 1 && json.Success == false) {
                                 json.datas = [];
                                 json.sEcho = 1;
@@ -288,49 +302,70 @@
                 "fnServerParams": function (aoData) {
                     // 增加自定义查询条件
                     //ie9不兼容placeholder属性 ie9下当value为空时，其value取placeholder值
-                    if ($("#MyStartTimeStart").attr("placeholder") == $("#MyStartTimeStart").val()) {
-                        $scope.MyStartTimeStart = "";
+                    // if ($("#MyStartTimeStart").attr("placeholder") == $("#MyStartTimeStart").val()) {
+                    //     $scope.MyStartTimeStart = "";
+                       
 
-                    } else {
-                        $scope.MyStartTimeStart = $("#MyStartTimeStart").val();
+                    // } else {
+                    //     $scope.MyStartTimeStart = $("#MyStartTimeStart").val();
+                    //     debugger;
+                    // }
+                    // if ($("#MyStartTimeEnd").attr("placeholder") == $("#MyStartTimeEnd").val()) {
+                    //     $scope.MyStartTimeEnd = "";
 
-                    }
-                    if ($("#MyStartTimeEnd").attr("placeholder") == $("#MyStartTimeEnd").val()) {
-                        $scope.MyStartTimeEnd = "";
+                    // } else {
+                    //     $scope.MyStartTimeEnd = $("#MyStartTimeEnd").val();
 
-                    } else {
-                        $scope.MyStartTimeEnd = $("#MyStartTimeEnd").val();
-
-                    }
+                    // }
                     //将时间转化为时间戳
-                    var myStartTimes = new Date($scope.MyStartTimeStart.replace(/-/g, "/")).getTime();
-
-                    var myEndTimes = new Date($scope.MyStartTimeEnd.replace(/-/g, "/")).getTime();
-                    if (myStartTimes > myEndTimes) {
-                        $.notify({ message: "时间区间错误", status: "danger" });
-                        $("#MyStartTimeEnd").css("color", "red");
-                        return false;
-                    };
                     aoData.push(//name的值是传输数据的key，value的值是传输数据的value
-                        { "name": "createTimeStart", "value": $filter("date")($scope.MyStartTimeStart, "yyyy-MM-dd HH:mm:ss") },
-                        { "name": "createTimeEnd", "value": $filter("date")($scope.MyStartTimeEnd, "yyyy-MM-dd HH:mm:ss") },
+                        { "name": "createTimeStart", "value": $filter("date")( $rootScope.searchStartTimeStart, "yyyy-MM-dd HH:mm:ss") },
+                        { "name": "createTimeEnd", "value": $filter("date")( $rootScope.searchStartTimeEnd ,"yyyy-MM-dd HH:mm:ss") },
                         { "name": "title", "value": $scope.myName },
                         { "name": "type", "value": $scope.index },
-
-
+                        { "name": "orgId", "value": $scope.Originator },
                     );
+                 
                 },
                 "aoColumns": $scope.getMyColumns(), // 字段定义
                 // 初始化完成事件,这里需要用到 JQuery ，因为当前表格是 JQuery 的插件
                 "initComplete": function (settings, json) {
-                    var filter = $(".searchContainer");
-                    filter.find("button").unbind("click.DT").bind("click.DT", function () {
+                    var filter = $("#searchAnnounceOrgName");
+                    filter.unbind("click.DT").bind("click.DT", function () {
                         var myselect = document.getElementById('myTagName');
                         $scope.index = myselect.selectedIndex;
                         if ($scope.index === 0) {
-                            $scope.index='';
+                            $scope.index = '';
                         }
-
+                        $scope.Originator = $("#searchcompany").SheetUIManager().GetValue();
+                        if ( $rootScope.searchStartTimeStart == undefined && $rootScope.searchStartTimeEnd == undefined) {
+                            $rootScope.searchStartTimeStart="";
+                            $rootScope.searchStartTimeEnd="";
+                        }
+                        else if($("#searchStartTimeStart").val()==""&&$("#searchStartTimeEnd").val()=="")
+                        {
+                            $rootScope.searchStartTimeStart="";
+                            $rootScope.searchStartTimeEnd="";
+                        }
+                        else if($("#searchStartTimeStart").val()==""&&$("#searchStartTimeEnd").val()!=="")
+                        {
+                            $rootScope.searchStartTimeStart="";
+                            
+                        }
+                        else if($("#searchStartTimeStart").val()!==""&&$("#searchStartTimeEnd").val()=="")
+                        {
+                            $rootScope.searchStartTimeEnd="";
+                        }
+                        else{
+                            
+                        var myStartTimes = new Date( $rootScope.searchStartTimeStart.replace(/-/g, "/")).getTime();
+                            var myEndTimes = new Date($rootScope.searchStartTimeEnd.replace(/-/g, "/")).getTime();
+                            if (myStartTimes > myEndTimes) {
+                                $.notify({ message: "时间区间错误", status: "danger" });
+                                $("#MyStartTimeEnd").css("color", "red");
+                                return false;
+                            };
+                        }
                         $("#tabMyFlow").dataTable().fnDraw();
                     });
                     $scope.loadScroll();
@@ -350,12 +385,9 @@
 
 
 
-           
+
             $scope.createAnnouncement = function (data) {
-           
-
                 var AgencyID = "";
-
                 $http({
                     url: ControllerConfig.Agents.GetAgency,
                     params: {
@@ -380,16 +412,16 @@
                             },
                             deps: ['$ocLazyLoad', function ($ocLazyLoad) {
                                 return $ocLazyLoad.load([
-                                    'WFRes/_Content/themes/ligerUI/Aqua/css/ligerui-all.min.css',
-                                    'WFRes/assets/stylesheets/sheet.css',
-                                    'WFRes/_Scripts/jquery/jquery.lang.js',
-                                    'WFRes/_Scripts/ligerUI/ligerui.all.min.js',
-                                    'WFRes/_Scripts/MvcSheet/SheetControls.js',
-                                    'WFRes/_Scripts/MvcSheet/MvcSheetUI.js'
+                                    // 'WFRes/_Content/themes/ligerUI/Aqua/css/ligerui-all.min.css',
+                                    // 'WFRes/assets/stylesheets/sheet.css',
+                                    // 'WFRes/_Scripts/jquery/jquery.lang.js',
+                                    // 'WFRes/_Scripts/ligerUI/ligerui.all.min.js',
+                                    // 'WFRes/_Scripts/MvcSheet/SheetControls.js',
+                                    // 'WFRes/_Scripts/MvcSheet/MvcSheetUI.js'
                                 ]).then(function () {
                                     return $ocLazyLoad.load([
-                                        'WFRes/_Scripts/MvcSheet/Controls/SheetWorkflow.js',
-                                        'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js'
+                                        // 'WFRes/_Scripts/MvcSheet/Controls/SheetWorkflow.js',
+                                        // 'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js'
                                     ]);
                                 });
                             }]
@@ -418,17 +450,6 @@
                         data[key] = "";
                     }
                 }
-
-                // $scope.temp.model.flow = data;
-                // $scope.temp.model.name = data.title;
-                // $scope.temp.model.startTime = data.startTime.substring(0, 10) + ' ' + data.startTime.substring(11, 19);
-                // $scope.temp.model.endTime = data.endTime.substring(0, 10) + ' ' + data.endTime.substring(11, 19);
-                // $scope.temp.model.tag = data.type;
-                // $scope.temp.model.description = data.description;
-                // $rootScope.flowCodeDesc = data.flowCodeDesc;
-                // $rootScope.flowId = data.flowId;
-                // var arrOrgList = data.permission.orgs;
-
                 var AgencyID = data;
 
                 $http({
@@ -456,16 +477,16 @@
                             },
                             deps: ['$ocLazyLoad', function ($ocLazyLoad) {
                                 return $ocLazyLoad.load([
-                                    'WFRes/_Content/themes/ligerUI/Aqua/css/ligerui-all.min.css',
-                                    'WFRes/assets/stylesheets/sheet.css',
-                                    'WFRes/_Scripts/jquery/jquery.lang.js',
-                                    'WFRes/_Scripts/ligerUI/ligerui.all.min.js',
-                                    'WFRes/_Scripts/MvcSheet/SheetControls.js',
-                                    'WFRes/_Scripts/MvcSheet/MvcSheetUI.js'
+                                    // 'WFRes/_Content/themes/ligerUI/Aqua/css/ligerui-all.min.css',
+                                    // 'WFRes/assets/stylesheets/sheet.css',
+                                    // 'WFRes/_Scripts/jquery/jquery.lang.js',
+                                    // 'WFRes/_Scripts/ligerUI/ligerui.all.min.js',
+                                    // 'WFRes/_Scripts/MvcSheet/SheetControls.js',
+                                    // 'WFRes/_Scripts/MvcSheet/MvcSheetUI.js'
                                 ]).then(function () {
                                     return $ocLazyLoad.load([
-                                        'WFRes/_Scripts/MvcSheet/Controls/SheetWorkflow.js',
-                                        'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js'
+                                        // 'WFRes/_Scripts/MvcSheet/Controls/SheetWorkflow.js',
+                                        // 'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js'
                                     ]);
                                 });
                             }]
@@ -476,16 +497,12 @@
                     });
                 });
 
-                // var arrOrgList = [];//显示权限
-                // for(var i = 0; i < lenOrgList; i++){
-                //     arrOrgList.push('429a78b-2d75-594f-91c6-567fab7c5e5f');
-                // }
+            
                 var times = setInterval(function () {
                     if ($("#editFlowPer").length > 0) {
                         clearInterval(times);
                         $(".select2-search-field").find("input").css("z-index", 0);
-                        var control = $("#editFlowPer").SheetUIManager();
-                        control.SetValue(arrOrgList);
+
                     }
                 }, 800);
             }
@@ -494,12 +511,7 @@
 
             /*************共享知识删除模态框*****************/
             $scope.toDeleteAnnouncement = function (data) {
-                // $scope.fileNavigator = $rootScope.scope.fileNavigator;//参数
-                // $rootScope.temp = data;
-                // var lenOrgList = data.model.filePermission.orgList.length;//组织的长度
-                // data = "";
-                // $scope.temp.flow = data;
-                // $scope.temp.model.name = data.name;
+
                 var AgencyID = data;
                 $http({
                     url: ControllerConfig.Agents.GetAgency,
@@ -524,16 +536,16 @@
                             },
                             deps: ['$ocLazyLoad', function ($ocLazyLoad) {
                                 return $ocLazyLoad.load([
-                                    'WFRes/_Content/themes/ligerUI/Aqua/css/ligerui-all.min.css',
-                                    'WFRes/assets/stylesheets/sheet.css',
-                                    'WFRes/_Scripts/jquery/jquery.lang.js',
-                                    'WFRes/_Scripts/ligerUI/ligerui.all.min.js',
-                                    'WFRes/_Scripts/MvcSheet/SheetControls.js',
-                                    'WFRes/_Scripts/MvcSheet/MvcSheetUI.js'
+                                    // 'WFRes/_Content/themes/ligerUI/Aqua/css/ligerui-all.min.css',
+                                    // 'WFRes/assets/stylesheets/sheet.css',
+                                    // 'WFRes/_Scripts/jquery/jquery.lang.js',
+                                    // 'WFRes/_Scripts/ligerUI/ligerui.all.min.js',
+                                    // 'WFRes/_Scripts/MvcSheet/SheetControls.js',
+                                    // 'WFRes/_Scripts/MvcSheet/MvcSheetUI.js'
                                 ]).then(function () {
                                     return $ocLazyLoad.load([
-                                        'WFRes/_Scripts/MvcSheet/Controls/SheetWorkflow.js',
-                                        'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js'
+                                        // 'WFRes/_Scripts/MvcSheet/Controls/SheetWorkflow.js',
+                                        // 'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js'
                                     ]);
                                 });
                             }]
@@ -594,16 +606,16 @@
                             },
                             deps: ['$ocLazyLoad', function ($ocLazyLoad) {
                                 return $ocLazyLoad.load([
-                                    'WFRes/_Content/themes/ligerUI/Aqua/css/ligerui-all.min.css',
-                                    'WFRes/assets/stylesheets/sheet.css',
-                                    'WFRes/_Scripts/jquery/jquery.lang.js',
-                                    'WFRes/_Scripts/ligerUI/ligerui.all.min.js',
-                                    'WFRes/_Scripts/MvcSheet/SheetControls.js',
-                                    'WFRes/_Scripts/MvcSheet/MvcSheetUI.js'
+                                    // 'WFRes/_Content/themes/ligerUI/Aqua/css/ligerui-all.min.css',
+                                    // 'WFRes/assets/stylesheets/sheet.css',
+                                    // 'WFRes/_Scripts/jquery/jquery.lang.js',
+                                    // 'WFRes/_Scripts/ligerUI/ligerui.all.min.js',
+                                    // 'WFRes/_Scripts/MvcSheet/SheetControls.js',
+                                    // 'WFRes/_Scripts/MvcSheet/MvcSheetUI.js'
                                 ]).then(function () {
                                     return $ocLazyLoad.load([
-                                        'WFRes/_Scripts/MvcSheet/Controls/SheetWorkflow.js',
-                                        'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js'
+                                        // 'WFRes/_Scripts/MvcSheet/Controls/SheetWorkflow.js',
+                                        // 'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js'
                                     ]);
                                 });
                             }]
