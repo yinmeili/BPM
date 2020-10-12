@@ -195,17 +195,14 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 						},
 						success: function (data) {//返回数据列表
 							$.each(eval(data).data.workItemList, function (i, item) {
-								var str = item.start;
-								var tempStrs = str.split(" ");
-								var dateStrs = tempStrs[0].split("-");
-								var year = parseInt(dateStrs[0], 10);
-								var month = parseInt(dateStrs[1], 10) - 1;
-								var day = parseInt(dateStrs[2], 10);
-								var timeStrs = tempStrs[1].split(":");
-								var hour = parseInt(timeStrs[0], 10);
-								var minute = parseInt(timeStrs[1], 10);
-								var second = parseInt(timeStrs[2], 10);
-								var date = new Date(year, month, day, hour, minute, second);
+								var time = new Date(item.start);
+                var year = time.getFullYear();
+                var month = time.getMonth() + 1 
+                var date = time.getDate() < 10 ? "0" + time.getDate() : time.getDate();
+                var hours = time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
+                var minutes = time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
+                var seconds = time.getSeconds() < 10 ? "0" + time.getSeconds() : time.getSeconds();
+                date = year + '-' + (month) + '-' + (date) + ' ' + (hours) + ':' + (minutes) + ':' + (seconds);
 								item.start = date;
 								item.color = $scope.statusColorType[item.status];
 								// item.url = 'WorkItemSheets.html?WorkItemID=' + item.id;
@@ -688,17 +685,14 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 			},
 			success: function (data) {//返回数据列表
 				$.each(eval(data).data.workItemList, function (i, item) {
-					var str = item.start;
-					var tempStrs = str.split(" ");
-					var dateStrs = tempStrs[0].split("-");
-					var year = parseInt(dateStrs[0], 10);
-					var month = parseInt(dateStrs[1], 10) - 1;
-					var day = parseInt(dateStrs[2], 10);
-					var timeStrs = tempStrs[1].split(":");
-					var hour = parseInt(timeStrs[0], 10);
-					var minute = parseInt(timeStrs[1], 10);
-					var second = parseInt(timeStrs[2], 10);
-					var date = new Date(year, month, day, hour, minute, second);
+					var time = new Date(item.start);
+					var year = time.getFullYear();
+					var month = time.getMonth() + 1 
+					var date = time.getDate() < 10 ? "0" + time.getDate() : time.getDate();
+					var hours = time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
+					var minutes = time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
+					var seconds = time.getSeconds() < 10 ? "0" + time.getSeconds() : time.getSeconds();
+					date = year + '-' + (month) + '-' + (date) + ' ' + (hours) + ':' + (minutes) + ':' + (seconds);
 					item.start = date;
 					item.color = $scope.statusColorType[item.status];
 					// item.url = 'WorkItemSheets.html?WorkItemID=' + item.id;
