@@ -1153,4 +1153,30 @@ public class FileManagerController extends ControllerBase {
 
 		return null;
 	}
+
+	/**
+	 * 删除回收站中的文件
+	 * 
+	 * @param knowledgeType
+	 * @param fileId
+	 * @return
+	 */
+	@RequestMapping(value = "/removeRecycleFile", method = RequestMethod.GET, produces = "application/json;charset=utf8")
+	@ResponseBody
+	public ResponseVo removeRecycleFile(@RequestParam(value = "knowledgeType") String knowledgeType, @RequestParam(value = "fileId") String fileId) {
+		try {
+			if (knowledgeType != null && !knowledgeType.equals("")) {
+				if (KnowledgeType.SHARE_FILE.getValue().equals(knowledgeType)) {
+					fileService.deleteRecycleFile(fileId);
+				}
+				if (KnowledgeType.MY_FILE.getValue().equals(knowledgeType)) {
+					myFileService.deleteRecycleMyFile(fileId);
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ResponseVo("删除成功");
+	}
 }

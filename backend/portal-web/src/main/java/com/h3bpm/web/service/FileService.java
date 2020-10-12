@@ -141,6 +141,21 @@ public class FileService extends ApiDataService {
 
 		fileMapper.updateFile(file);
 	}
+	
+	/**
+	 * 删除回收站文件或文件夹
+	 *
+	 * @param fileVo
+	 * @return 文件ID
+	 */
+	@Transactional
+	public void deleteRecycleFile(String fileId) {
+		File file = fileMapper.getFileById(fileId);
+		file.setIsDelete(DeletedFileType.COMPLETE_DELETED.getValue());
+		file.setDeleteTime(new Date());
+
+		fileMapper.updateFile(file);
+	}
 
 	/**
 	 * 新增文件或文件夹
