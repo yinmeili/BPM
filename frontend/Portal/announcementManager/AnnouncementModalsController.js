@@ -223,13 +223,14 @@ app.controller("AnnouncementModalsController", ["$scope", '$q', "$rootScope", "$
             var editEndTime = $scope.endTime;
 
             $scope.OriginatorRange = $("#editcompany").SheetUIManager().GetValue();
-            if ($scope.OriginatorRange != "") {
+            //if ($scope.OriginatorRange != "") {
                 var bumen = $scope.OriginatorRange;
-            }
-            else {
-                var bumen = params.AgencyID.orgId;
-
-            }
+                //部门判断出错bug修改
+            //}
+            // else {
+            //     var bumen = params.AgencyID.orgId;
+            //        debugger;
+            // }
 
 
             var msg = "";
