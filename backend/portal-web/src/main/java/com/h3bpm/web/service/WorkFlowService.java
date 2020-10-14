@@ -54,45 +54,4 @@ public class WorkFlowService extends ApiDataService{
 
         return null;
     }
-
-    public void importExcel(MultipartFile inputStream){
-
-        List<LiquidationImportData> list = null;
-        try {
-            list = FileUtils.importExcel(inputStream.getInputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if(list == null) return;
-        for (LiquidationImportData liquidationImportData : list) {
-            String userLoginName = workFlowTaskMapper.getUserLoginNameByUserDisplayName(liquidationImportData.getUserDisplayName());
-
-            if(userLoginName == null || userLoginName.equals("")) continue;
-
-            if(liquidationImportData.getStartTime() == null || liquidationImportData.getUserDisplayName() == null) continue;
-
-            WorkFlowTask workFlowTask = workFlowTaskMapper.getWorkFlowTaskByWorkflowCodeAndStartTime(WorkflowCode.LIQUIDATION.getValue(), liquidationImportData.getStartTime());
-            if(workFlowTask == null){
-                workFlowTask = new WorkFlowTask();
-
-                workFlowTask.setCreateTime(new Date());
-                workFlowTask.setWorkFlowCode(WorkflowCode.LIQUIDATION.getValue());
-                workFlowTask.setUserDisplayName(liquidationImportData.getUserDisplayName());
-                workFlowTask.setStartTime(liquidationImportData.getStartTime());
-                workFlowTask.setId(UUID.randomUUID().toString());
-                workFlowTask.setUserLoginName(workFlowTaskMapper.getUserLoginNameByUserDisplayName(liquidationImportData.getUserDisplayName()));
-
-                workFlowTaskMapper.createWorkFlowTask(workFlowTask);
-            }
-            else{
-                workFlowTask.setUserDisplayName(liquidationImportData.getUserDisplayName());
-                workFlowTask.setUserLoginName(workFlowTaskMapper.getUserLoginNameByUserDisplayName(liquidationImportData.getUserDisplayName()));
-                workFlowTaskMapper.updateWorkFlowTask(workFlowTask);
-            }
-        }
-    }
-
-    public List<WorkFlowTask> findWorkFlowTask(){
-        return workFlowTaskMapper.findUnFinishWorkFlowTask(new Date());
-    }
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.h3bpm.web.entity.WorkFlowTask;
 import com.h3bpm.web.service.WorkFlowService;
+import com.h3bpm.web.service.WorkFlowTaskService;
 
 
 @Component
@@ -18,6 +19,9 @@ public class WorkflowTask {
 
 	@Autowired
 	private WorkFlowService workFlowService;
+	
+	@Autowired
+	private WorkFlowTaskService workFlowTaskService;
 
 
 	/**
@@ -31,7 +35,7 @@ public class WorkflowTask {
 	private void process() {
 		logger.info("======== WorkflowTask start ========");
 		
-		List<WorkFlowTask> workflowTasks = workFlowService.findWorkFlowTask();
+		List<WorkFlowTask> workflowTasks = workFlowTaskService.findUnFinishWorkFlowTask();
 		for (WorkFlowTask workFlowTask : workflowTasks) {
 			workFlowService.createWorkFlow(workFlowTask.getId());
 		}

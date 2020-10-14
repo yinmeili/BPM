@@ -2,7 +2,8 @@ package com.h3bpm.web.entity;
 import java.util.Date;
 
 public class WorkFlowTask implements java.io.Serializable{
-    private String id;
+	private static final long serialVersionUID = 8088353609402628248L;
+	private String id;
     private String instanceId;
     private String workflowCode;
     private String userLoginName;

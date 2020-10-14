@@ -32,7 +32,7 @@ public enum WorkflowCode implements  Enumeration {
 		this.displayName = displayName;
 	}
 
-	public static WorkflowCode parse(Integer value) {
+	public static WorkflowCode parse(String value) {
 
 		try {
 			WorkflowCode found = DICT.get(value);
