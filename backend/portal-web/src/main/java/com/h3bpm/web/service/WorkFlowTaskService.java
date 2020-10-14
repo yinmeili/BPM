@@ -1,6 +1,7 @@
 package com.h3bpm.web.service;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.h3bpm.web.entity.WeeklyReportData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -99,5 +101,42 @@ public class WorkFlowTaskService extends ApiDataService {
 	
 	public List<WorkFlowTask> findUnFinishWorkFlowTask() {
 		return workFlowTaskMapper.findUnFinishWorkFlowTask(new Date());
+	}
+
+	public void addWeeklyReportWorkFlowTask() {
+
+//        File file = new File("src/main/resources/config/files/weeklyReport.xlsx");
+		InputStream is = null;
+		List<WeeklyReportData> list = null;
+		try {
+//            list = FileUtils.addWorkFlowTask(new FileInputStream(file));
+//            is = WorkFlowService.class.getClassLoader().getResource("config/files/weeklyReport.xlsx").openStream();
+			is = this.getClass().getClassLoader().getResourceAsStream("config/files/weeklyReport.xlsx");
+//            is = this.getClass().getResourceAsStream("config/files/weeklyReport.xlsx");
+			list = FileUtils.importWeeklyReportWorkFlowTask(is);
+//        } catch (IOException e) {
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		if (list == null) return;
+		for (WeeklyReportData weeklyReportData : list) {
+			String userLoginName = workFlowTaskMapper.getUserLoginNameByUserDisplayName(weeklyReportData.getUserDisplayName());
+
+			if (userLoginName == null || userLoginName.equals("")) continue;
+
+			if (weeklyReportData.getUserDisplayName() == null) continue;
+
+			WorkFlowTask workFlowTask = new WorkFlowTask();
+
+			workFlowTask.setId(UUID.randomUUID().toString());
+			workFlowTask.setCreateTime(new Date());
+			workFlowTask.setWorkFlowCode(WorkflowCode.WEEKLY_REPORT.getValue());
+			workFlowTask.setUserDisplayName(weeklyReportData.getUserDisplayName());
+			workFlowTask.setStartTime(new Date());
+			workFlowTask.setUserLoginName(userLoginName);
+
+			workFlowTaskMapper.createWorkFlowTask(workFlowTask);
+
+		}
 	}
 }

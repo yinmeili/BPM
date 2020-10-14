@@ -54,7 +54,7 @@ public class WorkflowTask {
 	private void addWeeklyReportProcess() {
 		logger.info("======== WorkflowTask start ========");
 
-		workFlowService.addWorkFlowTask();
+		workFlowTaskService.addWeeklyReportWorkFlowTask();
 
 		logger.info("======== WorkflowTask end ========");
 	}

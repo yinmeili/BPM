@@ -37,7 +37,7 @@ public class FileUtils {
         return null;
     }
 
-    public static List<WeeklyReportData> addWorkFlowTask(InputStream inputStream){
+    public static List<WeeklyReportData> importWeeklyReportWorkFlowTask(InputStream inputStream){
         if(inputStream == null) return null;
         ImportParams importParams = new ImportParams();
         importParams.setTitleRows(0);   //excel中的表格名称的占用行数，0表示没有表格名称，为1表示占用一行，2表示占用两行.....(默认占用0行)

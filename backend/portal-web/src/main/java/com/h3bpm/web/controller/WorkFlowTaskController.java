@@ -43,6 +43,13 @@ public class WorkFlowTaskController extends AbstractController {
 		return new RespPageVo(requestBean.getsEcho(), pageInfo.getTotal(), pageInfo.getList());
 	}
 
+	@RequestMapping(value = "/addWeeklyReportTask", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public ResponseVo addWorkFlowTask(){
+		workFlowTaskService.addWeeklyReportWorkFlowTask();
+		return new ResponseVo("导入周报人员成功");
+	}
+
 	@Override
 	public String getFunctionCode() {
 		// TODO Auto-generated method stub
