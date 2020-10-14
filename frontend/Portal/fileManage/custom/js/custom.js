@@ -18,8 +18,6 @@ app.config(['fileManagerConfigProvider', function (config) {
         updateUrl: fileManagerApiUrl + 'updateFile',
         listMyFolderUrl: fileManagerApiUrl + 'listMyFolder',
         listRecycleFileUrl: fileManagerApiUrl + 'listRecycleFile',
-
-
         downloadMyFileUrl: fileManagerApiUrl + 'previewFile',
         listMyFileUrl: fileManagerApiUrl + 'listMyFile',
         searchListMyFileUrl: fileManagerApiUrl + 'searchListMyFile',
@@ -30,7 +28,7 @@ app.config(['fileManagerConfigProvider', function (config) {
         collectToMyFileUrl:fileManagerApiUrl + 'collectToMyFile',
         shareFileUrl:fileManagerApiUrl + 'shareFile',
 
-        searchListRecycleUrl: fileManagerApiUrl + 'searchListRecycle',//回收站搜索
+        listRecycleFileUrl: fileManagerApiUrl + 'listRecycleFile',//回收站搜索
 
         createFlowUrl: knowledgeManageApiUrl + 'createKnowledge',
         listKnowledgeByPageUrl: knowledgeManageApiUrl + 'listKnowledgeByPage',

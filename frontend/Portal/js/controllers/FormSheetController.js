@@ -69,7 +69,7 @@
                         var modalInstance = $modal.open({
                             templateUrl: 'collectFinishedFlow.html',    // 指向上面创建的视图
                             controller: 'FormSheetModalsController',// 初始化模态范围
-                            size: "md",
+                            size: "lg",
                             resolve: {
                                 params: function () {
                                     return {
@@ -126,7 +126,7 @@
                         var modalInstance = $modal.open({
                             templateUrl: 'shareFinishedFlow.html',    // 指向上面创建的视图
                             controller: 'FormSheetModalsController',// 初始化模态范围
-                            size: "md",
+                            size: "lg",
                             resolve: {
                                 params: function () {
                                     return {
@@ -188,8 +188,8 @@
 
             $scope.name;
             $scope.tag;
-            $scope.desc;
-
+            // $scope.desc;
+            $scope.descList=[{key:new Date().getTime(),desc:"",detail:""}];
             var url = window.location.search;//absUrl()//获取flowId
             // var str = `http://localhost:8088/Portal/formSheet.html?SheetCode=Sbusiness_exception&Mode=View&WorkItemID=ef021fe4-6b83-44d9-a23a-401e6ac962c2&&T=090919&localLan=zh_CN#/platform/login"`
             var arr = url.split('&');
@@ -201,7 +201,17 @@
                 }
             }
 
-
+            //流程模板增加输入框
+            $scope.increate=function($index){
+                $scope.descList.splice($index+1,0,
+                    {key:new Date().getTime(),desc:"",detail:""})
+            }
+            //流程模板减少输入框
+            $scope.delete=function($index){
+                if($scope.descList.length>1){
+                    $scope.descList.splice($index,1);
+                }
+            }
             //收藏知识的数据交互
             $scope.collectFlow = function(){
                 var data = {}
@@ -209,15 +219,16 @@
                 if(!$scope.name){
                     msg +='请输入知识名称 | ';
                 }
-                if(!$scope.desc){
-                    msg += '请输入描述 | ';
-                }
+                // if(!$scope.desc){
+                //     msg += '请输入描述 | ';
+                // }
                 msg = msg.substr(0,msg.length-3);
                 if (!msg) {
                     data = {
                         flowId: val,
                         name: $scope.name,
-                        desc: $scope.desc,
+                        // desc: $scope.desc,
+                        descList:$scope.descList,
                         tagName: $scope.tag,
                         startTime: $scope.StartTime,
                         endTime: $scope.EndTime,
@@ -253,15 +264,15 @@
                 // if($rootScope.flowScope.fileNavigator.fileNameExists(foldername)){// 这个方法还未写似乎？
                 //     msg +='有重名知识，请重新命名 | ';
                 // }
-                if(!$scope.desc){
-                    msg += '请输入描述 | ';
-                }
+                // if(!$scope.desc){
+                //     msg += '请输入描述 | ';
+                // }
                 msg = msg.substr(0,msg.length-3);
                 if (!msg) {
                     data = {
                         flowId: val,
                         name: $scope.name,
-                        desc: $scope.desc,
+                        descList:$scope.descList,
                         tagName: $scope.tag,
                         startTime: $scope.StartTime,
                         endTime: $scope.EndTime,

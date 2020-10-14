@@ -1,18 +1,23 @@
 (function (window, angular, $) {
     'use strict';
     app.controller('FileManagerCtrl', [
-        '$scope', '$translate', '$cookies', 'fileManagerConfig', 'item', 'fileNavigator', 'fileUploader','$http', 'ControllerConfig', '$modal',
-        "$rootScope", "$state", "$filter",  "$compile", "jq.datables",
+        '$scope', '$translate', '$cookies', 'fileManagerConfig', 'item', 'fileNavigator', 'fileUploader', '$http', 'ControllerConfig', '$modal',
+        "$rootScope", "$state", "$filter", "$compile", "jq.datables",
         function ($scope, $translate, $cookies, fileManagerConfig, Item, FileNavigator, FileUploader, $http, ControllerConfig, $modal, $rootScope, $state, $filter, $compile, jqdatables) {
-        $scope.config = fileManagerConfig;
-        $rootScope.initRootDir = function () {
-            $scope.fileMemuTile = $scope.config.fileMemuTitle[$scope.fileMemuTile];
-            $rootScope.rootdir = $scope.fileMemuTile;
-        }
-        $rootScope.initRootDir();
-          $scope.reverse = false;
-          $scope.query = '';
-          //回收站按照删除时间默认排序
+            $scope.config = fileManagerConfig;
+
+            $scope.recycleTypeChoose = 'share_file';
+            $scope.knowledgeType = 'share_file';
+            $scope.recycleKeyword = '';
+
+            $rootScope.initRootDir = function () {
+                $scope.fileMemuTile = $scope.config.fileMemuTitle[$scope.fileMemuTile];
+                $rootScope.rootdir = $scope.fileMemuTile;
+            }
+            $rootScope.initRootDir();
+            $scope.reverse = false;
+            $scope.query = '';
+            //回收站按照删除时间默认排序
             if ($scope.fileMemuTile == $scope.config.fileMemuTitle['recycle']) {
                 $scope.predicate = ['model.deleteTime'];
                 $scope.reverse = true;
@@ -23,17 +28,15 @@
                 $scope.reverse = ($scope.predicate[1] === predicate) ? !$scope.reverse : false;
                 $scope.predicate[1] = predicate;
             };
-            
-						// $scope.temp = new Item();
-						
-						/********回收站 ***********/
-						/* $scope.types = [
-							{value:'1',name:'共享文件'}, 
-							{ value: '2', name: '我的文件' },
-							{ value: '3', name:'共享知识'},
-							{ value: '4', name: '我的知识' }]; */
-					$scope.types = ['共享文件', '我的文件', '共享知识','我的知识']
-						/******** ****************/
+
+            // $scope.temp = new Item();
+
+            /********回收站 ***********/
+            $scope.fileTypes = [
+                { value: 'share_file', name: '共享文件' },
+                { value: 'my_file', name: '我的文件' }];
+            // $scope.types = ['共享文件', '我的文件'];
+            /******** ****************/
 
             $rootScope.temp = new Item();
             $rootScope.rootdir = $scope.fileMemuTile;
@@ -68,10 +71,10 @@
             $scope.smartClick = function (item, e) {
                 var url = "";
                 e.target.target = "_blank";
-                if($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['myFiles']){
-                    url += "/Portal/onlinePreview/previewMyFile?fileId="+ item.model.id;
-                }else if($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['allFiles']){
-                    url += "/Portal/onlinePreview/previewFile?fileId="+ item.model.id;
+                if ($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['myFiles']) {
+                    url += "/Portal/onlinePreview/previewMyFile?fileId=" + item.model.id;
+                } else if ($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['allFiles']) {
+                    url += "/Portal/onlinePreview/previewFile?fileId=" + item.model.id;
                 }
 
                 if (item.isFolder()) {
@@ -239,7 +242,7 @@
                 }
                 item.rename().then(function () {
                     $scope.fileNavigator.refresh();
-									$scope.modal('rename', true);
+                    $scope.modal('rename', true);
                 });
             };
 
@@ -251,9 +254,9 @@
                 }
                 item.updateFile().then(function () {
                     $scope.fileNavigator.refresh();
-									$scope.modal('updateFile', true);
-								});
-								
+                    $scope.modal('updateFile', true);
+                });
+
             };
 
             $scope.createFolder = function (item) {
@@ -284,27 +287,27 @@
             };
 
             //回车搜索
-            $scope.searchKeyUp = function(e){
-                var keycode = window.event?e.keyCode:e.which;
-                if(keycode==13){
+            $scope.searchKeyUp = function (e) {
+                var keycode = window.event ? e.keyCode : e.which;
+                if (keycode == 13) {
                     $scope.search("allSearch");
                 }
             }
-            $scope.mySearchKeyUp = function(e){
-                var keycode = window.event?e.keyCode:e.which;
-                if(keycode==13){
+            $scope.mySearchKeyUp = function (e) {
+                var keycode = window.event ? e.keyCode : e.which;
+                if (keycode == 13) {
                     $scope.mySearch("mySearch");
                 }
             }
 
             //我的文件搜索
-            $scope.mySearch = function (searchId){
+            $scope.mySearch = function (searchId) {
                 $scope.fileNavigator.position = true;
-                var keyword = $("#"+searchId).val();
+                var keyword = $("#" + searchId).val();
                 var path = $scope.fileNavigator.currentPath.join('/');
                 $scope.fileNavigator.mySearch(keyword).then(function (data) {
                     // $scope.fileNavigator.currentParentId = data.parentId;
-                    $scope.fileNavigator.fileList = (data.result || []).map(function(file) {
+                    $scope.fileNavigator.fileList = (data.result || []).map(function (file) {
                         return new Item(file, $scope.fileNavigator.currentPath);
                     });
                     $scope.fileNavigator.buildTree(path);
@@ -312,38 +315,47 @@
 
             };
 
-						// 共享文件搜索
-						// 先拿到数据，先发送请求http，在渲染refresh
-            $scope.search = function(searchId){
+            // 共享文件搜索
+            // 先拿到数据，先发送请求http，在渲染refresh
+            $scope.search = function (searchId) {
                 $scope.fileNavigator.position = true;
-                var keyword = $("#"+searchId).val();
+                var keyword = $("#" + searchId).val();
                 var path = $scope.fileNavigator.currentPath.join('/');
                 $scope.fileNavigator.search(keyword).then(function (data) {
                     $scope.fileNavigator.currentParentId = data.parentId;
-                    $scope.fileNavigator.fileList = (data.result || []).map(function(file) {
+                    $scope.fileNavigator.fileList = (data.result || []).map(function (file) {
                         return new Item(file, $scope.fileNavigator.currentPath);
                     });
                     $scope.fileNavigator.buildTree(path);
                 });
-						}
-					
-					
-						// 回收站搜索
-					$scope.recycleSearch = function (type,searchId){
-						// $scope.fileNavigator.position = true;
-						//获取当前选择项的文本.
-						var type = $("#" + type +" option:selected").text();
-						var keyword = $("#" + searchId).val();
-						// var path = $scope.fileNavigator.currentPath.join('/');
-						$scope.fileNavigator.recycleSearch(type,keyword).then(function (data) {
-							// $scope.fileNavigator.currentParentId = data.parentId;
-							$scope.fileNavigator.fileList = (data.result || []).map(function (file) {
-								return new Item(file, $scope.fileNavigator.currentPath);
-							});
-							$scope.fileNavigator.buildTree(path);
-						});
-						}
+            }
 
+
+
+            // 回收站搜索
+            $scope.recycleSearch = function (type, searchId) {
+                //获得文件类型
+                var knowledgeType = $scope.recycleTypeChoose;
+                var keyword = $scope.recycleNameSearch1;
+                $scope.knowledgeType = knowledgeType;
+                $scope.recycleKeyword = keyword;
+                var path = $scope.fileNavigator.currentPath.join('/');
+                $scope.fileNavigator.listRecycle(knowledgeType, keyword).then(function (data) {
+                    // $scope.fileNavigator.currentParentId = data.parentId;
+                    $scope.fileNavigator.recycleFileList = (data.data || []).map(function (file) {
+                        return new Item(file, $scope.fileNavigator.currentPath);
+                    });
+                    $scope.fileNavigator.buildTree(path);
+                });
+            }
+            //回收站回车搜索
+            $scope.recycleSearchKeyUp=function(e){
+                var keycode=e.keyCode||e.keywhich;
+                if(keycode==13){
+                    $scope.recycleSearch('recycleTypeSearch','recycleNameSearch');
+                }
+                
+            }
             $scope.getQueryParam = function (param) {
                 var found;
                 window.location.search.substr(1).split('&').forEach(function (item) {
@@ -413,11 +425,11 @@
             //构造SheetUser
             // $("#divUser").SheetUser({ Editable: true, Visiable: true, Originate: true, OrgUnitVisible: true });
             $("#divUser").SheetUser({
-                ResignVisible:true,
-                    Editable: true,
+                ResignVisible: true,
+                Editable: true,
                 Visiable: true,
                 OrgUnitVisible: true,
-                IsMultiple : true,
+                IsMultiple: true,
                 UserVisible: true
             });
             // function GetCategoryColumns() {
@@ -439,13 +451,13 @@
             // }
 
 
-// ***************************共享文件新建文件夹模态框********************************
+            // ***************************共享文件新建文件夹模态框********************************
             //进入视图触发
             $scope.$on('$viewContentLoaded', function (event) {
                 $scope.myScroll = null
             });
             $scope.newFolder = function (data) {
-								$rootScope.temp.tempModel.name = "";
+                $rootScope.temp.tempModel.name = "";
                 var AgencyID;
                 if (data == undefined) AgencyID = "";
                 else AgencyID = data;
@@ -490,17 +502,17 @@
                             }
                         });
                     })
-                var times = setInterval(function() {
-                    if($("#WorkflowCodes").length>0){//id没有改过来，因为没有用到
+                var times = setInterval(function () {
+                    if ($("#WorkflowCodes").length > 0) {//id没有改过来，因为没有用到
                         clearInterval(times);
                         $(".select2-search-field").find("input").css("z-index", 0);
                         //console.log($("#WorkflowCodes"));
-                        $("#WorkflowCodes").css("width","246px");
+                        $("#WorkflowCodes").css("width", "246px");
                     }
                 }, 50);
             }
 
-// *************************共享文件上传文件选人模态框********************************
+            // *************************共享文件上传文件选人模态框********************************
             $scope.uploadFile = function (data) {
                 var AgencyID;
                 if (data == undefined) AgencyID = "";
@@ -546,22 +558,22 @@
                             }
                         });
 
-                        modalInstance.opened.then(function() {
+                        modalInstance.opened.then(function () {
                             //TODO not work
                         });
                     })
-                var times = setInterval(function() {
-                    if($("#WorkflowCodes").length>0){
+                var times = setInterval(function () {
+                    if ($("#WorkflowCodes").length > 0) {
                         clearInterval(times);
                         $(".select2-search-field").find("input").css("z-index", 0);
                         //console.log($("#WorkflowCodes"));
-                        $("#WorkflowCodes").css("width","246px");
+                        $("#WorkflowCodes").css("width", "246px");
                     }
                 }, 50);
             }
 
 
-// *************************共享文件编辑路径和名称模态框******************************
+            // *************************共享文件编辑路径和名称模态框******************************
             $scope.toUpdateFile = function (data) {
                 $scope.temp.tempModel.name = $scope.temp.model.name;
                 $scope.fileNavigator = $rootScope.scope.fileNavigator;//参数
@@ -578,49 +590,49 @@
                         random: new Date().getTime()
                     }
                 }).success(function (result, header, config, status) {
-                        var Agency = result.Rows[0];
-                        // 弹出模态框
-                        var modalInstance = $modal.open({
-                            templateUrl: 'updateFile.html',    // 指向上面创建的视图
-                            controller: 'ModalsController',// 初始化模态范围
-                            size: "md",
-                            resolve: {
-                                params: function () {
-                                    return {
-                                        user: $scope.user,
-                                        Agency: Agency,
-                                        AgencyID: AgencyID
-                                    };
-                                },
-                                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                    var Agency = result.Rows[0];
+                    // 弹出模态框
+                    var modalInstance = $modal.open({
+                        templateUrl: 'updateFile.html',    // 指向上面创建的视图
+                        controller: 'ModalsController',// 初始化模态范围
+                        size: "md",
+                        resolve: {
+                            params: function () {
+                                return {
+                                    user: $scope.user,
+                                    Agency: Agency,
+                                    AgencyID: AgencyID
+                                };
+                            },
+                            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                                return $ocLazyLoad.load([
+                                    'WFRes/_Content/themes/ligerUI/Aqua/css/ligerui-all.min.css',
+                                    'WFRes/assets/stylesheets/sheet.css',
+                                    'WFRes/_Scripts/jquery/jquery.lang.js',
+                                    'WFRes/_Scripts/ligerUI/ligerui.all.min.js',
+                                    'WFRes/_Scripts/MvcSheet/SheetControls.js',
+                                    'WFRes/_Scripts/MvcSheet/MvcSheetUI.js'
+                                ]).then(function () {
                                     return $ocLazyLoad.load([
-                                        'WFRes/_Content/themes/ligerUI/Aqua/css/ligerui-all.min.css',
-                                        'WFRes/assets/stylesheets/sheet.css',
-                                        'WFRes/_Scripts/jquery/jquery.lang.js',
-                                        'WFRes/_Scripts/ligerUI/ligerui.all.min.js',
-                                        'WFRes/_Scripts/MvcSheet/SheetControls.js',
-                                        'WFRes/_Scripts/MvcSheet/MvcSheetUI.js'
-                                    ]).then(function () {
-                                        return $ocLazyLoad.load([
-                                            'WFRes/_Scripts/MvcSheet/Controls/SheetWorkflow.js',
-                                            'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js'
-                                        ]);
-                                    });
-                                }]
-                            }
-                        });
-                        modalInstance.opened.then(function() {
-                            //TODO not work
-                        });
+                                        'WFRes/_Scripts/MvcSheet/Controls/SheetWorkflow.js',
+                                        'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js'
+                                    ]);
+                                });
+                            }]
+                        }
                     });
+                    modalInstance.opened.then(function () {
+                        //TODO not work
+                    });
+                });
 
                 var arrOrgList = [];
-                for(var i = 0; i < lenOrgList; i++){
+                for (var i = 0; i < lenOrgList; i++) {
                     //strOrgList += '<li class="select2-search-choice" id="'+ $rootScope.temp.model.filePermission.orgList[i].id + '" data-code="18f923a7-5a5e-426d-94ae-a55ad1a4b240" style="cursor: pointer; margin-top: 2px; background-color: rgb(250, 250, 250);"><div>'+ $rootScope.temp.model.filePermission.orgList[i].name +'</div><a href="javascript:void(0)" class="select2-search-choice-close"></a></li>';
                     arrOrgList.push($rootScope.temp.model.filePermission.orgList[i].id);
                 }
-                var times = setInterval(function() {
-                    if($("#editPer").length>0){
+                var times = setInterval(function () {
+                    if ($("#editPer").length > 0) {
                         clearInterval(times);
                         $(".select2-search-field").find("input").css("z-index", 0);
                         //$("#editPer").find("ul").prepend(strOrgList);
@@ -630,7 +642,7 @@
                 }, 800);
             }
 
-// ************************共享文件删除模态框*****************************************
+            // ************************共享文件删除模态框*****************************************
             $scope.toDeleteFile = function (data) {
                 $scope.fileNavigator = $rootScope.scope.fileNavigator;//参数
                 $rootScope.temp = data;
@@ -677,18 +689,17 @@
                             }]
                         }
                     });
-                    modalInstance.opened.then(function() {
+                    modalInstance.opened.then(function () {
                         //TODO not work
                     });
                 });
-
                 var arrOrgList = [];
-                for(var i = 0; i < lenOrgList; i++){
+                for (var i = 0; i < lenOrgList; i++) {
                     //strOrgList += '<li class="select2-search-choice" id="'+ $rootScope.temp.model.filePermission.orgList[i].id + '" data-code="18f923a7-5a5e-426d-94ae-a55ad1a4b240" style="cursor: pointer; margin-top: 2px; background-color: rgb(250, 250, 250);"><div>'+ $rootScope.temp.model.filePermission.orgList[i].name +'</div><a href="javascript:void(0)" class="select2-search-choice-close"></a></li>';
                     arrOrgList.push($rootScope.temp.model.filePermission.orgList[i].id);
                 }
-                var times = setInterval(function() {
-                    if($("#editPer").length>0){
+                var times = setInterval(function () {
+                    if ($("#editPer").length > 0) {
                         clearInterval(times);
                         $(".select2-search-field").find("input").css("z-index", 0);
                         //$("#editPer").find("ul").prepend(strOrgList);
@@ -698,7 +709,7 @@
                 }, 800);
             }
 
-// ***************************我的文件新建文件夹模态框********************************
+            // ***************************我的文件新建文件夹模态框********************************
             $scope.myNewFolder = function (data) {
                 $rootScope.temp.tempModel.name = "";
                 var AgencyID;
@@ -745,17 +756,17 @@
                             }
                         });
                     })
-                var times = setInterval(function() {
-                    if($("#WorkflowCodes").length>0){
+                var times = setInterval(function () {
+                    if ($("#WorkflowCodes").length > 0) {
                         clearInterval(times);
                         $(".select2-search-field").find("input").css("z-index", 0);
                         //console.log($("#WorkflowCodes"));
-                        $("#WorkflowCodes").css("width","246px");
+                        $("#WorkflowCodes").css("width", "246px");
                     }
                 }, 50);
             }
 
-// *************************我的文件上传文件选人模态框********************************
+            // *************************我的文件上传文件选人模态框********************************
             $scope.myUploadFile = function (data) {
                 var AgencyID;
                 if (data == undefined) AgencyID = "";
@@ -801,21 +812,21 @@
                             }
                         });
 
-                        modalInstance.opened.then(function() {
+                        modalInstance.opened.then(function () {
                             //TODO not work
                         });
                     })
-                var times = setInterval(function() {
-                    if($("#WorkflowCodes").length>0){
+                var times = setInterval(function () {
+                    if ($("#WorkflowCodes").length > 0) {
                         clearInterval(times);
                         $(".select2-search-field").find("input").css("z-index", 0);
                         //console.log($("#WorkflowCodes"));
-                        $("#WorkflowCodes").css("width","246px");
+                        $("#WorkflowCodes").css("width", "246px");
                     }
                 }, 50);
             }
 
-// *************************我的文件编辑路径和名称模态框******************************
+            // *************************我的文件编辑路径和名称模态框******************************
             $scope.myToUpdateFile = function (data) {
                 $scope.temp.tempModel.name = $scope.temp.model.name;
                 $scope.fileNavigator = $rootScope.scope.fileNavigator;//参数
@@ -863,20 +874,20 @@
                             }]
                         }
                     });
-                    modalInstance.opened.then(function() {
+                    modalInstance.opened.then(function () {
                         //TODO not work
                     });
                 });
-                var times = setInterval(function() {
-                    if($("#WorkflowCodes").length>0){
+                var times = setInterval(function () {
+                    if ($("#WorkflowCodes").length > 0) {
                         clearInterval(times);
                         $(".select2-search-field").find("input").css("z-index", 0);
                         //console.log($("#WorkflowCodes"));
-                        $("#WorkflowCodes").css("width","246px");
+                        $("#WorkflowCodes").css("width", "246px");
                     }
                 }, 50);
             }
-// ************************我的文件删除模态框*****************************************
+            // ************************我的文件删除模态框*****************************************
             $scope.toMyDeleteFile = function (data) {
                 $scope.fileNavigator = $rootScope.scope.fileNavigator;//参数
                 $rootScope.temp = data;
@@ -922,12 +933,12 @@
                             }]
                         }
                     });
-                    modalInstance.opened.then(function() {
+                    modalInstance.opened.then(function () {
                         //TODO not work
                     });
                 });
-                var times = setInterval(function() {
-                    if($("#editPer").length>0){
+                var times = setInterval(function () {
+                    if ($("#editPer").length > 0) {
                         clearInterval(times);
                         $(".select2-search-field").find("input").css("z-index", 0);
                     }
@@ -935,7 +946,7 @@
             }
 
 
-// ************************收藏到我的文件模态框***************************************
+            // ************************收藏到我的文件模态框***************************************
             $scope.toCollectFile = function (data) {
                 $rootScope.temp = data;
                 $scope.fileNavigator.currentModalFileId = '';//收藏直接弹出根路径
@@ -987,13 +998,13 @@
                                 }]
                             }
                         });
-                        modalInstance.opened.then(function() {
+                        modalInstance.opened.then(function () {
                             //TODO not work
                         });
                     });
             }
 
-// *************************分享到共享文件模态框**************************************
+            // *************************分享到共享文件模态框**************************************
             $scope.toShareFile = function (data) {
                 $rootScope.temp = data;
                 $scope.fileNavigator.currentModalFileId = '';//分享直接弹出根路径
@@ -1045,11 +1056,117 @@
                                 }]
                             }
                         });
-                        modalInstance.opened.then(function() {
+                        modalInstance.opened.then(function () {
+                            //TODO not work
+                        });
+                    });
+            }
+            /********************回收站恢复模态框******************************************/
+            $scope.toRenewRecycleFile = function (data) {
+                $rootScope.temp = data;
+                var tempData;
+                var AgencyID;
+                if (tempData == undefined) AgencyID = "";
+                else AgencyID = tempData;
+                $http({
+                    url: ControllerConfig.Agents.GetAgency,
+                    params: {
+                        agentID: AgencyID,
+                        random: new Date().getTime()
+                    }
+                })
+                    .success(function (result, header, config, status) {
+                        var Agency = result.Rows[0];
+                        // 弹出模态框
+                        var modalInstance = $modal.open({
+                            templateUrl: 'refreshFile.html',    // 指向上面创建的视图
+                            controller: 'ModalsController',// 初始化模态范围
+                            size: "md",
+                            resolve: {
+                                params: function () {
+                                    return {
+                                        Agency: Agency,
+                                        AgencyID: AgencyID,
+                                        knowledgeType: $scope.knowledgeType,
+                                        keyword: $scope.recycleKeyword
+                                    };
+                                },
+                                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                                    return $ocLazyLoad.load([
+                                        'WFRes/_Content/themes/ligerUI/Aqua/css/ligerui-all.min.css',
+                                        'WFRes/assets/stylesheets/sheet.css',
+                                        'WFRes/_Scripts/jquery/jquery.lang.js',
+                                        'WFRes/_Scripts/ligerUI/ligerui.all.min.js',
+                                        'WFRes/_Scripts/MvcSheet/SheetControls.js',
+                                        'WFRes/_Scripts/MvcSheet/MvcSheetUI.js'
+                                    ]).then(function () {
+                                        return $ocLazyLoad.load([
+                                            'WFRes/_Scripts/MvcSheet/Controls/SheetWorkflow.js',
+                                            'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js'
+                                        ]);
+                                    });
+                                }]
+                            }
+                        });
+                        modalInstance.opened.then(function () {
+                          
+                        });
+                    });
+            }
+            /**************************回收站删除模态框********************/
+            $scope.toRemoveRecycleFile = function (data) {
+                $rootScope.temp = data;
+                var tempData;
+                var AgencyID;
+                if (tempData == undefined) AgencyID = "";
+                else AgencyID = tempData;
+                $http({
+                    url: ControllerConfig.Agents.GetAgency,
+                    params: {
+                        agentID: AgencyID,
+                        random: new Date().getTime()
+                    }
+                })
+                    .success(function (result, header, config, status) {
+                        var Agency = result.Rows[0];
+                        // 弹出模态框
+
+                        var modalInstance = $modal.open({
+                            templateUrl: 'deleteRecycleFile.html',    // 指向上面创建的视图
+                            controller: 'ModalsController',// 初始化模态范围
+                            size: "md",
+                            resolve: {
+                                params: function () {
+                                    return {
+                                        Agency: Agency,
+                                        AgencyID: AgencyID,
+                                        knowledgeType: $scope.knowledgeType,
+                                        keyword: $scope.recycleKeyword
+                                    };
+                                },
+                                deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                                    return $ocLazyLoad.load([
+                                        'WFRes/_Content/themes/ligerUI/Aqua/css/ligerui-all.min.css',
+                                        'WFRes/assets/stylesheets/sheet.css',
+                                        'WFRes/_Scripts/jquery/jquery.lang.js',
+                                        'WFRes/_Scripts/ligerUI/ligerui.all.min.js',
+                                        'WFRes/_Scripts/MvcSheet/SheetControls.js',
+                                        'WFRes/_Scripts/MvcSheet/MvcSheetUI.js'
+                                    ]).then(function () {
+                                        return $ocLazyLoad.load([
+                                            'WFRes/_Scripts/MvcSheet/Controls/SheetWorkflow.js',
+                                            'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js'
+                                        ]);
+                                    });
+                                }]
+                            }
+                        });
+                        modalInstance.opened.then(function () {
                             //TODO not work
                         });
                     });
             }
 
-            }]);
+
+        }]);
 })(window, angular, jQuery);

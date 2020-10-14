@@ -1,9 +1,11 @@
 (function(angular) {
     'use strict';
 	app.service('fileNavigator', [
-		'$http', '$q', 'fileManagerConfig', 'item', '$rootScope' ,function ($http, $q, fileManagerConfig, Item, $rootScope) {
+		'$http','$q', 'fileManagerConfig', 'item', '$rootScope' ,function ($http,$q, fileManagerConfig, Item, $rootScope) {
 
         $http.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+  
+
         var FileNavigator = function() {
             this.requesting = false;
             this.position = false;
@@ -165,22 +167,18 @@
 
 			
 			/********************回收站列表*********************/
-        FileNavigator.prototype.listRecycle = function () {
+        FileNavigator.prototype.listRecycle = function (knowledgeType,keyword) {
 				var self = this;
 				var deferred = $q.defer();
-				var path = self.currentPath.join('/');
+                var path = self.currentPath.join('/');
 				self.requesting = true;
 				self.recycleFileList = [];
 				self.error = '';
-				self.showList('showFolder');
-
-				$http({
-					method: "POST",
-					url: fileManagerConfig.listRecycleFileUrl
-				}).success(function (data) {
-					self.deferredHandler(data, deferred);
-				}).error(function (data) {
-					self.deferredHandler(data, deferred, 'Unknown error listing, check the response');
+                self.showList('showFolder');
+                $http.post(fileManagerConfig.listRecycleFileUrl,{knowledgeType,keyword}).success(function (data) {
+                    self.deferredHandler(data, deferred);
+                }).error(function (data) {
+                    self.deferredHandler(data, deferred, 'Unknown error listing, check the response');
 				})['finally'](function () {
 					self.requesting = false;
 				});
@@ -249,35 +247,16 @@
                 });
                 return deferred.promise;
 						}
-						
-				// 回收站搜索
-				FileNavigator.prototype.recycleSearch = function (type,keyword) {
-					var self = this;
-					var deferred = $q.defer();
-					var path = self.currentPath.join('/');
-					var data = {
-						// parentId: self.currentFileId,
-						type:type,
-						keyword: keyword
-					}
-					$http.post(fileManagerConfig.searchListRecycleUrl, data).success(function (data) {
-						self.deferredHandler(data, deferred);
-					}).error(function (data) {
-						self.deferredHandler(data, deferred, 'Unknown error listing, check the response');
-					})['finally'](function () {
-						// self.position = false;
-					});
-					return deferred.promise;
-			}
-
-
-        FileNavigator.prototype.refresh = function() {
+        FileNavigator.prototype.refresh = function(knowledgeType,keyword) {
             var self = this;
             var path = self.currentPath.join('/');
             self.position = false;
             // 判断不同的index的页面刷新不同的数据
             if ($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['recycle']){
-                return self.listRecycle().then(function (data) {
+                if(knowledgeType==undefined){
+                    knowledgeType='share_file';
+                }
+                return self.listRecycle(knowledgeType,keyword).then(function (data) {
                     // self.currentParentId = data.parentId;
                     self.recycleFileList = (data.data || []).map(function (file) {
                         return new Item(file, self.currentPath);
@@ -326,6 +305,7 @@
                 });
             });
         };
+       
 		  /********** 更改路径后去掉当前文件夹再渲染*********/
 			/* FileNavigator.prototype.selectFolderRefresh = function (item) {
 				var self = this;
