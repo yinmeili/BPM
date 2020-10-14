@@ -8,7 +8,9 @@ import org.slf4j.LoggerFactory;
 
 public enum WorkflowCode implements  Enumeration {
 
-	LIQUIDATION("liquidation", "清算")
+	LIQUIDATION("liquidation", "清算"),
+
+	WEEKLY_REPORT("weeklyReport", "周报")
 
 	;
 
