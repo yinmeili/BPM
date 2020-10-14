@@ -1,179 +1,193 @@
 package com.h3bpm.web.entity;
 
+import com.alibaba.fastjson.JSONArray;
 import com.h3bpm.web.vo.KnowledgeVo;
 import com.h3bpm.web.vo.MyKnowledgeVo;
 
 import java.util.Date;
 
-public class MyKnowledge{
+public class MyKnowledge {
 
-    private String id = null;
-    private String type = null;
-    private String name = null;
-    private String desc = null;
-    private String tagName = null;
-    private String createUserId = null;
-    private String createUserName = null;
-    private Date createTime = null;
-    private boolean isDelete = false;
-    private Date deleteTime = null;
-    private String flowId = null;
-    private String flowCode = null;
-    private String flowCodeDesc = null;
-    private Date startTime = null;
-    private Date endTime = null;
+	private String id = null;
+	private String type = null;
+	private String name = null;
+	private String desc = null;
+	private String tagName = null;
+	private String createUserId = null;
+	private String createUserName = null;
+	private Date createTime = null;
+	private boolean isDelete = false;
+	private Date deleteTime = null;
+	private String flowId = null;
+	private String flowCode = null;
+	private String flowCodeDesc = null;
+	private Date startTime = null;
+	private Date endTime = null;
+	private String descListData = null;
 
-    @Deprecated
-    public MyKnowledge() {
+	@Deprecated
+	public MyKnowledge() {
 
-    }
+	}
 
-    public MyKnowledge(MyKnowledgeVo myKnowledgeVo) {
-        this.id = myKnowledgeVo.getId();
-        this.flowId = myKnowledgeVo.getFlowId();
-        this.name = myKnowledgeVo.getName();
-        this.desc = myKnowledgeVo.getDesc();
-        this.tagName = myKnowledgeVo.getTagName();
-        this.startTime = myKnowledgeVo.getStartTime();
-        this.endTime = myKnowledgeVo.getEndTime();
-        this.createTime = myKnowledgeVo.getCreateTime();
-        this.createUserId = myKnowledgeVo.getCreateUserId();
-        this.createUserName = myKnowledgeVo.getCreateUserName();
-        this.flowCodeDesc = myKnowledgeVo.getFlowCodeDesc();
-    }
+	public MyKnowledge(MyKnowledgeVo myKnowledgeVo) {
+		this.id = myKnowledgeVo.getId();
+		this.flowId = myKnowledgeVo.getFlowId();
+		this.name = myKnowledgeVo.getName();
+		this.desc = myKnowledgeVo.getDesc();
+		this.tagName = myKnowledgeVo.getTagName();
+		this.startTime = myKnowledgeVo.getStartTime();
+		this.endTime = myKnowledgeVo.getEndTime();
+		this.createTime = myKnowledgeVo.getCreateTime();
+		this.createUserId = myKnowledgeVo.getCreateUserId();
+		this.createUserName = myKnowledgeVo.getCreateUserName();
+		this.flowCodeDesc = myKnowledgeVo.getFlowCodeDesc();
+		
+		if(myKnowledgeVo.getDescList() != null){
+			this.descListData = (JSONArray.toJSON(myKnowledgeVo.getDescList())).toString();
+		}
+	}
 
-    public MyKnowledge(Knowledge knowledge){
-        this.flowId = knowledge.getFlowId();
-        this.name = knowledge.getName();
-        this.desc = knowledge.getDesc();
-        this.tagName = knowledge.getTagName();
-        this.startTime = knowledge.getStartTime();
-        this.endTime = knowledge.getEndTime();
-        this.createTime = knowledge.getCreateTime();
-        this.createUserId = knowledge.getCreateUserId();
-        this.createUserName = knowledge.getCreateUserName();
-        this.flowCodeDesc = knowledge.getFlowCodeDesc();
-    }
+	public MyKnowledge(Knowledge knowledge) {
+		this.flowId = knowledge.getFlowId();
+		this.name = knowledge.getName();
+		this.desc = knowledge.getDesc();
+		this.tagName = knowledge.getTagName();
+		this.startTime = knowledge.getStartTime();
+		this.endTime = knowledge.getEndTime();
+		this.createTime = knowledge.getCreateTime();
+		this.createUserId = knowledge.getCreateUserId();
+		this.createUserName = knowledge.getCreateUserName();
+		this.flowCodeDesc = knowledge.getFlowCodeDesc();
+		this.descListData = knowledge.getDescListData();
+	}
 
-    public String getCreateUserName() {
-        return createUserName;
-    }
+	public String getDescListData() {
+		return descListData;
+	}
 
-    public void setCreateUserName(String createUserName) {
-        this.createUserName = createUserName;
-    }
+	public void setDescListData(String descListData) {
+		this.descListData = descListData;
+	}
 
-    public String getFlowCodeDesc() {
-        return flowCodeDesc;
-    }
+	public String getCreateUserName() {
+		return createUserName;
+	}
 
-    public void setFlowCodeDesc(String flowCodeDesc) {
-        this.flowCodeDesc = flowCodeDesc;
-    }
+	public void setCreateUserName(String createUserName) {
+		this.createUserName = createUserName;
+	}
 
-    public String getId() {
-        return id;
-    }
+	public String getFlowCodeDesc() {
+		return flowCodeDesc;
+	}
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	public void setFlowCodeDesc(String flowCodeDesc) {
+		this.flowCodeDesc = flowCodeDesc;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public String getType() {
+		return type;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setType(String type) {
+		this.type = type;
+	}
 
-    public String getDesc() {
-        return desc;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getTagName() {
-        return tagName;
-    }
+	public String getDesc() {
+		return desc;
+	}
 
-    public void setTagName(String tagName) {
-        this.tagName = tagName;
-    }
+	public void setDesc(String desc) {
+		this.desc = desc;
+	}
 
-    public String getCreateUserId() {
-        return createUserId;
-    }
+	public String getTagName() {
+		return tagName;
+	}
 
-    public void setCreateUserId(String createUserId) {
-        this.createUserId = createUserId;
-    }
+	public void setTagName(String tagName) {
+		this.tagName = tagName;
+	}
 
-    public Date getCreateTime() {
-        return createTime;
-    }
+	public String getCreateUserId() {
+		return createUserId;
+	}
 
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
+	public void setCreateUserId(String createUserId) {
+		this.createUserId = createUserId;
+	}
 
-    public boolean isDelete() {
-        return isDelete;
-    }
+	public Date getCreateTime() {
+		return createTime;
+	}
 
-    public void setDelete(boolean delete) {
-        isDelete = delete;
-    }
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
 
-    public Date getDeleteTime() {
-        return deleteTime;
-    }
+	public boolean isDelete() {
+		return isDelete;
+	}
 
-    public void setDeleteTime(Date deleteTime) {
-        this.deleteTime = deleteTime;
-    }
+	public void setDelete(boolean delete) {
+		isDelete = delete;
+	}
 
-    public String getFlowId() {
-        return flowId;
-    }
+	public Date getDeleteTime() {
+		return deleteTime;
+	}
 
-    public void setFlowId(String flowId) {
-        this.flowId = flowId;
-    }
+	public void setDeleteTime(Date deleteTime) {
+		this.deleteTime = deleteTime;
+	}
 
-    public String getFlowCode() {
-        return flowCode;
-    }
+	public String getFlowId() {
+		return flowId;
+	}
 
-    public void setFlowCode(String flowCode) {
-        this.flowCode = flowCode;
-    }
+	public void setFlowId(String flowId) {
+		this.flowId = flowId;
+	}
 
-    public Date getStartTime() {
-        return startTime;
-    }
+	public String getFlowCode() {
+		return flowCode;
+	}
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
+	public void setFlowCode(String flowCode) {
+		this.flowCode = flowCode;
+	}
 
-    public Date getEndTime() {
-        return endTime;
-    }
+	public Date getStartTime() {
+		return startTime;
+	}
 
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-    }
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
 
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
 
 }

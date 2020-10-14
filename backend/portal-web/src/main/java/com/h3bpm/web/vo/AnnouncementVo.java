@@ -15,6 +15,8 @@ public class AnnouncementVo {
     private String updateUserId = null;
     private Long startTime = null;
     private Long endTime = null;
+    private String orgId = null;
+    private String orgName = null;
 
     public AnnouncementVo() {
     }
@@ -37,9 +39,27 @@ public class AnnouncementVo {
         if (announcement.getEndTime() != null) {
             this.endTime = announcement.getEndTime().getTime();
         }
+        this.orgId = announcement.getOrgId();
+        this.orgName = announcement.getOrgName();
     }
 
-    public String getId() {
+    public String getOrgId() {
+		return orgId;
+	}
+
+	public void setOrgId(String orgId) {
+		this.orgId = orgId;
+	}
+
+	public String getOrgName() {
+		return orgName;
+	}
+
+	public void setOrgName(String orgName) {
+		this.orgName = orgName;
+	}
+
+	public String getId() {
         return id;
     }
 

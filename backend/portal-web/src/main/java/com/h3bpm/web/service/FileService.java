@@ -25,7 +25,6 @@ public class FileService extends ApiDataService {
 	@Autowired
 	private FilePermissionMapper filePermissionMapper;
 
-
 	public List<File> findFileByParentIdAndKeyword(String parentId, String keyword) {
 		List<File> fileList = null;
 		String searchPath = null;
@@ -75,11 +74,11 @@ public class FileService extends ApiDataService {
 	 * @param createId
 	 * @return
 	 */
-	public List<File> findDeletedFileByUserId(String userId) {
+	public List<File> findDeletedFileByUserIdAndKeyword(String userId, String keyword) {
 
 		List<File> fileList = null;
 		try {
-			fileList = fileMapper.findDeletedFileByUserId(userId);
+			fileList = fileMapper.findDeletedFileByUserIdAndKeyword(userId, keyword);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -89,11 +88,11 @@ public class FileService extends ApiDataService {
 
 	}
 
-	public List<File> findDeletedMyFileByUserId(String userId) {
+	public List<File> findDeletedMyFileByUserIdAndKeyword(String userId, String keyword) {
 
 		List<File> fileList = null;
 		try {
-			fileList = fileMapper.findDeletedMyFileByUserId(userId);
+			fileList = fileMapper.findDeletedMyFileByUserIdAndKeyword(userId, keyword);
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -138,6 +137,21 @@ public class FileService extends ApiDataService {
 	public void deleteFile(String fileId) {
 		File file = fileMapper.getFileById(fileId);
 		file.setIsDelete(DeletedFileType.DELETED.getValue());
+		file.setDeleteTime(new Date());
+
+		fileMapper.updateFile(file);
+	}
+	
+	/**
+	 * 删除回收站文件或文件夹
+	 *
+	 * @param fileVo
+	 * @return 文件ID
+	 */
+	@Transactional
+	public void deleteRecycleFile(String fileId) {
+		File file = fileMapper.getFileById(fileId);
+		file.setIsDelete(DeletedFileType.COMPLETE_DELETED.getValue());
 		file.setDeleteTime(new Date());
 
 		fileMapper.updateFile(file);
@@ -205,7 +219,6 @@ public class FileService extends ApiDataService {
 		shareFileList.add(shareFile);
 	}
 
-
 	/**
 	 * 根据parentId查询出所有的文件名称
 	 *
@@ -213,7 +226,7 @@ public class FileService extends ApiDataService {
 	 * @return
 	 */
 
-	public List<String> findFileNameByParentId(String parentId){
+	public List<String> findFileNameByParentId(String parentId) {
 		List<String> res = new ArrayList<>();
 		try {
 			res = fileMapper.findFileNameByParentId(parentId);
@@ -229,7 +242,7 @@ public class FileService extends ApiDataService {
 	 * @param parentId
 	 * @return
 	 */
-	public List<String> findFolderNameByParentId(String parentId){
+	public List<String> findFolderNameByParentId(String parentId) {
 		List<String> res = new ArrayList<>();
 		try {
 			res = fileMapper.findFolderNameByParentId(parentId);
@@ -239,7 +252,6 @@ public class FileService extends ApiDataService {
 		return res;
 	}
 
-
 	/**
 	 * 校验文件夹名的名字
 	 *
@@ -247,22 +259,23 @@ public class FileService extends ApiDataService {
 	 * @param name
 	 * @return
 	 */
-	public String validateFolderName(String parentId, String name){
+	public String validateFolderName(String parentId, String name) {
 		boolean is_first = true;
 		List<String> fileNames = findFolderNameByParentId(parentId);
-		if(fileNames == null) return name;
+		if (fileNames == null)
+			return name;
 		int index = 1;
 		for (String fileName : fileNames) {
-			if(name.equals(fileName)){
-				if(!is_first) name = name.substring(0,name.length() - 3);
+			if (name.equals(fileName)) {
+				if (!is_first)
+					name = name.substring(0, name.length() - 3);
 				name = name + '(' + index + ')';
-				index ++ ;
+				index++;
 				is_first = false;
 			}
 		}
 		return name;
 	}
-
 
 	/**
 	 * 校验文件的名字
@@ -271,23 +284,24 @@ public class FileService extends ApiDataService {
 	 * @param name
 	 * @return
 	 */
-	public String validateFileName(String parentId, String name, String fileSuffix){
+	public String validateFileName(String parentId, String name, String fileSuffix) {
 		boolean is_first = true;
 		List<String> fileNames = findFileNameByParentId(parentId);
-		Collections.sort(fileNames);	//升序排序->test(1).txt,test(2).txt.....test.txt
-		String fileFullName = name + '.' + fileSuffix;	//文件全名
-		if(fileNames == null) return name;
+		Collections.sort(fileNames); // 升序排序->test(1).txt,test(2).txt.....test.txt
+		String fileFullName = name + '.' + fileSuffix; // 文件全名
+		if (fileNames == null)
+			return name;
 		int index = 2;
 		for (String fileName : fileNames) {
-			if(fileFullName.equals(fileName)){
+			if (fileFullName.equals(fileName)) {
 				name = name + "(1)";
 				fileFullName = name + '.' + fileSuffix;
-				break;	//找到了
+				break; // 找到了
 			}
 		}
 		for (String fileName : fileNames) {
-			if(fileFullName.equals(fileName)){
-				name = name.substring(0,name.length() - 3);
+			if (fileFullName.equals(fileName)) {
+				name = name.substring(0, name.length() - 3);
 				name = name + '(' + index + ')';
 				index++;
 				fileFullName = name + '.' + fileSuffix;
@@ -299,9 +313,10 @@ public class FileService extends ApiDataService {
 
 	/**
 	 * 重新恢复回收站中的文件
+	 * 
 	 * @param fileId
 	 */
-	public void renewRecycleFile(String fileId){
+	public void renewRecycleFile(String fileId) {
 		File file = fileMapper.getFileById(fileId);
 		file.setIsDelete(DeletedFileType.UNDELETED.getValue());
 		file.setDeleteTime(null);

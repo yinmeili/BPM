@@ -5,6 +5,7 @@ app.controller("ModalsController", ["$scope", "$rootScope", "$http", "$translate
         $scope.fileNavigator = _newscope.fileNavigator;
         $scope.temp = $rootScope.temp;
         $scope.fileMemuTile = $rootScope.rootdir;
+        $scope.descList=[{key:new Date().getTime(),desc:"",detail:""}];
         $scope.getLanguage = function () {
             $scope.LanJson = {
                 StartTime: $translate.instant("QueryTableColumn.StartTime"),
@@ -293,6 +294,27 @@ app.controller("ModalsController", ["$scope", "$rootScope", "$http", "$translate
             });
             $scope.cancel();
         }
+        //回收站恢复删除文件
+        $scope.renewRecycleFile=function(item){
+            item.knowledgeType = params.knowledgeType;
+            knowledgeType=params.knowledgeType;
+            keyword=params.keyword;
+            item.renewRecycleFile(knowledgeType,keyword).then(function(){
+                $scope.fileNavigator.refresh(knowledgeType,keyword);
+            });
+            $scope.cancel();
+        }
+        //回收站删除文件
+        $scope.removeRecycleFile=function(item){
+            item.knowledgeType = params.knowledgeType;
+            knowledgeType=params.knowledgeType;
+            keyword=params.keyword;
+            item.removeRecycleFile(knowledgeType,keyword).then(function(){
+                $scope.fileNavigator.refresh(knowledgeType,keyword);
+            });
+            //收回模态框
+            $scope.cancel();
+        }
         //------我的文件 end
 
         //控件初始化参数
@@ -323,13 +345,35 @@ app.controller("ModalsController", ["$scope", "$rootScope", "$http", "$translate
         }
 
         //-----共享知识 start ----------
+        //共享知识新建知识增加输入框
+        $scope.increate=function($index){
+            $scope.descList.splice($index+1,0,
+                {key:new Date().getTime(),desc:"",detail:""})
+        }
+        //共享知识减少输入框
+        $scope.delete=function($index){
+            if($scope.descList.length>1){
+                $scope.descList.splice($index,1);
+            }
+        }
+        //编辑新增输入框
+        $scope.increate2=function($index){
+            $scope.temp.model.descList.splice($index+1,0,
+                {key:new Date().getTime(),desc:"",detail:""})
+        }
+        //编辑减少输入框
+        $scope.delete2=function($index){
+            if($scope.temp.model.descList.length>1){
+                $scope.temp.model.descList.splice($index,1);
+            }
+        }
         //新建知识数据交互
         $scope.createFlow = function (item) {
             item.tempModel.startTime = $scope.StartTime;
             item.tempModel.endTime = $scope.EndTime;
+            item.tempModel.descList=$scope.descList;
             var permission = $("#flowPermission").SheetUIManager();
             var orgs = permission.GetValue();
-
             var foldername = item.tempModel.name && item.tempModel.name.trim();//名称
             var msg = '';
             if(!permission || !orgs){
@@ -362,7 +406,8 @@ app.controller("ModalsController", ["$scope", "$rootScope", "$http", "$translate
         //更新知识数据交互
         $scope.updateFlow = function (item) {
             var foldername = item.model.name && item.model.name.trim();//name
-            var desc = item.model.desc && item.model.desc.trim();//
+            // var desc = item.model.desc && item.model.desc.trim();
+            
             var permission = $("#editFlowPer").SheetUIManager();
             var orgs = permission.GetValue();
             var msg = '';
@@ -378,9 +423,9 @@ app.controller("ModalsController", ["$scope", "$rootScope", "$http", "$translate
             if(!foldername){
                 msg +='请输入知识名称 | ';
             }
-            if(!desc){
-                msg += '请输入描述 | ';
-            }
+            // if(!desc){
+            //     msg += '请输入描述 | ';
+            // }
             msg = msg.substr(0,msg.length-3);
             if (!msg) {
                 item.updateFlow().then(function () {
@@ -414,6 +459,7 @@ app.controller("ModalsController", ["$scope", "$rootScope", "$http", "$translate
         $scope.createMyFlow = function(item){
             item.tempModel.startTime = $scope.StartTime;
             item.tempModel.endTime = $scope.EndTime;
+            item.tempModel.descList=$scope.descList;
             var foldername = item.tempModel.name && item.tempModel.name.trim();//名称
             var msg = '';
             if(!foldername){
@@ -437,14 +483,16 @@ app.controller("ModalsController", ["$scope", "$rootScope", "$http", "$translate
         //更新知识数据交互
         $scope.updateMyFlow = function (item) {
             var foldername = item.model.name && item.model.name.trim();//name
-            var desc = item.model.desc && item.model.desc.trim();//desc,temp.model.tag,
+            // var desc = item.model.desc && item.model.desc.trim();//desc,temp.model.tag,
+            var descList=item.model.descList;
+            
             var msg="";
             if(!foldername){
                 msg +='请输入知识名称 | ';
             }
-            if(!desc){
-                msg += '请输入描述 | ';
-            }
+            // if(!desc){
+            //     msg += '请输入描述 | ';
+            // }
             msg = msg.substr(0,msg.length-3);
             if (!msg) {
                 item.updateMyFlow().then(function () {

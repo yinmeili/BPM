@@ -164,7 +164,7 @@ public class WorkCalendarController extends ControllerBase {
             workCalendarVo.setId(workItemViewModel.getBaseObjectID());
             workCalendarVo.setTitle(workItemViewModel.getInstanceName());
             workCalendarVo.setStatus(WorkCalendarStatus.FINISH.getValue());
-            workCalendarVo.setStart(DateTimeUtil.getStringToDate(workItemViewModel.getReceiveTime(), null));
+            workCalendarVo.setStart((DateTimeUtil.getStringToDate(workItemViewModel.getReceiveTime(), null)).getTime());
 
             list.add(workCalendarVo);
         }
@@ -199,7 +199,7 @@ public class WorkCalendarController extends ControllerBase {
             workCalendarVo.setId(workItemViewModel.getBaseObjectID());
             workCalendarVo.setTitle(workItemViewModel.getInstanceName());
             workCalendarVo.setStatus(WorkCalendarStatus.UNFINISH.getValue());
-            workCalendarVo.setStart(DateTimeUtil.getStringToDate(workItemViewModel.getReceiveTime(), null));
+            workCalendarVo.setStart((DateTimeUtil.getStringToDate(workItemViewModel.getReceiveTime(), null)).getTime());
 
             list.add(workCalendarVo);
         }
@@ -243,7 +243,7 @@ public class WorkCalendarController extends ControllerBase {
             workCalendarVo.setId(workItemViewModel.getBaseObjectID());
             workCalendarVo.setTitle(workItemViewModel.getInstanceName());
             workCalendarVo.setStatus(WorkCalendarStatus.EXCEED_TIME_LIMIT.getValue());
-            workCalendarVo.setStart(DateTimeUtil.getStringToDate(workItemViewModel.getReceiveTime(), null));
+            workCalendarVo.setStart((DateTimeUtil.getStringToDate(workItemViewModel.getReceiveTime(), null)).getTime());
 
             list.add(workCalendarVo);
         }

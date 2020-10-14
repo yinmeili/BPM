@@ -21,7 +21,9 @@ public class AnnouncementSqlProvider {
                         "			 create_user_id createUserId," +
                         "			 create_time createTime," +
                         "			 link," +
-                        "			 type" +
+                        "			 type," +
+                        "			 org_id orgId," +
+                        "			 org_name orgName" +
                         "			FROM" +
                         "				ot_announcement" +
                         "				WHERE 1=1" +
@@ -56,7 +58,14 @@ public class AnnouncementSqlProvider {
             String timeEndStr = simpleDateFormat.format(dateEnd);
             timeSqlStr += " AND create_time <= '" + timeEndStr + "'";
         }
-
+        
+        
+        String orgId = para.get("orgId") == null ? "" : (String) para.get("orgId");
+        String orgSqlStr = "";
+        if (!orgId.isEmpty()) {
+        	orgSqlStr = " AND org_id = '" + orgId + "'";
+        }
+        
         String sql =
                 "SELECT" +
                         "			 id," +
@@ -69,13 +78,16 @@ public class AnnouncementSqlProvider {
                         "			 end_time endTime," +
                         "			 type," +
                         "			 update_time updateTime," +
-                        "			 update_user_id updateUserId" +
+                        "			 update_user_id updateUserId," +
+                        "			 org_id orgId," +
+                        "			 org_name orgName" +
                         "			FROM" +
                         "				ot_announcement" +
                         "				WHERE 1=1" +
                         typeSqlStr +
                         titleSqlStr +
                         timeSqlStr +
+                        orgSqlStr + 
                         "			ORDER BY" +
                         "				create_time DESC";
         return sql;

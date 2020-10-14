@@ -21,7 +21,8 @@
                 perms: new Chmod(model && model.rights),
                 content: model && model.content || '',
                 recursive: false,
-                desc: model && model.desc,
+                // desc: model && model.desc,
+                descList:model&&model.descList,
                 filePermission: model && model.filePermission,
                 createUserId: model && model.createUserId,
                 sizeKb: function () {
@@ -260,8 +261,9 @@
                 tagName: self.tempModel.tag,
                 startTime: self.tempModel.startTime,
                 endTime: self.tempModel.endTime,
-                desc: self.tempModel.desc,
+                // desc: self.tempModel.desc,
                 permission: self.tempModel.filePermission,
+                descList:self.tempModel.descList           
                 // flowCodeDesc: null,
             };
             self.inprocess = true;
@@ -279,13 +281,15 @@
 
         //编辑知识的请求
         Item.prototype.updateFlow = function(){
-            var self = this;
-            var deferred = $q.defer();
+            var self = this;//传入的数据
+            var deferred = $q.defer();//异步方法
             var data = {
+                //获取的值
                 id: self.flow.id,
                 flowId: null,
                 name:self.model.name,
-                desc: self.model.desc,
+                // desc: self.model.desc,
+                descList:self.model.descList,
                 tagName: self.model.tag,
                 startTime: self.model.startTime,
                 endTime: self.model.endTime,
@@ -303,7 +307,7 @@
             });
             return deferred.promise;
         }
-
+        
         //收藏知识的请求
         Item.prototype.collectFlow = function(){
             var self = this;
@@ -354,7 +358,8 @@
                 tagName: self.tempModel.tag,
                 startTime: self.tempModel.startTime,
                 endTime: self.tempModel.endTime,
-                desc: self.tempModel.desc,
+                // desc: self.tempModel.desc,
+                descList:self.tempModel.descList  
                 // permission: self.tempModel.filePermission,
                 // flowCodeDesc: null,
             };
@@ -379,7 +384,8 @@
                 id: self.flow.id,
                 flowId: null,
                 name:self.model.name,
-                desc: self.model.desc,
+                // desc: self.model.desc,
+                descList:self.model.descList,
                 tagName: self.model.tag,
                 startTime: self.model.startTime,
                 endTime: self.model.endTime,
@@ -437,6 +443,40 @@
                 self.inprocess = false;
             });
             return deferred.promise;
+        }
+         //回收站还原文件
+         Item.prototype.renewRecycleFile = function(){
+            var self=this;
+            var deferred = $q.defer();
+            $http({
+                method:'GET',
+                url:'/Portal/fileManage/renewRecycleFile?knowledgeType='+self.knowledgeType+'&fileId='+self.model.id
+            }).success(function(data){
+                self.deferredHandler(data, deferred);
+            }).error(function(data){
+                self.deferredHandler(data, deferred);
+            })['finally'](function(){
+
+            })
+            return deferred.promise;
+           
+        }
+        //回收站删除文件
+        Item.prototype.removeRecycleFile=function(){
+            var self=this;
+            var deferred = $q.defer();
+            $http({
+                method:'GET',
+                url:' /Portal/fileManage/removeRecycleFile?knowledgeType='+self.knowledgeType+'&fileId='+self.model.id
+            }).success(function(data){
+                self.deferredHandler(data, deferred);
+            }).error(function(data){
+                self.deferredHandler(data, deferred);
+            })['finally'](function(){
+
+            })
+            return deferred.promise;
+            
         }
 
         Item.prototype.copy = function () {
@@ -519,7 +559,6 @@
             };
             return path && [fileManagerConfig.downloadFileUrl, $.param(data)].join('?');
         };
-
         Item.prototype.download = function (preview) {
             if (this.model.type !== 'dir') {
 

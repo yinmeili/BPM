@@ -1,5 +1,7 @@
 package com.h3bpm.web.vo;
 
+import java.util.List;
+
 public class ReqUpdateMyKnowledge {
     private String id;
     private String flowId;
@@ -9,6 +11,7 @@ public class ReqUpdateMyKnowledge {
     private String startTime;
     private String endTime;
     private String flowCodeDesc;
+    private List<KnowledgeDescVo> descList = null;
 
     public ReqUpdateMyKnowledge() {
     }
@@ -23,7 +26,15 @@ public class ReqUpdateMyKnowledge {
         this.endTime = endTime;
     }
 
-    public String getFlowCodeDesc() {
+    public List<KnowledgeDescVo> getDescList() {
+		return descList;
+	}
+
+	public void setDescList(List<KnowledgeDescVo> descList) {
+		this.descList = descList;
+	}
+
+	public String getFlowCodeDesc() {
         return flowCodeDesc;
     }
 

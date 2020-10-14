@@ -68,6 +68,8 @@ public class KnowledgeManagerController extends AbstractController {
 		knowledgeVo.setDesc(reqParam.getDesc());
 		knowledgeVo.setTagName(reqParam.getTagName());
 		knowledgeVo.setFlowCodeDesc(reqParam.getFlowCodeDesc());
+		knowledgeVo.setDescList(reqParam.getDescList());
+		
 		try {
 			knowledgeVo.setStartTime(format.parse(reqParam.getStartTime()));
 		} catch (Exception e) {
@@ -104,6 +106,8 @@ public class KnowledgeManagerController extends AbstractController {
 		myKnowledgeVo.setDesc(reqParam.getDesc());
 		myKnowledgeVo.setTagName(reqParam.getTagName());
 		myKnowledgeVo.setFlowCodeDesc(reqParam.getFlowCodeDesc());
+		myKnowledgeVo.setDescList(reqParam.getDescList());
+		
 		try {
 			myKnowledgeVo.setStartTime(format.parse(reqParam.getStartTime()));
 		} catch (Exception e) {
@@ -132,6 +136,8 @@ public class KnowledgeManagerController extends AbstractController {
 		knowledgeVo.setDesc(reqUpdateKnowledge.getDesc());
 		knowledgeVo.setTagName(reqUpdateKnowledge.getTagName());
 		knowledgeVo.setFlowCodeDesc(reqUpdateKnowledge.getFlowCodeDesc());
+		knowledgeVo.setDescList(reqUpdateKnowledge.getDescList());
+		
 		try { // 将前端传过来的'yyyy-MM-dd'样式的String转换成Date类型
 			knowledgeVo.setStartTime(format.parse(reqUpdateKnowledge.getStartTime()));
 		} catch (Exception e) {
@@ -160,6 +166,8 @@ public class KnowledgeManagerController extends AbstractController {
 		myKnowledgeVo.setDesc(reqUpdateMyKnowledge.getDesc());
 		myKnowledgeVo.setTagName(reqUpdateMyKnowledge.getTagName());
 		myKnowledgeVo.setFlowCodeDesc(reqUpdateMyKnowledge.getFlowCodeDesc());
+		myKnowledgeVo.setDescList(reqUpdateMyKnowledge.getDescList());
+		
 		try { // 将前端传过来的'yyyy-MM-dd'样式的String转换成Date类型
 			myKnowledgeVo.setStartTime(format.parse(reqUpdateMyKnowledge.getStartTime()));
 		} catch (Exception e) {
@@ -257,7 +265,6 @@ public class KnowledgeManagerController extends AbstractController {
 		queryMyKnowledgeList.setQueryUserId(user.getObjectId());
 
 		PageInfo<MyKnowledgeVo> pageInfo = myKnowledgeService.findMyKnowledgeByPage(queryMyKnowledgeList);
-		List<MyKnowledgeVo> myKnowledgeVoList = pageInfo.getList();
 
 		return new RespPageVo(requestBean.getsEcho(), pageInfo.getTotal(), pageInfo.getList());
 	}

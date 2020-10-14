@@ -618,7 +618,7 @@
                         var modalInstance = $modal.open({
                             templateUrl: 'newFlow.html',    // 指向上面创建的视图
                             controller: 'ModalsController',// 初始化模态范围
-                            size: "md",
+                            size: "lg",
                             resolve: {
                                 params: function () {
                                     return {
@@ -673,9 +673,14 @@
                 $scope.temp.model.startTime = data.startTime.substring(0,10)+' '+data.startTime.substring(11,19);
                 $scope.temp.model.endTime = data.endTime.substring(0,10)+' '+data.endTime.substring(11,19);
                 $scope.temp.model.tag = data.tagName;
-                $scope.temp.model.desc = data.desc;
+                $scope.temp.model.descList=data.descList;
+                if($scope.temp.model.descList==''){
+                    $scope.temp.model.descList=[{key:new Date().getTime(),desc:'',detail:''}];
+                }
                 $rootScope.flowCodeDesc = data.flowCodeDesc;
                 $rootScope.flowId = data.flowId;
+
+                
                 var arrOrgList = data.permission.orgs;
 
                 var tmpData;
@@ -694,7 +699,7 @@
                     var modalInstance = $modal.open({
                         templateUrl: 'updateFlow.html',    // 指向上面创建的视图
                         controller: 'ModalsController',// 初始化模态范围
-                        size: "md",
+                        size: "lg",
                         resolve: {
                             params: function () {
                                 return {
@@ -880,7 +885,10 @@
                 $scope.temp.model.startTime = data.startTime.substring(0,10)+' '+data.startTime.substring(11,19);
                 $scope.temp.model.endTime = data.endTime.substring(0,10)+' '+data.endTime.substring(11,19);
                 $scope.temp.model.tag = data.tagName;
-                $scope.temp.model.desc = data.desc;
+                $scope.temp.model.descList = data.descList;
+                if($scope.temp.model.descList==''){
+                    $scope.temp.model.descList=[{key:new Date().getTime(),desc:'',detail:''}];
+                }
                 $rootScope.flowCodeDesc = data.flowCodeDesc;
                 $rootScope.flowId = data.flowId;
                 var arrOrgList = data.permission.orgs;
@@ -901,7 +909,7 @@
                     var modalInstance = $modal.open({
                         templateUrl: 'detail.html',    // 指向上面创建的视图
                         controller: 'ModalsController',// 初始化模态范围
-                        size: "md",
+                        size: "lg",
                         resolve: {
                             params: function () {
                                 return {
@@ -972,7 +980,7 @@
                     var modalInstance = $modal.open({
                         templateUrl: 'newMyFlow.html',    // 指向上面创建的视图
                         controller: 'ModalsController',// 初始化模态范围
-                        size: "md",
+                        size: "lg",
                         resolve: {
                             params: function () {
                                 return {
@@ -1029,7 +1037,10 @@
                 $scope.temp.model.tag = data.tagName;
                 $rootScope.flowCodeDesc = data.flowCodeDesc;
                 $rootScope.flowId = data.flowId;
-                $scope.temp.model.desc = data.desc;
+                $scope.temp.model.descList=data.descList;
+                if($scope.temp.model.descList==''){
+                    $scope.temp.model.descList=[{key:new Date().getTime(),desc:'',detail:''}];
+                }
                 // var arrOrgList = data.permission.orgs;
 
                 var tmpData;
@@ -1048,7 +1059,7 @@
                     var modalInstance = $modal.open({
                         templateUrl: 'updateMyFlow.html',    // 指向上面创建的视图
                         controller: 'ModalsController',// 初始化模态范围
-                        size: "md",
+                        size: "lg",
                         resolve: {
                             params: function () {
                                 return {
@@ -1237,7 +1248,10 @@
                 $scope.temp.model.tag = data.tagName;
                 $rootScope.flowCodeDesc = data.flowCodeDesc;
                 $rootScope.flowId = data.flowId;
-                $scope.temp.model.desc = data.desc;
+                $scope.temp.model.descList = data.descList;
+                if($scope.temp.model.descList==''){
+                    $scope.temp.model.descList=[{key:new Date().getTime(),desc:'',detail:''}];
+                }
                 // var arrOrgList = data.permission.orgs;
 
                 var tmpData;
@@ -1256,7 +1270,7 @@
                     var modalInstance = $modal.open({
                         templateUrl: 'detailMyFlow.html',    // 指向上面创建的视图
                         controller: 'ModalsController',// 初始化模态范围
-                        size: "md",
+                        size: "lg",
                         resolve: {
                             params: function () {
                                 return {
