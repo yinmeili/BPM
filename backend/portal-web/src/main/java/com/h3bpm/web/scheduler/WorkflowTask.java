@@ -42,4 +42,21 @@ public class WorkflowTask {
 		
 		logger.info("======== WorkflowTask end ========");
 	}
+
+	/**
+	 * @Author lzf
+	 * @Description
+	 * @Data
+	 * @Param
+	 * @return void
+	 **/
+	@Scheduled(cron = "0 0 8 ? * WED")//每周三上午8点执行一次
+	private void addWeeklyReportProcess() {
+		logger.info("======== WorkflowTask start ========");
+
+		workFlowService.addWorkFlowTask();
+
+		logger.info("======== WorkflowTask end ========");
+	}
+
 }
