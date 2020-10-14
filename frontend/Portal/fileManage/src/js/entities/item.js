@@ -444,6 +444,40 @@
             });
             return deferred.promise;
         }
+         //回收站还原文件
+         Item.prototype.renewRecycleFile = function(){
+            var self=this;
+            var deferred = $q.defer();
+            $http({
+                method:'GET',
+                url:'/Portal/fileManage/renewRecycleFile?knowledgeType='+self.knowledgeType+'&fileId='+self.model.id
+            }).success(function(data){
+                self.deferredHandler(data, deferred);
+            }).error(function(data){
+                self.deferredHandler(data, deferred);
+            })['finally'](function(){
+
+            })
+            return deferred.promise;
+           
+        }
+        //回收站删除文件
+        Item.prototype.removeRecycleFile=function(){
+            var self=this;
+            var deferred = $q.defer();
+            $http({
+                method:'GET',
+                url:' /Portal/fileManage/removeRecycleFile?knowledgeType='+self.knowledgeType+'&fileId='+self.model.id
+            }).success(function(data){
+                self.deferredHandler(data, deferred);
+            }).error(function(data){
+                self.deferredHandler(data, deferred);
+            })['finally'](function(){
+
+            })
+            return deferred.promise;
+            
+        }
 
         Item.prototype.copy = function () {
             var self = this;
@@ -525,7 +559,6 @@
             };
             return path && [fileManagerConfig.downloadFileUrl, $.param(data)].join('?');
         };
-
         Item.prototype.download = function (preview) {
             if (this.model.type !== 'dir') {
 

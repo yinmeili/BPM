@@ -1421,3 +1421,41 @@ background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
       <span>{{temp.error}}</span>
     </div>
 </script>
+<!-- 回收站恢复文件 -->
+<script type="text/ng-template" id="refreshFile.html">
+    <form ng-submit="renewRecycleFile(temp)" style="color:#778CA2;">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true" ng-click="cancel();">&times;</span>
+            </button>
+            <h4 class="modal-title">确认框</h4>
+        </div>
+        <div class="modal-body">
+            确定恢复 <b>{{temp.model.name}}</b> ?
+            <div ng-include data-src="'error-bar'" class="clearfix"></div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
+            <button type="submit" class="btn btn-primary"ng-disabled="temp.inprocess"  autofocus="autofocus">确定</button>
+        </div>
+    </form>
+</script>
+<!-- 回收站删除文件 -->
+<script type="text/ng-template" id="deleteRecycleFile.html">
+    <form ng-submit="removeRecycleFile(temp)" style="color:#778CA2;">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">
+                <span aria-hidden="true" ng-click="cancel();">&times;</span>
+            </button>
+            <h4 class="modal-title">确认框</h4>
+        </div>
+        <div class="modal-body">
+            确定删除 <b>{{temp.model.name}}</b> ?
+            <div ng-include data-src="'error-bar'" class="clearfix"></div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
+            <button type="submit" class="btn btn-primary"ng-disabled="temp.inprocess"  autofocus="autofocus">确定</button>
+        </div>
+    </form>
+</script>

@@ -294,6 +294,27 @@ app.controller("ModalsController", ["$scope", "$rootScope", "$http", "$translate
             });
             $scope.cancel();
         }
+        //回收站恢复删除文件
+        $scope.renewRecycleFile=function(item){
+            item.knowledgeType = params.knowledgeType;
+            knowledgeType=params.knowledgeType;
+            keyword=params.keyword;
+            item.renewRecycleFile(knowledgeType,keyword).then(function(){
+                $scope.fileNavigator.refresh(knowledgeType,keyword);
+            });
+            $scope.cancel();
+        }
+        //回收站删除文件
+        $scope.removeRecycleFile=function(item){
+            item.knowledgeType = params.knowledgeType;
+            knowledgeType=params.knowledgeType;
+            keyword=params.keyword;
+            item.removeRecycleFile(knowledgeType,keyword).then(function(){
+                $scope.fileNavigator.refresh(knowledgeType,keyword);
+            });
+            //收回模态框
+            $scope.cancel();
+        }
         //------我的文件 end
 
         //控件初始化参数

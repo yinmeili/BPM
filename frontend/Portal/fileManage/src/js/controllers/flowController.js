@@ -674,7 +674,9 @@
                 $scope.temp.model.endTime = data.endTime.substring(0,10)+' '+data.endTime.substring(11,19);
                 $scope.temp.model.tag = data.tagName;
                 $scope.temp.model.descList=data.descList;
-                
+                if($scope.temp.model.descList==''){
+                    $scope.temp.model.descList=[{key:new Date().getTime(),desc:'',detail:''}];
+                }
                 $rootScope.flowCodeDesc = data.flowCodeDesc;
                 $rootScope.flowId = data.flowId;
 
@@ -884,6 +886,9 @@
                 $scope.temp.model.endTime = data.endTime.substring(0,10)+' '+data.endTime.substring(11,19);
                 $scope.temp.model.tag = data.tagName;
                 $scope.temp.model.descList = data.descList;
+                if($scope.temp.model.descList==''){
+                    $scope.temp.model.descList=[{key:new Date().getTime(),desc:'',detail:''}];
+                }
                 $rootScope.flowCodeDesc = data.flowCodeDesc;
                 $rootScope.flowId = data.flowId;
                 var arrOrgList = data.permission.orgs;
@@ -1033,6 +1038,9 @@
                 $rootScope.flowCodeDesc = data.flowCodeDesc;
                 $rootScope.flowId = data.flowId;
                 $scope.temp.model.descList=data.descList;
+                if($scope.temp.model.descList==''){
+                    $scope.temp.model.descList=[{key:new Date().getTime(),desc:'',detail:''}];
+                }
                 // var arrOrgList = data.permission.orgs;
 
                 var tmpData;
@@ -1241,6 +1249,9 @@
                 $rootScope.flowCodeDesc = data.flowCodeDesc;
                 $rootScope.flowId = data.flowId;
                 $scope.temp.model.descList = data.descList;
+                if($scope.temp.model.descList==''){
+                    $scope.temp.model.descList=[{key:new Date().getTime(),desc:'',detail:''}];
+                }
                 // var arrOrgList = data.permission.orgs;
 
                 var tmpData;

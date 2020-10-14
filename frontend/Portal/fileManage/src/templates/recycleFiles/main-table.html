@@ -7,13 +7,13 @@
                     <span class="sortorder" ng-show="predicate[1] === 'model.name'" ng-class="{reverse:reverse}"></span>
                 </a>
             </th>
-            <th class="hidden-sm hidden-xs">
+            <th class="hidden-sm hidden-xs"style="padding-left:50px;">
                 <a href="">
                     原位置
                     <span class="sortorder" ng-show="predicate[1] === 'model.dir'" ng-class="{reverse:reverse}"></span>
                 </a>
             </th>
-            <th class="hidden-sm hidden-xs">
+            <th class="hidden-sm hidden-xs"style="padding-left:50px;">
                 <a href="">
                     大小
                     <span class="sortorder" ng-show="predicate[1] === 'model.fileSize'" ng-class="{reverse:reverse}"></span>
@@ -25,7 +25,7 @@
 								<span class="sortorder" ng-show="predicate[1] === 'model.deleteTime'" ng-class="{reverse:reverse}"></span>
 							</a>
 						</th>
-            <th class=" hidden-xs">
+            <th class=" hidden-xs"style="padding-left:50px;">
                 <a href="">
                     创建日期
                     <span class="sortorder" ng-show="predicate[1] === 'model.createTime'" ng-class="{reverse:reverse}"></span>
@@ -60,38 +60,47 @@
 					
 					  <!-- 名称 -->
             <td ng-right-click="touch(item)" >
-                <a href="" title="{{item.model.name}} ">
+                <span href="" title="{{item.model.name}} ">
                     <i class="glyphicon glyphicon-folder-close" ng-show="item.model.type === 'dir'"></i>
                     <i class="glyphicon glyphicon-file" ng-show="item.model.type === 'file'"></i>
                     {{item.model.name | strLimit : 32}}
-                </a>
+                </span>
 						</td>
 						<!-- 路径位置 -->
-						<td class="hidden-xs">
+						<td class="hidden-xs"title="{{item.model.dir}} "style="padding-left:50px;">
 							{{item.model.dir}}
 						</td>
 						<!-- 文件大小 -->
-            <td class="hidden-sm hidden-xs " >
-                <span ng-show="item.model.type === 'file'">
+            <td class="hidden-sm hidden-xs "style="padding-left:50px;" >
+                <span ng-show="item.model.type === 'file'"title="{{item.model.sizeKb()}}KB ">
 									{{item.model.sizeKb()}}KB
 									<!-- {{item.model.fileSize}} -->
 								</span>
                 <span ng-show="item.model.type === 'dir'">{{item.model.sizeKb()}}KB</span>
 						</td>
 						<!-- 删除日期 -->
-						<td class="hidden-xs">
+						<td class="hidden-sm hidden-xs"title="{{item.model.deleteTime}} ">
 							{{item.model.deleteTime | formatDate}}
 						</td>
 						<!-- 创建日期 -->
-            <td class="hidden-xs">
+            <td class="hidden-xs"title="{{item.model.createTime}} ">
                 {{item.model.createTime | formatDate}}
 						</td>
            <!-- <td class="hidden-sm hidden-xs">
                 {{item.model.perms.toCode(item.model.type === 'dir'?'d':'-')}}
             </td>-->
-            <td class="text-right " nowrap>
+            <!-- <td class="text-right " nowrap>
                 <div ng-include="config.tplPath + '/item-toolbar.html'"></div>
+            </td> -->
+            <td class="text-right " nowrap>
+                <button class="btn btn-sm btn-default" ng-click="toRenewRecycleFile(item)"  title="还原">
+                    <i class="glyphicon glyphicon-refresh"></i>
+                </button>
+                <button class="btn btn-sm btn-danger"  ng-click="toRemoveRecycleFile(item)" title="删除">
+                    <i class="glyphicon glyphicon-trash"></i>
+                </button>
             </td>
+            
 				</tr>
     </tbody>
 
