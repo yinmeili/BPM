@@ -31,16 +31,16 @@ public class WorkflowTask {
 	 * @Param
 	 * @return void
 	 **/
-	@Scheduled(cron = "* */5 * * * ?")
+	@Scheduled(cron = "0 0/5 * * * ?")
 	private void process() {
-		logger.info("======== WorkflowTask start ========");
+		logger.info("======== autoStartWorkflowTask start ========");
 		
 		List<WorkFlowTask> workflowTasks = workFlowTaskService.findUnFinishWorkFlowTask();
 		for (WorkFlowTask workFlowTask : workflowTasks) {
 			workFlowService.createWorkFlow(workFlowTask.getId());
 		}
 		
-		logger.info("======== WorkflowTask end ========");
+		logger.info("======== autoStartWorkflowTask end ========");
 	}
 
 	/**
@@ -52,11 +52,11 @@ public class WorkflowTask {
 	 **/
 	@Scheduled(cron = "0 0 8 ? * WED")//每周三上午8点执行一次
 	private void addWeeklyReportProcess() {
-		logger.info("======== WorkflowTask start ========");
+		logger.info("======== addWeeklyReportProcess start ========");
 
 		workFlowTaskService.addWeeklyReportWorkFlowTask();
 
-		logger.info("======== WorkflowTask end ========");
+		logger.info("======== addWeeklyReportProcess end ========");
 	}
 
 }
