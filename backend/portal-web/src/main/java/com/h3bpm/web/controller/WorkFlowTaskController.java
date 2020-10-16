@@ -1,7 +1,6 @@
 package com.h3bpm.web.controller;
 
 import java.io.BufferedOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -21,9 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.github.pagehelper.PageInfo;
 import com.h3bpm.web.enumeration.WorkflowCode;
 import com.h3bpm.web.service.WorkFlowTaskService;
-import com.h3bpm.web.utils.SFTPUtil;
 import com.h3bpm.web.vo.ReqListWorkflowTaskPageVo;
-import com.h3bpm.web.vo.ReqParam;
 import com.h3bpm.web.vo.RespPageVo;
 import com.h3bpm.web.vo.ResponseVo;
 import com.h3bpm.web.vo.WorkFlowTaskVo;
@@ -53,13 +50,6 @@ public class WorkFlowTaskController extends AbstractController {
 		PageInfo<WorkFlowTaskVo> pageInfo = workFlowTaskService.findWorkFlowTaskByPage(queryWorkFlowTaskList);
 
 		return new RespPageVo(requestBean.getsEcho(), pageInfo.getTotal(), pageInfo.getList());
-	}
-
-	@RequestMapping(value = "/addWeeklyReportTask", produces = "application/json;charset=utf8")
-	@ResponseBody
-	public ResponseVo addWorkFlowTask() {
-		workFlowTaskService.addWeeklyReportWorkFlowTask();
-		return new ResponseVo("导入周报人员成功");
 	}
 
 	@RequestMapping(value = "/downloadTemplate")
