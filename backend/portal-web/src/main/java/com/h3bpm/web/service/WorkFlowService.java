@@ -1,11 +1,8 @@
 package com.h3bpm.web.service;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.h3bpm.web.entity.LiquidationImportData;
-import com.h3bpm.web.enumeration.WorkflowCode;
-import com.h3bpm.web.utils.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +10,6 @@ import com.h3bpm.web.entity.WorkFlowTask;
 import com.h3bpm.web.enumeration.ApiActionUrl;
 import com.h3bpm.web.enumeration.WorkflowExecuteType;
 import com.h3bpm.web.mapper.WorkFlowTaskMapper;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class WorkFlowService extends ApiDataService{

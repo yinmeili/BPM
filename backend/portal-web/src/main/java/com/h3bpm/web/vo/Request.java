@@ -27,6 +27,15 @@ public class Request {
 		this.method = method;
 	}
 
+	public Request(String url, String method) throws IllegalArgumentException {
+		Validate.isTrue(StringUtils.isNotBlank(url), "The 'url' is blank");
+		Validate.isTrue(StringUtils.isNotBlank(method), "The 'method' is blank");
+
+		this.url = url;
+		this.actionUrl = "";
+		this.method = method;
+	}
+
 	public String getMethod() {
 		return method;
 	}

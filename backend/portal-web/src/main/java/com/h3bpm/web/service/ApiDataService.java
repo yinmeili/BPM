@@ -6,7 +6,6 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.h3bpm.web.enumeration.HttpRequestType;
-import com.h3bpm.web.utils.DataUtils;
 import com.h3bpm.web.utils.TransportUtils;
 import com.h3bpm.web.vo.Request;
 import com.h3bpm.web.vo.Response;
@@ -19,6 +18,9 @@ public abstract class ApiDataService {
 	@Value(value = "${application.api.service.url.bpm}")
 	private String apiServiceUrlBpm = null;
 
+	@Value(value = "${application.api.kingdom.service.url}")
+	private String apiKingdomServiceUrl = null;
+
 	@Value(value = "${application.api.systemCode}")
 	private String systemCode = null;
 
@@ -29,25 +31,25 @@ public abstract class ApiDataService {
 		return apiServiceUrlOrg;
 	}
 
-//	public Map<String, Object> processSyncAndRetrieveSingleData(String actionUrl, HttpRequestType httpRequestType, Map<String, Object> data) throws IllegalArgumentException, TransportException {
-//		Map<String, Object> result = processSync(actionUrl, httpRequestType,data);
-//
-//		return DataUtils.parseToSingleData(result);
-//	}
-//
-//	public Map<String, Object> processSyncAndRetrieveSingleData(String actionUrl, HttpRequestType httpRequestType) throws IllegalArgumentException, TransportException {
-//		return processSyncAndRetrieveSingleData(actionUrl, httpRequestType, null);
-//	}
-//
-//	public Map<String, Object>[] processSyncAndRetrieveArrayData(String actionUrl, HttpRequestType httpRequestType, Map<String, Object> data) throws IllegalArgumentException, TransportException {
-//		Map<String, Object> result = processSync(actionUrl, httpRequestType,data);
-//
-//		return DataUtils.parseToArrayData(result);
-//	}
-//
-//	public Map<String, Object>[] processSyncAndRetrieveArrayData(String actionUrl, HttpRequestType httpRequestType) throws IllegalArgumentException, TransportException {
-//		return processSyncAndRetrieveArrayData(actionUrl, httpRequestType, null);
-//	}
+	// public Map<String, Object> processSyncAndRetrieveSingleData(String actionUrl, HttpRequestType httpRequestType, Map<String, Object> data) throws IllegalArgumentException, TransportException {
+	// Map<String, Object> result = processSync(actionUrl, httpRequestType,data);
+	//
+	// return DataUtils.parseToSingleData(result);
+	// }
+	//
+	// public Map<String, Object> processSyncAndRetrieveSingleData(String actionUrl, HttpRequestType httpRequestType) throws IllegalArgumentException, TransportException {
+	// return processSyncAndRetrieveSingleData(actionUrl, httpRequestType, null);
+	// }
+	//
+	// public Map<String, Object>[] processSyncAndRetrieveArrayData(String actionUrl, HttpRequestType httpRequestType, Map<String, Object> data) throws IllegalArgumentException, TransportException {
+	// Map<String, Object> result = processSync(actionUrl, httpRequestType,data);
+	//
+	// return DataUtils.parseToArrayData(result);
+	// }
+	//
+	// public Map<String, Object>[] processSyncAndRetrieveArrayData(String actionUrl, HttpRequestType httpRequestType) throws IllegalArgumentException, TransportException {
+	// return processSyncAndRetrieveArrayData(actionUrl, httpRequestType, null);
+	// }
 
 	public Map<String, Object> processSyncOrg(String actionUrl, HttpRequestType httpRequestType, Map<String, Object> data) throws IllegalArgumentException, TransportException {
 		Request request = new Request(apiServiceUrlOrg, actionUrl, httpRequestType.getValue());
@@ -66,13 +68,12 @@ public abstract class ApiDataService {
 		return result;
 	}
 
-
 	public Map<String, Object> processSyncBpm(String actionUrl, HttpRequestType httpRequestType, Map<String, Object> data) throws IllegalArgumentException, TransportException {
 		Request request = new Request(apiServiceUrlBpm, actionUrl, httpRequestType.getValue());
 
 		Map<String, Object> param = new HashMap<String, Object>();
-		param.put("systemCode",systemCode);
-		param.put("secret",secret);
+		param.put("systemCode", systemCode);
+		param.put("secret", secret);
 
 		if (data != null) {
 			param.putAll(data);

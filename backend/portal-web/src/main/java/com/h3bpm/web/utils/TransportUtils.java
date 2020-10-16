@@ -84,17 +84,17 @@ public class TransportUtils {
 					Map<String, Object> result = new ObjectMapper().readValue(reader, Map.class);
 					LOGGER.info("[" + uuid + "] Responsed result: " + JSONObject.toJSONString(result));
 
-//					int errorCode = (Integer) result.get(DataUtils.JSON_ERROR_CODE_KEY);
-//
-//					if (DataUtils.SUCCESS_CODE != errorCode) {
-//						String message = (String) result.get(DataUtils.JSON_ERROR_MESSAGE_KEY);
-//						if (errorCode >= DataUtils.WARN_CODE) {
-//							result.put(DataUtils.JSON_ERROR_MESSAGE_KEY, message);
-//
-//						} else {
-//							throw new TransportException(errorCode, message);
-//						}
-//					}
+					// int errorCode = (Integer) result.get(DataUtils.JSON_ERROR_CODE_KEY);
+					//
+					// if (DataUtils.SUCCESS_CODE != errorCode) {
+					// String message = (String) result.get(DataUtils.JSON_ERROR_MESSAGE_KEY);
+					// if (errorCode >= DataUtils.WARN_CODE) {
+					// result.put(DataUtils.JSON_ERROR_MESSAGE_KEY, message);
+					//
+					// } else {
+					// throw new TransportException(errorCode, message);
+					// }
+					// }
 
 					return new Response(result);
 
@@ -185,7 +185,7 @@ public class TransportUtils {
 			if (HttpsUtils.isHttpsScheme(request.getUrl())) {
 				HttpsUtils.enableSsl(httpClient);
 			}
-			
+
 			return httpClient.execute(httpRequest);
 
 		} finally {
@@ -195,7 +195,6 @@ public class TransportUtils {
 			}
 		}
 
-		
 	}
 
 	private static HttpResponse doPost(Request request, String uuid) throws Exception {
@@ -203,9 +202,9 @@ public class TransportUtils {
 		HttpPost httpRequest = null;
 
 		try {
-			JSONObject json = new JSONObject((Map<String,Object>)request.getData());
-//			json.put(DataUtils.JSON_DATA_KEY, request.getData());
-//			json.put(DataUtils.JSON_TIMESTAMP_KEY, new Date().getTime());
+			JSONObject json = new JSONObject((Map<String, Object>) request.getData());
+			// json.put(DataUtils.JSON_DATA_KEY, request.getData());
+			// json.put(DataUtils.JSON_TIMESTAMP_KEY, new Date().getTime());
 
 			StringEntity entity = new StringEntity(json.toJSONString(), DataUtils.CHARSET_UTF8);
 			// entity.setContentEncoding(DataUtils.CHARSET_UTF8);
@@ -223,14 +222,13 @@ public class TransportUtils {
 			}
 
 			return httpClient.execute(httpRequest);
-			
+
 		} finally {
 
 			if (httpClient != null && httpClient.getConnectionManager() != null) {
 				httpClient.getConnectionManager().shutdown();
 			}
 		}
-		
 
 	}
 }
