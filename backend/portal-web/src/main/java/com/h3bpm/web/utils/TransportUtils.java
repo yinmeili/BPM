@@ -1,8 +1,8 @@
 package com.h3bpm.web.utils;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +13,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -28,11 +27,10 @@ import org.json.simple.JSONObject;
 
 import com.h3bpm.web.enumeration.HttpRequestType;
 import com.h3bpm.web.service.TransportException;
-import com.h3bpm.web.utils.DataUtils;
-import com.h3bpm.web.utils.HttpsUtils;
 import com.h3bpm.web.vo.Callback;
 import com.h3bpm.web.vo.Request;
 import com.h3bpm.web.vo.Response;
+import com.h3bpm.web.vo.api.kingdom.KingdomRequestVo;
 
 /**
  * This class is designed to handle sending HTTP request and receiving its response.
@@ -202,13 +200,10 @@ public class TransportUtils {
 		HttpPost httpRequest = null;
 
 		try {
-			JSONObject json = new JSONObject((Map<String, Object>) request.getData());
-			// json.put(DataUtils.JSON_DATA_KEY, request.getData());
-			// json.put(DataUtils.JSON_TIMESTAMP_KEY, new Date().getTime());
-
-			StringEntity entity = new StringEntity(json.toJSONString(), DataUtils.CHARSET_UTF8);
-			// entity.setContentEncoding(DataUtils.CHARSET_UTF8);
-			// entity.setContentType(DataUtils.CONTENT_TYPE);
+			//JSONObject json = new JSONObject((Map<String, Object>) request.getData());
+			//StringEntity entity = new StringEntity(json.toJSONString(), DataUtils.CHARSET_UTF8);
+			
+			StringEntity entity = new StringEntity(com.alibaba.fastjson.JSONObject.toJSONString(request.getData()), DataUtils.CHARSET_UTF8);
 
 			httpRequest = new HttpPost(request.getUrl());
 

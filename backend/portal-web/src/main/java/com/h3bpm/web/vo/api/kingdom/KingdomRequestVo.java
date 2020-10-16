@@ -1,40 +1,47 @@
 package com.h3bpm.web.vo.api.kingdom;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 public class KingdomRequestVo {
-	private String Value = null;
-	private int Type = 4;
-	private String Name = null;
+
+	@JSONField(name="Value")
+	private String value = null;
+	
+	@JSONField(name="Type")
+	private int type = 4;
+	
+	@JSONField(name="Name")
+	private String name = null;
 
 	public KingdomRequestVo() {
 	}
 
-	public KingdomRequestVo(String Value, String Name) {
-		this.Value = Value;
-		this.Name = Name;
+	public KingdomRequestVo(String value, String name) {
+		this.value = value;
+		this.name = name;
 	}
 
 	public String getValue() {
-		return Value;
+		return value;
 	}
 
 	public void setValue(String value) {
-		Value = value;
+		this.value = value;
 	}
 
 	public int getType() {
-		return Type;
+		return type;
 	}
 
 	public void setType(int type) {
-		Type = type;
+		this.type = type;
 	}
 
 	public String getName() {
-		return Name;
+		return name;
 	}
 
 	public void setName(String name) {
-		Name = name;
+		this.name = name;
 	}
-
 }
