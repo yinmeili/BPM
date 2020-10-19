@@ -1,14 +1,11 @@
 package com.h3bpm.web.utils;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
+import com.h3bpm.web.enumeration.HttpRequestType;
+import com.h3bpm.web.service.TransportException;
+import com.h3bpm.web.vo.Callback;
+import com.h3bpm.web.vo.Request;
+import com.h3bpm.web.vo.Response;
+import com.h3bpm.web.vo.ResponseList;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.http.HttpEntity;
@@ -25,205 +22,274 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.simple.JSONObject;
 
-import com.h3bpm.web.enumeration.HttpRequestType;
-import com.h3bpm.web.service.TransportException;
-import com.h3bpm.web.vo.Callback;
-import com.h3bpm.web.vo.Request;
-import com.h3bpm.web.vo.Response;
-import com.h3bpm.web.vo.api.kingdom.KingdomRequestVo;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
 
 /**
  * This class is designed to handle sending HTTP request and receiving its response.
- * 
+ *
  * @author tonghao
  */
 @SuppressWarnings("unchecked")
 public class TransportUtils {
-	private static final Logger LOGGER = Logger.getLogger(TransportUtils.class);
+    private static final Logger LOGGER = Logger.getLogger(TransportUtils.class);
 
-	/**
-	 * 发送同步请求
-	 * 
-	 * @param request
-	 *            The request, cannot be null.
-	 * 
-	 * @return The response.
-	 * 
-	 * @throws IllegalArgumentException
-	 *             Thrown when the "request" is null.
-	 * @throws TransportException
-	 *             Thrown when any error occurs.
-	 */
-	public static Response processSync(final Request request) throws IllegalArgumentException, TransportException {
-		Validate.isTrue(request != null, "The 'request' is null");
+    /**
+     * 发送同步请求
+     *
+     * @param request The request, cannot be null.
+     * @return The response.
+     * @throws IllegalArgumentException Thrown when the "request" is null.
+     * @throws TransportException       Thrown when any error occurs.
+     */
+    public static Response processSync(final Request request) throws IllegalArgumentException, TransportException {
+        Validate.isTrue(request != null, "The 'request' is null");
 
-		HttpResponse httpResponse = null;
-		String uuid = UUID.randomUUID().toString();
+        HttpResponse httpResponse = null;
+        String uuid = UUID.randomUUID().toString();
 
-		try {
+        try {
 
-			if (request.getMethod().equals(HttpRequestType.GET.getValue())) {
-				httpResponse = doGet(request, uuid);
+            if (request.getMethod().equals(HttpRequestType.GET.getValue())) {
+                httpResponse = doGet(request, uuid);
 
-			} else if (request.getMethod().equals(HttpRequestType.POST.getValue())) {
-				httpResponse = doPost(request, uuid);
-			}
+            } else if (request.getMethod().equals(HttpRequestType.POST.getValue())) {
+                httpResponse = doPost(request, uuid);
+            }
 
-			// Parses the response data.
-			HttpEntity httpEntity = httpResponse.getEntity();
+            // Parses the response data.
+            HttpEntity httpEntity = httpResponse.getEntity();
 
-			if (httpEntity != null) {
-				BufferedReader reader = null;
+            if (httpEntity != null) {
+                BufferedReader reader = null;
 
-				try {
-					reader = new BufferedReader(new InputStreamReader(httpEntity.getContent(), DataUtils.CHARSET_UTF8));
+                try {
+                    reader = new BufferedReader(new InputStreamReader(httpEntity.getContent(), DataUtils.CHARSET_UTF8));
 
-					// List<String> lines = IOUtils.readLines(reader);
-					Map<String, Object> result = new ObjectMapper().readValue(reader, Map.class);
-					LOGGER.info("[" + uuid + "] Responsed result: " + JSONObject.toJSONString(result));
+                    // List<String> lines = IOUtils.readLines(reader);
+                    Map<String, Object> result = new ObjectMapper().readValue(reader, Map.class);
+                    LOGGER.info("[" + uuid + "] Responsed result: " + JSONObject.toJSONString(result));
 
-					// int errorCode = (Integer) result.get(DataUtils.JSON_ERROR_CODE_KEY);
-					//
-					// if (DataUtils.SUCCESS_CODE != errorCode) {
-					// String message = (String) result.get(DataUtils.JSON_ERROR_MESSAGE_KEY);
-					// if (errorCode >= DataUtils.WARN_CODE) {
-					// result.put(DataUtils.JSON_ERROR_MESSAGE_KEY, message);
-					//
-					// } else {
-					// throw new TransportException(errorCode, message);
-					// }
-					// }
+                    // int errorCode = (Integer) result.get(DataUtils.JSON_ERROR_CODE_KEY);
+                    //
+                    // if (DataUtils.SUCCESS_CODE != errorCode) {
+                    // String message = (String) result.get(DataUtils.JSON_ERROR_MESSAGE_KEY);
+                    // if (errorCode >= DataUtils.WARN_CODE) {
+                    // result.put(DataUtils.JSON_ERROR_MESSAGE_KEY, message);
+                    //
+                    // } else {
+                    // throw new TransportException(errorCode, message);
+                    // }
+                    // }
 
-					return new Response(result);
+                    return new Response(result);
 
-				} finally {
-					IOUtils.closeQuietly(reader);
-				}
+                } finally {
+                    IOUtils.closeQuietly(reader);
+                }
 
-			} else {
-				LOGGER.info("[" + uuid + "] Responsed empty result");
+            } else {
+                LOGGER.info("[" + uuid + "] Responsed empty result");
 
-				return new Response(new HashMap<String, Object>());
-			}
+                return new Response(new HashMap<String, Object>());
+            }
 
-		} catch (TransportException ex) {
-			LOGGER.info("[" + uuid + "] The request is success, but responsed data represents error result: " + request, ex);
+        } catch (TransportException ex) {
+            LOGGER.info("[" + uuid + "] The request is success, but responsed data represents error result: " + request, ex);
 
-			throw ex;
+            throw ex;
 
-		} catch (HttpHostConnectException ex) {
-			LOGGER.info("[" + uuid + "] Failed to process the request: " + request, ex);
+        } catch (HttpHostConnectException ex) {
+            LOGGER.info("[" + uuid + "] Failed to process the request: " + request, ex);
 
-			throw new TransportException("访问 API 服务失败！<br/><br/>【地址】<br/>" + request.getUrl() + "<br/><br/>请检查该地址是否正确或者该服务是否已经启动！");
+            throw new TransportException("访问 API 服务失败！<br/><br/>【地址】<br/>" + request.getUrl() + "<br/><br/>请检查该地址是否正确或者该服务是否已经启动！");
 
-		} catch (Exception ex) {
+        } catch (Exception ex) {
 
-			if (ex instanceof JsonParseException || ex instanceof JsonMappingException) {
-				throw new TransportException("返回数据格式转换时发生错误！");
-			}
+            if (ex instanceof JsonParseException || ex instanceof JsonMappingException) {
+                throw new TransportException("返回数据格式转换时发生错误！");
+            }
 
-			throw new TransportException(ex.getMessage());
+            throw new TransportException(ex.getMessage());
 
-		}
-	}
+        }
+    }
 
-	/**
-	 * 发送异步请求
-	 * 
-	 * @param request
-	 *            The request, cannot be null.
-	 * @param callback
-	 *            The callback, cannot be null.
-	 * 
-	 * @throws IllegalArgumentException
-	 *             Thrown when the "request" or the "callback" is null.
-	 */
-	public static void processAsync(final Request request, final Callback callback) throws IllegalArgumentException {
-		Validate.isTrue(request != null, "The 'request' is null");
-		Validate.isTrue(callback != null, "The 'callback' is null");
+    /**
+     * 发送同步请求
+     *
+     * @param request The request, cannot be null.
+     * @return The responseList.
+     * @throws IllegalArgumentException Thrown when the "request" is null.
+     * @throws TransportException       Thrown when any error occurs.
+     */
+    public static ResponseList processSyncResponseList(final Request request) throws IllegalArgumentException, TransportException {
+        Validate.isTrue(request != null, "The 'request' is null");
 
-		new Thread(new Runnable() {
+        HttpResponse httpResponse = null;
+        String uuid = UUID.randomUUID().toString();
 
-			@Override
-			public void run() {
+        try {
 
-				try {
-					Response response = processSync(request);
+            if (request.getMethod().equals(HttpRequestType.GET.getValue())) {
+                httpResponse = doGet(request, uuid);
 
-					callback.onSuccess(response.getResult());
+            } else if (request.getMethod().equals(HttpRequestType.POST.getValue())) {
+                httpResponse = doPost(request, uuid);
+            }
 
-				} catch (TransportException ex) {
-					callback.onFailure(ex);
-				}
-			}
+            // Parses the response data.
+            HttpEntity httpEntity = httpResponse.getEntity();
 
-		}).start();
-	}
+            if (httpEntity != null) {
+                BufferedReader reader = null;
 
-	private static HttpResponse doGet(final Request request, String uuid) throws Exception {
-		HttpClient httpClient = null;
-		HttpGet httpRequest = null;
+                try {
+                    reader = new BufferedReader(new InputStreamReader(httpEntity.getContent(), DataUtils.CHARSET_UTF8));
 
-		try {
-			JSONObject json = new JSONObject();
-			json.put(DataUtils.JSON_DATA_KEY, request.getData());
-			json.put(DataUtils.JSON_TIMESTAMP_KEY, new Date().getTime());
-			LOGGER.info("[" + uuid + "] Prepared data to be sent: " + json.toJSONString());
+                    // List<String> lines = IOUtils.readLines(reader);
+                    List<Map<String, Object>> result = new ObjectMapper().readValue(reader, ArrayList.class);
+                    LOGGER.info("[" + uuid + "] Responsed result: " + com.alibaba.fastjson.JSONObject.toJSONString(result));
 
-			StringEntity entity = new StringEntity(json.toJSONString(), DataUtils.CHARSET_UTF8);
-			// entity.setContentEncoding(DataUtils.CHARSET_UTF8);
-			// entity.setContentType(DataUtils.CONTENT_TYPE);
+                    // int errorCode = (Integer) result.get(DataUtils.JSON_ERROR_CODE_KEY);
+                    //
+                    // if (DataUtils.SUCCESS_CODE != errorCode) {
+                    // String message = (String) result.get(DataUtils.JSON_ERROR_MESSAGE_KEY);
+                    // if (errorCode >= DataUtils.WARN_CODE) {
+                    // result.put(DataUtils.JSON_ERROR_MESSAGE_KEY, message);
+                    //
+                    // } else {
+                    // throw new TransportException(errorCode, message);
+                    // }
+                    // }
 
-			httpRequest = new HttpGet(request.getUrl());
+                    return new ResponseList(result);
 
-			httpRequest.addHeader("content-type", DataUtils.CONTENT_TYPE);
+                } finally {
+                    IOUtils.closeQuietly(reader);
+                }
 
-			httpClient = new DefaultHttpClient();
+            } else {
+                LOGGER.info("[" + uuid + "] Responsed empty result");
 
-			if (HttpsUtils.isHttpsScheme(request.getUrl())) {
-				HttpsUtils.enableSsl(httpClient);
-			}
+                return new ResponseList(new ArrayList<Map<String, Object>>());
+            }
 
-			return httpClient.execute(httpRequest);
+        } catch (TransportException ex) {
+            LOGGER.info("[" + uuid + "] The request is success, but responsed data represents error result: " + request, ex);
 
-		} finally {
+            throw ex;
 
-			if (httpClient != null && httpClient.getConnectionManager() != null) {
-				httpClient.getConnectionManager().shutdown();
-			}
-		}
+        } catch (HttpHostConnectException ex) {
+            LOGGER.info("[" + uuid + "] Failed to process the request: " + request, ex);
 
-	}
+            throw new TransportException("访问 API 服务失败！<br/><br/>【地址】<br/>" + request.getUrl() + "<br/><br/>请检查该地址是否正确或者该服务是否已经启动！");
 
-	private static HttpResponse doPost(Request request, String uuid) throws Exception {
-		HttpClient httpClient = null;
-		HttpPost httpRequest = null;
+        } catch (Exception ex) {
 
-		try {
-			//JSONObject json = new JSONObject((Map<String, Object>) request.getData());
-			//StringEntity entity = new StringEntity(json.toJSONString(), DataUtils.CHARSET_UTF8);
-			
-			StringEntity entity = new StringEntity(com.alibaba.fastjson.JSONObject.toJSONString(request.getData()), DataUtils.CHARSET_UTF8);
+            if (ex instanceof JsonParseException || ex instanceof JsonMappingException) {
+                throw new TransportException("返回数据格式转换时发生错误！");
+            }
 
-			httpRequest = new HttpPost(request.getUrl());
+            throw new TransportException(ex.getMessage());
 
-			httpRequest.addHeader("content-type", DataUtils.CONTENT_TYPE);
-			httpRequest.setEntity(entity);
+        }
+    }
 
-			httpClient = new DefaultHttpClient();
+    /**
+     * 发送异步请求
+     *
+     * @param request  The request, cannot be null.
+     * @param callback The callback, cannot be null.
+     * @throws IllegalArgumentException Thrown when the "request" or the "callback" is null.
+     */
+    public static void processAsync(final Request request, final Callback callback) throws IllegalArgumentException {
+        Validate.isTrue(request != null, "The 'request' is null");
+        Validate.isTrue(callback != null, "The 'callback' is null");
 
-			if (HttpsUtils.isHttpsScheme(request.getUrl())) {
-				HttpsUtils.enableSsl(httpClient);
-			}
+        new Thread(new Runnable() {
 
-			return httpClient.execute(httpRequest);
+            @Override
+            public void run() {
 
-		} finally {
+                try {
+                    Response response = processSync(request);
 
-			if (httpClient != null && httpClient.getConnectionManager() != null) {
-				httpClient.getConnectionManager().shutdown();
-			}
-		}
+                    callback.onSuccess(response.getResult());
 
-	}
+                } catch (TransportException ex) {
+                    callback.onFailure(ex);
+                }
+            }
+
+        }).start();
+    }
+
+    private static HttpResponse doGet(final Request request, String uuid) throws Exception {
+        HttpClient httpClient = null;
+        HttpGet httpRequest = null;
+
+        try {
+            JSONObject json = new JSONObject();
+            json.put(DataUtils.JSON_DATA_KEY, request.getData());
+            json.put(DataUtils.JSON_TIMESTAMP_KEY, new Date().getTime());
+            LOGGER.info("[" + uuid + "] Prepared data to be sent: " + json.toJSONString());
+
+            StringEntity entity = new StringEntity(json.toJSONString(), DataUtils.CHARSET_UTF8);
+            // entity.setContentEncoding(DataUtils.CHARSET_UTF8);
+            // entity.setContentType(DataUtils.CONTENT_TYPE);
+
+            httpRequest = new HttpGet(request.getUrl());
+
+            httpRequest.addHeader("content-type", DataUtils.CONTENT_TYPE);
+
+            httpClient = new DefaultHttpClient();
+
+            if (HttpsUtils.isHttpsScheme(request.getUrl())) {
+                HttpsUtils.enableSsl(httpClient);
+            }
+
+            return httpClient.execute(httpRequest);
+
+        } finally {
+
+            if (httpClient != null && httpClient.getConnectionManager() != null) {
+                httpClient.getConnectionManager().shutdown();
+            }
+        }
+
+    }
+
+    private static HttpResponse doPost(Request request, String uuid) throws Exception {
+        HttpClient httpClient = null;
+        HttpPost httpRequest = null;
+
+        try {
+            //JSONObject json = new JSONObject((Map<String, Object>) request.getData());
+            //StringEntity entity = new StringEntity(json.toJSONString(), DataUtils.CHARSET_UTF8);
+
+            StringEntity entity = new StringEntity(com.alibaba.fastjson.JSONObject.toJSONString(request.getData()), DataUtils.CHARSET_UTF8);
+
+            httpRequest = new HttpPost(request.getUrl());
+
+            httpRequest.addHeader("content-type", DataUtils.CONTENT_TYPE);
+            httpRequest.setEntity(entity);
+
+            httpClient = new DefaultHttpClient();
+
+            if (HttpsUtils.isHttpsScheme(request.getUrl())) {
+                HttpsUtils.enableSsl(httpClient);
+            }
+
+            return httpClient.execute(httpRequest);
+
+        } finally {
+
+            if (httpClient != null && httpClient.getConnectionManager() != null) {
+                httpClient.getConnectionManager().shutdown();
+            }
+        }
+
+    }
 }
