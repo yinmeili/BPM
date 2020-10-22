@@ -45,7 +45,7 @@
                         <li class="header-login"
                              ng-click="switchFunction(list)"
                              ng-repeat="list in user.FunctionViewModels"
-                             class="app-item"style="position:relative;float:left;width:50%">
+                             class="app-item"style="position:relative;float:left;width:50%;display:block;">
                              
                             <a class="app-item-link"
                                ng-if="(list.Children[0].Url?list.Children[0].Url:list.Children[0].Children[0].Url).indexOf('http')==-1"

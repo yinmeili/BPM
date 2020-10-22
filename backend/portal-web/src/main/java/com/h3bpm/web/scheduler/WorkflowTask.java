@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.h3bpm.web.entity.WorkFlowTask;
 import com.h3bpm.web.service.WorkFlowService;
+import com.h3bpm.web.service.WorkFlowTaskService;
 
 
 @Component
@@ -18,6 +19,9 @@ public class WorkflowTask {
 
 	@Autowired
 	private WorkFlowService workFlowService;
+	
+	@Autowired
+	private WorkFlowTaskService workFlowTaskService;
 
 
 	/**
@@ -27,15 +31,32 @@ public class WorkflowTask {
 	 * @Param
 	 * @return void
 	 **/
-	@Scheduled(cron = "* */5 * * * ?")
+	@Scheduled(cron = "0 0/5 * * * ?")
 	private void process() {
-		logger.info("======== WorkflowTask start ========");
+		logger.info("======== autoStartWorkflowTask start ========");
 		
-		List<WorkFlowTask> workflowTasks = workFlowService.findWorkFlowTask();
+		List<WorkFlowTask> workflowTasks = workFlowTaskService.findUnFinishWorkFlowTask();
 		for (WorkFlowTask workFlowTask : workflowTasks) {
 			workFlowService.createWorkFlow(workFlowTask.getId());
 		}
 		
-		logger.info("======== WorkflowTask end ========");
+		logger.info("======== autoStartWorkflowTask end ========");
 	}
+
+	/**
+	 * @Author lzf
+	 * @Description
+	 * @Data
+	 * @Param
+	 * @return void
+	 **/
+	@Scheduled(cron = "0 0 8 ? * WED")//每周三上午8点执行一次
+	private void addWeeklyReportProcess() {
+		logger.info("======== addWeeklyReportProcess start ========");
+
+		workFlowTaskService.addWeeklyReportWorkFlowTask();
+
+		logger.info("======== addWeeklyReportProcess end ========");
+	}
+
 }

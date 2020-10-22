@@ -12,11 +12,10 @@
       <div class="navbar-form navbar-left">
 				<span class="search-title-text">类型</span>
 				<select id="recycleTypeSearch" class="input form-control form-control-select"
-					ng-model="recycleTypeChoose" ng-options="type for type in types">
-					<option value="" >请选择类型</option>
+					ng-model="$parent.recycleTypeChoose" ng-options="type.value as type.name for type in fileTypes">
 				</select>
 				<span class="search-title-text">名称</span>
-				<input type="text" class="form-control " placeholder="请输入名称..." id="recycleNameSearch">
+        <input type="text" ng-model="$parent.recycleNameSearch1" class="form-control " placeholder="请输入名称..." value="{{recycleNameSearch1}}"ng-keyup="recycleSearchKeyUp($event)">
 				<input type="button" class="form-control" value="搜索" ng-click="recycleSearch('recycleTypeSearch','recycleNameSearch')">
 				
       </div>

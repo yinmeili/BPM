@@ -1,6 +1,9 @@
 package com.h3bpm.web.mapper;
 
+import com.h3bpm.web.entity.Knowledge;
 import com.h3bpm.web.entity.WorkFlowTask;
+import com.h3bpm.web.mapper.sqlprovider.KnowledgeSqlProvider;
+import com.h3bpm.web.mapper.sqlprovider.UserSqlProvider;
 import com.h3bpm.web.mapper.sqlprovider.WorkFlowTaskSqlProvider;
 import org.apache.ibatis.annotations.*;
 
@@ -26,4 +29,6 @@ public interface WorkFlowTaskMapper {
     @Select(("SELECT `Code` from `ot_user` where `Name` = #{userDisplayName}"))
     public String getUserLoginNameByUserDisplayName(@Param("userDisplayName") String userDisplayName);
 
+    @SelectProvider(type = WorkFlowTaskSqlProvider.class, method = "findWorkFlowTask")
+	public List<WorkFlowTask> findWorkFlowTask(@Param("userDisplayName") String userDisplayName,  @Param("flowCode") String flowCode, @Param("startTimeStart") Date startTimeStart, @Param("startTimeEnd") Date startTimeEnd);
 }
