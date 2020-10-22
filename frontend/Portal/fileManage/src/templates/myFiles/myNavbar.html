@@ -22,10 +22,10 @@
                     <i class="glyphicon glyphicon-upload" ng-click="myUploadFile()"><span style="margin-left: 5px;">上传文件</span></i>
                 </button>
 
-                <button class="btn btn-default btn-sm" ng-click="$parent.setTemplate('main-icons.html')" ng-show="$parent.viewTemplate !== 'main-icons.html'" title="{{'icons' | translate}}">
+                <button class="btn btn-default btn-sm" ng-click="$parent.setMyTemplate('main-icons.html')" ng-show="$parent.viewMyTemplate !== 'main-icons.html'" title="{{'icons' | translate}}">
                     <i class="glyphicon glyphicon-th-large"></i>
                 </button>
-                <button class="btn btn-default btn-sm" ng-click="$parent.setTemplate('main-table.html')" ng-show="$parent.viewTemplate !== 'main-table.html'" title="{{'list' | translate}}">
+                <button class="btn btn-default btn-sm" ng-click="$parent.setMyTemplate('myFiles/main-table.html')" ng-show="$parent.viewMyTemplate !== 'myFiles/main-table.html'" title="{{'list' | translate}}">
                     <i class="glyphicon glyphicon-th-list"></i>
                 </button>
             </div>
