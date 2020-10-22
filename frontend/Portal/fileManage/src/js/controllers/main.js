@@ -44,9 +44,12 @@
             $scope.fileUploader = FileUploader;
             $scope.uploadFileList = [];
             $scope.viewTemplate = $cookies.viewTemplate || 'main-table.html';
-
             $scope.setTemplate = function (name) {
                 $scope.viewTemplate = $cookies.viewTemplate = name;
+            };
+            $scope.viewMyTemplate = $cookies.viewMyTemplate || 'myFiles/main-table.html';
+            $scope.setMyTemplate = function (name) {
+                $scope.viewMyTemplate = $cookies.viewMyTemplate = name;
             };
 
             $scope.changeLanguage = function (locale) {
@@ -76,7 +79,6 @@
                 } else if ($rootScope.rootdir == $rootScope.scope.config.fileMemuTitle['allFiles']) {
                     url += "/Portal/onlinePreview/previewFile?fileId=" + item.model.id;
                 }
-
                 if (item.isFolder()) {
                     return $scope.fileNavigator.folderClick(item);
                 }
@@ -458,6 +460,7 @@
             });
             $scope.newFolder = function (data) {
                 $rootScope.temp.tempModel.name = "";
+                $scope.temp.tempModel.filePermission=$scope.fileNavigator.currentFilePermission;
                 var AgencyID;
                 if (data == undefined) AgencyID = "";
                 else AgencyID = data;
@@ -481,7 +484,7 @@
                                     return {
                                         user: $scope.user,
                                         Agency: Agency,
-                                        AgencyID: AgencyID
+                                        AgencyID: AgencyID,
                                     };
                                 },
                                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
@@ -502,19 +505,30 @@
                             }
                         });
                     })
-                var times = setInterval(function () {
-                    if ($("#WorkflowCodes").length > 0) {//id没有改过来，因为没有用到
-                        clearInterval(times);
-                        $(".select2-search-field").find("input").css("z-index", 0);
-                        //console.log($("#WorkflowCodes"));
-                        $("#WorkflowCodes").css("width", "246px");
+                    var arrOrgList = [];
+                    if($scope.temp.tempModel.filePermission.orgList!=undefined){
+                        for (var i = 0; i < $scope.temp.tempModel.filePermission.orgList.length; i++) {
+                            arrOrgList.push($scope.temp.tempModel.filePermission.orgList[i].id);
+                        }
+                        var times = setInterval(function () {
+                            if ($("#folderPer").length > 0) {
+                                clearInterval(times);
+                                $(".select2-search-field").find("input").css("z-index", 0);
+                                var control = $("#folderPer").SheetUIManager();
+                                control.SetValue(arrOrgList);
+                            }
+                        }, 800);
+
                     }
-                }, 50);
+                    
+                    
+                   
             }
 
             // *************************共享文件上传文件选人模态框********************************
             $scope.uploadFile = function (data) {
                 var AgencyID;
+                $scope.temp.tempModel.filePermission=$scope.fileNavigator.currentFilePermission;
                 if (data == undefined) AgencyID = "";
                 else AgencyID = data;
                 $http({
@@ -562,14 +576,29 @@
                             //TODO not work
                         });
                     })
-                var times = setInterval(function () {
-                    if ($("#WorkflowCodes").length > 0) {
-                        clearInterval(times);
-                        $(".select2-search-field").find("input").css("z-index", 0);
-                        //console.log($("#WorkflowCodes"));
-                        $("#WorkflowCodes").css("width", "246px");
+                // var times = setInterval(function () {
+                //     if ($("#WorkflowCodes").length > 0) {
+                //         clearInterval(times);
+                //         $(".select2-search-field").find("input").css("z-index", 0);
+                //         //console.log($("#WorkflowCodes"));
+                //         $("#WorkflowCodes").css("width", "246px");
+                //     }
+                // }, 50);
+                var arrOrgList = [];
+                if($scope.temp.tempModel.filePermission.orgList!=undefined){
+                    for (var i = 0; i < $scope.temp.tempModel.filePermission.orgList.length; i++) {
+                        arrOrgList.push($scope.temp.tempModel.filePermission.orgList[i].id);
                     }
-                }, 50);
+                    var times = setInterval(function () {
+                        if ($("#uploadPer").length > 0) {
+                            clearInterval(times);
+                            $(".select2-search-field").find("input").css("z-index", 0);
+                            var control = $("#uploadPer").SheetUIManager();
+                            control.SetValue(arrOrgList);
+                        }
+                    }, 800);
+
+                }
             }
 
 
