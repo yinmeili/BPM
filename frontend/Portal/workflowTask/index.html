@@ -1,0 +1,91 @@
+<!--
+    共享流程
+     -->
+     <div class="hbox hbox-auto-xs hbox-auto-sm">
+      <!-- main -->
+      <div class="col" ng-controller="WorkflowTaskCtrl">
+          <!-- main header -->
+          <div class="wrapper-md">
+              <div class="row">
+                  <div class="col-sm-6 col-xs-12 form-title-name">
+                      <span class="h3" ng-bind="menuData.DisplayName"></span>
+                  </div>
+                  <div class="col-sm-6 col-xs-12">
+                    <button class="btn btn-default btn-sm"style="float: right">
+                      <i class="glyphicon glyphicon-upload" ng-click="WorkflowuploadFile()"><span style="margin-left: 5px;">上传文件</span></i>
+                    </button>
+                </div>
+              </div>
+          </div>
+          <!--表格部分Start-->
+          <div class="wrapper-md paddingbottomNone">
+              <div class="panel panel-default">
+                  <div class="table-responsive">
+                      <div class="form-inline search-box">
+                          <div class="input-group searchContainer">
+                              <!--名称-->
+                              <div class="header-search-item">
+                                  <span class="search-title-text">用户名</span>
+                                  <div class="form-group">
+                                      <input ng-model="workflowTaskUserName" maxlength="32" class="input form-control" placeholder="" />
+                                  </div>
+                              </div>
+                              <div class="header-search-item">
+                                <span class="search-title-text">流程名</span>
+                                <div class="form-group">
+                                  <select autocomplete="off" ng-model="workflowindex"ng-options="x.workFlowname for x in workFlow"
+                                 maxlength="32" class="input form-control"id="workflow"  style=" padding: 5px 0px;width: 80px;"  >
+                                  <option value=""style="display:none">清算</option>
+                                </select>
+                                </div>
+                            </div>
+                            
+                          </br>
+                              <div class="header-search-item">
+                                  <span class="search-title-text">发起时间</span>
+                                  <div class="form-group search-time-box">
+                                      <div class="input-group">
+                                          <input 
+                                                 id="workflowTasksearchStartTimeStart"
+                                                 autocomplete="off"
+                                                 ui-jq="wdatePicker" ui-options="workflowTasksearchStartTimeStart"
+                                                 class="input form-control" />
+                                          <span class="input-group-addon" style="border-left:0;border-right:0;" translate="QueryTableColumn.To"></span>
+                                          <input 
+                                                 autocomplete="off" id="workflowTasksearchStartTimeEnd"
+                                                 class="input form-control"
+                                                 ui-jq="wdatePicker" ui-options="workflowTasksearchStartTimeEnd"/>
+                                      </div>
+                                  </div>
+                              </div>
+                              <button class="btn btn-primary search-box-btn" id="searchWorkflowtask" type="button">查询</button>
+                      </div>
+                      </div>
+                   
+                      <table ui-jq="dataTable" id="tabWorkFlowTask"
+                             ui-options="dtWorkflowTaskFlowOptions"
+                             class="table table-striped m-b-none" style="width:99.5%;">
+                          <thead>
+                              <tr>
+                                  <th> <span>流程名</span></th>
+                                  <th class="hide1024"><span >发起时间</span></th>
+                                  <th class="hide414" ><span>执行人</span></th> 
+                                  <th class="hide414" ><span>是否发起</span></th> 
+                                   
+                                  
+                              </tr>
+                          </thead>
+                          <tbody></tbody>
+                      </table>
+                
+
+                  </div>
+              </div>
+          </div>
+          <div ng-include="'workflowTask/modals.html'"></div>  
+          <!--表格部分End-->
+      </div>
+      <!-- / main -->
+  </div>
+ 
+  

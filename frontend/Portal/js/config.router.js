@@ -782,6 +782,21 @@ angular.module('app')
                         ]
                     }
                 })
+                //流程任务
+                .state('app.WorkflowTask', {
+                    url: '/workflowTask',
+                    controller: "WorkflowTaskCtrl",
+                    templateUrl: 'workflowTask/index.html',
+                    resolve: {
+                        deps: ['$ocLazyLoad',
+                            function ($ocLazyLoad) {
+                                return $ocLazyLoad.load([
+                                    'js/services/notify.js', 
+                                ]);
+                            }
+                        ]
+                    }
+                })
 
                 
                
