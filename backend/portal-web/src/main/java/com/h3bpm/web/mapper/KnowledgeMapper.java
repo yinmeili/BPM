@@ -34,8 +34,8 @@ public interface KnowledgeMapper {
 	@Select("SELECT `id`, `type`, `name`, `desc`,`tag_name` `tagName`, `create_user_id` `createUserId`, `create_user_name` `createUserName`, `create_time` `createTime`, `is_delete` `isDelete`, `flow_id` `flowId`, `flow_code` `flowCode`, `flow_code_desc` `flowCodeDesc`, `start_time` `startTime`, `end_time` `endTime`, `status` `status` , `desc_list_data` `descListData` from `h3bpm`.`ot_knowledge` WHERE `id` = #{id}")
 	public Knowledge getKnowledgeById(@Param("id") String id);
 
-	@Select("select distinct b.`WorkflowCode` `flowCode`,c.`WorkflowName` `flowCodeDesc` from `ot_knowledge` a inner join `ot_workitemfinished` b on a.flow_id = b.ObjectID \n" +
-			"inner join `ot_workflowclause` c on b.`WorkflowCode` = c.`WorkflowCode` where a.`flow_id` = #{flowId}")
+	@Select("select distinct b.`WorkflowCode` `flowCode`,c.`WorkflowName` `flowCodeDesc` from `ot_workitemfinished` b \n" +
+			"inner join `ot_workflowclause` c on b.`WorkflowCode` = c.`WorkflowCode` where b.ObjectID = #{flowId}")
 	public FlowCode getFlowCodeByFlowId(@Param("flowId") String flowId);
 
 }
