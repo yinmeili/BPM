@@ -1,0 +1,44 @@
+<script type="text/ng-template" id="WorkflowuploadFile.html">
+  <form class="bs-example form-horizontal H3Panel">
+      <div class="modal-header">
+          <button type="button" class="close"
+                  data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+              ×
+          </button>
+          <h4 class="modal-title" id="myModalLabel1" style="color:#778CA2;">
+              上传
+          </h4>
+      </div>
+      <!--弹框提示-->
+      <div class="modal-body" style="padding-left:50px;padding-right:50px;">
+          <div class="row">
+              <div class="col-md-1"></div>
+              <div class="col-md-10">
+                  <div class="form-group" style="color:#778CA2;">
+                    <div class="row">
+                        <div class="col-md-2 col-sm-3"style="font-size:20px">流程名</div>
+                        <div class="col-md-10 col-sm-9 input-group">
+                             <select autocomplete="off" ng-model="workflowModal"ng-options="x.workFlowname for x in workFlow"
+                               maxlength="32" id="workflowModal" style=" padding: 5px 0px;width: 80px;"class="input form-control" >
+                                <option value=""style="display:none">清算</option>
+                                
+                              </select>
+                        </div>
+                    </div> 
+                </br>
+                      <div class="row" style="margin-bottom: 20px;" id="selectFile">
+                         <input type="file"name="shangchuan" class="input form-control"id="upload"name="upload">
+                      </div>
+                      <div class="row" style="margin-bottom: 20px;" id="downloadFile">
+                        <div style="font-size:16px;cursor:pointer "ng-click="modalsTaskdownload()">点击下载模板文件</div>
+                     </div>
+
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+          <div id="extrabutton1" class="ajax-file-upload-green" ng-click="myStartUploadFile()">开始上传</div>
+      </div>
+  </form>
+</script>
