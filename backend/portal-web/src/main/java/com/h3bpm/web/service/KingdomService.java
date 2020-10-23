@@ -13,9 +13,11 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
- * This class is designed to get Kingdom Token.
+ *
  *
  * @author lzf
  */
@@ -41,6 +43,8 @@ public class KingdomService extends ApiDataService {
 
 	private static final String TOKEN_ERROR_INFO = "TokenError";
 	private static final String FLOW_NODE_KEY = "k_flow_object";
+    private static final String STATUS_STR = "执行状态";
+    private static final String EXECUTE_RESULT = "级别";
 	private static final String FLOW_NODE_NAMES_KEY = "k_object_vclparam";
 
 	/**
@@ -79,6 +83,10 @@ public class KingdomService extends ApiDataService {
 	public List<KingdomNodeVo> findNodeInfo() {
 		return findNodeInfoByFlowId(flowId);
 	}
+
+    public KingdomNodeVo getNodeInfo() {
+        return getNodeInfoByFlowIdAndNodeName(flowId, "(192.168.41.189).(启动融航行情)");
+    }
 
 	/**
 	 * 查询流程下所有的节点信息
@@ -135,13 +143,6 @@ public class KingdomService extends ApiDataService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public KingdomNodeVo getNodeInfoByFlowIdAndNodeName(String flowId,String nodeName) {
-		String token = getToken();
-		
-		return null;
-	}
-	
-	@SuppressWarnings("unchecked")
 	public List<String> findNodeNameByFlowId(String flowId) {
 		List<String> nodeNameList = new ArrayList<>();
 		
@@ -149,7 +150,7 @@ public class KingdomService extends ApiDataService {
 			String token = getToken();
 //			String token = "b667aa83cf514fae9a3da4e7162e76f2";
 
-			List<KingdomRequestVo> kingdomRequestVoList = new ArrayList<KingdomRequestVo>();
+List<KingdomRequestVo> kingdomRequestVoList = new ArrayList<KingdomRequestVo>();
 			kingdomRequestVoList.add(new KingdomRequestVo("TFlowDM", modelName));
 			kingdomRequestVoList.add(new KingdomRequestVo(token, "Token"));
 			kingdomRequestVoList.add(new KingdomRequestVo("GetFlowObjectVCLParam", methodName));
@@ -187,7 +188,52 @@ public class KingdomService extends ApiDataService {
 		}
 		
 		return nodeNameList;
-	}
+	}    /**
+     * 查询金证自动化流程的节点运行状态
+     *
+     * @param flowId
+     * @param nodeName
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public KingdomNodeVo getNodeInfoByFlowIdAndNodeName(String flowId, String nodeName) {
+
+        KingdomNodeVo kingdomNodeVo = new KingdomNodeVo();
+
+        try {
+            String token = getToken();
+
+            List<KingdomRequestVo> kingdomRequestVoList = new ArrayList<KingdomRequestVo>();
+            kingdomRequestVoList.add(new KingdomRequestVo("TBigScreenDM", modelName));
+            kingdomRequestVoList.add(new KingdomRequestVo(token, "Token"));
+            kingdomRequestVoList.add(new KingdomRequestVo("GetFlowObjectState", methodName));
+            kingdomRequestVoList.add(new KingdomRequestVo(flowId, "FlowID"));
+            kingdomRequestVoList.add(new KingdomRequestVo(nodeName, "ObjectName"));
+
+            List<Map<String, Object>> mapList = this.processSyncKingdom(HttpRequestType.POST, kingdomRequestVoList);
+
+            if (mapList == null || mapList.size() != 2) {
+                return null;
+
+            } else {
+
+                for (Map<String, Object> map : mapList) {
+                    String srcStr = (String) map.get("Value");
+//                    String srcStr = "数据[数据]级别[正常]描述[描述]开始时间[2020-10-23 08:40:02]结束时间[2020-10-23 08:40:27]执行状态[执行完成]执行耗时[00:00:25]";
+                    if (srcStr != null && !srcStr.equals("")) {
+                        kingdomNodeVo.setName(nodeName);
+                        kingdomNodeVo.setStatusStr(getValue(srcStr, STATUS_STR));
+                        kingdomNodeVo.setExecuteResult(getValue(srcStr, EXECUTE_RESULT));
+                    }
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return kingdomNodeVo;
+    }
 
 	private KingdomNodeVo buildNodeVo(List<Map<String, Object>> nodeMaps) {
 
@@ -232,4 +278,24 @@ public class KingdomService extends ApiDataService {
 		return false;
 	}
 
+    /**
+     * 使用正则表达式获取节点运行状态值
+     *
+     * @param srcStr
+     * @param s
+     * @return
+     */
+    public String getValue(String srcStr, String s) {
+
+        String pattern = s + "\\[+[\\S*]+?\\]";//执行状态[未执行]
+        Pattern r = Pattern.compile(pattern);
+        Matcher m = r.matcher(srcStr);
+        if (m.find()) {
+            int i = m.group().indexOf("[");
+            int j = m.group().indexOf("]");
+            return m.group().substring(i + 1, j);
+        } else {
+            return null;
+        }
+    }
 }
