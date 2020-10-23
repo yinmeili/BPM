@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
- * This class is designed to get Kingdom Token.
+ *
  *
  * @author lzf
  */
@@ -36,6 +36,12 @@ public class KingdomController extends ControllerBase {
 	@ResponseBody
 	public ResponseVo findNodeList() throws Exception {
 		return new ResponseVo( kingdomService.findNodeInfo());
+	}
+
+	@RequestMapping(value = "/getNodeList")
+	@ResponseBody
+	public ResponseVo getNodeList() throws Exception {
+		return new ResponseVo(kingdomService.getNodeInfo());
 	}
 
 	@Override
