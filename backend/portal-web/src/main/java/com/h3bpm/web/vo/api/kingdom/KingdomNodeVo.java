@@ -8,6 +8,9 @@ public class KingdomNodeVo {
 	private String executeResult = null;
 	private String statusStr = null;
 
+	public KingdomNodeVo() {
+	}
+
 	public KingdomNodeVo(String name, String status, String executeResult) {
 		this.name = name;
 		this.status = status;
