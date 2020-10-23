@@ -182,12 +182,12 @@ public class TransportUtils {
 
 					reader = new BufferedReader(ins);
 					
-					String lineMessage;
-					StringBuffer returnMessage = new StringBuffer();
-					while ((lineMessage = reader.readLine()) != null) {
-					returnMessage.append(lineMessage);
-					}
-					reader.close();
+//					String lineMessage;
+//					StringBuffer returnMessage = new StringBuffer();
+//					while ((lineMessage = reader.readLine()) != null) {
+//					returnMessage.append(lineMessage);
+//					}
+//					reader.close();
 					
 					ObjectMapper objectMapper = new ObjectMapper();
 					

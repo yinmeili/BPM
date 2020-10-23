@@ -37,6 +37,12 @@ public class KingdomController extends ControllerBase {
 	public ResponseVo findNodeList() throws Exception {
 		return new ResponseVo( kingdomService.findNodeInfo());
 	}
+	
+	@RequestMapping(value = "/findNodeNameList")
+	@ResponseBody
+	public ResponseVo findNodeNameList() throws Exception {
+		return new ResponseVo( kingdomService.findNodeName());
+	}
 
 	@Override
 	public String getFunctionCode() {

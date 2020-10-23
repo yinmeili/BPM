@@ -41,6 +41,7 @@ public class KingdomService extends ApiDataService {
 
 	private static final String TOKEN_ERROR_INFO = "TokenError";
 	private static final String FLOW_NODE_KEY = "k_flow_object";
+	private static final String FLOW_NODE_NAMES_KEY = "k_object_vclparam";
 
 	/**
 	 * 获取令牌
@@ -71,6 +72,10 @@ public class KingdomService extends ApiDataService {
 		return null;
 	}
 
+	public List<String> findNodeName() {
+		return findNodeNameByFlowId(flowId);
+	}
+	
 	public List<KingdomNodeVo> findNodeInfo() {
 		return findNodeInfoByFlowId(flowId);
 	}
@@ -86,15 +91,15 @@ public class KingdomService extends ApiDataService {
 		List<KingdomNodeVo> kingdomVoList = new ArrayList<>();
 
 		try {
-//			String token = getToken();
-			String token = "b667aa83cf514fae9a3da4e7162e76f2";
+			String token = getToken();
+//			String token = "b667aa83cf514fae9a3da4e7162e76f2";
 
 			List<KingdomRequestVo> kingdomRequestVoList = new ArrayList<KingdomRequestVo>();
 			kingdomRequestVoList.add(new KingdomRequestVo("TFlowDM", modelName));
 			kingdomRequestVoList.add(new KingdomRequestVo(token, "Token"));
 			kingdomRequestVoList.add(new KingdomRequestVo("GetFlowObejctInfo", methodName));
-//			kingdomRequestVoList.add(new KingdomRequestVo(flowId, "FlowID"));
-			kingdomRequestVoList.add(new KingdomRequestVo("2023A3E9EB0740678CBDA8B4B8A771CA", "FlowID"));
+			kingdomRequestVoList.add(new KingdomRequestVo(flowId, "FlowID"));
+//			kingdomRequestVoList.add(new KingdomRequestVo("2023A3E9EB0740678CBDA8B4B8A771CA", "FlowID"));
 
 			List<Map<String, Object>> mapList = this.processSyncKingdom(HttpRequestType.POST, kingdomRequestVoList);
 
@@ -103,7 +108,6 @@ public class KingdomService extends ApiDataService {
 
 			} else {
 				Map<String, Object> dataMap = null;
-				kingdomVoList = new ArrayList<>();
 
 				for (Map<String, Object> map : mapList) {
 					if (FLOW_NODE_KEY.equals(map.get("Name"))) {
@@ -136,6 +140,54 @@ public class KingdomService extends ApiDataService {
 		
 		return null;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<String> findNodeNameByFlowId(String flowId) {
+		List<String> nodeNameList = new ArrayList<>();
+		
+		try {
+			String token = getToken();
+//			String token = "b667aa83cf514fae9a3da4e7162e76f2";
+
+			List<KingdomRequestVo> kingdomRequestVoList = new ArrayList<KingdomRequestVo>();
+			kingdomRequestVoList.add(new KingdomRequestVo("TFlowDM", modelName));
+			kingdomRequestVoList.add(new KingdomRequestVo(token, "Token"));
+			kingdomRequestVoList.add(new KingdomRequestVo("GetFlowObjectVCLParam", methodName));
+			kingdomRequestVoList.add(new KingdomRequestVo(flowId, "FlowID"));
+//			kingdomRequestVoList.add(new KingdomRequestVo("2023A3E9EB0740678CBDA8B4B8A771CA", "FlowID"));
+
+			List<Map<String, Object>> mapList = this.processSyncKingdom(HttpRequestType.POST, kingdomRequestVoList);
+
+			if (mapList == null || mapList.size() != 2) {
+				return null;
+
+			} else {
+				Map<String, Object> dataMap = null;
+
+				for (Map<String, Object> map : mapList) {
+					if (FLOW_NODE_NAMES_KEY.equals(map.get("Name"))) {
+						dataMap = map;
+						break;
+					}
+				}
+
+				if (dataMap != null) {
+					List<List<Map<String, Object>>> nodeMapList = (List<List<Map<String, Object>>>) dataMap.get("Value");
+					nodeMapList.remove(0);
+
+					for (List<Map<String, Object>> nodeMaps : nodeMapList) {
+						nodeNameList.add(buildNodeName(nodeMaps));
+					}
+
+				}
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return nodeNameList;
+	}
 
 	private KingdomNodeVo buildNodeVo(List<Map<String, Object>> nodeMaps) {
 
@@ -144,6 +196,13 @@ public class KingdomService extends ApiDataService {
 		String executeResult = (String) nodeMaps.get(3).get("Value");
 
 		return new KingdomNodeVo(name, status, executeResult);
+	}
+	
+	private String buildNodeName(List<Map<String, Object>> nodeMaps) {
+
+		String name = (String) nodeMaps.get(0).get("Value");
+
+		return name;
 	}
 
 	/**
