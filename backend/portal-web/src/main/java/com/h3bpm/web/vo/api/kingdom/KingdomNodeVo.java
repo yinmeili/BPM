@@ -33,17 +33,17 @@ public class KingdomNodeVo {
 		this.status = status;
 	}
 
-	// public String getStatusStr() {
-	// return KingdomNodeStatus.parse(status).getDisplayName();
-	// }
+	 public String getStatusStr() {
+	 return KingdomNodeStatus.parse(status).getDisplayName();
+	 }
 
 	public String getExecuteResult() {
 		return executeResult;
 	}
 
-	public String getStatusStr() {
-		return statusStr;
-	}
+//	public String getStatusStr() {
+//		return statusStr;
+//	}
 
 	public void setStatusStr(String statusStr) {
 		this.statusStr = statusStr;

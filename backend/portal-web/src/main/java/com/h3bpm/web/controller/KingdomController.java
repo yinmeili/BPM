@@ -1,14 +1,18 @@
 package com.h3bpm.web.controller;
 
-import OThinker.H3.Controller.ControllerBase;
-import com.h3bpm.web.service.KingdomService;
-import com.h3bpm.web.vo.ResponseVo;
+import javax.servlet.http.HttpServletResponse;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.h3bpm.web.service.KingdomService;
+import com.h3bpm.web.vo.ResponseVo;
+
+import OThinker.H3.Controller.ControllerBase;
 
 /**
  *
@@ -34,7 +38,8 @@ public class KingdomController extends ControllerBase {
 	
 	@RequestMapping(value = "/findNodeList")
 	@ResponseBody
-	public ResponseVo findNodeList() throws Exception {
+	public ResponseVo findNodeList(HttpServletResponse response) throws Exception {
+//		response.setContentLength(1);
 		return new ResponseVo( kingdomService.findNodeInfo());
 	}
 	

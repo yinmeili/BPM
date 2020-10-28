@@ -1,9 +1,7 @@
 package com.h3bpm.web.utils;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,12 +13,17 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.GzipDecompressingEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
@@ -29,6 +32,8 @@ import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.json.simple.JSONObject;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.TypeReference;
 import com.h3bpm.web.enumeration.HttpRequestType;
 import com.h3bpm.web.service.TransportException;
 import com.h3bpm.web.vo.Callback;
@@ -79,13 +84,10 @@ public class TransportUtils {
 
 				try {
 					reader = new BufferedReader(new InputStreamReader(httpEntity.getContent(), DataUtils.CHARSET_UTF8));
-
-					// List<String> lines = IOUtils.readLines(reader);
-					
 					ObjectMapper objectMapper = new ObjectMapper();
-					//忽略转义字符
+					// 忽略转义字符
 					objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
-					
+
 					Map<String, Object> result = objectMapper.readValue(reader, Map.class);
 					LOGGER.info("[" + uuid + "] Responsed result: " + JSONObject.toJSONString(result));
 
@@ -160,52 +162,55 @@ public class TransportUtils {
 				httpResponse = doPost(request, uuid);
 			}
 
-			// Parses the response data.
 			HttpEntity httpEntity = httpResponse.getEntity();
 
 			if (httpEntity != null) {
 				BufferedReader reader = null;
 				try {
 
-					// String resultStr = EntityUtils.toString(httpEntity, DataUtils.CHARSET_UTF8);
-					
-//					ByteArrayOutputStream resultStream = new ByteArrayOutputStream();
-//					byte[] buffer = new byte[1024];
-//					int length;
-//					while ((length = httpEntity.getContent().read(buffer)) != -1) {
-//						resultStream.write(buffer, 0, length);
-//					}
-//					String str = resultStream.toString(StandardCharsets.UTF_8.name());
-					
+					/** 
+					 * 过大的响应体，需要通过解压gzip完成
+					 */
+					org.apache.http.Header ceheader = httpEntity.getContentEncoding();
+					if (ceheader != null) {
+						for (org.apache.http.HeaderElement element : ceheader.getElements()) {
+							if ("gzip".equalsIgnoreCase(element.getName())) {
+								httpEntity = new GzipDecompressingEntity(httpEntity);
+								break;
+							}
+						}
+					}
 
 					InputStreamReader ins = new InputStreamReader(httpEntity.getContent(), DataUtils.CHARSET_UTF8);
 
 					reader = new BufferedReader(ins);
-					
-//					String lineMessage;
-//					StringBuffer returnMessage = new StringBuffer();
-//					while ((lineMessage = reader.readLine()) != null) {
-//					returnMessage.append(lineMessage);
-//					}
-//					reader.close();
-					
-					ObjectMapper objectMapper = new ObjectMapper();
-					
-					//忽略转义字符
-					objectMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
-			        objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
-			        objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
-			        objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
-			        objectMapper.configure(JsonParser.Feature.INTERN_FIELD_NAMES, true);
-			        objectMapper.configure(JsonParser.Feature.CANONICALIZE_FIELD_NAMES, true);
-			        objectMapper.configure(JsonParser.Feature.CANONICALIZE_FIELD_NAMES, true);
-			        objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-					List<Map<String, Object>> result = objectMapper.readValue(reader, ArrayList.class);
+					ObjectMapper objectMapper = new ObjectMapper();
+
+					// 忽略转义字符
+					objectMapper.configure(JsonParser.Feature.ALLOW_COMMENTS, true);
+					objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES, true);
+					objectMapper.configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);
+					objectMapper.configure(JsonParser.Feature.ALLOW_UNQUOTED_CONTROL_CHARS, true);
+					objectMapper.configure(JsonParser.Feature.INTERN_FIELD_NAMES, true);
+					objectMapper.configure(JsonParser.Feature.CANONICALIZE_FIELD_NAMES, true);
+					objectMapper.configure(JsonParser.Feature.CANONICALIZE_FIELD_NAMES, true);
+					objectMapper.configure(DeserializationConfig.Feature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+					List<Map<String, Object>> result = null;
+
+					try (CloseableHttpClient httpclient = HttpClients.createDefault();) {
+						result = objectMapper.readValue(reader, ArrayList.class);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
+					// JSONArray jsonArray = com.alibaba.fastjson.JSONObject.parseArray(testStr);
+					// List<Map<String, Object>> result2 = com.alibaba.fastjson.JSONObject.parseObject(testStr, new TypeReference<List<Map<String, Object>>>() {
+					// });
 
 					// LOGGER.info("[" + uuid + "] Responsed result: " + com.alibaba.fastjson.JSONObject.toJSONString(result));
 
-					// return new ResponseList(result);
 					return new ResponseList(result);
 
 				} finally {
@@ -306,6 +311,7 @@ public class TransportUtils {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	private static HttpResponse doPost(Request request, String uuid) throws Exception {
 		HttpClient httpClient = null;
 		HttpPost httpRequest = null;
@@ -317,9 +323,22 @@ public class TransportUtils {
 			StringEntity entity = new StringEntity(com.alibaba.fastjson.JSONObject.toJSONString(request.getData()), DataUtils.CHARSET_UTF8);
 
 			httpRequest = new HttpPost(request.getUrl());
+			// httpRequest.setProtocolVersion(HttpVersion.HTTP_1_0);
 
 			httpRequest.addHeader("content-type", DataUtils.CONTENT_TYPE);
+
+			// 对于过大的响应体，需要以gzip格式来保存响应
+			httpRequest.addHeader("Accept-Encoding", "gzip, deflate, br");
+
 			httpRequest.setEntity(entity);
+
+			// RequestConfig config = RequestConfig.custom().setConnectTimeout(1000000) // 连接超时时间
+			// .setConnectionRequestTimeout(100000) // 从连接池中取的连接的最长时间
+			// .setSocketTimeout(10 * 100000) // 数据传输的超时时间
+			// .setStaleConnectionCheckEnabled(true) // 提交请求前测试连接是否可用
+			// .build();
+			//
+			// httpRequest.setConfig(config);
 
 			httpClient = new DefaultHttpClient();
 
