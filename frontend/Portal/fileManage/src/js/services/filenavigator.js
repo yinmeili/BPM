@@ -27,6 +27,7 @@
             this.myFolderFileList = [];
             this.myFolderHistory = [{name:"我的文件"}];
 
+            this.currentFilePermission={};
             this.flowCurrentPath = ["flow/"];
             this.flowFileList = [];
             this.flowHistory = [{name:"共享流程"}];
@@ -78,7 +79,6 @@
             self.fileList = [];
             self.error = '';
             self.showList('showFolder');
-
             $http.post(fileManagerConfig.listUrl, data).success(function(data) {
                 self.deferredHandler(data, deferred);
             }).error(function(data) {
@@ -459,11 +459,15 @@
             this.currentPath = [];
             this.currentFileId = '';
             this.currentParentId='';
-
+            this.currentFilePermission={};
             if (item && item.isFolder()) {
                 this.currentFileId = item.model.id;
                 this.currentParentId=item.model.parentId;
                 this.currentPath = item.model.fullPath().split('/').splice(1);
+                if(this.currentFilePermission==undefined){
+                    this.currentFilePermission={};
+                }
+                this.currentFilePermission=item.model.filePermission;
             }
             this.refresh();
         };

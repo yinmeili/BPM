@@ -52,11 +52,11 @@
         </tr>
         <tr ng-repeat="item in fileNavigator.fileList | filter: {model:{name: query}} | orderBy:predicate:reverse" ng-show="!fileNavigator.requesting">
             <td ng-right-click="touch(item)" colspan="3">
-                <a href="" ng-click="smartClick(item,$event)" title="{{item.model.name}} ">
-                    <i class="glyphicon glyphicon-folder-close" ng-show="item.model.type === 'dir'"></i>
-                    <i class="glyphicon glyphicon-file" ng-show="item.model.type === 'file'"></i>
-                    {{item.model.name | strLimit : 64}}
-                </a>
+                <div title="{{item.model.name}} "> 
+                    <a class="glyphicon glyphicon-folder-close" ng-show="item.model.type === 'dir'"ng-click="smartClick(item,$event)"></a>
+                    <a class="glyphicon glyphicon-file" ng-show="item.model.type === 'file'"ng-click="smartClick(item,$event)"></a>
+                    <a ng-click="smartClick(item,$event)">{{item.model.name | strLimit : 64}}</a>
+                </div>
             </td>
             <!-- 路径位置 -->
             <td class="hidden-xs" title="{{item.model.dir}}" ng-show="fileNavigator.position">
