@@ -797,6 +797,21 @@ angular.module('app')
                         ]
                     }
                 })
+                //清算管理
+                .state('app.liquidation_manage', {
+                    url: '/liquidation',
+                    controller: "liquidationCtrl",
+                    templateUrl: 'liquidation/index.html',
+                    resolve: {
+                        deps: ['$ocLazyLoad',
+                            function ($ocLazyLoad) {
+                                return $ocLazyLoad.load([
+                                    'js/services/notify.js', 
+                                ]);
+                            }
+                        ]
+                    }
+                })
 
                 
                
