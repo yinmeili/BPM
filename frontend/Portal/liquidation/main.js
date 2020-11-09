@@ -243,7 +243,16 @@
                 }
             };
 
-
+            $('#liquidationKeyword').bind('keypress', function (event) { 
+                if (event.keyCode == "13") { 
+                 $("#search_liquidation").click();
+                }
+               })
+            $('#liquidationStatus').bind('keypress', function (event) { 
+                if (event.keyCode == "13") { 
+                 $("#search_liquidation").click();
+                }
+            })
 
 
             $scope.createLiquidation = function (data) {

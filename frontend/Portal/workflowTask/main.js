@@ -190,6 +190,9 @@
                 "sDom": '<"top"f>rt<"row"ipl>',
                 "sPaginationType": "full_numbers",
                 "fnServerParams": function (aoData) {
+                    if($scope.workflow ==undefined){
+                        $scope.workflow=$scope.workflow=$scope.workFlow[0].id ;
+                    }
                     aoData.push(//name的值是传输数据的key，value的值是传输数据的value
                         { "name": "startTimeStart", "value": $filter("date")( $rootScope.workflowTasksearchStartTimeStart, "yyyy-MM-dd HH:mm:ss") },
                         { "name": "startTimeEnd", "value": $filter("date")( $rootScope.workflowTasksearchStartTimeEnd ,"yyyy-MM-dd HH:mm:ss") },
@@ -212,6 +215,7 @@
                        else  {
                         $scope.workflow = $scope.workFlow[$scope.index-1].id ;
                     }
+                    
                         if ( $rootScope.workflowTasksearchStartTimeStart == undefined && $rootScope.workflowTasksearchStartTimeEnd == undefined) {
                             $rootScope.workflowTasksearchStartTimeStart="";
                             $rootScope.workflowTasksearchStartTimeEnd="";
@@ -256,7 +260,26 @@
                     jqdatables.trcss();
                 }
             };
-
+            $('#workflowTaskUserName').bind('keypress', function (event) { 
+                if (event.keyCode == "13") { 
+                 $("#searchWorkflowtask").click();
+                }
+               })
+               $('#workflow').bind('keypress', function (event) { 
+                if (event.keyCode == "13") { 
+                 $("#searchWorkflowtask").click();
+                }
+               })
+               $('#workflowTasksearchStartTimeStart').bind('keypress', function (event) { 
+                if (event.keyCode == "13") { 
+                 $("#searchWorkflowtask").click();
+                }
+               })
+               $('#workflowTasksearchStartTimeEnd').bind('keypress', function (event) { 
+                if (event.keyCode == "13") { 
+                 $("#searchWorkflowtask").click();
+                }
+               })
 
             //文件导入
             $scope.WorkflowuploadFile = function (data) {

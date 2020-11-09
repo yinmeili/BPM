@@ -252,7 +252,7 @@ app.controller("AnnouncementModalsController", ["$scope", '$q', "$rootScope", "$
             msg = msg.substr(0, msg.length - 3);
             if (!msg) {
                 updateannounce().then(function () {
-                    $("#tabMyFlow").dataTable().fnDraw();
+                    $("#tabAnnouncementFlow").dataTable().fnDraw();
                 });
             } else {
                 $.notify({ message: msg, status: "danger" });
@@ -327,7 +327,7 @@ app.controller("AnnouncementModalsController", ["$scope", '$q', "$rootScope", "$
             if (!msg) {
             
                 createannounce().then(function () {
-                    $("#tabMyFlow").dataTable().fnDraw();
+                    $("#tabAnnouncementFlow").dataTable().fnDraw();
                   
                 });
             } else {
@@ -369,7 +369,7 @@ app.controller("AnnouncementModalsController", ["$scope", '$q', "$rootScope", "$
         }
         $scope.removeAnnouncement = function () {
             removeAnnounce().then(function () {
-                $("#tabMyFlow").dataTable().fnDraw();
+                $("#tabAnnouncementFlow").dataTable().fnDraw();
             });
             $scope.cancel();
         }
