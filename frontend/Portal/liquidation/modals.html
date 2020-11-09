@@ -1,0 +1,297 @@
+<script type="text/ng-template" id="editLiquidation.html">
+  <form class="bs-example form-horizontal" ng-submit="editLiquidation()">
+      <div class="modal-header">
+          <button type="button" class="close"
+                  data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+              ×
+          </button>
+          <h4 class="modal-title" style="color:#778CA2;">
+              编辑信息
+          </h4>
+      </div>
+      <div class="modal-body" style="color:#778CA2;">
+          <div class="row form-group" style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">名称</div>
+              <div class="col-md-8 input-group">
+                  <input class="form-control" type="text" style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                         ng-model="liquidationModalsName" autofocus="autofocus"/>
+              </div>
+          </div>
+
+          <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">IP地址</div>
+            <div class="col-md-8 input-group">
+                <textarea ng-model="liquidationIP" class="form-control" rows="2" style="resize: none;"></textarea>
+            </div>
+        </div>
+        <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">操作步骤</div>
+            <div class="col-md-8 input-group">
+                <textarea ng-model="liquidationOperationsteps" class="form-control" rows="2" style="resize: none;height:105px"></textarea>
+            </div>
+        </div>
+
+          <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">操作时间</div>
+            <div class="col-md-8 input-group">
+            <div style="display:inline-block">
+                &nbsp;
+                <span style="font-size:20px">时<span>
+                   <select autocomplete="off" ng-model="liquidationHour" ng-options="x for x in liquidationHours"
+                id="liquidationHour"  class="input form-control"style="width:75px">
+
+                </select>
+            </div>
+                &nbsp;
+                <div style="display:inline-block">&nbsp;
+                <span style="font-size:20px">分<span>
+                <select autocomplete="off" ng-model="liquidationTime" ng-options="x for x in liquidationTimes"
+                id="liquidationTime" class="input form-control"style="width:75px" >
+
+                </select>
+            </div>
+            </div>
+        </div>
+
+          <div class="row form-group" style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">备注</div>
+              <div class="col-md-8 input-group">
+                  <textarea ng-model="liquidationDescription" class="form-control" rows="2" style="resize: none;height:105px"></textarea>
+              </div>
+          </div>
+          <div class="row " style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">状态</div>
+            <div class="col-md-8 input-group">
+                <select ng-model="liquidationModalsStatus" id="liquidationModalsStatus"style="width:75px" class="input form-control"
+                ng-options="type for type in type"/>
+              </select>
+            </div>
+        </div>
+
+          <div class="row " style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">序号</div>
+            <div class="col-md-8 input-group">
+                <input type="number"min="1"max="100"step="1"value="3"ng-model="liquidationSort"class="input form-control"style="width:75px">
+            </div>
+        </div>
+
+      <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
+          <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess">保存</button>
+      </div>
+  </form>
+</script>
+
+<script type="text/ng-template" id="detailLiquidation.html">
+  <form class="bs-example form-horizontal" >
+      <div class="modal-header">
+          <button type="button" class="close"
+                  data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+              ×
+          </button>
+          <h4 class="modal-title" style="color:#778CA2;">
+             详情信息
+          </h4>
+      </div>
+      <div class="modal-body" style="color:#778CA2;">
+        <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">名称</div>
+            <div class="col-md-8 input-group">
+                <input class="form-control" type="text"
+                       ng-model="liquidationModalsName" autofocus="autofocus"ng-disabled="true"/>
+            </div>
+        </div>
+        <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">IP地址</div>
+            <div class="col-md-8 input-group">
+                <textarea ng-model="liquidationIP" class="form-control" rows="2" style="resize: none;"ng-disabled="true"></textarea>
+            </div>
+        </div>
+        <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">操作步骤</div>
+            <div class="col-md-8 input-group">
+                <textarea ng-model="liquidationOperationsteps" class="form-control" rows="2" style="resize: none;height:105px"ng-disabled="true" ></textarea>
+            </div>
+        </div>
+
+
+          <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">操作时间</div>
+            <div class="col-md-8 input-group">
+            <div style="display:inline-block">
+                &nbsp;
+                <span style="font-size:20px">时<span>
+                   <select autocomplete="off" ng-model="liquidationHour" ng-options="x for x in liquidationHours"
+                id="liquidationHour"  class="input form-control"style="width:75px"ng-disabled="true">
+
+                </select>
+            </div>
+                &nbsp;
+                <div style="display:inline-block">
+                    &nbsp;
+                 <span style="font-size:20px">分<span>
+                <select autocomplete="off" ng-model="liquidationTime" ng-options="x for x in liquidationTimes"
+                id="liquidationTime" class="input form-control"style="width:75px"ng-disabled="true" >
+
+                </select>
+               </div>
+            </div>
+            </div>
+
+
+          <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">备注</div>
+            <div class="col-md-8 input-group">
+                <textarea ng-model="liquidationDescription" class="form-control" rows="2" style="resize: none;height:105px"ng-disabled="true"></textarea>
+            </div>
+          </div>
+          <div class="row " style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">状态</div>
+            <div class="col-md-8 input-group">
+                <select ng-model="liquidationModalsStatus" id="liquidationModalsStatus"style="width:75px" class="input form-control"
+                ng-options="type for type in type"ng-disabled="true"/>
+
+              </select>
+            </div>
+          </div>
+
+          <div class="row " style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">序号</div>
+            <div class="col-md-8 input-group">
+                <input type="number"min="1"max="100"step="1"value="3"ng-model="liquidationSort"class="input form-control"style="width:75px"ng-disabled="true">
+            </div>
+          </div>
+
+      <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal"  ng-click="cancel();">确认</button>
+
+      </div>
+  </form>
+</script>
+
+<script type="text/ng-template" id="createLiquidation.html">
+  <form class="bs-example form-horizontal" ng-submit="ModalsCreateLiquidation()">
+      <div class="modal-header">
+          <button type="button" class="close"
+                  data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+              ×
+          </button>
+          <h4 class="modal-title" style="color:#778CA2;">
+              新建信息
+          </h4>
+      </div>
+      <div class="modal-body" style="color:#778CA2;">
+          <div class="row form-group" style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">名称</div>
+              <div class="col-md-8 input-group">
+                  <input class="form-control" type="text" style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                         ng-model="liquidationModalsName" autofocus="autofocus"/>
+              </div>
+          </div>
+
+
+          <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">IP地址</div>
+            <div class="col-md-8 input-group">
+                <textarea ng-model="liquidationIP" class="form-control" rows="2" style="resize: none;"></textarea>
+            </div>
+        </div>
+
+        <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">操作步骤</div>
+            <div class="col-md-8 input-group">
+                <textarea ng-model="liquidationOperationsteps" class="form-control" rows="2" style="resize: none;height:105px"></textarea>
+            </div>
+        </div>
+
+
+
+          <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">操作时间</div>
+            <div class="col-md-8 input-group">
+            <div style="display:inline-block">&nbsp;
+                <span style="font-size:20px">时<span>
+                   <select autocomplete="off" ng-model="liquidationHour" ng-options="x for x in liquidationHours"
+                id="liquidationHour"  class="input form-control"style="width:75px">
+
+                </select>
+            </div>
+                &nbsp;
+                <div style="display:inline-block">
+                  &nbsp;
+                <span style="font-size:20px">分<span>
+                <select autocomplete="off" ng-model="liquidationTime" ng-options="x for x in liquidationTimes"
+                id="liquidationTime" class="input form-control"style="width:75px" >
+
+                </select>
+            </div>
+            </div>
+        </div>
+        <div class="row form-group" style="margin-bottom: 20px;">
+          <div class="col-md-1"></div>
+          <div class="col-md-2">备注</div>
+          <div class="col-md-8 input-group">
+              <textarea ng-model="liquidationDescription" class="form-control" rows="2" style="resize: none;height:105px"></textarea>
+          </div>
+      </div>
+        <div class="row " style="margin-bottom: 20px;">
+          <div class="col-md-1"></div>
+          <div class="col-md-2">状态</div>
+          <div class="col-md-8 input-group">
+              <select ng-model="liquidationModalsStatus" id="liquidationModalsStatus"style="width:76px" class="input form-control"
+              ng-options="type for type in type">
+              <option value=""style="display:none" >启用</option>
+            </select>
+
+          </div>
+      </div>
+          <div class="row " style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">序号</div>
+            <div class="col-md-8 input-group">
+                <input type="number"min="1"max="100"step="1"value="3"ng-model="liquidationSort"class="input form-control"style="width:75px">
+            </div>
+        </div>
+
+      <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
+          <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess">保存</button>
+      </div>
+  </form>
+</script>
+
+<script type="text/ng-template" id="deleteLiquidation.html">
+  <form ng-submit="removeLiquidation()" style="color:#778CA2;">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true" ng-click="cancel();">&times;</span>
+          </button>
+          <h4 class="modal-title">确认框</h4>
+      </div>
+      <div class="modal-body">
+          确定删除 <b>{{liquidationModalsName}}</b> ?
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
+          <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess" autofocus="autofocus">确定</button>
+      </div>
+  </form>
+</script>
