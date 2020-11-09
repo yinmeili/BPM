@@ -49,10 +49,13 @@
          'app-aside-dock':app.settings.asideDock,
          'container':app.settings.container}"
          ui-view>
+        
     </div>
     <!-- 弹出表单End -->
     <div data-ng-include="'template/platform/lock.html'" class="lockScreen" ng-show="app.locked">
     </div>
+    <!-- 设置loading遮罩层 -->
+    <div ng-include="'loading.html'"></div>
     <!-- jQuery -->
     <script src="vendor/jquery/jquery.min.js?v=201812011636"></script>
     <script src="vendor/jquery/notify/jquery.notify.js?v=201812011636"></script>

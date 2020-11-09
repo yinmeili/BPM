@@ -5,11 +5,9 @@
         "$rootScope", "$state", "$filter", "$compile", "jq.datables",
         function ($scope, $translate, $cookies, fileManagerConfig, Item, FileNavigator, FileUploader, $http, ControllerConfig, $modal, $rootScope, $state, $filter, $compile, jqdatables) {
             $scope.config = fileManagerConfig;
-
             $scope.recycleTypeChoose = 'share_file';
             $scope.knowledgeType = 'share_file';
             $scope.recycleKeyword = '';
-
             $rootScope.initRootDir = function () {
                 $scope.fileMemuTile = $scope.config.fileMemuTitle[$scope.fileMemuTile];
                 $rootScope.rootdir = $scope.fileMemuTile;
@@ -504,27 +502,49 @@
                                 }]
                             }
                         });
-                    })
-                    var arrOrgList = [];
-                    if($scope.temp.tempModel.filePermission.orgList!=undefined){
-                        for (var i = 0; i < $scope.temp.tempModel.filePermission.orgList.length; i++) {
-                            arrOrgList.push($scope.temp.tempModel.filePermission.orgList[i].id);
-                        }
-                        var times = setInterval(function () {
-                            if ($("#folderPer").length > 0) {
-                                clearInterval(times);
-                                $(".select2-search-field").find("input").css("z-index", 0);
-                                var control = $("#folderPer").SheetUIManager();
-                                control.SetValue(arrOrgList);
+                        modalInstance.opened.then(function () {
+                          
+                            //TODO not work
+                        })
+                        var arrOrgList = [];
+                        if($scope.temp.tempModel.filePermission.orgList!=undefined){
+                            for (var i = 0; i < $scope.temp.tempModel.filePermission.orgList.length; i++) {
+                                arrOrgList.push($scope.temp.tempModel.filePermission.orgList[i].id);
                             }
-                        }, 800);
-
+                            var times = setInterval(function () {
+                                if ($("#folderPer").length > 0) {
+                                    clearInterval(times);
+                                    $(".select2-search-field").find("input").css("z-index", 0);
+                                    var control = $("#folderPer").SheetUIManager();
+                                    control.SetValue(arrOrgList);
+                                }
+                            }, 800)
+                        }
+                       
+                    })
+                    $rootScope.loading=true;
+                    if($scope.temp.tempModel.filePermission.orgList!=undefined){
+                        if($scope.temp.tempModel.filePermission.orgList.length<=3){
+                            setTimeout(function(){
+                                $rootScope.loading=false;
+                                $scope.$apply();
+                            },800)
+                        }else{
+                            setTimeout(function(){
+                                $rootScope.loading=false;
+                                $scope.$apply();
+                            },1500)
+                        }
+                    }else{
+                        $rootScope.loading=false;
+                       
                     }
-                    
-                    
                    
+                   
+                  
+                  
             }
-
+           
             // *************************共享文件上传文件选人模态框********************************
             $scope.uploadFile = function (data) {
                 var AgencyID;
@@ -594,11 +614,30 @@
                             clearInterval(times);
                             $(".select2-search-field").find("input").css("z-index", 0);
                             var control = $("#uploadPer").SheetUIManager();
-                            control.SetValue(arrOrgList);
+                            debugger;
+                            control.SetValue(arrOrgList)
                         }
                     }, 800);
 
                 }
+                $rootScope.loading=true;
+                if($scope.temp.tempModel.filePermission.orgList!=undefined){
+                    if($scope.temp.tempModel.filePermission.orgList.length<=3){
+                        setTimeout(function(){
+                            $rootScope.loading=false;
+                            $scope.$apply();
+                        },800)
+                    }else{
+                        setTimeout(function(){
+                            $rootScope.loading=false;
+                            $scope.$apply();
+                        },1500)
+                    }
+                }else{
+                    $rootScope.loading=false;
+                   
+                }
+               
             }
 
 

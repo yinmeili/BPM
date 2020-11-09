@@ -1,4 +1,4 @@
-app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile', '$timeout', 'uiCalendarConfig', function ($scope, $rootScope, $http, $compile, $timeout, uiCalendarConfig) {
+app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile', '$timeout', 'uiCalendarConfig' ,function ($scope, $rootScope, $http, $compile, $timeout, uiCalendarConfig) {
 
 	var date = new Date();
 	var d = date.getDate();
@@ -13,7 +13,6 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 
 	$scope.start = null;
 	$scope.end = null;
-
 	newyear = function () {
 
 		var mm = date.getMonth() + 1;
@@ -170,30 +169,28 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 				events: function (start, end, timezone, callback) {
 					$scope.initStartAndEndDate();
 
+					$rootScope.loading=true;
+					
 					var userID = $scope.userId;
 					var workflowCode = "";
-
 					if (typeof ($("#sheet").SheetUIManager()) != 'undefined' && $("#sheet").SheetUIManager().GetValue() != "") {
 						workflowCode = ($("#sheet").SheetUIManager().GetValue()).join();
 					}
-
-
-
-
 					var start = $scope.start;//获取上面分析的starttime
 					var end = $scope.end;//获取上面分析的endtime
 					$.ajax({
 						dataType: 'json',
 						type: 'GET',
 						url: '/Portal/workCalendar/workitems/findAll',
-						async: false,
+					  // async:false,
 						data: {
 							userId: userID,
 							startTime: start,
 							endTime: end,
 							workflowCode: workflowCode,
 						},
-						success: function (data) {//返回数据列表
+						
+						success:function (data) {//返回数据列表
 							$.each(eval(data).data.workItemList, function (i, item) {
 								var time = new Date(item.start);
                 var year = time.getFullYear();
@@ -216,19 +213,25 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 							//  $scope.urlid=data.data.workItemList[].id;
 							$('.calendar').fullCalendar('removeEvents', function () { return true; });
 
+							$rootScope.loading = false;
+							$scope.$apply();
+
 							callback($scope.events);
+							 
 						},
 						error: function () {
 							alert("Failed");
 						}
 
-					});
+					})
+				},
+			
 
-
-				}
-
+			
 
 			}
+			
+
 
 		};
 
@@ -653,7 +656,6 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 
 	/*新增的ajax请求*/
 	$scope.newway = function () {
-
 		$scope.goToByDate();
 		$scope.initStartAndEndDate();
 		var userID = $("#category").val();
@@ -676,7 +678,6 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 			dataType: 'json',
 			type: 'GET',
 			url: '/Portal/workCalendar/workitems/findAll',
-
 			data: {
 				userId: userID,
 				startTime: start,
@@ -710,9 +711,7 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 			error: function () {
 				alert("Failed");
 			},
-
-
-		});
+		})
 	}
 	$scope.initStartAndEndDate = function () {
 		var e = new Date($('#calendarview').fullCalendar('getView').end);
