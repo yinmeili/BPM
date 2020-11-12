@@ -303,6 +303,7 @@
             //我的文件搜索
             $scope.mySearch = function (searchId) {
                 $scope.fileNavigator.position = true;
+                $rootScope.loading=true;
                 var keyword = $("#" + searchId).val();
                 var path = $scope.fileNavigator.currentPath.join('/');
                 $scope.fileNavigator.mySearch(keyword).then(function (data) {
@@ -311,6 +312,7 @@
                         return new Item(file, $scope.fileNavigator.currentPath);
                     });
                     $scope.fileNavigator.buildTree(path);
+                    $rootScope.loading=false;
                 });
 
             };
@@ -319,6 +321,7 @@
             // 先拿到数据，先发送请求http，在渲染refresh
             $scope.search = function (searchId) {
                 $scope.fileNavigator.position = true;
+                $rootScope.loading=true;
                 var keyword = $("#" + searchId).val();
                 var path = $scope.fileNavigator.currentPath.join('/');
                 $scope.fileNavigator.search(keyword).then(function (data) {
@@ -327,6 +330,7 @@
                         return new Item(file, $scope.fileNavigator.currentPath);
                     });
                     $scope.fileNavigator.buildTree(path);
+                    $rootScope.loading=false;
                 });
             }
 
@@ -458,6 +462,7 @@
             });
             $scope.newFolder = function (data) {
                 $rootScope.temp.tempModel.name = "";
+                $rootScope.loading=true;
                 $scope.temp.tempModel.filePermission=$scope.fileNavigator.currentFilePermission;
                 var AgencyID;
                 if (data == undefined) AgencyID = "";
@@ -514,6 +519,8 @@
                             var times = setInterval(function () {
                                 if ($("#folderPer").length > 0) {
                                     clearInterval(times);
+                                    $rootScope.loading=false;
+                                    $scope.$apply();
                                     $(".select2-search-field").find("input").css("z-index", 0);
                                     var control = $("#folderPer").SheetUIManager();
                                     control.SetValue(arrOrgList);
@@ -522,23 +529,7 @@
                         }
                        
                     })
-                    $rootScope.loading=true;
-                    if($scope.temp.tempModel.filePermission.orgList!=undefined){
-                        if($scope.temp.tempModel.filePermission.orgList.length<=3){
-                            setTimeout(function(){
-                                $rootScope.loading=false;
-                                $scope.$apply();
-                            },800)
-                        }else{
-                            setTimeout(function(){
-                                $rootScope.loading=false;
-                                $scope.$apply();
-                            },1500)
-                        }
-                    }else{
-                        $rootScope.loading=false;
-                       
-                    }
+                    
                    
                    
                   
@@ -549,6 +540,7 @@
             $scope.uploadFile = function (data) {
                 var AgencyID;
                 $scope.temp.tempModel.filePermission=$scope.fileNavigator.currentFilePermission;
+                $rootScope.loading=true;
                 if (data == undefined) AgencyID = "";
                 else AgencyID = data;
                 $http({
@@ -612,30 +604,14 @@
                     var times = setInterval(function () {
                         if ($("#uploadPer").length > 0) {
                             clearInterval(times);
+                            $rootScope.loading=false;
+                            $scope.$apply();
                             $(".select2-search-field").find("input").css("z-index", 0);
                             var control = $("#uploadPer").SheetUIManager();
-                            debugger;
                             control.SetValue(arrOrgList)
                         }
                     }, 800);
 
-                }
-                $rootScope.loading=true;
-                if($scope.temp.tempModel.filePermission.orgList!=undefined){
-                    if($scope.temp.tempModel.filePermission.orgList.length<=3){
-                        setTimeout(function(){
-                            $rootScope.loading=false;
-                            $scope.$apply();
-                        },800)
-                    }else{
-                        setTimeout(function(){
-                            $rootScope.loading=false;
-                            $scope.$apply();
-                        },1500)
-                    }
-                }else{
-                    $rootScope.loading=false;
-                   
                 }
                
             }
