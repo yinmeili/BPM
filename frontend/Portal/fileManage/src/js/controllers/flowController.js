@@ -679,7 +679,7 @@
                 }
                 $rootScope.flowCodeDesc = data.flowCodeDesc;
                 $rootScope.flowId = data.flowId;
-
+                $rootScope.loading=true;
                 
                 var arrOrgList = data.permission.orgs;
 
@@ -737,6 +737,8 @@
                 var times = setInterval(function() {
                     if($("#editFlowPer").length>0){
                         clearInterval(times);
+                        $rootScope.loading=false;
+                        $scope.$apply();
                         $(".select2-search-field").find("input").css("z-index", 0);
                         var control = $("#editFlowPer").SheetUIManager();
                         control.SetValue(arrOrgList);
@@ -886,6 +888,7 @@
                 $scope.temp.model.endTime = data.endTime.substring(0,10)+' '+data.endTime.substring(11,19);
                 $scope.temp.model.tag = data.tagName;
                 $scope.temp.model.descList = data.descList;
+                $rootScope.loading=true;
                 if($scope.temp.model.descList==''){
                     $scope.temp.model.descList=[{key:new Date().getTime(),desc:'',detail:''}];
                 }
@@ -947,6 +950,8 @@
                 var times = setInterval(function() {
                     if($("#detailFlow").length>0){
                         clearInterval(times);
+                        $rootScope.loading=false;
+                        $scope.$apply();
                         $(".select2-search-field").find("input").css("z-index", 0);
                         var control = $("#detailFlow").SheetUIManager();
                         control.SetValue(arrOrgList);
