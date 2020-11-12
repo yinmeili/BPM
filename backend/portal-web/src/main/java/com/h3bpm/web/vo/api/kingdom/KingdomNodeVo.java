@@ -2,11 +2,31 @@ package com.h3bpm.web.vo.api.kingdom;
 
 import com.h3bpm.web.enumeration.KingdomNodeStatus;
 
-public class KingdomNodeVo {
+public class KingdomNodeVo implements Comparable<KingdomNodeVo> {
 	private String name = null;
 	private String status = null;
 	private String executeResult = null;
 	private String statusStr = null;
+
+	@Override // 升序
+	public int compareTo(KingdomNodeVo o) {
+		int thisIndex = 0;
+		int index = 0;
+
+		String[] thisNames = name.split("-");
+		if (thisNames.length == 2) {
+			thisIndex = Integer.parseInt(thisNames[0]);
+		}
+
+		String name = o.getName();
+		String[] names = name.split("-");
+
+		if (names.length == 2) {
+			index = Integer.parseInt(names[0]);
+		}
+
+		return thisIndex - index;
+	}
 
 	public KingdomNodeVo() {
 	}
@@ -33,17 +53,17 @@ public class KingdomNodeVo {
 		this.status = status;
 	}
 
-	 public String getStatusStr() {
-	 return KingdomNodeStatus.parse(status).getDisplayName();
-	 }
+	public String getStatusStr() {
+		return KingdomNodeStatus.parse(status).getDisplayName();
+	}
 
 	public String getExecuteResult() {
 		return executeResult;
 	}
 
-//	public String getStatusStr() {
-//		return statusStr;
-//	}
+	// public String getStatusStr() {
+	// return statusStr;
+	// }
 
 	public void setStatusStr(String statusStr) {
 		this.statusStr = statusStr;

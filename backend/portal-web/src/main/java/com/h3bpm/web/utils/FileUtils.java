@@ -23,6 +23,8 @@ public class FileUtils {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    	
+//    	System.out.println("1234-5ttt".matches("^\\d+?-.*$"));  
     }
 
     public static List<LiquidationImportData> importExcel(InputStream inputStream){

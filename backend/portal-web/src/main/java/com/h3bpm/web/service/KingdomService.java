@@ -1,20 +1,22 @@
 package com.h3bpm.web.service;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.h3bpm.web.enumeration.HttpRequestType;
-import com.h3bpm.web.vo.api.kingdom.KingdomRequestVo;
-import com.h3bpm.web.vo.api.kingdom.KingdomResponseVo;
-import com.h3bpm.web.vo.api.kingdom.KingdomNodeVo;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import com.h3bpm.web.enumeration.HttpRequestType;
+import com.h3bpm.web.vo.api.kingdom.KingdomNodeVo;
+import com.h3bpm.web.vo.api.kingdom.KingdomRequestVo;
+import com.h3bpm.web.vo.api.kingdom.KingdomResponseVo;
 
 /**
  *
@@ -36,8 +38,14 @@ public class KingdomService extends ApiDataService {
 	@Value(value = "${application.api.kingdom.methodName}")
 	private String methodName = null;
 
-	@Value(value = "${application.api.kingdom.flowId}")
-	private String flowId = null;
+	@Value(value = "${application.api.kingdom.flowId.stockToMarket}")
+	private String stockToMarketFlowId = null;
+	
+	@Value(value = "${application.api.kingdom.flowId.deal}")
+	private String dealFlowId = null;
+	
+	@Value(value = "${application.api.kingdom.flowId.marketOpenAtNight}")
+	private String marketOpenAtNightFlowId = null;
 
 	private static String TOKEN = null;
 
@@ -77,15 +85,23 @@ public class KingdomService extends ApiDataService {
 	}
 
 	public List<String> findNodeName() {
-		return findNodeNameByFlowId(flowId);
+		return findNodeNameByFlowId(stockToMarketFlowId);
 	}
 
-	public List<KingdomNodeVo> findNodeInfo() {
-		return findNodeInfoByFlowId(flowId);
+	public List<KingdomNodeVo> findStockToMarketNodeInfo() {
+		return findNodeInfoByFlowId(stockToMarketFlowId);
+	}
+	
+	public List<KingdomNodeVo> findDealNodeInfo() {
+		return findNodeInfoByFlowId(dealFlowId);
+	}
+	
+	public List<KingdomNodeVo> findMarketOpenAtNightNodeInfo() {
+		return findNodeInfoByFlowId(marketOpenAtNightFlowId);
 	}
 
 	public KingdomNodeVo getNodeInfo() {
-		return getNodeInfoByFlowIdAndNodeName(flowId, "(192.168.41.189).(启动融航行情)");
+		return getNodeInfoByFlowIdAndNodeName(stockToMarketFlowId, "(192.168.41.189).(启动融航行情)");
 	}
 
 	/**
@@ -100,14 +116,14 @@ public class KingdomService extends ApiDataService {
 
 		try {
 			String token = getToken();
-//			String token = "c970ab99faba4e659fb4de30c6d395bd";
+			// String token = "c970ab99faba4e659fb4de30c6d395bd";
 
 			List<KingdomRequestVo> kingdomRequestVoList = new ArrayList<KingdomRequestVo>();
 			kingdomRequestVoList.add(new KingdomRequestVo("TFlowDM", modelName));
 			kingdomRequestVoList.add(new KingdomRequestVo(token, "Token"));
 			kingdomRequestVoList.add(new KingdomRequestVo("GetFlowObejctInfo", methodName));
 			kingdomRequestVoList.add(new KingdomRequestVo(flowId, "FlowID"));
-//			kingdomRequestVoList.add(new KingdomRequestVo("2023A3E9EB0740678CBDA8B4B8A771CA", "FlowID"));
+			// kingdomRequestVoList.add(new KingdomRequestVo("2023A3E9EB0740678CBDA8B4B8A771CA", "FlowID"));
 
 			List<Map<String, Object>> mapList = this.processSyncKingdom(HttpRequestType.POST, kingdomRequestVoList);
 
@@ -129,9 +145,19 @@ public class KingdomService extends ApiDataService {
 					nodeMapList.remove(0);
 
 					for (List<Map<String, Object>> nodeMaps : nodeMapList) {
-						kingdomVoList.add(buildNodeVo(nodeMaps));
+						KingdomNodeVo nodeVo = buildNodeVo(nodeMaps);
+
+						if (nodeVo != null) {
+							String name = nodeVo.getName();
+							String[] names = name.split("-");
+
+							if (names.length == 2) {
+								kingdomVoList.add(nodeVo);
+							}
+						}
 					}
 
+					Collections.sort(kingdomVoList);
 				}
 			}
 
@@ -207,7 +233,7 @@ public class KingdomService extends ApiDataService {
 			kingdomRequestVoList.add(new KingdomRequestVo("TBigScreenDM", modelName));
 			kingdomRequestVoList.add(new KingdomRequestVo(token, "Token"));
 			kingdomRequestVoList.add(new KingdomRequestVo("GetFlowObjectState", methodName));
-//			kingdomRequestVoList.add(new KingdomRequestVo(flowId, "FlowID"));
+			// kingdomRequestVoList.add(new KingdomRequestVo(flowId, "FlowID"));
 			kingdomRequestVoList.add(new KingdomRequestVo("2023A3E9EB0740678CBDA8B4B8A771CA", "FlowID"));
 			kingdomRequestVoList.add(new KingdomRequestVo(nodeName, "ObjectName"));
 
@@ -239,6 +265,12 @@ public class KingdomService extends ApiDataService {
 	private KingdomNodeVo buildNodeVo(List<Map<String, Object>> nodeMaps) {
 
 		String name = (String) nodeMaps.get(0).get("Value");
+
+		// 只取名称为"数字-"开头的节点，如 "1-数据库开启"
+		if (!name.matches("^\\d+?-.*$")) {
+			return null;
+		}
+
 		String status = (String) nodeMaps.get(1).get("Value");
 		String executeResult = (String) nodeMaps.get(3).get("Value");
 
@@ -286,7 +318,7 @@ public class KingdomService extends ApiDataService {
 	 * @param s
 	 * @return
 	 */
-	public String getValue(String srcStr, String s) {
+	private String getValue(String srcStr, String s) {
 
 		String pattern = s + "\\[+[\\S*]+?\\]";// 执行状态[未执行]
 		Pattern r = Pattern.compile(pattern);
@@ -299,4 +331,29 @@ public class KingdomService extends ApiDataService {
 			return null;
 		}
 	}
+
+	// public int compareTo(KingdomNodeVo vo) {
+	// String name = nodeVo.getName();
+	// String[] names = name.split("-");
+	//
+	// if (names.length == 2) {
+	// int index = Integer.parseInt(names[0]);
+	// return this.name.compareTo(emp.getName());// 换姓名升序排序
+	// }
+	//
+	// }
+	//
+	// private void sortNodeVoList() {
+	// Collections.sort(list, new Comparator() {
+	// @Override
+	// public int compare(Object o1, Object o2) {
+	// if (o1 instanceof Emp && o2 instanceof Emp) {
+	// Emp e1 = (Emp) o1;
+	// Emp e2 = (Emp) o2;
+	// return e1.getAge() - e2.getAge();
+	// }
+	// throw new ClassCastException("不能转换为Emp类型");
+	// }
+	// });
+	// }
 }

@@ -36,11 +36,22 @@ public class KingdomController extends ControllerBase {
 		return new ResponseVo((Object) token);
 	}
 	
-	@RequestMapping(value = "/findNodeList")
+	@RequestMapping(value = "/findStockToMarketNodeList")
 	@ResponseBody
 	public ResponseVo findNodeList(HttpServletResponse response) throws Exception {
-//		response.setContentLength(1);
-		return new ResponseVo( kingdomService.findNodeInfo());
+		return new ResponseVo( kingdomService.findStockToMarketNodeInfo());
+	}
+	
+	@RequestMapping(value = "/findDealNodeList")
+	@ResponseBody
+	public ResponseVo findDealNodeInfo(HttpServletResponse response) throws Exception {
+		return new ResponseVo( kingdomService.findDealNodeInfo());
+	}
+	
+	@RequestMapping(value = "/findMarketOpenAtNightNodeList")
+	@ResponseBody
+	public ResponseVo findMarketOpenAtNightNodeList(HttpServletResponse response) throws Exception {
+		return new ResponseVo( kingdomService.findMarketOpenAtNightNodeInfo());
 	}
 	
 	@RequestMapping(value = "/findNodeNameList")
