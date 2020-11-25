@@ -1,0 +1,277 @@
+<script type="text/ng-template" id="editBusinessException.html">
+  <form class="bs-example form-horizontal" ng-submit="editBusinessException()">
+      <div class="modal-header">
+          <button type="button" class="close"
+                  data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+              ×
+          </button>
+          <h4 class="modal-title" style="color:#778CA2;">
+              编辑公告
+          </h4>
+      </div>
+      <div class="modal-body" style="color:#778CA2;">
+          <div class="row form-group" style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">标题</div>
+              <div class="col-md-8 input-group">
+                  <input class="form-control" type="text" style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                         ng-model="name" autofocus="autofocus"/>
+              </div>
+          </div>
+          <div class="row " style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">类型</div>
+              <div class="col-md-8 input-group">
+                  <select ng-model="tag" id="editMyTag" autocomplete="off" maxlength="32" class="input form-control"
+                  ng-options="type for type in type">
+                </select>
+              </div>
+          </div>
+          <div class="row form-group" style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">描述</div>
+              <div class="col-md-8 input-group">
+                  <textarea ng-model="description" class="form-control" rows="2" style="resize: none;"></textarea>
+              </div>
+          </div>
+          <!-- <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">发布时间</div>
+            <div class="col-md-8 input-group">
+                <input ng-model="createTime"
+                       autocomplete="off"
+                       class="input form-control"
+                       ui-jq="wdatePicker" ui-options="EditcreateTime" />
+            </div>
+        </div> -->
+        <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">部门</div>
+            <div class="col-md-8 input-group">
+                <div ui-jq="SheetUser" ui-options="editWasAgentOptions" id="editcompany"
+                               class="form-horizontal" style="margin-bottom: 20px;" data-orgunitvisible="true"data-groupvisible="true" data-sheetusercontrol="true">
+              </div>
+            </div>
+        </div>
+          <div class="row form-group" style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">开始时间</div>
+              <div class="col-md-8 input-group">
+                  <input ng-model="startTime"
+                         autocomplete="off"
+                         ui-jq="wdatePicker" ui-options="EditStartTime"
+                         class="input form-control"/>
+              </div>
+          </div>
+          <div class="row form-group" style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">结束时间</div>
+              <div class="col-md-8 input-group">
+                  <input ng-model="endTime"
+                         autocomplete="off"
+                         class="input form-control"
+                         ui-jq="wdatePicker" ui-options="EditEndTime" />
+              </div>
+          </div>
+          <div class="row " style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">链接</div>
+            <div class="col-md-8 input-group">
+                <input ng-model="link" id="editMylink" autocomplete="off" class="input form-control"/>
+            </div>
+        </div>
+
+      <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
+          <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess">保存</button>
+      </div>
+  </form>
+</script>
+
+<script type="text/ng-template" id="detailBusinessException.html">
+  <form class="bs-example form-horizontal" >
+      <div class="modal-header">
+          <button type="button" class="close"
+                  data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+              ×
+          </button>
+          <h4 class="modal-title" style="color:#778CA2;">
+             详情公告
+          </h4>
+      </div>
+      <div class="modal-body" style="color:#778CA2;">
+          <div class="row form-group" style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">标题</div>
+              <div class="col-md-8 input-group">
+                  <input class="form-control" type="text" style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                         ng-model="name" autofocus="focus" ng-disabled="true"/>
+              </div>
+          </div>
+          <div class="row " style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">类型</div>
+              <div class="col-md-8 input-group">
+                  <input ng-model="tag" id="editMyTag" autocomplete="off" maxlength="32" class="input form-control"ng-disabled="true"/>
+              </div>
+          </div>
+          <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">部门</div>
+            <div class="col-md-8 input-group">
+                <input ui-jq="SheetUser" ui-options="WasAgentOptions" id="editcompany"ng-model="company"ng-disabled="true"
+                        class="form-control" style="margin-bottom: 20px;" data-orgunitvisible="true"data-groupvisible="true" data-sheetusercontrol="true">
+             
+            </div>
+        </div>
+          <div class="row form-group" style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">描述</div>
+              <div class="col-md-8 input-group">
+                  <textarea ng-model="description" class="form-control" rows="2" style="resize: none;"ng-disabled="true"></textarea>
+              </div>
+          </div>
+          <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">发布时间</div>
+            <div class="col-md-8 input-group">
+                <input ng-model="createTime"
+                       autocomplete="off"
+                       class="input form-control"
+                       ui-jq="wdatePicker" ui-options="EditcreateTime" ng-disabled="true"/>
+            </div>
+        </div>
+          <div class="row form-group" style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">开始时间</div>
+              <div class="col-md-8 input-group">
+                  <input ng-model="startTime"
+                         autocomplete="off"
+                         ui-jq="wdatePicker" ui-options="EditStartTime"
+                         class="input form-control"ng-disabled="true"/>
+              </div>
+          </div>
+          <div class="row form-group" style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">结束时间</div>
+              <div class="col-md-8 input-group">
+                  <input ng-model="endTime"
+                         autocomplete="off"
+                         class="input form-control"
+                         ui-jq="wdatePicker" ui-options="EditEndTime" ng-disabled="true"/>
+              </div>
+          </div>
+          <div class="row " style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">链接</div>
+              <div class="col-md-8 input-group">
+                  <input ng-model="link" id="editMylink" autocomplete="off" class="input form-control"ng-disabled="true"/>
+              </div>
+          </div>
+
+      <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal"  ng-click="cancel();">确认</button>
+
+      </div>
+  </form>
+</script>
+
+<script type="text/ng-template" id="createBusinessException.html">
+  <form class="bs-example form-horizontal" ng-submit="createBusinessException()">
+      <div class="modal-header">
+          <button type="button" class="close"
+                  data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+              ×
+          </button>
+          <h4 class="modal-title" style="color:#778CA2;">
+              新建公告
+          </h4>
+      </div>
+      <div class="modal-body" style="color:#778CA2;">
+          <div class="row form-group" style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">标题</div>
+              <div class="col-md-8 input-group">
+                  <input class="form-control" type="text" style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                         ng-model="name" autofocus="autofocus"/>
+              </div>
+          </div>
+          <div class="row " style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">类型</div>
+              <div class="col-md-8 input-group">
+                  <select ng-model="tag" id="editMyTag" autocomplete="off" maxlength="32" class="input form-control"
+                  ng-options="type for type in type"></select>
+              </div>
+          </div>
+          <div class="row form-group" style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">描述</div>
+              <div class="col-md-8 input-group">
+                  <textarea ng-model="description" class="form-control" rows="2" style="resize: none;"></textarea>
+              </div>
+          </div>
+          <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">部门</div>
+            <div class="col-md-8 input-group">
+                <div ui-jq="SheetUser" ui-options="WasAgentOptions" id="createcompany"
+                               class="form-horizontal" style="margin-bottom: 20px;" data-orgunitvisible="true"data-groupvisible="true" data-sheetusercontrol="true">
+              </div>
+            </div>
+        </div>
+        
+          <div class="row form-group" style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">开始时间</div>
+              <div class="col-md-8 input-group">
+                  <input 
+                         autocomplete="off"
+                         ui-jq="wdatePicker" ui-options="createStartTime "
+                         class="input form-control"/>
+              </div>
+          </div>
+          <div class="row form-group" style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">结束时间</div>
+              <div class="col-md-8 input-group">
+                  <input 
+                         autocomplete="off"
+                         class="input form-control"
+                         ui-jq="wdatePicker" ui-options="createEndTime" />
+              </div>
+          </div>
+          <div class="row " style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">链接</div>
+              <div class="col-md-8 input-group">
+                  <input ng-model="link" id="editMylink" autocomplete="off"  class="input form-control"/>
+              </div>
+          </div>
+
+
+      <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
+          <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess">保存</button>
+      </div>
+  </form>
+</script>
+
+<script type="text/ng-template" id="deleteMyBusinessException.html">
+  <form ng-submit="removeBusinessException()" style="color:#778CA2;">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true" ng-click="cancel();">&times;</span>
+          </button>
+          <h4 class="modal-title">确认框</h4>
+      </div>
+      <div class="modal-body">
+          确定删除 <b>{{name}}</b> ?
+          <!-- <div ng-include data-src="'error-bar'" class="clearfix"></div> -->
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
+          <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess" autofocus="autofocus">确定</button>
+      </div>
+  </form>
+</script>

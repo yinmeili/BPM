@@ -462,7 +462,6 @@
             });
             $scope.newFolder = function (data) {
                 $rootScope.temp.tempModel.name = "";
-                $rootScope.loading=true;
                 $scope.temp.tempModel.filePermission=$scope.fileNavigator.currentFilePermission;
                 var AgencyID;
                 if (data == undefined) AgencyID = "";
@@ -513,6 +512,7 @@
                         })
                         var arrOrgList = [];
                         if($scope.temp.tempModel.filePermission.orgList!=undefined){
+                            $rootScope.loading=true;
                             for (var i = 0; i < $scope.temp.tempModel.filePermission.orgList.length; i++) {
                                 arrOrgList.push($scope.temp.tempModel.filePermission.orgList[i].id);
                             }
@@ -525,8 +525,8 @@
                                     var control = $("#folderPer").SheetUIManager();
                                     control.SetValue(arrOrgList);
                                 }
-                            }, 800)
-                        }
+                            }, 800)                         
+                        }                    
                        
                     })
                     
@@ -540,7 +540,6 @@
             $scope.uploadFile = function (data) {
                 var AgencyID;
                 $scope.temp.tempModel.filePermission=$scope.fileNavigator.currentFilePermission;
-                $rootScope.loading=true;
                 if (data == undefined) AgencyID = "";
                 else AgencyID = data;
                 $http({
@@ -598,6 +597,7 @@
                 // }, 50);
                 var arrOrgList = [];
                 if($scope.temp.tempModel.filePermission.orgList!=undefined){
+                    $rootScope.loading=true;
                     for (var i = 0; i < $scope.temp.tempModel.filePermission.orgList.length; i++) {
                         arrOrgList.push($scope.temp.tempModel.filePermission.orgList[i].id);
                     }
@@ -669,7 +669,7 @@
                         //TODO not work
                     });
                 });
-
+                $rootScope.loading=true;
                 var arrOrgList = [];
                 for (var i = 0; i < lenOrgList; i++) {
                     //strOrgList += '<li class="select2-search-choice" id="'+ $rootScope.temp.model.filePermission.orgList[i].id + '" data-code="18f923a7-5a5e-426d-94ae-a55ad1a4b240" style="cursor: pointer; margin-top: 2px; background-color: rgb(250, 250, 250);"><div>'+ $rootScope.temp.model.filePermission.orgList[i].name +'</div><a href="javascript:void(0)" class="select2-search-choice-close"></a></li>';
@@ -678,6 +678,8 @@
                 var times = setInterval(function () {
                     if ($("#editPer").length > 0) {
                         clearInterval(times);
+                        $rootScope.loading=false;
+                        $scope.$apply();
                         $(".select2-search-field").find("input").css("z-index", 0);
                         //$("#editPer").find("ul").prepend(strOrgList);
                         var control = $("#editPer").SheetUIManager();
