@@ -206,11 +206,16 @@ public class TransportUtils {
 					}
 
 					// JSONArray jsonArray = com.alibaba.fastjson.JSONObject.parseArray(testStr);
-					// List<Map<String, Object>> result2 = com.alibaba.fastjson.JSONObject.parseObject(testStr, new TypeReference<List<Map<String, Object>>>() {
-					// });
+					
+					
+					
+//					 List<Map<String, Object>> result2 = com.alibaba.fastjson.JSONObject.parseObject(testStr, new TypeReference<List<Map<String, Object>>>() {
+//					 });
 
 					// LOGGER.info("[" + uuid + "] Responsed result: " + com.alibaba.fastjson.JSONObject.toJSONString(result));
 
+//					 return new ResponseList(result2);
+					 
 					return new ResponseList(result);
 
 				} finally {

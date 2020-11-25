@@ -1,12 +1,13 @@
 package com.h3bpm.web.vo.api.kingdom;
 
+import com.h3bpm.web.entity.MonitorNode;
+import com.h3bpm.web.entity.MonitorNodeHistory;
 import com.h3bpm.web.enumeration.KingdomNodeStatus;
 
 public class KingdomNodeVo implements Comparable<KingdomNodeVo> {
 	private String name = null;
 	private String status = null;
 	private String executeResult = null;
-	private String statusStr = null;
 
 	@Override // 升序
 	public int compareTo(KingdomNodeVo o) {
@@ -37,6 +38,18 @@ public class KingdomNodeVo implements Comparable<KingdomNodeVo> {
 		this.executeResult = executeResult;
 	}
 
+	public KingdomNodeVo(MonitorNode model) {
+		this.name = model.getName();
+		this.status = model.getStatus();
+		this.executeResult = model.getExecuteResult();
+	}
+	
+	public KingdomNodeVo(MonitorNodeHistory model) {
+		this.name = model.getName();
+		this.status = model.getStatus();
+		this.executeResult = model.getExecuteResult();
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -53,10 +66,6 @@ public class KingdomNodeVo implements Comparable<KingdomNodeVo> {
 		this.status = status;
 	}
 
-	public String getStatusStr() {
-		return KingdomNodeStatus.parse(status).getDisplayName();
-	}
-
 	public String getExecuteResult() {
 		return executeResult;
 	}
@@ -64,10 +73,6 @@ public class KingdomNodeVo implements Comparable<KingdomNodeVo> {
 	// public String getStatusStr() {
 	// return statusStr;
 	// }
-
-	public void setStatusStr(String statusStr) {
-		this.statusStr = statusStr;
-	}
 
 	public void setExecuteResult(String executeResult) {
 		this.executeResult = executeResult;
