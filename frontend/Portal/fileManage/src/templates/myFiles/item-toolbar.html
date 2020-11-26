@@ -1,4 +1,7 @@
 <div ng-show="!item.inprocess" >
+    <button class="btn btn-sm btn-default" ng-show="config.allowedActions.download && !item.isFolder()" ng-click="item.downloadMyFile()" title="{{'下载' | translate}}">
+        <i class="glyphicon glyphicon-download"></i>
+    </button>
     <button class="btn btn-sm btn-default" ng-click="myToUpdateFile(item)" ng-show="config.allowedActions.rename" title="编辑">
         <i class="glyphicon glyphicon-edit"></i>
     </button>
@@ -17,9 +20,9 @@
     <button class="btn btn-sm btn-default" data-toggle="modal" data-target="#extract" ng-show="config.allowedActions.extract && item.isExtractable()" ng-click="touch(item); item.tempModel.name=''" title="{{'extract' | translate}}">
         <i class="glyphicon glyphicon-export"></i>
     </button>
-    <button class="btn btn-sm btn-default" ng-show="config.allowedActions.download && !item.isFolder()" ng-click="item.downloadMyFile()" title="{{'下载' | translate}}">
+    <!-- <button class="btn btn-sm btn-default" ng-show="config.allowedActions.download && !item.isFolder()" ng-click="item.downloadMyFile()" title="{{'下载' | translate}}">
         <i class="glyphicon glyphicon-download"></i>
-    </button>
+    </button> -->
     <!--<button class="btn btn-sm btn-default" ng-show="config.allowedActions.preview && item.isImage()" ng-click="openImagePreview(item)" title="{{'图片' | translate}}">-->
         <!--<i class="glyphicon glyphicon-picture"></i>-->
     <!--</button>-->

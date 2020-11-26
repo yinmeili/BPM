@@ -1,0 +1,118 @@
+<!--
+    共享流程
+     -->
+     <div class="hbox hbox-auto-xs hbox-auto-sm">
+      <!-- main -->
+      <div class="col" ng-controller="businessExceptionCtrl">
+          <!-- main header -->
+          <div class="wrapper-md">
+              <div class="row">
+                  <div class="col-sm-6 col-xs-12 form-title-name">
+                      <span class="h3" ng-bind="menuData.DisplayName"></span>
+                  </div>
+                  <div class="col-sm-6 col-xs-12">
+                      <button class="btn btn-default btn-sm" style="float: right">
+                          <i class="glyphicon glyphicon-plus" ng-click="createBusinessException()"><span style="margin-left: 5px;">新建公告</span></i>
+                      </button>
+                  </div>
+              </div>
+          </div>
+  
+          <!--表格部分Start-->
+          <div class="wrapper-md paddingbottomNone">
+              <div class="panel panel-default">
+                  <div class="table-responsive">
+                      <div class="form-inline search-box">
+                          <div class="input-group searchContainer">
+                              <!--名称-->
+                              <div class="header-search-item">
+                                  <span class="search-title-text">标题</span>
+                                  <div class="form-group">
+                                      <input ng-model="myName" maxlength="32" class="input form-control" placeholder="标题" id="businessExceptionName"/>
+                                  </div>
+                              </div>
+                              <!--标签-->
+                              <div class="header-search-item">
+                                  <span class="search-title-text">类型</span>
+                                  <div class="form-group">
+                                      <select autocomplete="off" ng-model="businessExceptionType" ng-options="x.name for x in types"
+                                      id="businessExceptionType" maxlength="32" class="input form-control" >
+                                      <option value="" >全部公告</option>
+                                      </select>
+                                  </div>
+                              </div>
+                              <div class="header-search-item">
+                                <span class="search-title-text">部门</span>
+                                <div class="form-group">
+                                    <div ui-jq="SheetUser" ui-options="searchWasAgentOptions" id="searchCompany"
+                                    class="form-horizontal"data-orgunitvisible="true"data-groupvisible="true" data-sheetusercontrol="true"
+                                       
+                                    >
+                                    </div>
+                                    <!-- <div ui-jq="SheetUser" ui-options="WasAgentOptions" id="editPer"
+                                     class="" style="" data-orgunitvisible="true" data-groupvisible="true">
+                                </div> -->
+                                </div>
+                            </div>
+                        
+                            </br>
+                              <div class="header-search-item">
+                                  <span class="search-title-text">发布时间</span>
+                                  <div class="form-group search-time-box">
+                                      <div class="input-group">
+                                          <input 
+                                                 id="searchExceptionStartTimeStart"
+                                                 autocomplete="off"
+                                                 ui-jq="wdatePicker" ui-options="searchExceptionStartTimeStart"
+                                                 class="input form-control" />
+                                          <span class="input-group-addon" style="border-left:0;border-right:0;" translate="QueryTableColumn.To"></span>
+                                          <input 
+                                                 autocomplete="off" id="searchExceptionStartTimeEnd"
+                                                 class="input form-control"
+                                                 ui-jq="wdatePicker" ui-options="searchExceptionStartTimeEnd"/>
+                                      </div>
+                                  </div>
+                              </div>
+                              <!-- <div class="form-group">
+                                  <input ng-model="searchKey" type="text" class="input form-control" style="width:200px;display:none;"
+                                         placeholder="{{LanJson.search}}">
+                                  <span class="input-group-btn"></span>
+                              </div> -->
+                              <button class="btn btn-primary search-box-btn" id="searchBusinessExceptionOrgName" type="button">查询</button>
+                             
+                      </div>
+                      </div>
+                   
+                      <table ui-jq="dataTable" id="tabBusinessxceptionFlow"
+                             ui-options="dtMyFlowOptions"
+                             class="table table-striped m-b-none" style="width:99.5%;">
+                          <thead>
+                              <tr>
+                                  <th> <span>标题</span></th>
+                                  <th><span>部门</span></th>
+                                  <th><span>类型</span></th>
+                                  <th class="hide1024"><span >发布时间</span></th>
+                                  <th class="hide414" ><span>更新时间</span></th> 
+                                  <th class="hide414" ><span>开始时间</span></th> 
+                                   <th class="hide414"><span>结束时间</span></th> 
+                                  <th class="hide1024"><span>操作</span></th>
+                              </tr>
+                          </thead>
+                          <tbody></tbody>
+                      </table>
+                
+
+                  </div>
+              </div>
+          </div>
+          <div ng-include="'queryModel/businessException/modals.html'"></div>  
+          <!--表格部分End-->
+      </div>
+      <!-- / main -->
+  </div>
+ 
+  <!-- <script type="text/javascript">
+    var controllerScope = $('div[ng-controller="AnnouncementManageCtrl"]').scope();
+    //fileMemuTile的值关联fileManagerConfig.fileMemuTitle枚举类型的key值
+    controllerScope.fileMemuTile = 'AnnouncementManager';
+</script> -->

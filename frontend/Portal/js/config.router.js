@@ -394,6 +394,23 @@ angular.module('app')
                         ]
                     }
                 })
+                //交易异常查询
+                .state('app.QueryBusinessException',{
+                    url:'/QueryBusinessException',
+                    controller:'businessExceptionCtrl',
+                    templateUrl:'queryModel/businessException/index.html',
+                    resolve:{
+                        deps:['$ocLazyLoad',
+                            function($ocLazyLoad){
+                                return $ocLazyLoad.load([
+                                    'queryModel/businessException/main.js',
+                                    'js/services/notify.js'
+                                ]);
+                            }
+                            
+                        ]
+                    }
+                })
                 //查询流程实例
                 .state('app.QueryInstance', {
                     url: '/QueryInstance',
