@@ -15,12 +15,9 @@ import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
-import com.h3bpm.web.entity.MonitorNode;
 import com.h3bpm.web.entity.MonitorNodeHistory;
 import com.h3bpm.web.enumeration.HttpRequestType;
 import com.h3bpm.web.enumeration.KingdomNodeStatus;
-import com.h3bpm.web.enumeration.MonitorNodeLoadStatus;
 import com.h3bpm.web.enumeration.MonitorNodeName;
 import com.h3bpm.web.mapper.LiquidationMonitorMapper;
 import com.h3bpm.web.vo.api.kingdom.KingdomNodeVo;
@@ -584,29 +581,4 @@ public class KingdomService extends ApiDataService {
 
 		return nodeVoTempList;
 	}
-
-	// public int compareTo(KingdomNodeVo vo) {
-	// String name = nodeVo.getName();
-	// String[] names = name.split("-");
-	//
-	// if (names.length == 2) {
-	// int index = Integer.parseInt(names[0]);
-	// return this.name.compareTo(emp.getName());// 换姓名升序排序
-	// }
-	//
-	// }
-	//
-	// private void sortNodeVoList() {
-	// Collections.sort(list, new Comparator() {
-	// @Override
-	// public int compare(Object o1, Object o2) {
-	// if (o1 instanceof Emp && o2 instanceof Emp) {
-	// Emp e1 = (Emp) o1;
-	// Emp e2 = (Emp) o2;
-	// return e1.getAge() - e2.getAge();
-	// }
-	// throw new ClassCastException("不能转换为Emp类型");
-	// }
-	// });
-	// }
 }

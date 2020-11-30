@@ -64,38 +64,38 @@ public class KingdomMonitorTask {
 	}
 	
 	
-//	@Scheduled(cron = "${application.task.kingdom.monitor.frequency.stockToMarket}")
-//	private void monitorStockToMarket() {
-//		logger.info("======== monitor stockToMarket start ========");
-//
-//		String nowTimeStr = DateTimeUtil.format(new Date(), "HH:mm:ss");
-//		Date nowTime = DateTimeUtil.parse(nowTimeStr, "HH:mm:ss");
-//
-//		Date startTime = DateTimeUtil.parse(stockToMarketStartTime, "HH:mm:ss");
-//		Date endTime = DateTimeUtil.parse(stockToMarketEndTime, "HH:mm:ss");
-//
-//		if (nowTime.getTime() >= startTime.getTime() && nowTime.getTime() <= endTime.getTime()) {
-//			kingdomService.refreshNodeList(MonitorNodeName.STMARKET);
-//		}
-//
-//		logger.info("======== monitor stockToMarket end ========");
-//	}
-//	
-//	
-//	@Scheduled(cron = "${application.task.kingdom.monitor.frequency.deal}")
-//	private void monitorDeal() {
-//		logger.info("======== monitor deal start ========");
-//
-//		String nowTimeStr = DateTimeUtil.format(new Date(), "HH:mm:ss");
-//		Date nowTime = DateTimeUtil.parse(nowTimeStr, "HH:mm:ss");
-//
-//		Date startTime = DateTimeUtil.parse(dealStartTime, "HH:mm:ss");
-//		Date endTime = DateTimeUtil.parse(dealEndTime, "HH:mm:ss");
-//
-//		if (nowTime.getTime() >= startTime.getTime() && nowTime.getTime() <= endTime.getTime()) {
-//			kingdomService.refreshNodeList(MonitorNodeName.DEAL);
-//		}
-//
-//		logger.info("======== monitor deal end ========");
-//	}
+	@Scheduled(cron = "${application.task.kingdom.monitor.frequency.stockToMarket}")
+	private void monitorStockToMarket() {
+		logger.info("======== monitor stockToMarket start ========");
+
+		String nowTimeStr = DateTimeUtil.format(new Date(), "HH:mm:ss");
+		Date nowTime = DateTimeUtil.parse(nowTimeStr, "HH:mm:ss");
+
+		Date startTime = DateTimeUtil.parse(stockToMarketStartTime, "HH:mm:ss");
+		Date endTime = DateTimeUtil.parse(stockToMarketEndTime, "HH:mm:ss");
+
+		if (nowTime.getTime() >= startTime.getTime() && nowTime.getTime() <= endTime.getTime()) {
+			kingdomService.refreshNodeHistoryList(MonitorNodeName.STMARKET, new Date());
+		}
+
+		logger.info("======== monitor stockToMarket end ========");
+	}
+	
+	
+	@Scheduled(cron = "${application.task.kingdom.monitor.frequency.deal}")
+	private void monitorDeal() {
+		logger.info("======== monitor deal start ========");
+
+		String nowTimeStr = DateTimeUtil.format(new Date(), "HH:mm:ss");
+		Date nowTime = DateTimeUtil.parse(nowTimeStr, "HH:mm:ss");
+
+		Date startTime = DateTimeUtil.parse(dealStartTime, "HH:mm:ss");
+		Date endTime = DateTimeUtil.parse(dealEndTime, "HH:mm:ss");
+
+		if (nowTime.getTime() >= startTime.getTime() && nowTime.getTime() <= endTime.getTime()) {
+			kingdomService.refreshNodeHistoryList(MonitorNodeName.DEAL, new Date());
+		}
+
+		logger.info("======== monitor deal end ========");
+	}
 }
