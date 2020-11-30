@@ -17,12 +17,14 @@ import cn.afterturn.easypoi.excel.entity.result.ExcelImportResult;
 public class FileUtils {
 
     public static void main(String[] args) {
-        File file = new File("/Users/liubinhui/Desktop/last_day.xlsx");
-        try {
-            List<LiquidationImportData> list = importExcel(new FileInputStream(file));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+//        File file = new File("/Users/liubinhui/Desktop/last_day.xlsx");
+//        try {
+//            List<LiquidationImportData> list = importExcel(new FileInputStream(file));
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+    	
+    	System.out.println("3-\n3e\nee联合风---控网关夜盘开启".matches("^\\d+?-[\\S\\s]*?.[\\S\\s]*?$"));  
     }
 
     public static List<LiquidationImportData> importExcel(InputStream inputStream){

@@ -5,11 +5,9 @@
         "$rootScope", "$state", "$filter", "$compile", "jq.datables",
         function ($scope, $translate, $cookies, fileManagerConfig, Item, FileNavigator, FileUploader, $http, ControllerConfig, $modal, $rootScope, $state, $filter, $compile, jqdatables) {
             $scope.config = fileManagerConfig;
-
             $scope.recycleTypeChoose = 'share_file';
             $scope.knowledgeType = 'share_file';
             $scope.recycleKeyword = '';
-
             $rootScope.initRootDir = function () {
                 $scope.fileMemuTile = $scope.config.fileMemuTitle[$scope.fileMemuTile];
                 $rootScope.rootdir = $scope.fileMemuTile;
@@ -305,6 +303,7 @@
             //我的文件搜索
             $scope.mySearch = function (searchId) {
                 $scope.fileNavigator.position = true;
+                $rootScope.loading=true;
                 var keyword = $("#" + searchId).val();
                 var path = $scope.fileNavigator.currentPath.join('/');
                 $scope.fileNavigator.mySearch(keyword).then(function (data) {
@@ -313,6 +312,7 @@
                         return new Item(file, $scope.fileNavigator.currentPath);
                     });
                     $scope.fileNavigator.buildTree(path);
+                    $rootScope.loading=false;
                 });
 
             };
@@ -321,6 +321,7 @@
             // 先拿到数据，先发送请求http，在渲染refresh
             $scope.search = function (searchId) {
                 $scope.fileNavigator.position = true;
+                $rootScope.loading=true;
                 var keyword = $("#" + searchId).val();
                 var path = $scope.fileNavigator.currentPath.join('/');
                 $scope.fileNavigator.search(keyword).then(function (data) {
@@ -329,6 +330,7 @@
                         return new Item(file, $scope.fileNavigator.currentPath);
                     });
                     $scope.fileNavigator.buildTree(path);
+                    $rootScope.loading=false;
                 });
             }
 
@@ -504,27 +506,36 @@
                                 }]
                             }
                         });
-                    })
-                    var arrOrgList = [];
-                    if($scope.temp.tempModel.filePermission.orgList!=undefined){
-                        for (var i = 0; i < $scope.temp.tempModel.filePermission.orgList.length; i++) {
-                            arrOrgList.push($scope.temp.tempModel.filePermission.orgList[i].id);
-                        }
-                        var times = setInterval(function () {
-                            if ($("#folderPer").length > 0) {
-                                clearInterval(times);
-                                $(".select2-search-field").find("input").css("z-index", 0);
-                                var control = $("#folderPer").SheetUIManager();
-                                control.SetValue(arrOrgList);
+                        modalInstance.opened.then(function () {
+                          
+                            //TODO not work
+                        })
+                        var arrOrgList = [];
+                        if($scope.temp.tempModel.filePermission.orgList!=undefined){
+                            $rootScope.loading=true;
+                            for (var i = 0; i < $scope.temp.tempModel.filePermission.orgList.length; i++) {
+                                arrOrgList.push($scope.temp.tempModel.filePermission.orgList[i].id);
                             }
-                        }, 800);
-
-                    }
-                    
+                            var times = setInterval(function () {
+                                if ($("#folderPer").length > 0) {
+                                    clearInterval(times);
+                                    $rootScope.loading=false;
+                                    $scope.$apply();
+                                    $(".select2-search-field").find("input").css("z-index", 0);
+                                    var control = $("#folderPer").SheetUIManager();
+                                    control.SetValue(arrOrgList);
+                                }
+                            }, 800)                         
+                        }                    
+                       
+                    })
                     
                    
+                   
+                  
+                  
             }
-
+           
             // *************************共享文件上传文件选人模态框********************************
             $scope.uploadFile = function (data) {
                 var AgencyID;
@@ -586,19 +597,23 @@
                 // }, 50);
                 var arrOrgList = [];
                 if($scope.temp.tempModel.filePermission.orgList!=undefined){
+                    $rootScope.loading=true;
                     for (var i = 0; i < $scope.temp.tempModel.filePermission.orgList.length; i++) {
                         arrOrgList.push($scope.temp.tempModel.filePermission.orgList[i].id);
                     }
                     var times = setInterval(function () {
                         if ($("#uploadPer").length > 0) {
                             clearInterval(times);
+                            $rootScope.loading=false;
+                            $scope.$apply();
                             $(".select2-search-field").find("input").css("z-index", 0);
                             var control = $("#uploadPer").SheetUIManager();
-                            control.SetValue(arrOrgList);
+                            control.SetValue(arrOrgList)
                         }
                     }, 800);
 
                 }
+               
             }
 
 
@@ -654,7 +669,7 @@
                         //TODO not work
                     });
                 });
-
+                $rootScope.loading=true;
                 var arrOrgList = [];
                 for (var i = 0; i < lenOrgList; i++) {
                     //strOrgList += '<li class="select2-search-choice" id="'+ $rootScope.temp.model.filePermission.orgList[i].id + '" data-code="18f923a7-5a5e-426d-94ae-a55ad1a4b240" style="cursor: pointer; margin-top: 2px; background-color: rgb(250, 250, 250);"><div>'+ $rootScope.temp.model.filePermission.orgList[i].name +'</div><a href="javascript:void(0)" class="select2-search-choice-close"></a></li>';
@@ -663,6 +678,8 @@
                 var times = setInterval(function () {
                     if ($("#editPer").length > 0) {
                         clearInterval(times);
+                        $rootScope.loading=false;
+                        $scope.$apply();
                         $(".select2-search-field").find("input").css("z-index", 0);
                         //$("#editPer").find("ul").prepend(strOrgList);
                         var control = $("#editPer").SheetUIManager();

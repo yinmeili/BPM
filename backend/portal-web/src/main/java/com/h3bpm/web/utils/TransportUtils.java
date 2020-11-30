@@ -24,6 +24,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicHeader;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.JsonParser;
@@ -206,11 +207,16 @@ public class TransportUtils {
 					}
 
 					// JSONArray jsonArray = com.alibaba.fastjson.JSONObject.parseArray(testStr);
-					// List<Map<String, Object>> result2 = com.alibaba.fastjson.JSONObject.parseObject(testStr, new TypeReference<List<Map<String, Object>>>() {
-					// });
+					
+					
+					
+//					 List<Map<String, Object>> result2 = com.alibaba.fastjson.JSONObject.parseObject(testStr, new TypeReference<List<Map<String, Object>>>() {
+//					 });
 
 					// LOGGER.info("[" + uuid + "] Responsed result: " + com.alibaba.fastjson.JSONObject.toJSONString(result));
 
+//					 return new ResponseList(result2);
+					 
 					return new ResponseList(result);
 
 				} finally {
@@ -293,6 +299,7 @@ public class TransportUtils {
 			httpRequest = new HttpGet(request.getUrl());
 
 			httpRequest.addHeader("content-type", DataUtils.CONTENT_TYPE);
+			httpRequest.addHeader("Connection", "close");  
 
 			httpClient = new DefaultHttpClient();
 
@@ -304,9 +311,9 @@ public class TransportUtils {
 
 		} finally {
 
-			if (httpClient != null && httpClient.getConnectionManager() != null) {
-				httpClient.getConnectionManager().shutdown();
-			}
+//			if (httpClient != null && httpClient.getConnectionManager() != null) {
+//				httpClient.getConnectionManager().shutdown();
+//			}
 		}
 
 	}
@@ -323,13 +330,14 @@ public class TransportUtils {
 			StringEntity entity = new StringEntity(com.alibaba.fastjson.JSONObject.toJSONString(request.getData()), DataUtils.CHARSET_UTF8);
 
 			httpRequest = new HttpPost(request.getUrl());
-			// httpRequest.setProtocolVersion(HttpVersion.HTTP_1_0);
+//			 httpRequest.setProtocolVersion(HttpVersion.HTTP_1_0);
 
 			httpRequest.addHeader("content-type", DataUtils.CONTENT_TYPE);
 
 			// 对于过大的响应体，需要以gzip格式来保存响应
 			httpRequest.addHeader("Accept-Encoding", "gzip, deflate, br");
-
+			httpRequest.addHeader("Connection", "close");  
+			
 			httpRequest.setEntity(entity);
 
 			// RequestConfig config = RequestConfig.custom().setConnectTimeout(1000000) // 连接超时时间
@@ -349,10 +357,10 @@ public class TransportUtils {
 			return httpClient.execute(httpRequest);
 
 		} finally {
-
-			if (httpClient != null && httpClient.getConnectionManager() != null) {
-				httpClient.getConnectionManager().shutdown();
-			}
+			
+//			if (httpClient != null && httpClient.getConnectionManager() != null) {
+//				httpClient.getConnectionManager().shutdown();
+//			}
 		}
 
 	}

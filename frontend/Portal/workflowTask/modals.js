@@ -31,12 +31,11 @@ app.controller("workflowTaskController", ["$scope", '$q', "$rootScope", "$http",
         $rootScope.cancel = $scope.cancel;
 
         startUpload = function () {
-
             var deferred = $q.defer();
             var fd = new FormData();
+            $rootScope.loading=true;
             fd.append("file", $('#upload')[0].files[0]);
             fd.append("workflowCode", $scope.workflowModal);
-
             $.ajax({
                 url: '/Portal/workflowTask/importTask',
                 type: 'post',
@@ -51,9 +50,11 @@ app.controller("workflowTaskController", ["$scope", '$q', "$rootScope", "$http",
                     deferredHandler(data, deferred, $translate.instant('error_creating_folder'));
                 }
 
+            }).then(function(){
+                $rootScope.loading=false;
             })
             return deferred.promise;
-
+           
 
         };
 
