@@ -8,10 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.h3bpm.web.entity.User;
 import com.h3bpm.web.entity.WorkFlowTask;
+import com.h3bpm.web.service.KingdomService;
+import com.h3bpm.web.service.ServiceException;
+import com.h3bpm.web.service.UserService;
 import com.h3bpm.web.service.WorkFlowService;
 import com.h3bpm.web.service.WorkFlowTaskService;
-
+import com.h3bpm.web.vo.SmsInfoVo;
 
 @Component
 public class WorkflowTask {
@@ -19,10 +23,15 @@ public class WorkflowTask {
 
 	@Autowired
 	private WorkFlowService workFlowService;
-	
+
 	@Autowired
 	private WorkFlowTaskService workFlowTaskService;
 
+	@Autowired
+	private KingdomService kingdomService;
+
+	@Autowired
+	private UserService userService;
 
 	/**
 	 * @Author tonghao
@@ -30,16 +39,27 @@ public class WorkflowTask {
 	 * @Date 14:23 2019/1/24
 	 * @Param
 	 * @return void
+	 * @throws ServiceException
 	 **/
 	@Scheduled(cron = "0 0/5 * * * ?")
-	private void process() {
+	private void process() throws ServiceException {
 		logger.info("======== autoStartWorkflowTask start ========");
-		
+
 		List<WorkFlowTask> workflowTasks = workFlowTaskService.findUnFinishWorkFlowTask();
 		for (WorkFlowTask workFlowTask : workflowTasks) {
-			workFlowService.createWorkFlow(workFlowTask.getId());
+			try {
+				workFlowService.createWorkFlow(workFlowTask.getId());
+			} catch (ServiceException e) {
+				throw new ServiceException("error to autoStartWorkflowTask");
+			}
+
+			// 发送提醒短信
+			User user = userService.getUserByLoginName(workFlowTask.getUserLoginName());
+			if (user != null && user.getMobile() != null && !user.getMobile().isEmpty()) {
+				kingdomService.sendSmsInfo(new SmsInfoVo(user.getName(), user.getMobile(), "【协办平台】您有一个新的待办任务，请及时处理，谢谢！"));
+			}
 		}
-		
+
 		logger.info("======== autoStartWorkflowTask end ========");
 	}
 
@@ -50,7 +70,7 @@ public class WorkflowTask {
 	 * @Param
 	 * @return void
 	 **/
-	@Scheduled(cron = "0 0 8 ? * WED")//每周三上午8点执行一次
+	@Scheduled(cron = "0 0 8 ? * WED") // 每周三上午8点执行一次
 	private void addWeeklyReportProcess() {
 		logger.info("======== addWeeklyReportProcess start ========");
 

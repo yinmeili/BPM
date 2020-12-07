@@ -21,9 +21,10 @@ public class WorkFlowService extends ApiDataService {
 	 * 新建一个流程
 	 * 
 	 * @param id
+	 * @throws ServiceException 
 	 */
 	@SuppressWarnings("unchecked")
-	public String createWorkFlow(String id) {
+	public String createWorkFlow(String id) throws ServiceException {
 		WorkFlowTask workFlowTask = null;
 
 		try {
@@ -47,14 +48,15 @@ public class WorkFlowService extends ApiDataService {
 				workFlowTask.setInstanceId((String) data.get("instanceId"));
 			}
 
-			workFlowTaskMapper.updateWorkFlowTask(workFlowTask);
-			return workFlowTask.getInstanceId();
+			workFlowTask.setExecuteType(WorkflowExecuteType.SUCCESS.getValue());
 
 		} catch (Exception e) {
 			workFlowTask.setExecuteType(WorkflowExecuteType.FAIL.getValue());
-			e.printStackTrace();
+			throw new ServiceException("create workflow task error!");
 		}
+		
+		workFlowTaskMapper.updateWorkFlowTask(workFlowTask);
 
-		return null;
+		return workFlowTask.getInstanceId();
 	}
 }

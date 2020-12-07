@@ -20,6 +20,7 @@ import com.h3bpm.web.enumeration.HttpRequestType;
 import com.h3bpm.web.enumeration.KingdomNodeStatus;
 import com.h3bpm.web.enumeration.MonitorNodeName;
 import com.h3bpm.web.mapper.LiquidationMonitorMapper;
+import com.h3bpm.web.vo.SmsInfoVo;
 import com.h3bpm.web.vo.api.kingdom.KingdomNodeVo;
 import com.h3bpm.web.vo.api.kingdom.KingdomRequestVo;
 import com.h3bpm.web.vo.api.kingdom.KingdomResponseVo;
@@ -580,5 +581,27 @@ public class KingdomService extends ApiDataService {
 		Collections.sort(nodeVoTempList);
 
 		return nodeVoTempList;
+	}
+
+	public void sendSmsInfo(SmsInfoVo smsInfoVo) {
+		try {
+		List<KingdomRequestVo> kingdomRequestVoList = new ArrayList<KingdomRequestVo>();
+		kingdomRequestVoList.add(new KingdomRequestVo("TSystemDM", modelName));
+		kingdomRequestVoList.add(new KingdomRequestVo(user, "User"));
+		kingdomRequestVoList.add(new KingdomRequestVo(pass, "Pass"));
+		kingdomRequestVoList.add(new KingdomRequestVo("SendMessageInfo", methodName));
+		kingdomRequestVoList.add(new KingdomRequestVo(smsInfoVo.getPhoneNum(), "PhoneNo"));
+		kingdomRequestVoList.add(new KingdomRequestVo(smsInfoVo.getContent(), "Msg"));
+
+		List<Map<String, Object>> mapList = this.processSyncKingdom(HttpRequestType.POST, kingdomRequestVoList);
+		
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TransportException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 }

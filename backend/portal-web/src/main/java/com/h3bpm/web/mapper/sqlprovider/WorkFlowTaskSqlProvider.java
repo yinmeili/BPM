@@ -9,7 +9,7 @@ public class WorkFlowTaskSqlProvider {
         Date startTime = (Date)para.get("startTime");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = simpleDateFormat.format(startTime);
-        String startTimeStrSql = " start_time >= " + "'" + dateString + "'";
+        String startTimeStrSql = " start_time <= " + "'" + dateString + "'";
         String sql =
                 "SELECT"+
                         "			 id,"+
