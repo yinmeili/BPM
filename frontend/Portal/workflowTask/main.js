@@ -118,6 +118,17 @@
                         return "<span title=\"" + data + "\">" + data + "</span>";
                     }
                 });
+                columns.push({
+                    "mRender": function (data, type, full) {
+                        full = JSON.stringify(full);
+                        return `
+                        
+                         
+                              <button class='btn btn-sm btn-danger' ng-click='toEditWorkflowTaskOperator(${full})' title='编辑'>
+                                  <i class='glyphicon glyphicon-edit'></i>
+                              </button>`;
+                    }
+                });
                 
 
                 
@@ -283,12 +294,12 @@
 
             //文件导入
             $scope.WorkflowuploadFile = function (data) {
-                var AgencyID=$scope.workFlow;
+              
                 $http({
                     url: ControllerConfig.Agents.GetAgency,
                     params: {
-                        agentID: AgencyID,
-                        random: new Date().getTime()
+                        // agentID: AgencyID,
+                        // random: new Date().getTime()
                     }
                 })
                     .success(function (result, header, config, status) {
@@ -301,9 +312,9 @@
                             resolve: {
                                 params: function () {
                                     return {
-                                        user: $scope.user,
-                                        //Agency: Agency,
-                                        AgencyID: AgencyID
+                                        // user: $scope.user,
+                                        // Agency: Agency,
+                                        // AgencyID: AgencyID
                                     };
                                 },
                                 deps: ['$ocLazyLoad', function ($ocLazyLoad) {
@@ -321,6 +332,54 @@
                         });
                     })
                 
+            }
+            $scope.toEditWorkflowTaskOperator = function (data) {
+
+                for (var key in data) {
+
+                    if (data[key] == null) {
+                        data[key] = "";
+                    }
+                }
+                var AgencyID = data;
+
+                $http({
+                    url: ControllerConfig.Agents.GetAgency,
+                    params: {
+                        agentID:AgencyID,
+                        random: data
+                    }
+                }).success(function (result, header, config, status) {
+                    var Agency = result.Rows[0];
+                    var modalInstance = $modal.open({
+                        templateUrl: 'editWorkflowOperator.html',    // 指向上面创建的视图
+                        controller: 'workflowTaskController',// 初始化模态范围
+                        size: "md",
+                        resolve: {
+                            params: function () {
+                                return {
+                                    user: $scope.user,
+                                    Agency: Agency,
+                                    AgencyID: AgencyID
+                                };
+                            },
+                            deps: ['$ocLazyLoad', function ($ocLazyLoad) {
+                                return $ocLazyLoad.load([
+
+                                ]).then(function () {
+                                    return $ocLazyLoad.load([
+
+                                    ]);
+                                });
+                            }]
+                        }
+                    });
+                    modalInstance.opened.then(function () {
+
+                    });
+                });
+
+
             }
         }]);
 
