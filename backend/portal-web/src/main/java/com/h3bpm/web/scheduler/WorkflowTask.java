@@ -44,13 +44,13 @@ public class WorkflowTask {
 	 * @return void
 	 * @throws ServiceException
 	 **/
-	@Scheduled(cron = "0 0/5 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	private void process() throws ServiceException {
 		logger.info("======== autoStartWorkflowTask start ========");
+		try {
+			List<WorkFlowTask> workflowTasks = workFlowTaskService.findUnFinishWorkFlowTask();
+			for (WorkFlowTask workFlowTask : workflowTasks) {
 
-		List<WorkFlowTask> workflowTasks = workFlowTaskService.findUnFinishWorkFlowTask();
-		for (WorkFlowTask workFlowTask : workflowTasks) {
-			try {
 				Date nowDate = DateTimeUtil.parse(DateTimeUtil.format(new Date(), "yyyy-MM-dd"), "yyyy-MM-dd");
 				Date taskDate = DateTimeUtil.parse(DateTimeUtil.format(workFlowTask.getStartTime(), "yyyy-MM-dd"), "yyyy-MM-dd");
 
@@ -67,11 +67,12 @@ public class WorkflowTask {
 					}
 				}
 
-			} catch (ServiceException e) {
-				throw new ServiceException("error to autoStartWorkflowTask");
 			}
-		}
 
+		} catch (ServiceException e) {
+			logger.error("error to autoStartWorkflowTask : " + e.getMessage());
+		}
+		
 		logger.info("======== autoStartWorkflowTask end ========");
 	}
 
