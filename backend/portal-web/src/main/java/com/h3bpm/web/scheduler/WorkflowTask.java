@@ -1,5 +1,6 @@
 package com.h3bpm.web.scheduler;
 
+import java.util.Date;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -16,6 +17,8 @@ import com.h3bpm.web.service.UserService;
 import com.h3bpm.web.service.WorkFlowService;
 import com.h3bpm.web.service.WorkFlowTaskService;
 import com.h3bpm.web.vo.SmsInfoVo;
+
+import OThinker.Common.DateTimeUtil;
 
 @Component
 public class WorkflowTask {
@@ -48,15 +51,24 @@ public class WorkflowTask {
 		List<WorkFlowTask> workflowTasks = workFlowTaskService.findUnFinishWorkFlowTask();
 		for (WorkFlowTask workFlowTask : workflowTasks) {
 			try {
-				workFlowService.createWorkFlow(workFlowTask.getId());
+				Date nowDate = DateTimeUtil.parse(DateTimeUtil.format(new Date(), "yyyy-MM-dd"), "yyyy-MM-dd");
+				Date taskDate = DateTimeUtil.parse(DateTimeUtil.format(workFlowTask.getStartTime(), "yyyy-MM-dd"), "yyyy-MM-dd");
+
+				/*
+				 * 只创建当天任务
+				 */
+				if (nowDate.getTime() == taskDate.getTime()) {
+					workFlowService.createWorkFlow(workFlowTask.getId());
+
+					// 发送提醒短信
+					User user = userService.getUserByLoginName(workFlowTask.getUserLoginName());
+					if (user != null && user.getMobile() != null && !user.getMobile().isEmpty()) {
+						kingdomService.sendSmsInfo(new SmsInfoVo(user.getName(), user.getMobile(), "【协办平台】您有一个新的待办任务，请及时处理，谢谢！"));
+					}
+				}
+
 			} catch (ServiceException e) {
 				throw new ServiceException("error to autoStartWorkflowTask");
-			}
-
-			// 发送提醒短信
-			User user = userService.getUserByLoginName(workFlowTask.getUserLoginName());
-			if (user != null && user.getMobile() != null && !user.getMobile().isEmpty()) {
-				kingdomService.sendSmsInfo(new SmsInfoVo(user.getName(), user.getMobile(), "【协办平台】您有一个新的待办任务，请及时处理，谢谢！"));
 			}
 		}
 

@@ -15,12 +15,14 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.h3bpm.web.entity.LiquidationImportData;
+import com.h3bpm.web.entity.User;
 import com.h3bpm.web.entity.WeeklyReportData;
 import com.h3bpm.web.entity.WorkFlowTask;
 import com.h3bpm.web.enumeration.WorkflowCode;
 import com.h3bpm.web.mapper.UserMapper;
 import com.h3bpm.web.mapper.WorkFlowTaskMapper;
 import com.h3bpm.web.utils.FileUtils;
+import com.h3bpm.web.vo.ReqUpdateWorkFlowTaskVo;
 import com.h3bpm.web.vo.WorkFlowTaskVo;
 import com.h3bpm.web.vo.query.QueryWorkFlowTaskList;
 
@@ -136,7 +138,7 @@ public class WorkFlowTaskService extends ApiDataService {
 
 			workFlowTask.setId(UUID.randomUUID().toString());
 			workFlowTask.setCreateTime(new Date());
-			workFlowTask.setWorkFlowCode(WorkflowCode.WEEKLY_REPORT.getValue());
+			workFlowTask.setWorkFlowCode(WorkflowCode.ORG_SYSTEM_WEEKLY_REPORT.getValue());
 			workFlowTask.setUserDisplayName(weeklyReportData.getUserDisplayName());
 			workFlowTask.setStartTime(new Date());
 			workFlowTask.setUserLoginName(userLoginName);
@@ -144,5 +146,21 @@ public class WorkFlowTaskService extends ApiDataService {
 			workFlowTaskMapper.createWorkFlowTask(workFlowTask);
 
 		}
+	}
+
+	public void updateWorkFlowTaskUser(ReqUpdateWorkFlowTaskVo voBean) throws ServiceException {
+		WorkFlowTask workFlowTask = workFlowTaskMapper.getWorkFlowTaskById(voBean.getId());
+		String loginName = userMapper.getUserLoginNameByUserDisplayName(voBean.getUserDisplayName());
+
+		if (loginName == null) {
+			throw new ServiceException("该用户不存在");
+		}
+
+		User user = userMapper.getUserByLoginName(loginName);
+
+		workFlowTask.setUserLoginName(user.getLoginName());
+		workFlowTask.setUserDisplayName(user.getName());
+
+		workFlowTaskMapper.updateWorkFlowTask(workFlowTask);
 	}
 }
