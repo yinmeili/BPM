@@ -202,9 +202,6 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
                 var seconds = time.getSeconds() < 10 ? "0" + time.getSeconds() : time.getSeconds();
                 date = year + '-' + (month) + '-' + (date) + ' ' + (hours) + ':' + (minutes) + ':' + (seconds);
 								item.start = date;
-								var title=item.title.split(".")
-								title.pop();
-								item.title=title;
 								item.color = $scope.statusColorType[item.status];
 								// item.url = 'WorkItemSheets.html?WorkItemID=' + item.id;
 							})
@@ -699,9 +696,6 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 					var seconds = time.getSeconds() < 10 ? "0" + time.getSeconds() : time.getSeconds();
 					date = year + '-' + (month) + '-' + (date) + ' ' + (hours) + ':' + (minutes) + ':' + (seconds);
 					item.start = date;
-					var title=item.title.split(".")
-					title.pop();
-					item.title=title;
 					item.color = $scope.statusColorType[item.status];
 					// item.url = 'WorkItemSheets.html?WorkItemID=' + item.id;
 				})
