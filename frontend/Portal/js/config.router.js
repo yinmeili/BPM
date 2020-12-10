@@ -404,13 +404,34 @@ angular.module('app')
                             function($ocLazyLoad){
                                 return $ocLazyLoad.load([
                                     'queryModel/businessException/main.js',
-                                    'js/services/notify.js'
+                                    'js/services/notify.js',
+                                    'vendor/jquery/bootstrap-select-1.12.4/dist/css/bootstrap-select.min.css', 
+                                    'vendor/jquery/bootstrap-select-1.12.4/dist/js/bootstrap-select.min.js'
                                 ]);
                             }
                             
                         ]
                     }
                 })
+                //周报查询
+                // .state('app.WeeklyReport',{
+                //     url:'/WeeklyReport',
+                //     controller:'weeklyReportCtrl',
+                //     templateUrl:'weeklyReport/index.html',
+                //     resolve:{
+                //         deps:['$ocLazyLoad',
+                //             function($ocLazyLoad){
+                //                 return $ocLazyLoad.load([
+                //                     'weeklyReport/main.js',
+                //                     'js/services/notify.js',
+                //                     'vendor/jquery/bootstrap-select-1.12.4/dist/css/bootstrap-select.min.css', 
+                //                     'vendor/jquery/bootstrap-select-1.12.4/dist/js/bootstrap-select.min.js'
+                //                 ]);
+                //             }
+                            
+                //         ]
+                //     }
+                // })
                 //查询流程实例
                 .state('app.QueryInstance', {
                     url: '/QueryInstance',

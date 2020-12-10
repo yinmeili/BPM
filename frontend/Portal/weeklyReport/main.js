@@ -1,10 +1,10 @@
 (function (window, angular, $) {
   'use strict';
-  app.controller('businessExceptionCtrl', ['$scope', "$rootScope", "$translate", "$compile", "$http", "$timeout", "$state", "$interval", "$filter", "ControllerConfig", "datecalculation", "jq.datables", '$modal', 'item', 'fileNavigator',
+  app.controller('weeklyReportCtrl', ['$scope', "$rootScope", "$translate", "$compile", "$http", "$timeout", "$state", "$interval", "$filter", "ControllerConfig", "datecalculation", "jq.datables", '$modal', 'item', 'fileNavigator',
       function ($scope, $rootScope, $translate, $compile, $http, $timeout, $state, $interval, $filter, ControllerConfig, datecalculation, jqdatables, $modal, Item, FileNavigator) {
           //$rootScope.flowScope = $scope;
           //实例化参数
-          $scope.searchExceptionWasAgentOptions = {
+          $scope.searchWeeklyReportWasAgentOptions = {
               Editable: true,
               Visiable: true,
               //IsMultiple: true,
@@ -18,47 +18,35 @@
             "dataType": "json",
             "success": function (data) {
                 $scope.businessExceptionOptionData = data.Rows;
-                //使用refresh方法更新UI以匹配新状态
-                $('#usertype').selectpicker('refresh');
-                //render方法强制重新渲染引导程序 - 选择ui。
-                $('#usertype').selectpicker('render');
-                var optionMulti = [];
-                optionMulti = $scope.businessExceptionOptionData;
-                //定义一个对象数组，用于储存所需选项
-                for (var i = 0; i < optionMulti.length; i++) {
-                    $("#usertype").append($("<option value=\"" + optionMulti[i].Code + "\">" + optionMulti[i].Code + "</option>"));
-                }
+                // //使用refresh方法更新UI以匹配新状态
+                // $('#usertype').selectpicker('refresh');
+                // //render方法强制重新渲染引导程序 - 选择ui。
+                // $('#usertype').selectpicker('render');
+                // var optionMulti = [];
+                // optionMulti = $scope.businessExceptionOptionData;
+                // //定义一个对象数组，用于储存所需选项
+                // for (var i = 0; i < optionMulti.length; i++) {
+                //     $("#usertype").append($("<option value=\"" + optionMulti[i].Code + "\">" + optionMulti[i].Code + "</option>"));
+                // }
               },
             "error": function () {
             }
           })
           //共享知识的日期控件初始化
-          $scope.searchExceptionStartTimeStart = {
+          $scope.searchWeeklyStartTimeStart = {
               dateFmt: 'yyyy-MM-dd', realDateFmt: "yyyy-MM-dd", minDate: '2012-1-1', maxDate: '2099-12-31',
               onpicked: function (e) {
-                  $rootScope.searchExceptionStartTimeStart = e.el.value;
+                  $rootScope.searchWeeklyStartTimeStart = e.el.value;
               }
           }
-          $scope.searchExceptionStartTimeEnd = {
+          $scope.searchWeeklyStartTimeEnd = {
               dateFmt: 'yyyy-MM-dd', realDateFmt: "yyyy-MM-dd", minDate: '2012-1-1', maxDate: '2099-12-31',
               onpicked: function (e) {
-                  $rootScope.searchExceptionStartTimeEnd = e.el.value;
+                  $rootScope.searchWeeklyStartTimeEnd = e.el.value;
               
               }
           }
-          $scope.searchExceptionEndTimeStart = {
-              dateFmt: 'yyyy-MM-dd', realDateFmt: "yyyy-MM-dd", minDate: '2012-1-1', maxDate: '2099-12-31',
-              onpicked: function (e) {
-                  $rootScope.searchExceptionEndTimeStart = e.el.value;
-              }
-          }
-          $scope.searchExceptionEndTimeEnd = {
-              dateFmt: 'yyyy-MM-dd', realDateFmt: "yyyy-MM-dd", minDate: '2012-1-1', maxDate: '2099-12-31',
-              onpicked: function (e) {
-                  $rootScope.searchExceptionEndTimeEnd = e.el.value;
-
-              }
-          }
+          
           $scope.$on('$viewContentLoaded', function (event) {
               $scope.init();
               $scope.myScroll = null
@@ -66,10 +54,9 @@
 
           $scope.init = function () {
               $scope.name = $translate.instant("WorkItemController.FinishedWorkitem");
-              $scope.searchExceptionStartTimeStart = datecalculation.redDays(new Date(), 30);
-              $scope.searchExceptionStartTimeEnd = datecalculation.addDays(new Date(), 30);
-              $scope.searchExceptionEndTimeStart = datecalculation.redDays(new Date(), 30);
-              $scope.searchExceptionEndTimeEnd = datecalculation.addDays(new Date(), 30);
+              $scope.searchWeeklyStartTimeStart = datecalculation.redDays(new Date(), 30);
+              $scope.searchWeeklyStartTimeEnd = datecalculation.addDays(new Date(), 30);
+              
           }
           $scope.getLanguage = function () {
               $scope.LanJson = {
@@ -95,12 +82,13 @@
                   "mData": "title",//返回数据的键
                   "mRender": function (data, type, full) {
                       data = $scope.htmlEncode(data);
+                      console.log(data)
                       if (data == 'null' || data == null) {
                           data = '';
                       }
                     //   full = JSON.stringify(full);
-                      return `<a class="like"target="_blank"href="InstanceSheets.html?InstanceId=${full.instanceId}"style='cursor: pointer;' title='${data}'>${data}</a>`;
-                  }
+                    return `<a class="like"target="_blank"href="InstanceSheets.html?InstanceId=${full.instanceId}"style='cursor: pointer;' title='${data}'>${data}</a>`;
+                }
               });
               columns.push({
                   "mData": "businessSystem",
@@ -248,9 +236,9 @@
                 
                   //将时间转化为时间戳
                   aoData.push(//name的值是传输数据的key，value的值是传输数据的value
-                      { "name": "startTimeStart", "value": $filter("date")( $rootScope.searchExceptionStartTimeStart, "yyyy-MM-dd HH:mm:ss") },
-                      { "name": "startTimeEnd", "value": $filter("date")( $rootScope.searchExceptionStartTimeEnd ,"yyyy-MM-dd HH:mm:ss") },
-                      { "name": "keyword", "value":$scope.businessExceptionKeyword },
+                      { "name": "startTimeStart", "value": $filter("date")( $rootScope.searchWeeklyStartTimeStart, "yyyy-MM-dd HH:mm:ss") },
+                      { "name": "startTimeEnd", "value": $filter("date")( $rootScope.searchWeeklyStartTimeEnd ,"yyyy-MM-dd HH:mm:ss") },
+                      { "name": "keyword", "value":$scope.weeklyReportKeyword },
                       { "name": "userId", "value": $scope.Originator },
                       { "name": "businessSystem","value":$("#usertype").val()},
                       { "name": "endTimeStart", "value": $filter("date")( $rootScope.searchExceptionEndTimeStart, "yyyy-MM-dd HH:mm:ss") },
@@ -261,72 +249,44 @@
               "aoColumns": $scope.getMyColumns(), // 字段定义
               // 初始化完成事件,这里需要用到 JQuery ，因为当前表格是 JQuery 的插件
               "initComplete": function (settings, json) {
-                  var filter = $("#searchBusinessExceptionOrgName");
+                  var filter = $("#searchWeeklyReportOrgName");
                   filter.unbind("click.DT").bind("click.DT", function () {
                       
-                      $scope.Originator = $("#searchExceptionCompany").SheetUIManager().GetValue();
-                      if ( $rootScope.searchExceptionStartTimeStart == undefined && $rootScope.searchExceptionStartTimeEnd == undefined) {
-                          $rootScope.searchExceptionStartTimeStart="";
-                          $rootScope.searchExceptionStartTimeEnd="";
+                      $scope.Originator = $("#searchWeeklyReportCompany").SheetUIManager().GetValue();
+                      if ( $rootScope.searchWeeklyStartTimeStart == undefined && $rootScope.searchWeeklyStartTimeEnd == undefined) {
+                          $rootScope.searchWeeklyStartTimeStart="";
+                          $rootScope.searchWeeklyStartTimeEnd="";
                       }
-                      if ($rootScope.searchExceptionEndTimeStart == undefined && $rootScope.searchExceptionEndTimeEnd == undefined) {
-                          $rootScope.searchExceptionEndTimeStart = "";
-                          $rootScope.searchExceptionEndTimeEnd = "";
-                      }
-                      else if($("#searchExceptionStartTimeStart").val()==""&&$("#searchExceptionStartTimeEnd").val()=="")
+                      
+                      else if($("#searchWeeklyStartTimeStart").val()==""&&$("#searchWeeklyStartTimeEnd").val()=="")
                       {
-                          $rootScope.searchExceptionStartTimeStart="";
-                          $rootScope.searchExceptionStartTimeEnd="";
+                          $rootScope.searchWeeklyStartTimeStart="";
+                          $rootScope.searchWeeklyStartTimeEnd="";
                       }
-                      else if($("#searchExceptionStartTimeStart").val()==""&&$("#searchExceptionStartTimeEnd").val()!=="")
+                      else if($("#searchWeeklyStartTimeStart").val()==""&&$("#searchWeeklyStartTimeEnd").val()!=="")
                       {
-                          $rootScope.searchExceptionStartTimeStart="";
+                          $rootScope.searchWeeklyStartTimeStart="";
                           
                       }
-                      else if($("#searchExceptionStartTimeStart").val()!==""&&$("#searchExceptionStartTimeEnd").val()=="")
+                      else if($("#searchWeeklyStartTimeStart").val()!==""&&$("#searchWeeklyStartTimeEnd").val()=="")
                       {
-                          $rootScope.searchExceptionStartTimeEnd="";
+                          $rootScope.searchWeeklyStartTimeEnd="";
                       }
-                      //截止时间
-                      else if($("#searchExceptionEndTimeStart").val()==""&&$("#searchExceptionEndTimeEnd").val()=="")
-                      {
-                          $rootScope.searchExceptionEndTimeStart="";
-                          $rootScope.searchExceptionEndTimeEnd="";
-                      }
-                      else if($("#searchExceptionEndTimeStart").val()==""&&$("#searchExceptionEndTimeEnd").val()!=="")
-                      {
-                          $rootScope.searchExceptionEndTimeStart="";
-                          
-                      }
-                      else if($("#searchExceptionEndTimeStart").val()!==""&&$("#searchExceptionEndTimeEnd").val()=="")
-                      {
-                          $rootScope.searchExceptionEndTimeEnd="";
-                      }
+                      
                       else{
                           
-                      var myStartTimes = new Date( $rootScope.searchExceptionStartTimeStart.replace(/-/g, "/")).getTime();
-                          var myEndTimes = new Date($rootScope.searchExceptionStartTimeEnd.replace(/-/g, "/")).getTime();
+                      var myStartTimes = new Date( $rootScope.searchWeeklyStartTimeStart.replace(/-/g, "/")).getTime();
+                          var myEndTimes = new Date($rootScope.searchWeeklyStartTimeEnd.replace(/-/g, "/")).getTime();
                           if (myStartTimes > myEndTimes) {
                               $.notify({ message: "时间区间错误", status: "danger" });
                               $("#MyStartTimeEnd").css("color", "red");
                               return false;
                           };
-                          var myEndStartTimes=new Date($rootScope.searchExceptionEndTimeStart.replace(/-/g,"/")).getTime;
-                          var myEndEndTimes=new Date($rootScope.searchExceptionEndTimeEnd.replace(/-/g, "/")).getTime();
-                          if(myEndStartTimes<myEndTimes){
-                            $.notify({ message: "时间区间错误", status: "danger" });
-                            $("#MyEndTimeStart").css("color", "red");
-                            return false;
-                          }
-                          if(myEndStartTimes>myEndEndTimes){
-                            $.notify({ message: "时间区间错误", status: "danger" });
-                            $("#MyEndTimeEnd").css("color", "red");
-                            return false;
-                          }
+                        
                       }
                      
                       
-                      $("#tabBusinessxceptionFlow").dataTable().fnDraw();
+                      $("#tabWeeklyReportFlow").dataTable().fnDraw();
                   });
                   $scope.loadScroll();
               },
@@ -342,37 +302,28 @@
                   jqdatables.trcss();
               }
           };
-          $('#businessExceptionName').bind('keypress', function (event) { 
+          $('#weeklyReportName').bind('keypress', function (event) { 
               if (event.keyCode == "13") { 
-               $("#searchBusinessExceptionOrgName").click();
+               $("#searchWeeklyReportOrgName").click();
               }
              })
          
-          $('#searchExceptionCompany').bind('keypress', function (event) { 
+          $('#searchWeeklyReportCompany').bind('keypress', function (event) { 
               if (event.keyCode == "13") { 
-               $("#searchBusinessExceptionOrgName").click();
+               $("#searchWeeklyReportOrgName").click();
               }
           })
-          $('#searchExceptionStartTimeStart').bind('keypress', function (event) { 
+          $('#searchWeeklyStartTimeStart').bind('keypress', function (event) { 
               if (event.keyCode == "13") { 
-               $("#searchBusinessExceptionOrgName").click();
+               $("#searchWeeklyReportOrgName").click();
               }
           })
-          $('#searchExceptionStartTimeEnd').bind('keypress', function (event) { 
+          $('#searchWeeklyStartTimeEnd').bind('keypress', function (event) { 
               if (event.keyCode == "13") { 
-               $("#searchBusinessExceptionOrgName").click();
+               $("#searchWeeklyReportOrgName").click();
               }
           })
-          $('#searchExceptionEndTimeStart').bind('keypress', function (event) {
-              if (event.keyCode == "13") {
-                  $("#searchBusinessExceptionOrgName").click();
-              }
-          })
-          $('#searchExceptionEndTimeEnd').bind('keypress', function (event) {
-              if (event.keyCode == "13") {
-                  $("#searchBusinessExceptionOrgName").click();
-              }
-          })
+         
           
           
          
