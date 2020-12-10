@@ -18,10 +18,15 @@ public class ResponseVo {
 		this.msg = errorCode.getDisplayName();
 	}
 
+	public ResponseVo(ErrorCode errorCode, String msg) {
+		this.errorCode = errorCode.getValue();
+		this.msg = msg;
+	}
+
 	public ResponseVo(Object data) {
 		this.data = data;
 	}
-	
+
 	public ResponseVo(String msg) {
 		this.msg = msg;
 	}

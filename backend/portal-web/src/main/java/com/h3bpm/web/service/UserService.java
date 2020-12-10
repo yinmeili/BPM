@@ -37,6 +37,10 @@ public class UserService extends ApiDataService {
 
 		return getParentId(parentIdList, userId);
 	}
+	
+	public User getUserByLoginName(String loginName) {
+		return userMapper.getUserByLoginName(loginName);
+	}
 
 	private List<String> getParentId(List<String> parentIdList, String ouId) {
 		try {

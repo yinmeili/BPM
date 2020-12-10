@@ -4,12 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
-import com.h3bpm.web.entity.WeeklyReportData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,21 +15,27 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.h3bpm.web.entity.LiquidationImportData;
+import com.h3bpm.web.entity.User;
+import com.h3bpm.web.entity.WeeklyReportData;
 import com.h3bpm.web.entity.WorkFlowTask;
-import com.h3bpm.web.enumeration.ApiActionUrl;
 import com.h3bpm.web.enumeration.WorkflowCode;
-import com.h3bpm.web.enumeration.WorkflowExecuteType;
+import com.h3bpm.web.mapper.UserMapper;
 import com.h3bpm.web.mapper.WorkFlowTaskMapper;
 import com.h3bpm.web.utils.FileUtils;
-import com.h3bpm.web.vo.KnowledgeVo;
+import com.h3bpm.web.vo.ReqUpdateWorkFlowTaskVo;
 import com.h3bpm.web.vo.WorkFlowTaskVo;
 import com.h3bpm.web.vo.query.QueryWorkFlowTaskList;
+
+import OThinker.Common.DateTimeUtil;
 
 @Service
 public class WorkFlowTaskService extends ApiDataService {
 
 	@Autowired
 	private WorkFlowTaskMapper workFlowTaskMapper;
+
+	@Autowired
+	private UserMapper userMapper;
 
 	/**
 	 * 导入清算报表
@@ -50,7 +53,7 @@ public class WorkFlowTaskService extends ApiDataService {
 		if (list == null)
 			return;
 		for (LiquidationImportData liquidationImportData : list) {
-			String userLoginName = workFlowTaskMapper.getUserLoginNameByUserDisplayName(liquidationImportData.getUserDisplayName());
+			String userLoginName = userMapper.getUserLoginNameByUserDisplayName(liquidationImportData.getUserDisplayName());
 
 			if (userLoginName == null || userLoginName.equals(""))
 				continue;
@@ -58,21 +61,29 @@ public class WorkFlowTaskService extends ApiDataService {
 			if (liquidationImportData.getStartTime() == null || liquidationImportData.getUserDisplayName() == null)
 				continue;
 
-			WorkFlowTask workFlowTask = workFlowTaskMapper.getWorkFlowTaskByWorkflowCodeAndStartTime(WorkflowCode.LIQUIDATION.getValue(), liquidationImportData.getStartTime());
+			// 每天15点开始发起清算任务
+			Date workflowTaskStartTime = liquidationImportData.getStartTime();
+			workflowTaskStartTime = DateTimeUtil.addHours(workflowTaskStartTime, 15);
+			// workflowTaskStartTime = DateTimeUtil.addMinutes(workflowTaskStartTime, 50);
+
+			WorkFlowTask workFlowTask = workFlowTaskMapper.getWorkFlowTaskByWorkflowCodeAndStartTime(WorkflowCode.LIQUIDATION.getValue(), workflowTaskStartTime);
+
 			if (workFlowTask == null) {
 				workFlowTask = new WorkFlowTask();
 
 				workFlowTask.setCreateTime(new Date());
 				workFlowTask.setWorkFlowCode(WorkflowCode.LIQUIDATION.getValue());
 				workFlowTask.setUserDisplayName(liquidationImportData.getUserDisplayName());
-				workFlowTask.setStartTime(liquidationImportData.getStartTime());
+				workFlowTask.setStartTime(workflowTaskStartTime);
 				workFlowTask.setId(UUID.randomUUID().toString());
-				workFlowTask.setUserLoginName(workFlowTaskMapper.getUserLoginNameByUserDisplayName(liquidationImportData.getUserDisplayName()));
+				workFlowTask.setUserLoginName(userMapper.getUserLoginNameByUserDisplayName(liquidationImportData.getUserDisplayName()));
 
 				workFlowTaskMapper.createWorkFlowTask(workFlowTask);
+
 			} else {
+
 				workFlowTask.setUserDisplayName(liquidationImportData.getUserDisplayName());
-				workFlowTask.setUserLoginName(workFlowTaskMapper.getUserLoginNameByUserDisplayName(liquidationImportData.getUserDisplayName()));
+				workFlowTask.setUserLoginName(userMapper.getUserLoginNameByUserDisplayName(liquidationImportData.getUserDisplayName()));
 				workFlowTaskMapper.updateWorkFlowTask(workFlowTask);
 			}
 		}
@@ -98,39 +109,36 @@ public class WorkFlowTaskService extends ApiDataService {
 
 		return pageInfo;
 	}
-	
+
 	public List<WorkFlowTask> findUnFinishWorkFlowTask() {
 		return workFlowTaskMapper.findUnFinishWorkFlowTask(new Date());
 	}
 
 	public void addWeeklyReportWorkFlowTask() {
-
-//        File file = new File("src/main/resources/config/files/weeklyReport.xlsx");
 		InputStream is = null;
 		List<WeeklyReportData> list = null;
 		try {
-//            list = FileUtils.addWorkFlowTask(new FileInputStream(file));
-//            is = WorkFlowService.class.getClassLoader().getResource("config/files/weeklyReport.xlsx").openStream();
 			is = this.getClass().getClassLoader().getResourceAsStream("config/files/weeklyReport.xlsx");
-//            is = this.getClass().getResourceAsStream("config/files/weeklyReport.xlsx");
 			list = FileUtils.importWeeklyReportWorkFlowTask(is);
-//        } catch (IOException e) {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		if (list == null) return;
+		if (list == null)
+			return;
 		for (WeeklyReportData weeklyReportData : list) {
-			String userLoginName = workFlowTaskMapper.getUserLoginNameByUserDisplayName(weeklyReportData.getUserDisplayName());
+			String userLoginName = userMapper.getUserLoginNameByUserDisplayName(weeklyReportData.getUserDisplayName());
 
-			if (userLoginName == null || userLoginName.equals("")) continue;
+			if (userLoginName == null || userLoginName.equals(""))
+				continue;
 
-			if (weeklyReportData.getUserDisplayName() == null) continue;
+			if (weeklyReportData.getUserDisplayName() == null)
+				continue;
 
 			WorkFlowTask workFlowTask = new WorkFlowTask();
 
 			workFlowTask.setId(UUID.randomUUID().toString());
 			workFlowTask.setCreateTime(new Date());
-			workFlowTask.setWorkFlowCode(WorkflowCode.WEEKLY_REPORT.getValue());
+			workFlowTask.setWorkFlowCode(WorkflowCode.ORG_SYSTEM_WEEKLY_REPORT.getValue());
 			workFlowTask.setUserDisplayName(weeklyReportData.getUserDisplayName());
 			workFlowTask.setStartTime(new Date());
 			workFlowTask.setUserLoginName(userLoginName);
@@ -138,5 +146,21 @@ public class WorkFlowTaskService extends ApiDataService {
 			workFlowTaskMapper.createWorkFlowTask(workFlowTask);
 
 		}
+	}
+
+	public void updateWorkFlowTaskUser(ReqUpdateWorkFlowTaskVo voBean) throws ServiceException {
+		WorkFlowTask workFlowTask = workFlowTaskMapper.getWorkFlowTaskById(voBean.getId());
+		String loginName = userMapper.getUserLoginNameByUserDisplayName(voBean.getUserDisplayName());
+
+		if (loginName == null) {
+			throw new ServiceException("该用户不存在");
+		}
+
+		User user = userMapper.getUserByLoginName(loginName);
+
+		workFlowTask.setUserLoginName(user.getLoginName());
+		workFlowTask.setUserDisplayName(user.getName());
+
+		workFlowTaskMapper.updateWorkFlowTask(workFlowTask);
 	}
 }

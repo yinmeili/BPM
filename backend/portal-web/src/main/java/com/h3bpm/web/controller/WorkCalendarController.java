@@ -19,6 +19,7 @@ import OThinker.H3.Entity.WorkItem.WorkItemState;
 import com.h3bpm.base.engine.client.PortalQuery;
 import com.h3bpm.base.user.UserValidator;
 import com.h3bpm.base.user.UserValidatorFactory;
+import com.h3bpm.web.enumeration.InstanceStatus;
 import com.h3bpm.web.enumeration.WorkCalendarStatus;
 import com.h3bpm.web.vo.ResponseVo;
 import com.h3bpm.web.vo.ResponseWorkCalendarVo;
@@ -39,224 +40,208 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Controller
 @RequestMapping(value = "/Portal/workCalendar")
 public class WorkCalendarController extends ControllerBase {
 
-    private static final Logger logger = LoggerFactory.getLogger(WorkCalendarController.class);
+	private static final Logger logger = LoggerFactory.getLogger(WorkCalendarController.class);
 
-    @Value(value = "${application.api.systemCode}")
-    private String systemCode = null;
+	@Value(value = "${application.api.systemCode}")
+	private String systemCode = null;
 
-    @Value(value = "${application.api.secret}")
-    private String secret = null;
+	@Value(value = "${application.api.secret}")
+	private String secret = null;
 
-    /**
-     * 获取当前Controller的权限编码
-     */
-    @Override
-    public String getFunctionCode() {
-        return "";
-    }
+	/**
+	 * 获取当前Controller的权限编码
+	 */
+	@Override
+	public String getFunctionCode() {
+		return "";
+	}
 
-    public final PortalQuery getPortalQuery() throws Exception {
-        return getEngine().getPortalQuery();
-    }
+	public final PortalQuery getPortalQuery() throws Exception {
+		return getEngine().getPortalQuery();
+	}
 
-    // 组织结构管理器
-    public final IOrganization getOrganization() throws Exception {
-        return getEngine().getOrganization();
-    }
+	// 组织结构管理器
+	public final IOrganization getOrganization() throws Exception {
+		return getEngine().getOrganization();
+	}
 
-    protected User getUserByUserId(String userId) throws Exception {
-        if (DotNetToJavaStringHelper.isNullOrEmpty(userId)) {
-            return null;
-        }
-        Unit unit = getOrganization().GetUnit(userId);
-        if (unit != null && unit instanceof User) {
-            User user = (User) unit;
-            return user;
-        }
-        return null;
-    }
+	protected User getUserByUserId(String userId) throws Exception {
+		if (DotNetToJavaStringHelper.isNullOrEmpty(userId)) {
+			return null;
+		}
+		Unit unit = getOrganization().GetUnit(userId);
+		if (unit != null && unit instanceof User) {
+			User user = (User) unit;
+			return user;
+		}
+		return null;
+	}
 
-    // 验证当前用户是否正确
-    protected UserValidator getUserValidator(String userId) throws Exception {
-        logger.info("Validator User " + userId + ".");
+	// 验证当前用户是否正确
+	protected UserValidator getUserValidator(String userId) throws Exception {
+		logger.info("Validator User " + userId + ".");
 
-        User user = getUserByUserId(userId);
-        if (user == null) {
-            return null;
-        }
+		User user = getUserByUserId(userId);
+		if (user == null) {
+			return null;
+		}
 
-        // add by luwei
-        if (user.getIsVirtualUser() || user.getState() == State.Inactive
-                || user.getServiceState() == UserServiceState.Dismissed) {
-            return null;
-        }
+		// add by luwei
+		if (user.getIsVirtualUser() || user.getState() == State.Inactive || user.getServiceState() == UserServiceState.Dismissed) {
+			return null;
+		}
 
-        UserValidator validator = UserValidatorFactory.GetUserValidator(
-                request, getEngine(), user.getCode());
-        if (validator == null) {
-            return null;
-        }
+		UserValidator validator = UserValidatorFactory.GetUserValidator(request, getEngine(), user.getCode());
+		if (validator == null) {
+			return null;
+		}
 
-        // this._Engine = (EngineClient) validator.getEngine();
-        return validator;
-    }
+		// this._Engine = (EngineClient) validator.getEngine();
+		return validator;
+	}
 
-    /**
-     * @throws
-     * @Title: findAll
-     * @Description: [GET] /workitems/findAll 查询用户的待办、已办和超时任务
-     * @Param: userId 用户id 必填
-     * @param: startTime 开始时间
-     * @param: endTime 结束时间
-     * @param: workflowCode 流程编码
-     * @param: instanceName 流程实例名称
-     * @Return: ResponseVo
-     */
-    @SuppressWarnings("static-access")
-    @RequestMapping(value = "/workitems/findAll", method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseVo findAll(
-            @RequestParam("userId") String userId,
-            @RequestParam("startTime") String startTimeStr,
-            @RequestParam("endTime") String endTimeStr,
-            String workflowCode,
-            String instanceName) throws Exception {
+	/**
+	 * @throws @Title:
+	 *             findAll
+	 * @Description: [GET] /workitems/findAll 查询用户的待办、已办和超时任务
+	 * @Param: userId 用户id 必填
+	 * @param: startTime
+	 *             开始时间
+	 * @param: endTime
+	 *             结束时间
+	 * @param: workflowCode
+	 *             流程编码
+	 * @param: instanceName
+	 *             流程实例名称
+	 * @Return: ResponseVo
+	 */
+	@SuppressWarnings("static-access")
+	@RequestMapping(value = "/workitems/findAll", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseVo findAll(@RequestParam("userId") String userId, @RequestParam("startTime") String startTimeStr, @RequestParam("endTime") String endTimeStr, String workflowCode, String instanceName) throws Exception {
 
-        int startIndex = -1;
-        int endIndex = -1;
+		int startIndex = -1;
+		int endIndex = -1;
 
-        WorkItemController controller = new WorkItemController();
-        WorkCalendarVo workCalendarVo = null;
-        List<WorkCalendarVo> list = new ArrayList<>();
-        ResponseWorkCalendarVo responseWorkCalendarVo = null;
+		WorkItemController controller = new WorkItemController();
+		WorkCalendarVo workCalendarVo = null;
+		List<WorkCalendarVo> list = new ArrayList<>();
+		ResponseWorkCalendarVo responseWorkCalendarVo = null;
 
-        UserValidator validator = getUserValidator(userId);
+		UserValidator validator = getUserValidator(userId);
 
-        /*
-         * **************查询已办任务**************
-         */
-        List<WorkItemViewModel> griddataFinish = null;
+		/*
+		 * **************查询已办任务**************
+		 */
+		List<WorkItemViewModel> griddataFinish = null;
 
-        String[] conditions1 = getPortalQuery().GetWorkItemConditions(userId,
-                DateTimeUtil.getStringToDate(startTimeStr), DateTimeUtil.getDatePlusOne(endTimeStr),
-                WorkItemState.Finished, instanceName,
-                BoolMatchValue.Unspecified, workflowCode, true,
-                WorkItemFinished.TableName);
+		String[] conditions1 = getPortalQuery().GetWorkItemConditions(userId, DateTimeUtil.getStringToDate(startTimeStr), DateTimeUtil.getDatePlusOne(endTimeStr), WorkItemState.Finished, instanceName, BoolMatchValue.Unspecified, workflowCode, true, WorkItemFinished.TableName);
 
-        String orderBy1 = "ORDER BY " + WorkItemFinished.TableName + "."
-                + WorkItemFinished.PropertyName_ReceiveTime + " DESC";
+		String orderBy1 = "ORDER BY " + WorkItemFinished.TableName + "." + WorkItemFinished.PropertyName_ReceiveTime + " DESC";
 
-        DataTable dtWorkItem1 = getPortalQuery().QueryWorkItem(conditions1,
-                startIndex, endIndex, orderBy1, WorkItemFinished.TableName);
+		DataTable dtWorkItem1 = getPortalQuery().QueryWorkItem(conditions1, startIndex, endIndex, orderBy1, WorkItemFinished.TableName);
 
-        String[] columns = new String[]{WorkItemFinished.PropertyName_OrgUnit};
-        griddataFinish = controller.Getgriddata(dtWorkItem1, columns, true);
+		String[] columns = new String[] { WorkItemFinished.PropertyName_OrgUnit };
+		griddataFinish = controller.Getgriddata(dtWorkItem1, columns, true);
 
-        for (WorkItemViewModel workItemViewModel : griddataFinish) {
+		int finishTotal = 0;
+		for (WorkItemViewModel workItemViewModel : griddataFinish) {
+			// 过滤掉已取消的任务
+			if (workItemViewModel.getInstanceState().equals(InstanceStatus.CANCEL.getValue())) {
+				continue;
+			}
 
-            workCalendarVo = new WorkCalendarVo();
+			workCalendarVo = new WorkCalendarVo();
 
-            workCalendarVo.setId(workItemViewModel.getBaseObjectID());
-            workCalendarVo.setTitle(workItemViewModel.getInstanceName());
-            workCalendarVo.setStatus(WorkCalendarStatus.FINISH.getValue());
-            workCalendarVo.setStart((DateTimeUtil.getStringToDate(workItemViewModel.getReceiveTime(), null)).getTime());
+			workCalendarVo.setId(workItemViewModel.getBaseObjectID());
+			workCalendarVo.setTitle(workItemViewModel.getInstanceName());
+			workCalendarVo.setStatus(WorkCalendarStatus.FINISH.getValue());
+			workCalendarVo.setStart((DateTimeUtil.getStringToDate(workItemViewModel.getReceiveTime(), null)).getTime());
 
-            list.add(workCalendarVo);
-        }
-        int finishTotal = griddataFinish == null ? 0 : griddataFinish.size();
+			list.add(workCalendarVo);
 
-        /******************************************/
+			finishTotal++;
+		}
+		/******************************************/
 
+		/*
+		 * **************查询待办任务**************
+		 */
+		List<WorkItemViewModel> griddataUnfinish = null;
 
-        /*
-         * **************查询待办任务**************
-         */
-        List<WorkItemViewModel> griddataUnfinish = null;
+		String[] conditions2 = getPortalQuery().GetWorkItemConditions(userId, DateTimeUtil.getStringToDate(startTimeStr), DateTimeUtil.getDatePlusOne(endTimeStr), WorkItemState.Unfinished, instanceName, BoolMatchValue.Unspecified, workflowCode, true, WorkItem.TableName);
+		String orderBy2 = " ORDER BY " + WorkItem.TableName + "." + WorkItem.PropertyName_Priority + " DESC," + WorkItem.TableName + "." + WorkItem.PropertyName_Urged + " DESC," + WorkItem.TableName + "." + WorkItem.PropertyName_ReceiveTime + " DESC";
 
-        String[] conditions2 = getPortalQuery().GetWorkItemConditions(userId,
-                DateTimeUtil.getStringToDate(startTimeStr), DateTimeUtil.getDatePlusOne(endTimeStr),
-                WorkItemState.Unfinished, instanceName,
-                BoolMatchValue.Unspecified, workflowCode, true,
-                WorkItem.TableName);
-        String orderBy2 = " ORDER BY " + WorkItem.TableName + "." + WorkItem.PropertyName_Priority + " DESC,"
-                + WorkItem.TableName + "." + WorkItem.PropertyName_Urged + " DESC,"
-                + WorkItem.TableName + "." + WorkItem.PropertyName_ReceiveTime + " DESC";
+		DataTable dtWorkItem2 = getPortalQuery().QueryWorkItem(conditions2, startIndex, endIndex, orderBy2, WorkItem.TableName);
 
-        DataTable dtWorkItem2 = getPortalQuery().QueryWorkItem(conditions2,
-                startIndex, endIndex, orderBy2, WorkItem.TableName);
+		griddataUnfinish = controller.Getgriddata(dtWorkItem2, columns, true);
 
-        griddataUnfinish = controller.Getgriddata(dtWorkItem2, columns, true);
+		for (WorkItemViewModel workItemViewModel : griddataUnfinish) {
 
-        for (WorkItemViewModel workItemViewModel : griddataUnfinish) {
+			workCalendarVo = new WorkCalendarVo();
 
-            workCalendarVo = new WorkCalendarVo();
+			workCalendarVo.setId(workItemViewModel.getBaseObjectID());
+			workCalendarVo.setTitle(workItemViewModel.getInstanceName());
+			workCalendarVo.setStatus(WorkCalendarStatus.UNFINISH.getValue());
+			workCalendarVo.setStart((DateTimeUtil.getStringToDate(workItemViewModel.getReceiveTime(), null)).getTime());
 
-            workCalendarVo.setId(workItemViewModel.getBaseObjectID());
-            workCalendarVo.setTitle(workItemViewModel.getInstanceName());
-            workCalendarVo.setStatus(WorkCalendarStatus.UNFINISH.getValue());
-            workCalendarVo.setStart((DateTimeUtil.getStringToDate(workItemViewModel.getReceiveTime(), null)).getTime());
+			list.add(workCalendarVo);
+		}
+		int unfinishTotal = griddataUnfinish == null ? 0 : griddataUnfinish.size();
 
-            list.add(workCalendarVo);
-        }
-        int unfinishTotal = griddataUnfinish == null ? 0 : griddataUnfinish.size();
+		/******************************************/
 
-        /******************************************/
+		/*
+		 * **************查询超时任务**************
+		 */
+		JSONObject json = ExecuteFunctionRun(null);
+		if (json != null) {
+			return null;
+		}
 
+		userId = StringEscapeUtils.escapeSql(userId);
 
-        /*
-         * **************查询超时任务**************
-         */
-        JSONObject json = ExecuteFunctionRun(null);
-        if (json != null) {
-            return null;
-        }
+		List<WorkItemViewModel> griddataElapsed = null;
 
-        userId = StringEscapeUtils.escapeSql(userId);
+		String[] orgs = DotNetToJavaStringHelper.isNullOrEmpty(userId) ? this.getUserValidator().getViewableOrgs() : userId.split(";");
 
-        List<WorkItemViewModel> griddataElapsed = null;
+		instanceName = StringEscapeUtils.escapeSql(instanceName);
+		workflowCode = StringEscapeUtils.escapeSql(workflowCode);
 
-        String[] orgs = DotNetToJavaStringHelper.isNullOrEmpty(userId) ? this.getUserValidator().getViewableOrgs() : userId.split(";");
+		instanceName = DotNetToJavaStringHelper.isNullOrEmpty(instanceName) ? null : instanceName.trim().replace("'", "").replace("--", "");
 
-        instanceName = StringEscapeUtils.escapeSql(instanceName);
-        workflowCode = StringEscapeUtils.escapeSql(workflowCode);
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		List<Parameter> params = new ArrayList<>();
+		String[] conditions = getEngine().getPortalQuery().GetQueryWorkItemConditionsForMonitor(params, orgs, workflowCode, DotNetToJavaStringHelper.isNullOrEmpty(startTimeStr) ? DateTimeUtil.minValue() : df.parse(startTimeStr), DotNetToJavaStringHelper.isNullOrEmpty(endTimeStr) ? DateTimeUtil.maxValue() : DateTimeUtil.addDates(df.parse(endTimeStr), 1), instanceName, WorkItemState.Unfinished, BoolMatchValue.Unspecified, BoolMatchValue.True);
 
-        instanceName = DotNetToJavaStringHelper.isNullOrEmpty(instanceName) ? null : instanceName.trim().replace("'", "").replace("--", "");
+		DataTable dtWorkitem = getEngine().getPortalQuery().QueryWorkItem(conditions, ListUtil.toArray(params), -1, -1, "", WorkItem.TableName);
 
-        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-        List<Parameter> params = new ArrayList<>();
-        String[] conditions = getEngine().getPortalQuery().GetQueryWorkItemConditionsForMonitor(params, orgs, workflowCode, DotNetToJavaStringHelper.isNullOrEmpty(startTimeStr) ? DateTimeUtil.minValue() : df.parse(startTimeStr), DotNetToJavaStringHelper.isNullOrEmpty(endTimeStr) ? DateTimeUtil.maxValue() : DateTimeUtil.addDates(df.parse(endTimeStr), 1), instanceName, WorkItemState.Unfinished, BoolMatchValue.Unspecified, BoolMatchValue.True);
+		String[] columnsElapsed = new String[] { WorkItem.PropertyName_OrgUnit };
+		griddataElapsed = controller.Getgriddata(dtWorkitem, columnsElapsed, true);
 
-        DataTable dtWorkitem = getEngine().getPortalQuery().QueryWorkItem(conditions, ListUtil.toArray(params), -1, -1, "", WorkItem.TableName);
+		for (WorkItemViewModel workItemViewModel : griddataElapsed) {
 
-        String[] columnsElapsed = new String[]{WorkItem.PropertyName_OrgUnit};
-        griddataElapsed = controller.Getgriddata(dtWorkitem, columnsElapsed, true);
+			workCalendarVo = new WorkCalendarVo();
 
-        for (WorkItemViewModel workItemViewModel : griddataElapsed) {
+			workCalendarVo.setId(workItemViewModel.getBaseObjectID());
+			workCalendarVo.setTitle(workItemViewModel.getInstanceName());
+			workCalendarVo.setStatus(WorkCalendarStatus.EXCEED_TIME_LIMIT.getValue());
+			workCalendarVo.setStart((DateTimeUtil.getStringToDate(workItemViewModel.getReceiveTime(), null)).getTime());
 
-            workCalendarVo = new WorkCalendarVo();
+			list.add(workCalendarVo);
+		}
+		int exceedTimeLimitTotal = griddataElapsed == null ? 0 : griddataElapsed.size();
 
-            workCalendarVo.setId(workItemViewModel.getBaseObjectID());
-            workCalendarVo.setTitle(workItemViewModel.getInstanceName());
-            workCalendarVo.setStatus(WorkCalendarStatus.EXCEED_TIME_LIMIT.getValue());
-            workCalendarVo.setStart((DateTimeUtil.getStringToDate(workItemViewModel.getReceiveTime(), null)).getTime());
+		/******************************************/
 
-            list.add(workCalendarVo);
-        }
-        int exceedTimeLimitTotal = griddataElapsed == null ? 0 : griddataElapsed.size();
-
-        /******************************************/
-
-
-        responseWorkCalendarVo = new ResponseWorkCalendarVo(list);
-        responseWorkCalendarVo.setFinishTotal(finishTotal);
-        responseWorkCalendarVo.setUnfinishTotal(unfinishTotal);
-        responseWorkCalendarVo.setExceedTimeLimitTotal(exceedTimeLimitTotal);
-        return new ResponseVo(responseWorkCalendarVo);
-    }
+		responseWorkCalendarVo = new ResponseWorkCalendarVo(list);
+		responseWorkCalendarVo.setFinishTotal(finishTotal);
+		responseWorkCalendarVo.setUnfinishTotal(unfinishTotal);
+		responseWorkCalendarVo.setExceedTimeLimitTotal(exceedTimeLimitTotal);
+		return new ResponseVo(responseWorkCalendarVo);
+	}
 }
-

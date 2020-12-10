@@ -7,10 +7,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum WorkflowExecuteType implements  EnumerationInt {
-
-	SUCCESS(1, "成功"),
+	
 	UNFINISH(0, "未执行"),
-	FAIL(-1,"执行失败"),
+	
+	SUCCESS(1, "成功"),
+	
+	FAIL(2,"执行失败"),
 
 	;
 

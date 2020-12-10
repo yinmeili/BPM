@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,8 +20,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.github.pagehelper.PageInfo;
 import com.h3bpm.web.enumeration.WorkflowCode;
+import com.h3bpm.web.service.ServiceException;
 import com.h3bpm.web.service.WorkFlowTaskService;
+import com.h3bpm.web.vo.ReqCreateKnowledge;
 import com.h3bpm.web.vo.ReqListWorkflowTaskPageVo;
+import com.h3bpm.web.vo.ReqUpdateWorkFlowTaskVo;
 import com.h3bpm.web.vo.RespPageVo;
 import com.h3bpm.web.vo.ResponseVo;
 import com.h3bpm.web.vo.WorkFlowTaskVo;
@@ -50,6 +54,13 @@ public class WorkFlowTaskController extends AbstractController {
 		PageInfo<WorkFlowTaskVo> pageInfo = workFlowTaskService.findWorkFlowTaskByPage(queryWorkFlowTaskList);
 
 		return new RespPageVo(requestBean.getsEcho(), pageInfo.getTotal(), pageInfo.getList());
+	}
+
+	@RequestMapping(value = "/updateWorkFlowTaskUser", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public ResponseVo updateWorkFlowTaskUser(@RequestBody ReqUpdateWorkFlowTaskVo reqBean) throws ServiceException {
+		workFlowTaskService.updateWorkFlowTaskUser(reqBean);
+		return new ResponseVo("编辑成功");
 	}
 
 	@RequestMapping(value = "/downloadTemplate")
