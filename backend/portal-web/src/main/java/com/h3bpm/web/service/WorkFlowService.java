@@ -6,9 +6,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.h3bpm.web.entity.BizObjectInfo;
 import com.h3bpm.web.entity.WorkFlowTask;
 import com.h3bpm.web.enumeration.ApiActionUrl;
 import com.h3bpm.web.enumeration.WorkflowExecuteType;
+import com.h3bpm.web.mapper.WorkFlowMapper;
 import com.h3bpm.web.mapper.WorkFlowTaskMapper;
 
 @Service
@@ -16,6 +18,9 @@ public class WorkFlowService extends ApiDataService {
 
 	@Autowired
 	private WorkFlowTaskMapper workFlowTaskMapper;
+	
+	@Autowired
+	private WorkFlowMapper workFlowMapper;
 
 	/**
 	 * 新建一个流程
@@ -58,5 +63,12 @@ public class WorkFlowService extends ApiDataService {
 		workFlowTaskMapper.updateWorkFlowTask(workFlowTask);
 
 		return workFlowTask.getInstanceId();
+	}
+	
+	public BizObjectInfo getBizObjectInfoByInstanceId(String instanceId){
+		BizObjectInfo bizObjectInfo = workFlowMapper.getBizObjectIdByInstanceId(instanceId);
+		bizObjectInfo = workFlowMapper.getBizObjectInfoByBizObjectIdAndWorkflowCode(bizObjectInfo.getId(), bizObjectInfo.getWorkflowCode());
+		
+		return bizObjectInfo;
 	}
 }

@@ -77,7 +77,7 @@ public class BusinessExceptionSqlProvider {
 				" WHERE "+
 				"	a.ObjectID = b.BizObjectId"+
 				"	AND a.CreatedBy = c.ObjectID"+
-//				"   AND b.State=4"+
+				"   AND b.State=4"+
 				keywordSqlStr+
 				userIdSqlStr+
 				businessSysSqlStr+

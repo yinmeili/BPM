@@ -1,9 +1,36 @@
 package com.h3bpm.web.controller;
 
-import OThinker.Common.Data.BoolMatchValue;
-import OThinker.Common.Data.Database.Parameter;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang.StringEscapeUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.h3bpm.base.engine.client.PortalQuery;
+import com.h3bpm.base.user.UserValidator;
+import com.h3bpm.base.user.UserValidatorFactory;
+import com.h3bpm.web.entity.BizObjectInfo;
+import com.h3bpm.web.enumeration.InstanceStatus;
+import com.h3bpm.web.enumeration.WorkCalendarStatus;
+import com.h3bpm.web.enumeration.WorkflowCode;
+import com.h3bpm.web.service.WorkFlowService;
+import com.h3bpm.web.vo.ResponseVo;
+import com.h3bpm.web.vo.ResponseWorkCalendarVo;
+import com.h3bpm.web.vo.WorkCalendarVo;
+
 import OThinker.Common.DateTimeUtil;
 import OThinker.Common.DotNetToJavaStringHelper;
+import OThinker.Common.Data.BoolMatchValue;
+import OThinker.Common.Data.Database.Parameter;
 import OThinker.Common.Organization.Interface.IOrganization;
 import OThinker.Common.Organization.Models.Unit;
 import OThinker.Common.Organization.Models.User;
@@ -13,32 +40,11 @@ import OThinker.Common.util.ListUtil;
 import OThinker.H3.Controller.ControllerBase;
 import OThinker.H3.Controller.Controllers.ProcessCenter.WorkItemController;
 import OThinker.H3.Controller.ViewModels.WorkItemViewModel;
+import OThinker.H3.Entity.WorkItem.WorkItemState;
 import OThinker.H3.Entity.WorkItem.WorkItemModels.WorkItem;
 import OThinker.H3.Entity.WorkItem.WorkItemModels.WorkItemFinished;
-import OThinker.H3.Entity.WorkItem.WorkItemState;
-import com.h3bpm.base.engine.client.PortalQuery;
-import com.h3bpm.base.user.UserValidator;
-import com.h3bpm.base.user.UserValidatorFactory;
-import com.h3bpm.web.enumeration.InstanceStatus;
-import com.h3bpm.web.enumeration.WorkCalendarStatus;
-import com.h3bpm.web.vo.ResponseVo;
-import com.h3bpm.web.vo.ResponseWorkCalendarVo;
-import com.h3bpm.web.vo.WorkCalendarVo;
 import data.DataTable;
 import net.sf.json.JSONObject;
-import org.apache.commons.lang.StringEscapeUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping(value = "/Portal/workCalendar")
@@ -51,6 +57,9 @@ public class WorkCalendarController extends ControllerBase {
 
 	@Value(value = "${application.api.secret}")
 	private String secret = null;
+
+	@Autowired
+	private WorkFlowService workFlowService;
 
 	/**
 	 * 获取当前Controller的权限编码
@@ -158,7 +167,7 @@ public class WorkCalendarController extends ControllerBase {
 			workCalendarVo = new WorkCalendarVo();
 
 			workCalendarVo.setId(workItemViewModel.getBaseObjectID());
-			workCalendarVo.setTitle(workItemViewModel.getInstanceName());
+			workCalendarVo.setTitle(initCalendarTitle(workItemViewModel));
 			workCalendarVo.setStatus(WorkCalendarStatus.FINISH.getValue());
 			workCalendarVo.setStart((DateTimeUtil.getStringToDate(workItemViewModel.getReceiveTime(), null)).getTime());
 
@@ -166,7 +175,7 @@ public class WorkCalendarController extends ControllerBase {
 
 			finishTotal++;
 		}
-		/******************************************/
+		/* *****************************************/
 
 		/*
 		 * **************查询待办任务**************
@@ -185,7 +194,7 @@ public class WorkCalendarController extends ControllerBase {
 			workCalendarVo = new WorkCalendarVo();
 
 			workCalendarVo.setId(workItemViewModel.getBaseObjectID());
-			workCalendarVo.setTitle(workItemViewModel.getInstanceName());
+			workCalendarVo.setTitle(initCalendarTitle(workItemViewModel));
 			workCalendarVo.setStatus(WorkCalendarStatus.UNFINISH.getValue());
 			workCalendarVo.setStart((DateTimeUtil.getStringToDate(workItemViewModel.getReceiveTime(), null)).getTime());
 
@@ -193,7 +202,7 @@ public class WorkCalendarController extends ControllerBase {
 		}
 		int unfinishTotal = griddataUnfinish == null ? 0 : griddataUnfinish.size();
 
-		/******************************************/
+		/* *****************************************/
 
 		/*
 		 * **************查询超时任务**************
@@ -228,7 +237,7 @@ public class WorkCalendarController extends ControllerBase {
 			workCalendarVo = new WorkCalendarVo();
 
 			workCalendarVo.setId(workItemViewModel.getBaseObjectID());
-			workCalendarVo.setTitle(workItemViewModel.getInstanceName());
+			workCalendarVo.setTitle(initCalendarTitle(workItemViewModel));
 			workCalendarVo.setStatus(WorkCalendarStatus.EXCEED_TIME_LIMIT.getValue());
 			workCalendarVo.setStart((DateTimeUtil.getStringToDate(workItemViewModel.getReceiveTime(), null)).getTime());
 
@@ -236,12 +245,34 @@ public class WorkCalendarController extends ControllerBase {
 		}
 		int exceedTimeLimitTotal = griddataElapsed == null ? 0 : griddataElapsed.size();
 
-		/******************************************/
+		/* *****************************************/
 
 		responseWorkCalendarVo = new ResponseWorkCalendarVo(list);
 		responseWorkCalendarVo.setFinishTotal(finishTotal);
 		responseWorkCalendarVo.setUnfinishTotal(unfinishTotal);
 		responseWorkCalendarVo.setExceedTimeLimitTotal(exceedTimeLimitTotal);
 		return new ResponseVo(responseWorkCalendarVo);
+	}
+
+	private String initCalendarTitle(WorkItemViewModel workItemViewModel) {
+		StringBuffer title = null;
+		int dot = workItemViewModel.getInstanceName().lastIndexOf('.');
+
+		// 去掉任务名称点后后面的字符串，例如 "运维记录.32" 转为 "运维记录"
+		if ((dot > -1) && (dot < (workItemViewModel.getInstanceName().length()))) {
+			title = new StringBuffer(workItemViewModel.getInstanceName().substring(0, dot));
+
+		} else {
+			title = new StringBuffer(workItemViewModel.getInstanceName());
+		}
+
+		if (workItemViewModel.getWorkflowCode().equals(WorkflowCode.BUSINESS_EXCEPTION.getValue())) {
+
+			BizObjectInfo bizObjectInfo = workFlowService.getBizObjectInfoByInstanceId(workItemViewModel.getInstanceId());
+
+			return (title.append("-").append(bizObjectInfo.getBusinessSys())).toString();
+		}
+
+		return title.toString();
 	}
 }

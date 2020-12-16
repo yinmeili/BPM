@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 
 public enum WorkflowCode implements Enumeration {
 
+	BUSINESS_EXCEPTION("business_exception", "交易异常"),
+	
 	LIQUIDATION("liquidation", "清算"),
 
 	ORG_SYSTEM_WEEKLY_REPORT("org_system_weekly_report", "机构系统部周报")
