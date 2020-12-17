@@ -27,6 +27,9 @@ public interface UserMapper {
 	 */
 	@SelectProvider(type = UserSqlProvider.class, method = "getUserByLoginName")
 	public User getUserByLoginName(@Param("loginName") String loginName);
+	
+	@SelectProvider(type = UserSqlProvider.class, method = "getUserById")
+	public User getUserById(@Param("id") String id);
 
 	/**
 	 * 根据用户名查找用户登录名

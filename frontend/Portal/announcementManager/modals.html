@@ -59,7 +59,7 @@
               <div class="col-md-8 input-group">
                   <input ng-model="startTime"
                          autocomplete="off"
-                         ui-jq="wdatePicker" ui-options="EditStartTime"
+                         ui-jq="wdatePicker" ui-options="EditStartTime"id="EditStartTime"
                          class="input form-control"/>
               </div>
           </div>
@@ -67,7 +67,7 @@
               <div class="col-md-1"></div>
               <div class="col-md-2">结束时间</div>
               <div class="col-md-8 input-group">
-                  <input ng-model="endTime"
+                  <input ng-model="endTime"id="EditEndTime"
                          autocomplete="off"
                          class="input form-control"
                          ui-jq="wdatePicker" ui-options="EditEndTime" />
@@ -226,7 +226,7 @@
               <div class="col-md-2">开始时间</div>
               <div class="col-md-8 input-group">
                   <input 
-                         autocomplete="off"
+                         autocomplete="off"id="CreateStartTime"
                          ui-jq="wdatePicker" ui-options="createStartTime "
                          class="input form-control"/>
               </div>
@@ -236,7 +236,7 @@
               <div class="col-md-2">结束时间</div>
               <div class="col-md-8 input-group">
                   <input 
-                         autocomplete="off"
+                         autocomplete="off"id="CreateEndTime"
                          class="input form-control"
                          ui-jq="wdatePicker" ui-options="createEndTime" />
               </div>

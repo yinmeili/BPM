@@ -44,7 +44,7 @@ public class WorkflowTask {
 	 * @return void
 	 * @throws ServiceException
 	 **/
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/5 * * * ?")
 	private void process() throws ServiceException {
 		logger.info("======== autoStartWorkflowTask start ========");
 		try {
