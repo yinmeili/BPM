@@ -6,18 +6,18 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public enum WorkflowCode implements Enumeration {
+public enum InstanceStatus implements Enumeration {
 
-	BUSINESS_EXCEPTION("business_exception", "交易异常"),
-	
-	LIQUIDATION("liquidation", "清算"),
+	UNFINISH("2", "待办"),
 
-	ORG_SYSTEM_WEEKLY_REPORT("org_system_weekly_report", "机构系统部周报")
+	FINISH("4", "结束"),
+
+	CANCEL("5", "取消"),
 
 	;
 
-	private final static Logger logger = LoggerFactory.getLogger(WorkflowCode.class);
-	private static final Map<String, WorkflowCode> DICT = new HashMap<String, WorkflowCode>();
+	private final static Logger logger = LoggerFactory.getLogger(InstanceStatus.class);
+	private static final Map<String, InstanceStatus> DICT = new HashMap<String, InstanceStatus>();
 	private static final Map<String, Object> VALUES_MAP = new HashMap<String, Object>();
 
 	private String value = null;
@@ -25,21 +25,21 @@ public enum WorkflowCode implements Enumeration {
 
 	static {
 
-		for (WorkflowCode item : values()) {
+		for (InstanceStatus item : values()) {
 			DICT.put(item.value, item);
 			VALUES_MAP.put(item.value, item.displayName);
 		}
 	}
 
-	private WorkflowCode(String value, String displayName) {
+	private InstanceStatus(String value, String displayName) {
 		this.value = value;
 		this.displayName = displayName;
 	}
 
-	public static WorkflowCode parse(String value) {
+	public static InstanceStatus parse(String value) {
 
 		try {
-			WorkflowCode found = DICT.get(value);
+			InstanceStatus found = DICT.get(value);
 
 			return found;
 
@@ -59,4 +59,5 @@ public enum WorkflowCode implements Enumeration {
 	public String getDisplayName() {
 		return displayName;
 	}
+
 }

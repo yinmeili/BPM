@@ -17,6 +17,7 @@ public class UserService extends ApiDataService {
 
 	/**
 	 * 根据指定userId获取所有下级
+	 * 
 	 * @param userId
 	 * @return
 	 */
@@ -38,16 +39,24 @@ public class UserService extends ApiDataService {
 		return getParentId(parentIdList, userId);
 	}
 
+	public User getUserByLoginName(String loginName) {
+		return userMapper.getUserByLoginName(loginName);
+	}
+
+	public User getUserById(String id) {
+		return userMapper.getUserById(id);
+	}
+
 	private List<String> getParentId(List<String> parentIdList, String ouId) {
 		try {
 			Map<String, Object> result = this.processSyncOrg(String.format(ApiActionUrl.GET_PARENT_ORG.getUrl(), ouId), ApiActionUrl.GET_PARENT_ORG.getHttpRequestType(), null);
 
-			if(result.get("data") == null){
+			if (result.get("data") == null) {
 				return parentIdList;
 
-			}else{
+			} else {
 				parentIdList.add((String) result.get("data"));
-				getParentId(parentIdList, (String)result.get("data"));
+				getParentId(parentIdList, (String) result.get("data"));
 			}
 
 		} catch (IllegalArgumentException | TransportException e) {

@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;  
+import org.slf4j.LoggerFactory;
 
-public enum ErrorCode implements  EnumerationInt {
+public enum ErrorCode implements EnumerationInt {
 
-	SUCCESS(200, "成功"), 
+	SUCCESS(200, "成功"),
+
+	FAIL(201, "失败"),
 
 	AUTHORITY_ERROR(30001, "权限校验错误"),
 

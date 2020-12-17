@@ -3,35 +3,35 @@ package com.h3bpm.web.vo;
 import java.util.Date;
 
 public class BusinessExceptionVo {
-	private String id = null;
-	private String name = null;
-	private String createUser = null;
+	private String instanceId = null;
+	private String title = null;
+	private String createUserName = null;
 	private String businessSystem = null;
 	private Date startTime = null;
 	private Date endTime = null;
 
-	public String getId() {
-		return id;
+	public String getInstanceId() {
+		return instanceId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setInstanceId(String instanceId) {
+		this.instanceId = instanceId;
 	}
 
-	public String getName() {
-		return name;
+	public String getTitle() {
+		return title;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setTitle(String title) {
+		this.title = title;
 	}
 
-	public String getCreateUser() {
-		return createUser;
+	public String getCreateUserName() {
+		return createUserName;
 	}
 
-	public void setCreateUser(String createUser) {
-		this.createUser = createUser;
+	public void setCreateUserName(String createUserName) {
+		this.createUserName = createUserName;
 	}
 
 	public String getBusinessSystem() {

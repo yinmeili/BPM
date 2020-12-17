@@ -6,9 +6,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.h3bpm.web.entity.BizObjectInfo;
 import com.h3bpm.web.entity.WorkFlowTask;
 import com.h3bpm.web.enumeration.ApiActionUrl;
 import com.h3bpm.web.enumeration.WorkflowExecuteType;
+import com.h3bpm.web.mapper.WorkFlowMapper;
 import com.h3bpm.web.mapper.WorkFlowTaskMapper;
 
 @Service
@@ -16,14 +18,18 @@ public class WorkFlowService extends ApiDataService {
 
 	@Autowired
 	private WorkFlowTaskMapper workFlowTaskMapper;
+	
+	@Autowired
+	private WorkFlowMapper workFlowMapper;
 
 	/**
 	 * 新建一个流程
 	 * 
 	 * @param id
+	 * @throws ServiceException 
 	 */
 	@SuppressWarnings("unchecked")
-	public String createWorkFlow(String id) {
+	public String createWorkFlow(String id) throws ServiceException {
 		WorkFlowTask workFlowTask = null;
 
 		try {
@@ -47,14 +53,22 @@ public class WorkFlowService extends ApiDataService {
 				workFlowTask.setInstanceId((String) data.get("instanceId"));
 			}
 
-			workFlowTaskMapper.updateWorkFlowTask(workFlowTask);
-			return workFlowTask.getInstanceId();
+			workFlowTask.setExecuteType(WorkflowExecuteType.SUCCESS.getValue());
 
 		} catch (Exception e) {
 			workFlowTask.setExecuteType(WorkflowExecuteType.FAIL.getValue());
-			e.printStackTrace();
+			throw new ServiceException("create workflow task error!");
 		}
+		
+		workFlowTaskMapper.updateWorkFlowTask(workFlowTask);
 
-		return null;
+		return workFlowTask.getInstanceId();
+	}
+	
+	public BizObjectInfo getBizObjectInfoByInstanceId(String instanceId){
+		BizObjectInfo bizObjectInfo = workFlowMapper.getBizObjectIdByInstanceId(instanceId);
+		bizObjectInfo = workFlowMapper.getBizObjectInfoByBizObjectIdAndWorkflowCode(bizObjectInfo.getId(), bizObjectInfo.getWorkflowCode());
+		
+		return bizObjectInfo;
 	}
 }

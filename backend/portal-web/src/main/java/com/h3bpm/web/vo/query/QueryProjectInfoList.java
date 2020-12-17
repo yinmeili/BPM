@@ -2,19 +2,18 @@ package com.h3bpm.web.vo.query;
 
 import java.util.Date;
 
-import com.h3bpm.web.vo.ReqListWorkflowTaskPageVo;
+import com.h3bpm.web.vo.ReqListProjectInfoPageVo;
 
 import OThinker.Common.DateTimeUtil;
 
 @SuppressWarnings("deprecation")
-public class QueryWorkFlowTaskList extends ReqListWorkflowTaskPageVo {
-
-	public QueryWorkFlowTaskList(ReqListWorkflowTaskPageVo voBean) {
+public class QueryProjectInfoList extends ReqListProjectInfoPageVo {
+	public QueryProjectInfoList(ReqListProjectInfoPageVo voBean) {
 		this.setsEcho(voBean.getsEcho());
 		this.setiDisplayStart(voBean.getiDisplayStart());
 		this.setiDisplayLength(voBean.getiDisplayLength());
-		this.setFlowCode(voBean.getFlowCode());
-		this.setUserDisplayName(voBean.getUserDisplayName());
+		this.setKeyword(voBean.getKeyword());
+		this.setLeaderId(voBean.getLeaderId());
 		this.setStartTimeStart(voBean.getStartTimeStart());
 
 		// 页面接收的时间没有时分秒，将时分秒加大到该天的最后时刻
@@ -24,6 +23,15 @@ public class QueryWorkFlowTaskList extends ReqListWorkflowTaskPageVo {
 			startEndTime = DateTimeUtil.addSeconds(startEndTime, 59);
 			this.setStartTimeEnd(startEndTime);
 		}
-	}
 
+		this.setEndTimeStart(voBean.getEndTimeStart());
+
+		// 页面接收的时间没有时分秒，将时分秒加大到该天的最后时刻
+		if (voBean.getEndTimeEnd() != null) {
+			Date endEndTime = DateTimeUtil.addHours(voBean.getEndTimeEnd(), 23);
+			endEndTime = DateTimeUtil.addMinutes(endEndTime, 59);
+			endEndTime = DateTimeUtil.addSeconds(endEndTime, 59);
+			this.setEndTimeEnd(endEndTime);
+		}
+	}
 }
