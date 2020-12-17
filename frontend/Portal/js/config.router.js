@@ -404,16 +404,14 @@ angular.module('app')
                             function($ocLazyLoad){
                                 return $ocLazyLoad.load([
                                     'queryModel/businessException/main.js',
-                                    'js/services/notify.js',
-                                    'vendor/jquery/bootstrap-select-1.12.4/dist/css/bootstrap-select.min.css', 
-                                    'vendor/jquery/bootstrap-select-1.12.4/dist/js/bootstrap-select.min.js'
+                                    'js/services/notify.js'
                                 ]);
                             }
                             
                         ]
                     }
                 })
-                //周报查询
+                // 周报查询
                 // .state('app.WeeklyReport',{
                 //     url:'/WeeklyReport',
                 //     controller:'weeklyReportCtrl',
@@ -814,7 +812,7 @@ angular.module('app')
                         deps: ['$ocLazyLoad',
                             function ($ocLazyLoad) {
                                 return $ocLazyLoad.load([
-                                    'js/services/notify.js', 
+                                    'js/services/notify.js'
                                 ]);
                             }
                         ]
