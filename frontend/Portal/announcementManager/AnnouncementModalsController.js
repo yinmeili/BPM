@@ -272,8 +272,8 @@ app.controller("AnnouncementModalsController", ["$scope", '$q', "$rootScope", "$
             var myEndTimes = new Date($scope.createendTime.replace(/-/g, "/")).getTime();
             if (myStartTimes > myEndTimes) {
                 $.notify({ message: "时间区间错误", status: "danger" });
-                $("#EditStartTime").css("color", "red");
-                $("#EditEndTime").css("color", "red");
+                $("#CreateStartTime").css("color", "red");
+                $("#CreateEndTime").css("color", "red");
                 return false;
             };
            
