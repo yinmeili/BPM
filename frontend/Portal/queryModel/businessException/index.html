@@ -44,22 +44,16 @@
                                     <span class="search-title-text">系统名</span>
                                     <div class="form-group">
                                         <!-- <select class="input form-control"  style="height:30px;">
-                                            <option value="">全部</option>
-                                            <option ng-repeat="businessOption in businessExceptionOptionData" value="{{businessOption.Code}}">
-                                                {{businessOption.Code}}
+                                            <option selected="selected"value="">全部</option>
+                                            <option   id="usertype"  class="selectpicker show-tick form-control"style="width:80px;height:29.6px;" multiple title="全部">
                                             </option>
                                         </select> -->
-                                        <select   id="usertype"  class="selectpicker show-tick form-control"style="width:80px;height:29.6px;" multiple >
-                                            <option selected="selected"value="">全部</option>
-                                            <!-- <option value="">全部</option>
-                                            <option ng-repeat="businessOption in businessExceptionOptionData" value="{{businessOption.Code}}">
-                                                {{businessOption.Code}}
-                                            </option> -->
+                                        <select  id="usertype"  class="selectpicker show-tick form-control"style="width:80px;height:29.6px;" multiple title="全部" >
+                                            <option value=""id="businessExceptionAll"selected="selected">全部</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
-                        
                             </br>
                               <div class="header-search-item">
                                   <span class="search-title-text">开始时间</span>

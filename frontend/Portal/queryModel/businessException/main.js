@@ -12,12 +12,12 @@
              
           }
           $.ajax({
-            "url": "MasterData/GetMasterDataList",
+            "url": "/Portal/system/findDictionaryData",
             "type": "post",
-            "data": { id: "交易系统", PageIndex: 1, PageSize: 99 },
+            "data": { categoryCode: "交易系统"},
             "dataType": "json",
             "success": function (data) {
-                $scope.businessExceptionOptionData = data.Rows;
+                $scope.businessExceptionOptionData = data.data;
                 //使用refresh方法更新UI以匹配新状态
                 $('#usertype').selectpicker('refresh');
                 //render方法强制重新渲染引导程序 - 选择ui。
@@ -26,37 +26,50 @@
                 optionMulti = $scope.businessExceptionOptionData;
                 //定义一个对象数组，用于储存所需选项
                 for (var i = 0; i < optionMulti.length; i++) {
-                    $("#usertype").append($("<option value=\"" + optionMulti[i].Code + "\">" + optionMulti[i].Code + "</option>"));
+                    $("#usertype").append($("<option value=\"" + optionMulti[i].code + "\">" + optionMulti[i].code + "</option>"));
                 }
+                
               },
             "error": function () {
             }
           })
+          $('#usertype').on('changed.bs.select',
+              function () {
+                  if ($('#usertype').val() != null) {
+                      $scope.businessExceptionOptionData.forEach(el => {
+                          if ($('#usertype').val().indexOf(el.code) != "-1") {
+                              $('#businessExceptionAll').removeAttr("selected");
+                              $('#usertype').selectpicker('refresh');
+                              $('#usertype').selectpicker('render');
+                          }
+                      })
+                  }
+
+          });
           //共享知识的日期控件初始化
           $scope.searchExceptionStartTimeStart = {
-              dateFmt: 'yyyy-MM-dd', realDateFmt: "yyyy-MM-dd", minDate: '2012-1-1', maxDate: '2099-12-31',
+              dateFmt: 'yyyy-MM-dd HH:mm:ss', realDateFmt: "yyyy-MM-dd HH:mm:ss", minDate: '2012-1-1', maxDate: '2099-12-31',
               onpicked: function (e) {
                   $rootScope.searchExceptionStartTimeStart = e.el.value;
               }
           }
           $scope.searchExceptionStartTimeEnd = {
-              dateFmt: 'yyyy-MM-dd', realDateFmt: "yyyy-MM-dd", minDate: '2012-1-1', maxDate: '2099-12-31',
+              dateFmt: 'yyyy-MM-dd HH:mm:ss', realDateFmt: "yyyy-MM-dd HH:mm:ss", minDate: '2012-1-1', maxDate: '2099-12-31',
               onpicked: function (e) {
                   $rootScope.searchExceptionStartTimeEnd = e.el.value;
               
               }
           }
           $scope.searchExceptionEndTimeStart = {
-              dateFmt: 'yyyy-MM-dd', realDateFmt: "yyyy-MM-dd", minDate: '2012-1-1', maxDate: '2099-12-31',
+              dateFmt: 'yyyy-MM-dd HH:mm:ss', realDateFmt: "yyyy-MM-dd HH:mm:ss", minDate: '2012-1-1', maxDate: '2099-12-31',
               onpicked: function (e) {
                   $rootScope.searchExceptionEndTimeStart = e.el.value;
               }
           }
           $scope.searchExceptionEndTimeEnd = {
-              dateFmt: 'yyyy-MM-dd', realDateFmt: "yyyy-MM-dd", minDate: '2012-1-1', maxDate: '2099-12-31',
+              dateFmt: 'yyyy-MM-dd HH:mm:ss', realDateFmt: "yyyy-MM-dd HH:mm:ss", minDate: '2012-1-1', maxDate: '2099-12-31',
               onpicked: function (e) {
                   $rootScope.searchExceptionEndTimeEnd = e.el.value;
-
               }
           }
           $scope.$on('$viewContentLoaded', function (event) {
@@ -245,7 +258,6 @@
               "sPaginationType": "full_numbers",
               "fnServerParams": function (aoData) {
                   // 增加自定义查询条件
-                
                   //将时间转化为时间戳
                   aoData.push(//name的值是传输数据的key，value的值是传输数据的value
                       { "name": "startTimeStart", "value": $filter("date")( $rootScope.searchExceptionStartTimeStart, "yyyy-MM-dd HH:mm:ss") },
@@ -255,8 +267,7 @@
                       { "name": "businessSystem","value":$("#usertype").val()},
                       { "name": "endTimeStart", "value": $filter("date")( $rootScope.searchExceptionEndTimeStart, "yyyy-MM-dd HH:mm:ss") },
                       { "name": "endTimeEnd", "value": $filter("date")( $rootScope.searchExceptionEndTimeEnd ,"yyyy-MM-dd HH:mm:ss") },
-                  );
-               
+                  );               
               },
               "aoColumns": $scope.getMyColumns(), // 字段定义
               // 初始化完成事件,这里需要用到 JQuery ，因为当前表格是 JQuery 的插件
@@ -273,57 +284,57 @@
                           $rootScope.searchExceptionEndTimeStart = "";
                           $rootScope.searchExceptionEndTimeEnd = "";
                       }
-                      else if($("#searchExceptionStartTimeStart").val()==""&&$("#searchExceptionStartTimeEnd").val()=="")
+                      if($("#searchExceptionStartTimeStart").val()==""&&$("#searchExceptionStartTimeEnd").val()=="")
                       {
                           $rootScope.searchExceptionStartTimeStart="";
                           $rootScope.searchExceptionStartTimeEnd="";
                       }
-                      else if($("#searchExceptionStartTimeStart").val()==""&&$("#searchExceptionStartTimeEnd").val()!=="")
+                      if($("#searchExceptionStartTimeStart").val()==""&&$("#searchExceptionStartTimeEnd").val()!=="")
                       {
                           $rootScope.searchExceptionStartTimeStart="";
                           
                       }
-                      else if($("#searchExceptionStartTimeStart").val()!==""&&$("#searchExceptionStartTimeEnd").val()=="")
+                      if($("#searchExceptionStartTimeStart").val()!==""&&$("#searchExceptionStartTimeEnd").val()=="")
                       {
                           $rootScope.searchExceptionStartTimeEnd="";
                       }
-                      //截止时间
-                      else if($("#searchExceptionEndTimeStart").val()==""&&$("#searchExceptionEndTimeEnd").val()=="")
+                      if($("#searchExceptionEndTimeStart").val()==""&&$("#searchExceptionEndTimeEnd").val()=="")
                       {
                           $rootScope.searchExceptionEndTimeStart="";
                           $rootScope.searchExceptionEndTimeEnd="";
                       }
-                      else if($("#searchExceptionEndTimeStart").val()==""&&$("#searchExceptionEndTimeEnd").val()!=="")
+                      if($("#searchExceptionEndTimeStart").val()==""&&$("#searchExceptionEndTimeEnd").val()!=="")
                       {
                           $rootScope.searchExceptionEndTimeStart="";
                           
                       }
-                      else if($("#searchExceptionEndTimeStart").val()!==""&&$("#searchExceptionEndTimeEnd").val()=="")
+                      if($("#searchExceptionEndTimeStart").val()!==""&&$("#searchExceptionEndTimeEnd").val()=="")
                       {
                           $rootScope.searchExceptionEndTimeEnd="";
                       }
-                      else{
+                      else {
                           
-                      var myStartTimes = new Date( $rootScope.searchExceptionStartTimeStart.replace(/-/g, "/")).getTime();
+                          var myStartTimes = new Date( $rootScope.searchExceptionStartTimeStart.replace(/-/g, "/")).getTime();
                           var myEndTimes = new Date($rootScope.searchExceptionStartTimeEnd.replace(/-/g, "/")).getTime();
+                          var myEndStartTimes=new Date($rootScope.searchExceptionEndTimeStart.replace(/-/g, "/")).getTime();
+                          var myEndEndTimes=new Date($rootScope.searchExceptionEndTimeEnd.replace(/-/g, "/")).getTime();
                           if (myStartTimes > myEndTimes) {
                               $.notify({ message: "时间区间错误", status: "danger" });
                               $("#MyStartTimeEnd").css("color", "red");
                               return false;
-                          };
-                          var myEndStartTimes=new Date($rootScope.searchExceptionEndTimeStart.replace(/-/g,"/")).getTime;
-                          var myEndEndTimes=new Date($rootScope.searchExceptionEndTimeEnd.replace(/-/g, "/")).getTime();
-                          if(myEndStartTimes<myEndTimes){
-                            $.notify({ message: "时间区间错误", status: "danger" });
-                            $("#MyEndTimeStart").css("color", "red");
-                            return false;
                           }
                           if(myEndStartTimes>myEndEndTimes){
                             $.notify({ message: "时间区间错误", status: "danger" });
                             $("#MyEndTimeEnd").css("color", "red");
                             return false;
                           }
+                          
+                          
                       }
+                      //截止时间
+                     
+                      
+                       
                      
                       
                       $("#tabBusinessxceptionFlow").dataTable().fnDraw();
