@@ -829,6 +829,25 @@ angular.module('app')
                         ]
                     }
                 })
+                //项目信息管理
+                .state('app.projectManager', {
+                    url: '/projectManager',
+                    controller: "projectManagerCtrl",
+                    templateUrl: 'projectManager/index.html',
+                    resolve: {
+                        deps: ['$ocLazyLoad',
+                            function ($ocLazyLoad) {
+                                return $ocLazyLoad.load([
+                                    'WFRes/_Scripts/MvcSheet/SheetControls.js',
+                                    'WFRes/_Scripts/MvcSheet/MvcSheetUI.js',
+                                    'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js',
+                                    'WFRes/_Scripts/MvcSheet/Controls/MvcSheetControls.js',
+                                    'js/services/notify.js', 
+                                ]);
+                            }
+                        ]
+                    }
+                })
 
                 
                
