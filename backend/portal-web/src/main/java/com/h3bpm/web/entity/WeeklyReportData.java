@@ -2,11 +2,10 @@ package com.h3bpm.web.entity;
 
 import cn.afterturn.easypoi.excel.annotation.Excel;
 
-import java.util.Date;
-
 public class WeeklyReportData implements java.io.Serializable{
-
-    @Excel(name = "周报人员", orderNum = "0")
+	private static final long serialVersionUID = 1L;
+	
+	@Excel(name = "周报人员", orderNum = "0")
     private String userDisplayName;
 
     public WeeklyReportData() {

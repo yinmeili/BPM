@@ -1,7 +1,5 @@
 package com.h3bpm.web.mapper.sqlprovider;
 
-import OThinker.Common.Organization.Models.User;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
