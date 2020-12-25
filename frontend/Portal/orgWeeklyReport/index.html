@@ -1,0 +1,246 @@
+<!--
+    共享流程
+     -->
+<div class="hbox hbox-auto-xs hbox-auto-sm" ng-controller="orgWeeklyReportCtrl">
+  <!-- main -->
+  <div class="col">
+    <!-- main header -->
+    <div class="wrapper-md">
+      <div class="row">
+        <div class="col-sm-6 col-xs-12 form-title-name">
+          <span class="h3" ng-bind="menuData.DisplayName"></span>
+        </div>
+        <div class="col-sm-6 col-xs-12">
+
+        </div>
+      </div>
+    </div>
+
+    <!--表格部分Start-->
+    <div class="wrapper-md paddingbottomNone">
+      <div class="panel panel-default">
+        <div class="table-responsive">
+          <div class="form-inline search-box">
+            <div class="input-group searchContainer">
+              <!--名称-->
+              
+              <!--标签-->
+              <div class="header-search-item">
+                <span class="search-title-text">部门</span>
+                <div class="form-group">
+                  <select autocomplete="off" ng-model="orgWeeklyReportCompany"
+                    id="orgWeeklyReportCompany" maxlength="32" class="input form-control" > 
+                  </select>
+                 
+                </div>
+              </div>
+              <div class="header-search-item">
+                <span class="search-title-text">等级</span>
+                <div class="form-group">
+                  <select autocomplete="off" ng-model="orgWeeklyReportLevel" ng-options="o.id as o.text for o in level"
+                    id="orgWeeklyReportLevel" maxlength="32" class="input form-control" > 
+                    <option value=""style="display:none">二级及以上</option>
+                  </select>
+                 
+                </div>
+              </div>
+            </br>
+              <div class="header-search-item">
+                <span class="search-title-text">开始时间</span>
+                <div class="form-group search-time-box">
+                  <div class="input-group">
+                    <input id="orgWeeklyReportStartTimeStart" autocomplete="off" ui-jq="wdatePicker"ng-model="orgWeeklyReportStartTime"
+                      ui-options="orgWeeklyReportStartTimeStart" class="input form-control"/>
+                    <span class="input-group-addon" style="border-left:0;border-right:0;"
+                      translate="QueryTableColumn.To"></span>
+                  
+                      <input class="form-control" style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                         ng-model="orgWeeklyReportStartTimeEnd" autofocus="focus" ng-disabled="true"/>
+     
+                    </div>
+                </div>
+              </div>
+
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <button class="btn btn-primary search-box-btn" id="search_orgWeeklyReport" type="button"ng-click="searchOrgWeeklyReport()">
+                查询
+              </button>
+            </div>
+          </div>
+          <!-- 表格  -->
+          <!-- 常规工作 -->
+          <div id="div110456" class="col-md-12" style="border:1px solid #C7C7C7;position: relative;border-bottom: none">
+            <div style="background-color: white;position: absolute;left:15px;top:-10px;color: rgba(0,0,0,.65)">
+              <b>常规工作</b>
+            </div>
+          </div>
+          <div id="div517598" class="col-md-12"
+            style="border-right: 1px solid rgb(199, 199, 199); border-bottom: 1px solid rgb(199, 199, 199); border-left: 1px solid rgb(199, 199, 199); border-image: initial; border-top: none; overflow: auto;"
+            data-title="">
+
+            <table id="org_weekly_report_job" data-datafield="org_weekly_report_job" data-type="SheetGridView"
+              class="SheetGridView" style="">
+              <tbody class="">
+                <tr class="header">
+                  
+                  <td id="ctl639771_header0" style="" class="" data-field="org_weekly_report_job.job_content">
+                    <label id="ctl639771_Label0" data-datafield="org_weekly_report_job.job_content"
+                      data-type="SheetLabel" style="">工作内容</label></td>
+                  <td id="ctl639771_header1" style="" class="" data-field="org_weekly_report_job.job_evolve">
+                    <label id="ctl639771_Label1" data-datafield="org_weekly_report_job.job_evolve"
+                      data-type="SheetLabel" style="">工作进展</label></td>
+                  <td id="ctl639771_header2" style="" class="" data-field="org_weekly_report_job.job_ratio">
+                    <label id="ctl639771_Label2" data-datafield="org_weekly_report_job.job_ratio"
+                      data-type="SheetLabel" style="">完成比例</label></td>
+                  <td id="ctl639771_header3" style="" class="" data-field="org_weekly_report_job.job_problem">
+                    <label id="ctl639771_Label3" data-datafield="org_weekly_report_job.job_problem"
+                      data-type="SheetLabel" style="">存在问题</label></td>
+                  <td id="ctl639771_header4" style="" class="" data-field="org_weekly_report_job.job_type">
+                    <label id="ctl639771_Label4" data-datafield="org_weekly_report_job.job_type"
+                      data-type="SheetLabel" style="">工作分类</label></td>
+                  <td id="ctl639771_header5" style="" data-field="org_weekly_report_job.job_level"><label
+                      id="ctl639771_Label5" data-datafield="org_weekly_report_job.job_level"
+                      data-type="SheetLabel" style="">工作等级</label></td>
+
+                </tr>
+
+
+              </tbody>
+            </table>
+            <div id="DashedBlank11" style="height:30px;display: block;text-align: center;color: red;"> </div>
+          </div>
+          <div id="blank" class="col-md-12" style="height:20px">    
+          </div>
+          <!-- 项目工作 -->
+          <div id="div679814" class="col-md-12"
+            style="border:1px solid #C7C7C7;position: relative;border-bottom: none;">
+            <div style="background-color: white;position: absolute;left:15px;top:-10px;color: rgba(0,0,0,.65)">
+              <b>项目工作</b>
+            </div>
+          </div>
+          <div id="div924539" class="col-md-12"
+            style="border-right: 1px solid rgb(199, 199, 199); border-bottom: 1px solid rgb(199, 199, 199); border-left: 1px solid rgb(199, 199, 199); border-image: initial; border-top: none; overflow: auto;"
+            data-title="">
+            <table id="org_weekly_report_pj" data-datafield="org_weekly_report_pj" data-type="SheetGridView"
+              class="SheetGridView" style="" data-displaydelete="false" data-displayadd="false">
+              <tbody>
+                <tr class="header">
+                  <td id="ctl21142_header0" style="" data-field="org_weekly_report_pj.pj_name"><label
+                      id="ctl21142_Label0" data-datafield="org_weekly_report_pj.pj_name" data-type="SheetLabel"
+                      style="">项目名称</label></td>
+                  <td id="ctl21142_header1" style="" data-field="org_weekly_report_pj.pj_info"><label
+                      id="ctl21142_Label1" data-datafield="org_weekly_report_pj.pj_info" data-type="SheetLabel"
+                      style="">项目情况说明</label></td>
+                  <td id="ctl21142_header2" style="" data-field="org_weekly_report_pj.pj_evolve"><label
+                      id="ctl21142_Label2" data-datafield="org_weekly_report_pj.pj_evolve" data-type="SheetLabel"
+                      style="">项目进展</label></td>
+                  <td id="ctl21142_header3" style="" data-field="org_weekly_report_pj.pj_ratio"><label
+                      id="ctl21142_Label3" data-datafield="org_weekly_report_pj.pj_ratio" data-type="SheetLabel"
+                      style="">完成比例</label></td>
+                  <td id="ctl21142_header4" style="" data-field="org_weekly_report_pj.pj_org"><label
+                      id="ctl21142_Label4" data-datafield="org_weekly_report_pj.pj_org" data-type="SheetLabel"
+                      style="">涉及部门</label></td>
+                  <td id="ctl21142_header5" style="" data-field="org_weekly_report_pj.pj_remark"><label
+                      id="ctl21142_Label5" data-datafield="org_weekly_report_pj.pj_remark" data-type="SheetLabel"
+                      style="">备注</label></td>
+
+                </tr>
+              </tbody>
+            </table>
+            <div id="DashedBlank12" style="height:30px;display: block;text-align: center;color: red;"> </div>
+          </div>
+          <div id="blank" class="col-md-12" style="height:20px">    
+          </div>
+          <!-- 下周常规工作计划 -->
+         
+          <div id="div916338" class="col-md-12"
+            style="border:1px solid #C7C7C7;border-bottom: none;position: relative;">
+            <div style="background-color: white;position: absolute;left:15px;top:-10px;color: rgba(0,0,0,.65)">
+              <b>下周常规工作计划</b>
+            </div>
+          </div>
+          <div id="div857461" class="col-md-12"
+            style="border-right: 1px solid rgb(199, 199, 199); border-bottom: 1px solid rgb(199, 199, 199); border-left: 1px solid rgb(199, 199, 199); border-image: initial; border-top: none; overflow: auto;"
+            data-title="">
+            <table id="org_weekly_job_plan" data-datafield="org_weekly_job_plan" data-type="SheetGridView"
+              class="SheetGridView" style="">
+              <tbody>
+                <tr class="header">
+                 
+                  <td id="ctl593547_header0" style="" class="" data-field="org_weekly_job_plan.job_content">
+                    <label id="ctl593547_Label0" data-datafield="org_weekly_job_plan.job_content"
+                      data-type="SheetLabel" style="" class="">工作内容</label></td>
+                  <td id="ctl593547_header1" style="" data-field="org_weekly_job_plan.job_evolve"><label
+                      id="ctl593547_Label1" data-datafield="org_weekly_job_plan.job_evolve"
+                      data-type="SheetLabel" style="">工作进展</label></td>
+                  <td id="ctl593547_header2" style="" data-field="org_weekly_job_plan.job_ratio"><label
+                      id="ctl593547_Label2" data-datafield="org_weekly_job_plan.job_ratio" data-type="SheetLabel"
+                      style="">完成比例</label></td>
+                  <td id="ctl593547_header3" style="" class="" data-field="org_weekly_job_plan.job_problem">
+                    <label id="ctl593547_Label3" data-datafield="org_weekly_job_plan.job_problem"
+                      data-type="SheetLabel" style="">存在问题</label></td>
+                  <td id="ctl593547_header4" style="" class="" data-field="org_weekly_job_plan.job_type"><label
+                      id="ctl593547_Label4" data-datafield="org_weekly_job_plan.job_type" data-type="SheetLabel"
+                      style="">工作分类</label></td>
+                  <td id="ctl593547_header5" style="" data-field="org_weekly_job_plan.job_level"><label
+                      id="ctl593547_Label5" data-datafield="org_weekly_job_plan.job_level" data-type="SheetLabel"
+                      style="">工作等级</label></td>
+
+                </tr>
+              
+              </tbody>
+            </table>
+            <div id="DashedBlank13" style="height:30px;display: block;text-align: center;color: red;"> </div>
+          </div>
+          <!-- 下周项目 -->
+          <div id="blank" class="col-md-12" style="height:20px">    
+          </div>
+          <div id="div216556" class="col-md-12"
+            style="border:1px solid #C7C7C7;border-bottom: none;position: relative;">
+            <div style="background-color: white;position: absolute;left:15px;top:-10px;color: rgba(0,0,0,.65)">
+              <b>下周项目工作计划</b>
+            </div>
+          </div>
+
+
+          <div id="div449862" class="col-md-12"
+            style="border-right: 1px solid rgb(199, 199, 199); border-bottom: 1px solid rgb(199, 199, 199); border-left: 1px solid rgb(199, 199, 199); border-image: initial; border-top: none; overflow: auto;"
+            data-title="">
+            <table id="org_weekly_pj_plan" data-datafield="org_weekly_pj_plan" data-type="SheetGridView"
+              class="SheetGridView" style="" data-displayadd="false" data-displaydelete="false">
+              <tbody>
+                <tr class="header">
+                  
+                  <td id="ctl898092_header0" style="" class="" data-field="org_weekly_pj_plan.pj_name"><label
+                      id="ctl898092_Label0" data-datafield="org_weekly_pj_plan.pj_name" data-type="SheetLabel"
+                      style="">项目名称</label></td>
+                  <td id="ctl898092_header1" style="" class="" data-field="org_weekly_pj_plan.pj_info"><label
+                      id="ctl898092_Label1" data-datafield="org_weekly_pj_plan.pj_info" data-type="SheetLabel"
+                      style="">项目情况说明</label></td>
+                  <td id="ctl898092_header2" style="" class="" data-field="org_weekly_pj_plan.pj_evolve"><label
+                      id="ctl898092_Label2" data-datafield="org_weekly_pj_plan.pj_evolve" data-type="SheetLabel"
+                      style="">项目进展</label></td>
+                  <td id="ctl898092_header3" style="" class="" data-field="org_weekly_pj_plan.pj_ratio"><label
+                      id="ctl898092_Label3" data-datafield="org_weekly_pj_plan.pj_ratio" data-type="SheetLabel"
+                      style="" class="">完成比例</label></td>
+                  <td id="ctl898092_header4" style="" class="" data-field="org_weekly_pj_plan.pj_org"><label
+                      id="ctl898092_Label4" data-datafield="org_weekly_pj_plan.pj_org" data-type="SheetLabel"
+                      style="">涉及部门</label></td>
+                  <td id="ctl898092_header5" style="" class="" data-field="org_weekly_pj_plan.pj_remark"><label
+                      id="ctl898092_Label5" data-datafield="org_weekly_pj_plan.pj_remark" data-type="SheetLabel"
+                      style="">备注</label></td>
+                </tr>
+             
+              </tbody>
+            </table>
+            <div id="DashedBlank14" style="height:30px;display: block;text-align: center;color: red;"> </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+<link href="WFRes/css/MvcSheet.min.css" rel="stylesheet">
+<link href="WFRes/css/MvcSheetPrint.min.css" rel="stylesheet">
