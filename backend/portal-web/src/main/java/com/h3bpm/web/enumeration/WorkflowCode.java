@@ -12,7 +12,9 @@ public enum WorkflowCode implements Enumeration {
 	
 	LIQUIDATION("liquidation", "清算"),
 
-	ORG_SYSTEM_WEEKLY_REPORT("org_system_weekly_report", "机构系统部周报")
+	ORG_SYSTEM_WEEKLY_REPORT("org_system_weekly_report", "机构系统部周报"),
+	
+	ORG_WEEKLY_REPORT("org_weekly_report", "部门周报"),
 
 	;
 
