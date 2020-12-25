@@ -867,6 +867,26 @@ angular.module('app')
                         ]
                     }
                 })
+                   //周报快速查看
+                .state('app.OrgWeeklyReportQuery', {
+                    url: '/orgWeeklyReport',
+                    controller: "orgWeeklyReportCtrl",
+                    templateUrl: 'orgWeeklyReport/index.html',
+                    resolve: {
+                        deps: ['$ocLazyLoad',
+                            function ($ocLazyLoad) {
+                                return $ocLazyLoad.load([
+                                    // 'WFRes/_Scripts/MvcSheet/MvcSheet.min.js',
+                                    // 'WFRes/_Scripts/MvcSheet/MvcSheetAll.js',
+                                   
+                                   
+                                ]);
+                            }
+                        ]
+                    }
+                })
+           
+             
 
                 
                
