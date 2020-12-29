@@ -26,26 +26,46 @@
                 optionMulti = $scope.businessExceptionOptionData;
                 //定义一个对象数组，用于储存所需选项
                 for (var i = 0; i < optionMulti.length; i++) {
-                    $("#usertype").append($("<option value=\"" + optionMulti[i].code + "\">" + optionMulti[i].code + "</option>"));
+                    $("#usertype").append($("<option value=\"" + optionMulti[i].code +"\">" + optionMulti[i].code + "</option>"));
                 }
-                
               },
             "error": function () {
             }
           })
           $('#usertype').on('changed.bs.select',
-              function () {
+              function (e, clickedIndex, isSelected, previousValue) {
+                  //选中其他时，去除全部的选择状态
                   if ($('#usertype').val() != null) {
                       $scope.businessExceptionOptionData.forEach(el => {
                           if ($('#usertype').val().indexOf(el.code) != "-1") {
-                              $('#businessExceptionAll').removeAttr("selected");
+                            //   $('#businessExceptionAll').removeAttr("selected");
+                            $('#businessExceptionAll').attr("selected",false);
                               $('#usertype').selectpicker('refresh');
                               $('#usertype').selectpicker('render');
                           }
                       })
                   }
+                  //选中全部时，只选全部，去除其他元素的选择状态
+                 if(clickedIndex==0)
+                 {
+                    $('#usertype').find("option:selected").attr("selected", false);
+                    $('#businessExceptionAll').prop('selected',true);
+                    $('#usertype').selectpicker('refresh');
+                    $('#usertype').selectpicker('render');
+
+                 }
+                 //没有选中元素时，默认选择全部
+                 if($('#usertype').val()==null){
+                    $('#businessExceptionAll').prop('selected',true);
+                    $('#usertype').selectpicker('refresh');
+                    $('#usertype').selectpicker('render');
+                 }
+                  
+
+                 
 
           });
+         
           //共享知识的日期控件初始化
           $scope.searchExceptionStartTimeStart = {
               dateFmt: 'yyyy-MM-dd HH:mm:ss', realDateFmt: "yyyy-MM-dd HH:mm:ss", minDate: '2012-1-1', maxDate: '2099-12-31',

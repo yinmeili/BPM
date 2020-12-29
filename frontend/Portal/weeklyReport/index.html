@@ -20,44 +20,40 @@
                       <div class="form-inline search-box">
                           <div class="input-group searchContainer">
                               <!--名称-->
-                              <div class="header-search-item">
-                                  <span class="search-title-text">标题</span>
-                                  <div class="form-group">
-                                      <input ng-model="weeklyReportKeyword" maxlength="32" class="input form-control" placeholder="标题" id="weeklyReportName"/>
-                                  </div>
-                              </div>
+                            
                               <!--标签-->
                              
                               <div class="header-search-item">
-                                <span class="search-title-text">创建者</span>
+                                <span class="search-title-text">部门</span>
                                 <div class="form-group">
-                                    <div ui-jq="SheetUser" ui-options="searchWeeklyReportWasAgentOptions" id="searchWeeklyReportCompany"
-                                    class="form-horizontal" data-sheetusercontrol="true"
-                                       
-                                    >
-                                    </div>
-                                    <!-- <div ui-jq="SheetUser" ui-options="WasAgentOptions" id="editPer"
-                                     class="" style="" data-orgunitvisible="true" data-groupvisible="true">
-                                </div> -->
+                                    <!-- <select id="WeeklySelect"ng-model="WeeklySelect" class="input form-control" maxlength="32"
+                                    ng-options="item.text for item in WeeklySelectDatas track by item.id" >
+                                        <option  style='display: none' value=''></option>
+                                    </select> -->
+                                    <select  id="WeeklySelect"  class="input form-control" title="全部" >
+                                        <option value=""selected="selected">全部</option>
+                                    </select>
                                 </div>
+                               
                                 
                             </div>
                         
                             </br>
                               <div class="header-search-item">
-                                  <span class="search-title-text">开始时间</span>
+                                  <span class="search-title-text">周报时间</span>
                                   <div class="form-group search-time-box">
                                       <div class="input-group"style="z-index:0">
                                           <input 
                                                  id="searchWeeklyStartTimeStart"
                                                  autocomplete="off"
-                                                 ui-jq="wdatePicker" ui-options="searchWeeklyStartTimeStart"
+                                                 ui-jq="wdatePicker" ui-options="searchWeeklyReportStartTimeStart"
+                                                 ng-model="searchWeeklyStartTimeStart"
                                                  class="input form-control" />
                                           <span class="input-group-addon" style="border-left:0;border-right:0;" translate="QueryTableColumn.To"></span>
                                           <input 
                                                  autocomplete="off" id="searchWeeklyStartTimeEnd"
-                                                 class="input form-control"
-                                                 ui-jq="wdatePicker" ui-options="searchWeeklyStartTimeEnd"/>
+                                                 class="input form-control"ng-model="searchWeeklyStartTimeEnd"
+                                                 />
                                       </div>
                                   </div>
                               </div>
@@ -78,8 +74,6 @@
                           <thead>
                               <tr>
                                   <th> <span>标题</span></th>
-                                  <th><span>系统名</span></th>
-                                  <th><span>创建者</span></th>
                                   <th class="hide1024"><span >开始时间</span></th>
                                   <th class="hide414" ><span>截止时间</span></th> 
                               </tr>
@@ -91,7 +85,6 @@
                   </div>
               </div>
           </div>
-          <div ng-include="'weeklyReport/modals.html'"></div>  
           <!--表格部分End-->
       </div>
     
