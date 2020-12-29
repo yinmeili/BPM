@@ -13,5 +13,7 @@ public interface WorkFlowMapper {
 
 	@SelectProvider(type = WorkFlowSqlProvider.class, method = "getBizObjectInfoByIdAndWorkflowCode")
 	public BizObjectInfo getBizObjectInfoByBizObjectIdAndWorkflowCode(@Param("id") String id, @Param("workflowCode") String workflowCode);
-
+	
+	@SelectProvider(type = WorkFlowSqlProvider.class, method = "getBizObjectInfoByBizObjectIdAndWorkflowCodeWithOutSysType")
+	public BizObjectInfo getBizObjectInfoByBizObjectIdAndWorkflowCodeWithOutSysType(@Param("id") String id, @Param("workflowCode") String workflowCode);
 }

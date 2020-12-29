@@ -14,6 +14,8 @@ public enum WorkflowCode implements Enumeration {
 
 	ORG_SYSTEM_WEEKLY_REPORT("org_system_weekly_report", "机构系统部周报"),
 	
+	WEEKLY_REPORT("weekly_report", "工作周报"),
+	
 	ORG_WEEKLY_REPORT("org_weekly_report", "部门周报"),
 
 	;
