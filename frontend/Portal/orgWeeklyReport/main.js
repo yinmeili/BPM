@@ -34,7 +34,12 @@
           var weekLastDay = new Date((weekFirstDay / 1000 + 6 * 86400) * 1000);
           var lastMonth = Number(weekLastDay.getMonth()) + 1;
           var weekLastDays = weekLastDay.getDate();
-          var WeekLastDate = weekFirstDay.getFullYear() + '-' + lastMonth + '-' + weekLastDays;
+          if (firstMonth > lastMonth) {
+            var WeekLastDate = weekFirstDay.getFullYear() + 1 + '-' + lastMonth + '-' + weekLastDays;
+          } else {
+            var WeekLastDate = weekFirstDay.getFullYear() + '-' + lastMonth + '-' + weekLastDays;
+          }
+         
 
           $scope.orgWeeklyReportStartTimeEnd = WeekLastDate;
           $scope.$apply();
@@ -53,7 +58,11 @@
         var weekLastDay = new Date((weekFirstDay / 1000 + 6 * 86400) * 1000);
         var lastMonth = Number(weekLastDay.getMonth()) + 1;
         var weekLastDays = weekLastDay.getDate();
-        var WeekLastDate = weekFirstDay.getFullYear() + '-' + lastMonth + '-' + weekLastDays;
+        if (firstMonth > lastMonth) {
+          var WeekLastDate = weekFirstDay.getFullYear() + 1 + '-' + lastMonth + '-' + weekLastDays;
+        } else {
+          var WeekLastDate = weekFirstDay.getFullYear() + '-' + lastMonth + '-' + weekLastDays;
+        }
         $scope.orgWeeklyReportStartTime = WeekFirstDate;
         $scope.orgWeeklyReportStartTimeEnd = WeekLastDate;
       }
@@ -72,17 +81,12 @@
           var weekLastDay = new Date((weekFirstDay / 1000 + 6 * 86400) * 1000);
           var lastMonth = Number(weekLastDay.getMonth()) + 1;
           var weekLastDays = weekLastDay.getDate();
-          var WeekLastDate = weekFirstDay.getFullYear() + '-' + lastMonth + '-' + weekLastDays;
-          //下周第一天
-          var nextweekFirstDay = new Date((weekFirstDay / 1000 + 7 * 86400) * 1000);
-          var nextfirstMonth = Number(nextweekFirstDay.getMonth()) + 1;
-          var nextweekFirstDays = nextweekFirstDay.getDate()
-          var NextWeekFirstDate = weekFirstDay.getFullYear() + '-' + nextfirstMonth + '-' + nextweekFirstDays;
-          //下周最后一天
-          var nextweekLastDay = new Date((nextweekFirstDay / 1000 + 6 * 86400) * 1000);
-          var nextlastMonth = Number(nextweekLastDay.getMonth()) + 1;
-          var nextweekLastDays = nextweekLastDay.getDate();
-          var NextWeekLastDate = nextweekFirstDay.getFullYear() + '-' + nextlastMonth + '-' + nextweekLastDays;
+          if (firstMonth > lastMonth) {
+            var WeekLastDate = weekFirstDay.getFullYear() + 1 + '-' + lastMonth + '-' + weekLastDays;
+          } else {
+            var WeekLastDate = weekFirstDay.getFullYear() + '-' + lastMonth + '-' + weekLastDays;
+          }
+          
         }
         else {
           var date = new Date();
@@ -94,16 +98,11 @@
           var weekLastDay = new Date((weekFirstDay / 1000 + 6 * 86400) * 1000);
           var lastMonth = Number(weekLastDay.getMonth()) + 1;
           var weekLastDays = weekLastDay.getDate();
-          var WeekLastDate = weekFirstDay.getFullYear() + '-' + lastMonth + '-' + weekLastDays;
-          var nextweekFirstDay = new Date((weekFirstDay / 1000 + 7 * 86400) * 1000);
-          var nextfirstMonth = Number(nextweekFirstDay.getMonth()) + 1;
-          var nextweekFirstDays = nextweekFirstDay.getDate()
-          var NextWeekFirstDate = weekFirstDay.getFullYear() + '-' + nextfirstMonth + '-' + nextweekFirstDays;
-          //下周最后一天
-          var nextweekLastDay = new Date((nextweekFirstDay / 1000 + 6 * 86400) * 1000);
-          var nextlastMonth = Number(nextweekLastDay.getMonth()) + 1;
-          var nextweekLastDays = nextweekLastDay.getDate();
-          var NextWeekLastDate = nextweekFirstDay.getFullYear() + '-' + nextlastMonth + '-' + nextweekLastDays;
+          if (firstMonth > lastMonth) {
+            var WeekLastDate = weekFirstDay.getFullYear() + 1 + '-' + lastMonth + '-' + weekLastDays;
+          } else {
+            var WeekLastDate = weekFirstDay.getFullYear() + '-' + lastMonth + '-' + weekLastDays;
+          }
           startTime = WeekFirstDate;
           WeekLastDate = WeekLastDate
         }
