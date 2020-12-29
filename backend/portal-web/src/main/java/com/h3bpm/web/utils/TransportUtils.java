@@ -19,6 +19,7 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.GzipDecompressingEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
 import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -75,6 +76,9 @@ public class TransportUtils {
 
 			} else if (request.getMethod().equals(HttpRequestType.POST.getValue())) {
 				httpResponse = doPost(request, uuid);
+				
+			} else if (request.getMethod().equals(HttpRequestType.PUT.getValue())) {
+				httpResponse = doPut(request, uuid);
 			}
 
 			// Parses the response data.
@@ -175,6 +179,9 @@ public class TransportUtils {
 
 			} else if (request.getMethod().equals(HttpRequestType.POST.getValue())) {
 				httpResponse = doPost(request, uuid);
+				
+			} else if (request.getMethod().equals(HttpRequestType.PUT.getValue())) {
+				httpResponse = doPut(request, uuid);
 			}
 
 			HttpEntity httpEntity = httpResponse.getEntity();
@@ -342,6 +349,53 @@ public class TransportUtils {
 			StringEntity entity = new StringEntity(com.alibaba.fastjson.JSONObject.toJSONString(request.getData()), DataUtils.CHARSET_UTF8);
 
 			httpRequest = new HttpPost(request.getUrl());
+			// httpRequest.setProtocolVersion(HttpVersion.HTTP_1_0);
+
+			httpRequest.addHeader("content-type", DataUtils.CONTENT_TYPE);
+
+			// 对于过大的响应体，需要以gzip格式来保存响应
+			httpRequest.addHeader("Accept-Encoding", "gzip, deflate, br");
+			httpRequest.addHeader("Connection", "close");
+
+			httpRequest.setEntity(entity);
+
+			// RequestConfig config = RequestConfig.custom().setConnectTimeout(1000000) // 连接超时时间
+			// .setConnectionRequestTimeout(100000) // 从连接池中取的连接的最长时间
+			// .setSocketTimeout(10 * 100000) // 数据传输的超时时间
+			// .setStaleConnectionCheckEnabled(true) // 提交请求前测试连接是否可用
+			// .build();
+			//
+			// httpRequest.setConfig(config);
+
+			httpClient = new DefaultHttpClient();
+
+			if (HttpsUtils.isHttpsScheme(request.getUrl())) {
+				HttpsUtils.enableSsl(httpClient);
+			}
+
+			return httpClient.execute(httpRequest);
+
+		} finally {
+
+			// if (httpClient != null && httpClient.getConnectionManager() != null) {
+			// httpClient.getConnectionManager().shutdown();
+			// }
+		}
+
+	}
+	
+	@SuppressWarnings("deprecation")
+	private static HttpResponse doPut(Request request, String uuid) throws Exception {
+		HttpClient httpClient = null;
+		HttpPut httpRequest = null;
+
+		try {
+			// JSONObject json = new JSONObject((Map<String, Object>) request.getData());
+			// StringEntity entity = new StringEntity(json.toJSONString(), DataUtils.CHARSET_UTF8);
+
+			StringEntity entity = new StringEntity(com.alibaba.fastjson.JSONObject.toJSONString(request.getData()), DataUtils.CHARSET_UTF8);
+
+			httpRequest = new HttpPut(request.getUrl());
 			// httpRequest.setProtocolVersion(HttpVersion.HTTP_1_0);
 
 			httpRequest.addHeader("content-type", DataUtils.CONTENT_TYPE);

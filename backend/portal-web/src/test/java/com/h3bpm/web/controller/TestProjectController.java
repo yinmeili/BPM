@@ -1,11 +1,18 @@
 package com.h3bpm.web.controller;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.h3bpm.web.entity.User;
+import com.h3bpm.web.entity.WorkFlowTask;
+import com.h3bpm.web.enumeration.WorkflowCode;
 import com.h3bpm.web.service.KingdomService;
 import com.h3bpm.web.service.ServiceException;
 import com.h3bpm.web.service.UserService;
@@ -53,6 +60,33 @@ public class TestProjectController extends AbstractController {
 		kingdomService.sendSmsInfo(new SmsInfoVo(user.getName(),user.getMobile(), "【协办平台】您有一个新的待办任务，请按时处理，谢谢！"));
 		
 		return new ResponseVo();
+	}
+	
+	@RequestMapping(value = "/createWeeklyReportWorkFlow", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public ResponseVo createWeeklyReportWorkFlow() throws ServiceException {
+//		WorkFlowTask workFlowTask = new WorkFlowTask();
+//		workFlowTask.setUserLoginName("huangyong1");
+//		workFlowTask.setWorkFlowCode(WorkflowCode.ORG_WEEKLY_REPORT.getValue());
+//		
+//		Map<String,String> data = new HashMap<>();
+//		data.put("itemName", "title");
+//		data.put("itemValue", "测试部门周报标题3");
+//		
+//		List<Map<String,String>> param = new ArrayList<Map<String,String>>();
+//		param.add(data);
+//		
+//		workFlowTask.setParamData(com.alibaba.fastjson.JSONObject.toJSONString(param));
+//		
+//		return new ResponseVo(workFlowService.createWorkFlowTest(workFlowTask));
+		return null;
+	}
+	
+	@RequestMapping(value = "/activateWorkFlowNode", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public ResponseVo activateWorkFlowNode() throws ServiceException {
+		return new ResponseVo(workFlowService.activateWorkFlowNode("08e9ff55-695c-413a-baf8-433c6fdd6967", "check_report"));
+//		return null;
 	}
 
 	@Override

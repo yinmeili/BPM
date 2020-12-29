@@ -14,6 +14,10 @@ public enum WorkCalendarStatus implements EnumerationInt {
 
 	EXCEED_TIME_LIMIT(2, "逾期"),
 
+	UNREAD(3, "待阅"),
+
+	READED(4, "已阅"),
+
 	;
 
 	private final static Logger logger = LoggerFactory.getLogger(WorkCalendarStatus.class);

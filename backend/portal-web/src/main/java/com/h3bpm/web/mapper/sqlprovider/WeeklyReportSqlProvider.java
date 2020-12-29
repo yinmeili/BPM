@@ -46,8 +46,8 @@ public class WeeklyReportSqlProvider {
         				"	b.job_ratio ratio,"+
         				"	b.job_type type"+
         				" FROM "+
-        				"	`i_org_system_weekly_report` a RIGHT JOIN"+
-        				"	i_org_system_weekly_report_job b ON a.ObjectID = b.ParentObjectID"+
+        				"	`i_weekly_report` a RIGHT JOIN"+
+        				"	i_weekly_report_job b ON a.ObjectID = b.ParentObjectID"+
         				"	LEFT JOIN ot_instancecontext c ON a.ObjectID=c.BizObjectId"+
         				" WHERE c.State=4 "+
         				userIdSqlStr+
@@ -92,8 +92,8 @@ public class WeeklyReportSqlProvider {
         				"	b.pj_org org,"+
         				"	b.pj_remark remark"+
         				" FROM "+
-        				"	`i_org_system_weekly_report` a RIGHT JOIN"+
-        				"	i_org_system_weekly_report_pj b ON a.ObjectID = b.ParentObjectID"+
+        				"	`i_weekly_report` a RIGHT JOIN"+
+        				"	i_weekly_report_pj b ON a.ObjectID = b.ParentObjectID"+
         				"	LEFT JOIN ot_instancecontext c ON a.ObjectID=c.BizObjectId"+
         				" WHERE c.State=4 "+
         				userIdSqlStr+
@@ -143,8 +143,8 @@ public class WeeklyReportSqlProvider {
         				"	b.job_ratio ratio,"+
         				"	b.job_type type"+
         				" FROM "+
-        				"	`i_org_system_weekly_report` a RIGHT JOIN"+
-        				"	i_org_system_weekly_job_plan b ON a.ObjectID = b.ParentObjectID"+
+        				"	`i_weekly_report` a RIGHT JOIN"+
+        				"	i_weekly_job_plan b ON a.ObjectID = b.ParentObjectID"+
         				"	LEFT JOIN ot_instancecontext c ON a.ObjectID=c.BizObjectId"+
         				" WHERE c.State=4 "+
         				userIdSqlStr+
@@ -189,8 +189,8 @@ public class WeeklyReportSqlProvider {
         				"	b.pj_org org,"+
         				"	b.pj_remark remark"+
         				" FROM "+
-        				"	`i_org_system_weekly_report` a RIGHT JOIN"+
-        				"	i_org_system_weekly_pj_plan b ON a.ObjectID = b.ParentObjectID"+
+        				"	`i_weekly_report` a RIGHT JOIN"+
+        				"	i_weekly_pj_plan b ON a.ObjectID = b.ParentObjectID"+
         				"	LEFT JOIN ot_instancecontext c ON a.ObjectID=c.BizObjectId"+
         				" WHERE c.State=4 "+
         				userIdSqlStr+

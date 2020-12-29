@@ -10,6 +10,8 @@ public enum HttpRequestType implements Enumeration {
 	GET("get", "get"),
 
 	POST("post", "post"),
+	
+	PUT("put", "put"),
 
 	;
 

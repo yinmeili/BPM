@@ -6,6 +6,7 @@ public class ResponseWorkCalendarVo {
 	private int finishTotal = 0;
 	private int unfinishTotal = 0;
 	private int exceedTimeLimitTotal = 0;
+	private int unReadTotal = 0;
 
 	private List<WorkCalendarVo> workItemList = null;
 
@@ -48,5 +49,13 @@ public class ResponseWorkCalendarVo {
 
 	public void setWorkItemList(List<WorkCalendarVo> workItemList) {
 		this.workItemList = workItemList;
+	}
+
+	public int getUnReadTotal() {
+		return unReadTotal;
+	}
+
+	public void setUnReadTotal(int unReadTotal) {
+		this.unReadTotal = unReadTotal;
 	}
 }

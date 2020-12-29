@@ -1,13 +1,12 @@
 package com.h3bpm.web.utils;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.List;
 
 import com.h3bpm.web.entity.LiquidationImportData;
 import com.h3bpm.web.entity.WeeklyReportData;
+import com.h3bpm.web.entity.WeeklyReportSendData;
 import com.h3bpm.web.entity.WorkFlowTask;
 
 import cn.afterturn.easypoi.excel.ExcelImportUtil;
@@ -50,6 +49,22 @@ public class FileUtils {
         importParams.setNeedVerfiy(false);//是否使用Hibernate Validator对excel中的数据进行检测(默认为false,表示不检测)
         try{
             ExcelImportResult<WeeklyReportData> result = ExcelImportUtil.importExcelMore(inputStream, WeeklyReportData.class,importParams);
+            return result.getList();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+    
+    public static List<WeeklyReportSendData> importWeeklyReportSend(InputStream inputStream){
+        if(inputStream == null) return null;
+        ImportParams importParams = new ImportParams();
+        importParams.setTitleRows(0);   //excel中的表格名称的占用行数，0表示没有表格名称，为1表示占用一行，2表示占用两行.....(默认占用0行)
+        importParams.setHeadRows(1);    //excel中表格的列名称的占用行数行数，1表示占用1行，2表示占用两行......(默认占用1行)
+        importParams.setNeedVerfiy(false);//是否使用Hibernate Validator对excel中的数据进行检测(默认为false,表示不检测)
+        try{
+            ExcelImportResult<WeeklyReportSendData> result = ExcelImportUtil.importExcelMore(inputStream, WeeklyReportSendData.class,importParams);
             return result.getList();
         }catch (Exception e){
             e.printStackTrace();
