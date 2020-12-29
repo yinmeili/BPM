@@ -404,7 +404,11 @@ angular.module('app')
                             function($ocLazyLoad){
                                 return $ocLazyLoad.load([
                                     'queryModel/businessException/main.js',
-                                    'js/services/notify.js'
+                                    'js/services/notify.js',
+                                    'WFRes/_Scripts/MvcSheet/SheetControls.js',
+                                    'WFRes/_Scripts/MvcSheet/MvcSheetUI.js',
+                                    'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js',
+                                    'WFRes/_Scripts/MvcSheet/Controls/MvcSheetControls.js'
                                 ]);
                             }
                             
@@ -412,24 +416,22 @@ angular.module('app')
                     }
                 })
                 // 周报查询
-                // .state('app.WeeklyReport',{
-                //     url:'/WeeklyReport',
-                //     controller:'weeklyReportCtrl',
-                //     templateUrl:'weeklyReport/index.html',
-                //     resolve:{
-                //         deps:['$ocLazyLoad',
-                //             function($ocLazyLoad){
-                //                 return $ocLazyLoad.load([
-                //                     'weeklyReport/main.js',
-                //                     'js/services/notify.js',
-                //                     'vendor/jquery/bootstrap-select-1.12.4/dist/css/bootstrap-select.min.css', 
-                //                     'vendor/jquery/bootstrap-select-1.12.4/dist/js/bootstrap-select.min.js'
-                //                 ]);
-                //             }
+                .state('app.WeeklyReport',{
+                    url:'/WeeklyReport',
+                    controller:'weeklyReportCtrl',
+                    templateUrl:'weeklyReport/index.html',
+                    resolve:{
+                        deps:['$ocLazyLoad',
+                            function($ocLazyLoad){
+                                return $ocLazyLoad.load([
+                                    // 'weeklyReport/main.js',
+                                    'js/services/notify.js',
+                                ]);
+                            }
                             
-                //         ]
-                //     }
-                // })
+                        ]
+                    }
+                })
                 //查询流程实例
                 .state('app.QueryInstance', {
                     url: '/QueryInstance',
@@ -588,7 +590,22 @@ angular.module('app')
                         }]
                     }
                 })
-
+                //流程任务查看
+                .state('app.IndexQuery',{
+                    url:'/IndexQuery',
+                    controller:'WorkflowTaskIndexQueryCtrl',
+                    templateUrl:'workflowTask/indexQuery.html',
+                    resolve:{
+                        deps:['$ocLazyLoad',
+                            function($ocLazyLoad){
+                                return $ocLazyLoad.load([
+                                    'js/services/notify.js',
+                                ]);
+                            }
+                            
+                        ]
+                    }
+                })
                 //流程状态-发起模式链接
                 .state('WorkflowInfo', {
                     url: '/WorkflowInfo/:InstanceID/:WorkItemID/:WorkflowCode/:WorkflowVersion',
@@ -812,7 +829,11 @@ angular.module('app')
                         deps: ['$ocLazyLoad',
                             function ($ocLazyLoad) {
                                 return $ocLazyLoad.load([
-                                    'js/services/notify.js'
+                                    'js/services/notify.js',
+                                    'WFRes/_Scripts/MvcSheet/SheetControls.js',
+                                    'WFRes/_Scripts/MvcSheet/MvcSheetUI.js',
+                                    'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js',
+                                    'WFRes/_Scripts/MvcSheet/Controls/MvcSheetControls.js'
                                 ]);
                             }
                         ]
