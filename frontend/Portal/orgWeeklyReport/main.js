@@ -16,7 +16,7 @@
         { "id": "1", "text": "一级及以上" },
         { "id": "2", "text": "二级及以上" },
         { "id": "3", "text": "三级及以上" },
-        { "id": "4", "text": "四级及以上" },
+        
       ]
 
       $scope.orgWeeklyReportStartTimeStart = {
