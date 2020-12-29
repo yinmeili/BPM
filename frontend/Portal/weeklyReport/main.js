@@ -4,6 +4,32 @@
       function ($scope, $rootScope, $translate, $compile, $http, $timeout, $state, $interval, $filter, ControllerConfig, datecalculation, jqdatables, $modal, Item, FileNavigator) {
           //$rootScope.flowScope = $scope;
           //实例化参数
+         $scope.$on('$viewContentLoaded', function (event) {
+            $scope.init();
+            $.ajax({
+                "url": "/Portal/user/listChildrenOrg",
+                "type": "get",
+                "dataType": "json",
+                "success": function (data) {
+                    $scope.WeeklySelectDatas=data;
+                    // $('#WeeklySelect').selectpicker('refresh');
+                    // //render方法强制重新渲染引导程序 - 选择ui。
+                    // $('#WeeklySelect').selectpicker('render');
+                    // $(".selectpicker").selectpicker({
+                    //     noneSelectedText : '请选择'//默认显示内容
+                    // });
+                    var WeeklyData = [];
+                    WeeklyData = $scope.WeeklySelectDatas;
+                    //定义一个对象数组，用于储存所需选项
+                    for (var i = 0; i <  WeeklyData.length; i++) {
+                        $("#WeeklySelect").append($("<option value=\"" + WeeklyData[i].id +"\">" + WeeklyData[i].text + "</option>"));
+                    }
+    
+                },
+                "error": function () {
+                }
+            })  
+         })
           $scope.searchWeeklyReportWasAgentOptions = {
               Editable: true,
               Visiable: true,
@@ -11,42 +37,42 @@
               UserVisible: true,//是否显示用户
              
           }
-          $.ajax({
-            "url": "MasterData/GetMasterDataList",
-            "type": "post",
-            "data": { id: "交易系统", PageIndex: 1, PageSize: 99 },
-            "dataType": "json",
-            "success": function (data) {
-                $scope.businessExceptionOptionData = data.Rows;
-                // //使用refresh方法更新UI以匹配新状态
-                // $('#usertype').selectpicker('refresh');
-                // //render方法强制重新渲染引导程序 - 选择ui。
-                // $('#usertype').selectpicker('render');
-                // var optionMulti = [];
-                // optionMulti = $scope.businessExceptionOptionData;
-                // //定义一个对象数组，用于储存所需选项
-                // for (var i = 0; i < optionMulti.length; i++) {
-                //     $("#usertype").append($("<option value=\"" + optionMulti[i].Code + "\">" + optionMulti[i].Code + "</option>"));
-                // }
-              },
-            "error": function () {
-            }
-          })
-          //共享知识的日期控件初始化
-          $scope.searchWeeklyStartTimeStart = {
+               //共享知识的日期控件初始化
+          $scope.searchWeeklyReportStartTimeStart = {
               dateFmt: 'yyyy-MM-dd', realDateFmt: "yyyy-MM-dd", minDate: '2012-1-1', maxDate: '2099-12-31',
+              skin: 'whyGreen',//皮肤
+              firstDayOfWeek: 1, errDealMode: 3, isShowClear: "true",
+              disabledDays: [1, 2, 3, 4, 5, 6],//只选周一 
               onpicked: function (e) {
                   $rootScope.searchWeeklyStartTimeStart = e.el.value;
+                  var date = new Date($rootScope.searchWeeklyStartTimeStart);
+                  var weekFirstDay = new Date(date - (date.getDay() - 1) * 86400000);
+                  var firstMonth = Number(weekFirstDay.getMonth()) + 1;
+                  var weekFirstDays = weekFirstDay.getDate();
+                  var WeekFirstDate = weekFirstDay.getFullYear() + '-' + firstMonth + '-' + weekFirstDays;
+                  //这周最后一天
+                  var weekLastDay = new Date((weekFirstDay / 1000 + 6 * 86400) * 1000);
+                  var lastMonth = Number(weekLastDay.getMonth()) + 1;
+                  var weekLastDays = weekLastDay.getDate();
+                  if (lastMonth <= 9) {
+                      lastMonth = "0" + lastMonth
+
+                  }
+                  if (weekLastDays <= 9) {
+                      weekLastDays = "0" + weekLastDays
+                  }
+                  if (firstMonth > lastMonth) {
+                      var WeekLastDate = weekFirstDay.getFullYear() + 1 + '-' + lastMonth + '-' + weekLastDays;
+                  } else {
+                      var WeekLastDate = weekFirstDay.getFullYear() + '-' + lastMonth + '-' + weekLastDays;
+                  }
+                  $rootScope.searchWeeklyStartTimeEnd = WeekLastDate;
+                  $scope.$apply();
+                 
+
               }
           }
-          $scope.searchWeeklyStartTimeEnd = {
-              dateFmt: 'yyyy-MM-dd', realDateFmt: "yyyy-MM-dd", minDate: '2012-1-1', maxDate: '2099-12-31',
-              onpicked: function (e) {
-                  $rootScope.searchWeeklyStartTimeEnd = e.el.value;
-              
-              }
-          }
-          
+
           $scope.$on('$viewContentLoaded', function (event) {
               $scope.init();
               $scope.myScroll = null
@@ -54,9 +80,31 @@
 
           $scope.init = function () {
               $scope.name = $translate.instant("WorkItemController.FinishedWorkitem");
-              $scope.searchWeeklyStartTimeStart = datecalculation.redDays(new Date(), 30);
-              $scope.searchWeeklyStartTimeEnd = datecalculation.addDays(new Date(), 30);
-              
+              //   $scope.searchWeeklyStartTimeStart = datecalculation.redDays(new Date(), 30);
+              //   $scope.searchWeeklyStartTimeEnd = datecalculation.addDays(new Date(), 30);
+              var date = new Date();
+              //这周第一天
+              var weekFirstDay = new Date(date - (date.getDay() - 1) * 86400000);
+              var firstMonth = Number(weekFirstDay.getMonth()) + 1;
+              var weekFirstDays = weekFirstDay.getDate();
+              var WeekFirstDate = weekFirstDay.getFullYear() + '-' + firstMonth + '-' + weekFirstDays;
+              $rootScope.searchWeeklyStartTimeStart = WeekFirstDate;
+              //这周最后一天
+              var weekLastDay = new Date((weekFirstDay / 1000 + 6 * 86400) * 1000);
+              var lastMonth = Number(weekLastDay.getMonth()) + 1;
+              var weekLastDays = weekLastDay.getDate();
+              if (lastMonth <= 9) {
+                  lastMonth = "0" + lastMonth
+              }
+              if (weekLastDays <= 9) {
+                  weekLastDays = "0" + weekLastDays
+              }
+              if (firstMonth > lastMonth) {
+                  var WeekLastDate = weekFirstDay.getFullYear() + 1 + '-' + lastMonth + '-' + weekLastDays;
+              } else {
+                  var WeekLastDate = weekFirstDay.getFullYear() + '-' + lastMonth + '-' + weekLastDays;
+              }
+              $rootScope.searchWeeklyStartTimeEnd = WeekLastDate;
           }
           $scope.getLanguage = function () {
               $scope.LanJson = {
@@ -82,41 +130,12 @@
                   "mData": "title",//返回数据的键
                   "mRender": function (data, type, full) {
                       data = $scope.htmlEncode(data);
-                      console.log(data)
                       if (data == 'null' || data == null) {
                           data = '';
                       }
                     //   full = JSON.stringify(full);
-                    return `<a class="like"target="_blank"href="InstanceSheets.html?InstanceId=${full.instanceId}"style='cursor: pointer;' title='${data}'>${data}</a>`;
+                    return `<a class="like"target="_blank"href="WorkItemSheets.html?WorkItemID=${full.workItemId}"style='cursor: pointer;' title='${data}'>${data}</a>`;
                 }
-              });
-              columns.push({
-                  "mData": "businessSystem",
-                  "mRender": function (data, type, full) {
-                      //打开流程状态
-
-                      data = $scope.htmlEncode(data);
-                      // data=$scope.htmlEncode[data];
-                      if (data == 'null' || data == null) {
-                          data = '';
-                      }
-                      full = JSON.stringify(full);
-                      return "<span title=\"" + data + "\">" + data + "</span>";
-                  }
-              });
-              columns.push({
-                  "mData": "createUserName",
-                  "mRender": function (data, type, full) {
-                      //打开流程状态
-
-                      data = $scope.htmlEncode(data);
-                      // data=$scope.htmlEncode[data];
-                      if (data == 'null' || data == null) {
-                          data = '';
-                      }
-                      full = JSON.stringify(full);
-                      return "<span title=\"" + data + "\">" + data + "</span>";
-                  }
               });
               columns.push({
                   "mData": "startTime",
@@ -130,10 +149,12 @@
                           var year = time.getFullYear();
                           var month = time.getMonth() + 1 
                           var date = time.getDate() < 10 ? "0" + time.getDate() : time.getDate();
-                          var hours = time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
-                          var minutes = time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
-                          var seconds = time.getSeconds() < 10 ? "0" + time.getSeconds() : time.getSeconds();
-                          data = year + '-' + (month) + '-' + (date) + ' ' + (hours) + ':' + (minutes) + ':' + (seconds);
+                        //   var hours = time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
+                        //   var minutes = time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
+                        //   var seconds = time.getSeconds() < 10 ? "0" + time.getSeconds() : time.getSeconds();
+                        //   data = year + '-' + (month) + '-' + (date) + ' ' + (hours) + ':' + (minutes) + ':' + (seconds);
+                          data = year + '-' + (month) + '-' + (date) 
+
                       }
                       return  "<span title=\"" + data + "\">" + data + "<span>";
                   }
@@ -150,10 +171,12 @@
                           var year = time.getFullYear();
                           var month = time.getMonth() + 1
                           var date = time.getDate() < 10 ? "0" + time.getDate() : time.getDate();
-                          var hours = time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
-                          var minutes = time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
-                          var seconds = time.getSeconds() < 10 ? "0" + time.getSeconds() : time.getSeconds();
-                          data = year + '-' + (month) + '-' + (date) + ' ' + (hours) + ':' + (minutes) + ':' + (seconds);
+                        //   var hours = time.getHours() < 10 ? "0" + time.getHours() : time.getHours();
+                        //   var minutes = time.getMinutes() < 10 ? "0" + time.getMinutes() : time.getMinutes();
+                        //   var seconds = time.getSeconds() < 10 ? "0" + time.getSeconds() : time.getSeconds();
+                        //   data = year + '-' + (month) + '-' + (date) + ' ' + (hours) + ':' + (minutes) + ':' + (seconds);
+                          data = year + '-' + (month) + '-' + (date) 
+
                       }
 
 
@@ -206,7 +229,7 @@
                       "next": ">"
                   }
               },
-              "sAjaxSource": " /Portal/queryWorkflowList/listBusinessExceptionByPage",
+              "sAjaxSource": "/Portal/queryWorkflowList/listOrgWeeklyReportByPage",
               "fnServerData": function (sSource, aDataSet, fnCallback) {//sSource的值与sAjaxSource同步，WorkItem/GetFinishWorkItems,点击查询
                   $.ajax({
                       "dataType": 'json',
@@ -233,16 +256,11 @@
               "sPaginationType": "full_numbers",
               "fnServerParams": function (aoData) {
                   // 增加自定义查询条件
-                
                   //将时间转化为时间戳
                   aoData.push(//name的值是传输数据的key，value的值是传输数据的value
-                      { "name": "startTimeStart", "value": $filter("date")( $rootScope.searchWeeklyStartTimeStart, "yyyy-MM-dd HH:mm:ss") },
-                      { "name": "startTimeEnd", "value": $filter("date")( $rootScope.searchWeeklyStartTimeEnd ,"yyyy-MM-dd HH:mm:ss") },
-                      { "name": "keyword", "value":$scope.weeklyReportKeyword },
-                      { "name": "userId", "value": $scope.Originator },
-                      { "name": "businessSystem","value":$("#usertype").val()},
-                      { "name": "endTimeStart", "value": $filter("date")( $rootScope.searchExceptionEndTimeStart, "yyyy-MM-dd HH:mm:ss") },
-                      { "name": "endTimeEnd", "value": $filter("date")( $rootScope.searchExceptionEndTimeEnd ,"yyyy-MM-dd HH:mm:ss") },
+                    { "name": "orgId", "value":$('#WeeklySelect').val() },
+                    { "name": "startTime", "value": $filter("date")( $rootScope.searchWeeklyStartTimeStart,"yyyy-MM-dd 00:00:00") },
+                    { "name": "endTime", "value":$filter("date")( $scope.searchWeeklyStartTimeEnd,"yyyy-MM-dd 00:00:00")},
                   );
                
               },
@@ -251,13 +269,16 @@
               "initComplete": function (settings, json) {
                   var filter = $("#searchWeeklyReportOrgName");
                   filter.unbind("click.DT").bind("click.DT", function () {
-                      
-                      $scope.Originator = $("#searchWeeklyReportCompany").SheetUIManager().GetValue();
-                      if ( $rootScope.searchWeeklyStartTimeStart == undefined && $rootScope.searchWeeklyStartTimeEnd == undefined) {
-                          $rootScope.searchWeeklyStartTimeStart="";
-                          $rootScope.searchWeeklyStartTimeEnd="";
+                      var myWeeklyReportselect = document.getElementById('WeeklySelect');
+                      $scope.index = myWeeklyReportselect.selectedIndex;
+                      if ($scope.index === 0) {
+                          $scope.index = '';
                       }
-                      
+                      if ($rootScope.searchWeeklyStartTimeStart == undefined && $rootScope.searchWeeklyStartTimeEnd == undefined) {
+                          $rootScope.searchWeeklyStartTimeStart = "";
+                          $rootScope.searchWeeklyStartTimeEnd = "";
+                      }
+
                       else if($("#searchWeeklyStartTimeStart").val()==""&&$("#searchWeeklyStartTimeEnd").val()=="")
                       {
                           $rootScope.searchWeeklyStartTimeStart="";
@@ -272,20 +293,6 @@
                       {
                           $rootScope.searchWeeklyStartTimeEnd="";
                       }
-                      
-                      else{
-                          
-                      var myStartTimes = new Date( $rootScope.searchWeeklyStartTimeStart.replace(/-/g, "/")).getTime();
-                          var myEndTimes = new Date($rootScope.searchWeeklyStartTimeEnd.replace(/-/g, "/")).getTime();
-                          if (myStartTimes > myEndTimes) {
-                              $.notify({ message: "时间区间错误", status: "danger" });
-                              $("#MyStartTimeEnd").css("color", "red");
-                              return false;
-                          };
-                        
-                      }
-                     
-                      
                       $("#tabWeeklyReportFlow").dataTable().fnDraw();
                   });
                   $scope.loadScroll();
@@ -307,12 +314,6 @@
                $("#searchWeeklyReportOrgName").click();
               }
              })
-         
-          $('#searchWeeklyReportCompany').bind('keypress', function (event) { 
-              if (event.keyCode == "13") { 
-               $("#searchWeeklyReportOrgName").click();
-              }
-          })
           $('#searchWeeklyStartTimeStart').bind('keypress', function (event) { 
               if (event.keyCode == "13") { 
                $("#searchWeeklyReportOrgName").click();
@@ -323,6 +324,11 @@
                $("#searchWeeklyReportOrgName").click();
               }
           })
+          $('#WeeklySelect').bind('keypress', function (event) { 
+            if (event.keyCode == "13") { 
+             $("#searchWeeklyReportOrgName").click();
+            }
+        })
          
           
           
