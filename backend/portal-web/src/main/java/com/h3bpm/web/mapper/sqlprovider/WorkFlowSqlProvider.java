@@ -1,7 +1,5 @@
 package com.h3bpm.web.mapper.sqlprovider;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 
 public class WorkFlowSqlProvider {

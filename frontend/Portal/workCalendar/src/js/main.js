@@ -205,7 +205,7 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 								item.color = $scope.statusColorType[item.status];
 								// item.url = 'WorkItemSheets.html?WorkItemID=' + item.id;
 							})
-
+							$(".newval4").html(data.data.unReadTotal);
 							$(".newval").html(data.data.unfinishTotal);
 							$(".newval1").html(data.data.finishTotal);
 							$(".newval2").html(data.data.exceedTimeLimitTotal);
@@ -700,6 +700,7 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 					// item.url = 'WorkItemSheets.html?WorkItemID=' + item.id;
 				})
 				var events = data.data.workItemList;
+				$(".newval4").html(data.data.unReadTotal);
 				$(".newval").html(data.data.unfinishTotal);
 				$(".newval1").html(data.data.finishTotal);
 				$(".newval2").html(data.data.exceedTimeLimitTotal);

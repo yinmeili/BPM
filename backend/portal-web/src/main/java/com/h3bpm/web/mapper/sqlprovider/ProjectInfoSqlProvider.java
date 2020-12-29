@@ -84,15 +84,19 @@ public class ProjectInfoSqlProvider {
 		
 		String timeSqlStr = "";
 		Date startTime = para.get("startTime") == null ? null : (Date) para.get("startTime");
-		Date endTime = para.get("endTime") == null ? null : (Date) para.get("startTime");
+		Date endTime = para.get("endTime") == null ? null : (Date) para.get("endTime");
 		
 		if (startTime != null && endTime != null) {
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String startTimeString = format.format(startTime);
 			String endTimeString = format.format(endTime);
+			timeSqlStr = " AND (";
 			
-			timeSqlStr = " AND ((a.start_time <= '" + startTimeString + "' AND a.end_time >= '" + startTimeString + "')";
-			timeSqlStr += " OR (a.start_time <= '" + endTimeString + "' AND a.end_time >= '" + endTimeString + "'))";
+			timeSqlStr += " (a.start_time >= '" + startTimeString + "' AND a.start_time <= '" + endTimeString + "')";
+			timeSqlStr += " OR (a.end_time >= '" + startTimeString + "' AND a.end_time <= '" + endTimeString + "')";
+			timeSqlStr += " OR (a.start_time <= '" + startTimeString + "' AND a.end_time >= '" + endTimeString + "')";
+			
+			timeSqlStr += ")";
 		}
 
 

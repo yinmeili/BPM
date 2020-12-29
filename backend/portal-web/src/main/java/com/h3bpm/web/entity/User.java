@@ -6,6 +6,17 @@ public class User {
 	private String loginName = null;
 	private String mobile = null;
 
+	public User() {
+
+	}
+
+	public User(OThinker.Common.Organization.Models.User appModel) {
+		this.id = appModel._ObjectID;
+		this.name = appModel._Name;
+		this.loginName = appModel.getCode();
+		this.mobile = appModel.getMobile();
+	}
+
 	public String getMobile() {
 		return mobile;
 	}
