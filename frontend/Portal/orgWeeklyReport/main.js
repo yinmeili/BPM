@@ -134,7 +134,7 @@
           if (result.length > 0) {
 
             for (var i = 0; i < result.length; i++) {
-              var item = '<tr><td>' + result[i].content + "</td><td>" + result[i].evolve + "</td><td>" +
+              var item = '<tr><td>' +parseInt(i+1)+ '</td><td>' + result[i].content + "</td><td>" + result[i].evolve + "</td><td>" +
                 result[i].ratio + "</td><td>" + result[i].problem + "</td><td>" + result[i].type + "</td><td>" + result[i].jobLevelStr + "</td></tr>";
               $('#org_weekly_report_job').append(item);//动态加行
             }
@@ -157,7 +157,7 @@
           $("#org_weekly_report_pj tr:not(:first)").html("");//删除除表头外的所有行
           if (listOrgProjectResult.length > 0) {
             for (var i = 0; i < listOrgProjectResult.length; i++) {
-              var item = '<tr><td>' + listOrgProjectResult[i].name + "</td><td>" + listOrgProjectResult[i].info + "</td><td>" +
+              var item = '<tr><td>' +parseInt(i+1)+ '</td><td>' + listOrgProjectResult[i].name + "</td><td>" + listOrgProjectResult[i].info + "</td><td>" +
                 listOrgProjectResult[i].evolve + "</td><td>" + listOrgProjectResult[i].ratio + "</td><td>" + listOrgProjectResult[i].org +
                 "</td><td>" + listOrgProjectResult[i].remark + "</td></tr>";
               $('#org_weekly_report_pj').append(item);//动态加行
@@ -179,7 +179,7 @@
           $("#org_weekly_job_plan tr:not(:first)").html("");//删除除表头外的所有行
           if (listOrgJobPlanResult.length > 0) {
             for (var i = 0; i < listOrgJobPlanResult.length; i++) {
-              var item = '<tr><td>' + listOrgJobPlanResult[i].content + "</td><td>" + listOrgJobPlanResult[i].evolve + "</td><td>" +
+              var item = '<tr><td>' +parseInt(i+1)+ '</td><td>' + listOrgJobPlanResult[i].content + "</td><td>" + listOrgJobPlanResult[i].evolve + "</td><td>" +
                 listOrgJobPlanResult[i].ratio + "</td><td>" + listOrgJobPlanResult[i].problem + "</td><td>" + listOrgJobPlanResult[i].type +
                 "</td><td>" + listOrgJobPlanResult[i].jobLevelStr + "</td></tr>";
               $('#org_weekly_job_plan').append(item);//动态加行
@@ -201,7 +201,7 @@
           $("#org_weekly_pj_plan tr:not(:first)").html("");//删除除表头外的所有行
           if (listOrgProjectResult.length > 0) {
             for (var i = 0; i < listOrgProjectResult.length; i++) {
-              var item = '<tr><td>' + listOrgProjectResult[i].name + "</td><td>" + listOrgProjectResult[i].info + "</td><td>" +
+              var item = '<tr><td>' +parseInt(i+1)+ '</td><td>' + listOrgProjectResult[i].name + "</td><td>" + listOrgProjectResult[i].info + "</td><td>" +
                 listOrgProjectResult[i].evolve + "</td><td>" + listOrgProjectResult[i].ratio + "</td><td>" + listOrgProjectResult[i].org +
                 "</td><td>" + listOrgProjectResult[i].remark + "</td></tr>";
               $('#org_weekly_pj_plan').append(item);//动态加行
