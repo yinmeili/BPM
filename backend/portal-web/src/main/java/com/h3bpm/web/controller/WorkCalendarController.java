@@ -2,7 +2,9 @@ package com.h3bpm.web.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang.StringEscapeUtils;
 import org.slf4j.Logger;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.h3bpm.base.engine.client.PortalQuery;
+import com.h3bpm.base.model.GridViewModel;
 import com.h3bpm.base.user.UserValidator;
 import com.h3bpm.base.user.UserValidatorFactory;
 import com.h3bpm.web.entity.BizObjectInfo;
@@ -39,10 +42,19 @@ import OThinker.Common.Organization.enums.UserServiceState;
 import OThinker.Common.util.ListUtil;
 import OThinker.H3.Controller.ControllerBase;
 import OThinker.H3.Controller.Controllers.ProcessCenter.WorkItemController;
+import OThinker.H3.Controller.ViewModels.CirculateItemViewModel;
 import OThinker.H3.Controller.ViewModels.WorkItemViewModel;
+import OThinker.H3.Entity.Instance.InstanceContext;
 import OThinker.H3.Entity.WorkItem.WorkItemState;
+import OThinker.H3.Entity.WorkItem.CirculateModels.CirculateItem;
 import OThinker.H3.Entity.WorkItem.WorkItemModels.WorkItem;
 import OThinker.H3.Entity.WorkItem.WorkItemModels.WorkItemFinished;
+import OThinker.H3.Entity.WorkflowTemplate.WorkflowClause;
+import data.DataColumn;
+import data.DataColumnCollection;
+import data.DataException;
+import data.DataRow;
+import data.DataRowCollection;
 import data.DataTable;
 import net.sf.json.JSONObject;
 
@@ -127,6 +139,8 @@ public class WorkCalendarController extends ControllerBase {
 	 * @param: instanceName
 	 *             流程实例名称
 	 * @Return: ResponseVo
+	 * 
+	 *          参照了 OThinker.H3.Controller.Controllers.ProcessCenter.WorkItemController 类;
 	 */
 	@SuppressWarnings("static-access")
 	@RequestMapping(value = "/workitems/findAll", method = RequestMethod.GET)
@@ -135,6 +149,9 @@ public class WorkCalendarController extends ControllerBase {
 
 		int startIndex = -1;
 		int endIndex = -1;
+
+		Date startTime = DateTimeUtil.getStringToDate(startTimeStr);
+		Date endTime = DateTimeUtil.getStringToDate(endTimeStr);
 
 		WorkItemController controller = new WorkItemController();
 		WorkCalendarVo workCalendarVo = null;
@@ -148,7 +165,7 @@ public class WorkCalendarController extends ControllerBase {
 		 */
 		List<WorkItemViewModel> griddataFinish = null;
 
-		String[] conditions1 = getPortalQuery().GetWorkItemConditions(userId, DateTimeUtil.getStringToDate(startTimeStr), DateTimeUtil.getDatePlusOne(endTimeStr), WorkItemState.Finished, instanceName, BoolMatchValue.Unspecified, workflowCode, true, WorkItemFinished.TableName);
+		String[] conditions1 = getPortalQuery().GetWorkItemConditions(userId, startTime, endTime, WorkItemState.Finished, instanceName, BoolMatchValue.Unspecified, workflowCode, true, WorkItemFinished.TableName);
 
 		String orderBy1 = "ORDER BY " + WorkItemFinished.TableName + "." + WorkItemFinished.PropertyName_ReceiveTime + " DESC";
 
@@ -182,7 +199,7 @@ public class WorkCalendarController extends ControllerBase {
 		 */
 		List<WorkItemViewModel> griddataUnfinish = null;
 
-		String[] conditions2 = getPortalQuery().GetWorkItemConditions(userId, DateTimeUtil.getStringToDate(startTimeStr), DateTimeUtil.getDatePlusOne(endTimeStr), WorkItemState.Unfinished, instanceName, BoolMatchValue.Unspecified, workflowCode, true, WorkItem.TableName);
+		String[] conditions2 = getPortalQuery().GetWorkItemConditions(userId, startTime, endTime, WorkItemState.Unfinished, instanceName, BoolMatchValue.Unspecified, workflowCode, true, WorkItem.TableName);
 		String orderBy2 = " ORDER BY " + WorkItem.TableName + "." + WorkItem.PropertyName_Priority + " DESC," + WorkItem.TableName + "." + WorkItem.PropertyName_Urged + " DESC," + WorkItem.TableName + "." + WorkItem.PropertyName_ReceiveTime + " DESC";
 
 		DataTable dtWorkItem2 = getPortalQuery().QueryWorkItem(conditions2, startIndex, endIndex, orderBy2, WorkItem.TableName);
@@ -247,10 +264,37 @@ public class WorkCalendarController extends ControllerBase {
 
 		/* *****************************************/
 
+		/*
+		 ********************** 查询待阅任务*********************
+		 */
+		List<Parameter> paramsUnRead = new ArrayList<>();
+		String[] conditionsUnRead = getEngine().getPortalQuery().GetWorkItemConditions(paramsUnRead, this.getUserValidator().getUserID(), startTime, endTime, WorkItemState.Unfinished, "", BoolMatchValue.Unspecified, "", false, CirculateItem.TableName);
+		DataTable dtWorkitemUnRead = getEngine().getPortalQuery().QueryWorkItem(conditionsUnRead, ListUtil.toArray(paramsUnRead), startIndex, endIndex, "", CirculateItem.TableName);
+		getEngine().getPortalQuery().CountWorkItem(conditionsUnRead, ListUtil.toArray(paramsUnRead), CirculateItem.TableName);
+		String[] columnsUnRead = new String[] { CirculateItem.PropertyName_OrgUnit };
+		List<CirculateItemViewModel> griddataUnReadList = this.Getgriddata(dtWorkitemUnRead, columnsUnRead, false);
+
+		for (CirculateItemViewModel griddataUnRead : griddataUnReadList) {
+
+			workCalendarVo = new WorkCalendarVo();
+
+			workCalendarVo.setId(griddataUnRead.getBaseObjectID());
+			workCalendarVo.setTitle(initCalendarTitle(griddataUnRead));
+			workCalendarVo.setStatus(WorkCalendarStatus.UNREAD.getValue());
+			workCalendarVo.setStart((DateTimeUtil.getStringToDate(griddataUnRead.getReceiveTime(), null)).getTime());
+
+			list.add(workCalendarVo);
+		}
+		int unReadTotal = griddataUnReadList == null ? 0 : griddataUnReadList.size();
+
+		/* ************************************************************/
+		
 		responseWorkCalendarVo = new ResponseWorkCalendarVo(list);
 		responseWorkCalendarVo.setFinishTotal(finishTotal);
 		responseWorkCalendarVo.setUnfinishTotal(unfinishTotal);
 		responseWorkCalendarVo.setExceedTimeLimitTotal(exceedTimeLimitTotal);
+		responseWorkCalendarVo.setUnReadTotal(unReadTotal);
+
 		return new ResponseVo(responseWorkCalendarVo);
 	}
 
@@ -274,5 +318,100 @@ public class WorkCalendarController extends ControllerBase {
 		}
 
 		return title.toString();
+	}
+
+	private String initCalendarTitle(CirculateItemViewModel circulateItemViewModel) {
+		StringBuffer title = null;
+		int dot = circulateItemViewModel.getInstanceName().lastIndexOf('.');
+
+		// 去掉任务名称点后后面的字符串，例如 "运维记录.32" 转为 "运维记录"
+		if ((dot > -1) && (dot < (circulateItemViewModel.getInstanceName().length()))) {
+			title = new StringBuffer(circulateItemViewModel.getInstanceName().substring(0, dot));
+
+		} else {
+			title = new StringBuffer(circulateItemViewModel.getInstanceName());
+		}
+		
+		if (circulateItemViewModel.getWorkflowCode().equals(WorkflowCode.ORG_WEEKLY_REPORT.getValue())) {
+
+			BizObjectInfo bizObjectInfo = workFlowService.getBizObjectInfoByInstanceIdWithOutSysType(circulateItemViewModel.getInstanceId());
+
+			return bizObjectInfo.getTitle();
+		}
+
+		return title.toString();
+	}
+
+	private List<CirculateItemViewModel> Getgriddata(DataTable dtWorkItem, String[] columns, boolean unfinishedWorkitem) throws DataException, Exception {
+		Map<String, String> unitNames = this.GetUnitNamesFromTable(dtWorkItem, columns);
+		Map<String, String> orgOUNames = this.GetParentUnitNamesFromTable(dtWorkItem, new String[] { WorkItem.PropertyName_Originator });
+		List<CirculateItemViewModel> griddata = new ArrayList<CirculateItemViewModel>();
+		DataRowCollection rows = dtWorkItem.getRows();
+		for (int i = 0; i < rows.size(); i++) {
+			DataRow row = rows.get(i);
+
+			CirculateItemViewModel tempVar = new CirculateItemViewModel();
+			// 浼犻槄鏉ユ簮鍙兘涓虹┖ add by hxc 浼犻槄鏉ユ簮涓虹┖鐨勮瘽鍙栧彂璧蜂汉
+			String cCreator = this.GetColumnsValue(row, CirculateItem.PropertyName_Creator);
+			if (!DotNetToJavaStringHelper.isNullOrEmpty(cCreator)) {
+				tempVar.setCirculateCreator(this.GetColumnsValue(row, CirculateItem.PropertyName_Creator));
+				tempVar.setCirculateCreatorName(getColumnNames(row).contains(CirculateItem.PropertyName_CreatorName) ? row.getString(CirculateItem.PropertyName_CreatorName) : null);
+			} else {
+				String originatorId = row.getString(WorkItem.PropertyName_Originator);
+				String originatorName = row.getString(InstanceContext.PropertyName_OriginatorName);
+				tempVar.setCirculateCreator(originatorId);
+				tempVar.setCirculateCreatorName(originatorName);
+			}
+
+			tempVar.setBaseObjectID(this.GetColumnsValue(row, WorkItem.PropertyName_ObjectID));
+			tempVar.setInstanceId(row.getString(WorkItem.PropertyName_InstanceId));
+			tempVar.setInstanceName(row.getString(InstanceContext.PropertyName_InstanceName));
+			tempVar.setWorkflowCode(row.getString(WorkItem.PropertyName_WorkflowCode));
+			tempVar.setWorkflowName(getColumnNames(row).contains(WorkflowClause.PropertyName_WorkflowName) ? row.getString(WorkflowClause.PropertyName_WorkflowName) : null);
+			tempVar.setDisplayName(row.getString(WorkItem.PropertyName_DisplayName));
+			tempVar.setReceiveTime(this.GetValueFromDate(row.getObject(WorkItem.PropertyName_ReceiveTime), WorkItemTimeFormat));
+			tempVar.setFinishTime(this.GetValueFromDate(row.getObject(WorkItem.PropertyName_FinishTime), WorkItemTimeFormat));
+			// add by linwp@Future 2018.8.3
+			tempVar.setParticipant(row.getString(CirculateItem.PropertyName_Participant));
+			tempVar.setParticipantName(row.getString(CirculateItem.PropertyName_ParticipantName));
+			tempVar.setInstanceCreatedTime(GetValueFromDate(row.getString(PortalQuery.ColumnName_InstanceCreatedTime), WorkItemTimeFormat));
+			tempVar.setInstanceState(row.getString(PortalQuery.ColumnName_InstanceState) + "");
+			tempVar.setInstanceSequenceNo(row.getString(InstanceContext.PropertyName_SequenceNo) + "");
+			tempVar.setOriginator(row.getString(WorkItem.PropertyName_Originator));
+			tempVar.setOriginatorName(row.getString(InstanceContext.PropertyName_OriginatorName));
+			tempVar.setOriginatorOUName(this.GetValueFromDictionary(orgOUNames, row.getString(WorkItem.PropertyName_Originator)));
+			griddata.add(tempVar);
+		}
+		return griddata;
+	}
+
+	private String GetColumnsValue(DataRow row, String columns) throws DataException {
+		List<String> columnNames = new ArrayList<String>() {
+			@Override
+			public boolean contains(Object o) {
+				return super.contains(String.valueOf(o).toLowerCase());
+			}
+		};
+		DataColumnCollection dataColumns = row.getTable().getColumns();
+		for (int i = 0; i < dataColumns.size(); i++) {
+			DataColumn column = dataColumns.get(i);
+			columnNames.add(column.getColumnName().toLowerCase());
+		}
+		return columnNames.contains(columns) ? row.getString(columns) : "";
+	}
+
+	private List<String> getColumnNames(DataRow row) {
+		List<String> columnNames = new ArrayList<String>() {
+			@Override
+			public boolean contains(Object o) {
+				return super.contains(String.valueOf(o).toLowerCase());
+			}
+		};
+		DataColumnCollection dataColumns = row.getTable().getColumns();
+		for (int i = 0; i < dataColumns.size(); i++) {
+			DataColumn column = dataColumns.get(i);
+			columnNames.add(column.getColumnName().toLowerCase());
+		}
+		return columnNames;
 	}
 }

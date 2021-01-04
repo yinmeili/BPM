@@ -1,7 +1,7 @@
 package com.h3bpm.web.vo;
 
 public class WorkCalendarVo {
-	private String id = null;	//ObjectID流程ID
+	private String id = null;	//ObjectID流程ID workItemId
 	private String title = null;//InstanceName流程名称
 	private int status = 0;		//流程状态
 	private Long start = null;

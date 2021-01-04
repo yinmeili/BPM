@@ -22,31 +22,61 @@ public class WeeklyReportController extends AbstractController {
 	@RequestMapping(value = "/listOrgJob", produces = "application/json;charset=utf8")
 	@ResponseBody
 	public ResponseVo listOrgJob(@RequestBody ReqListWeeklyReportJobVo requestBean) throws ServiceException {
+		validateWeeklyReportJobVo(requestBean);
 		return new ResponseVo(weeklyReportService.findWeeklyReportJobByOrgId(requestBean.getOrgId(), requestBean.getStartTime(), requestBean.getEndTime(), requestBean.getJobLevel()));
 	}
 
 	@RequestMapping(value = "/listOrgProject", produces = "application/json;charset=utf8")
 	@ResponseBody
 	public ResponseVo listOrgProject(@RequestBody ReqListWeeklyReportProjectVo requestBean) throws ServiceException {
+		validateWeeklyReportProjectVo(requestBean);
 		return new ResponseVo(weeklyReportService.findWeeklyReportProjectByOrgId(requestBean.getOrgId(), requestBean.getStartTime(), requestBean.getEndTime()));
 	}
 
 	@RequestMapping(value = "/listOrgJobPlan", produces = "application/json;charset=utf8")
 	@ResponseBody
 	public ResponseVo listOrgJobPlan(@RequestBody ReqListWeeklyReportJobVo requestBean) throws ServiceException {
+		validateWeeklyReportJobVo(requestBean);
 		return new ResponseVo(weeklyReportService.findWeeklyReportJobPlanByOrgId(requestBean.getOrgId(), requestBean.getStartTime(), requestBean.getEndTime(), requestBean.getJobLevel()));
 	}
 
 	@RequestMapping(value = "/listOrgProjectPlan", produces = "application/json;charset=utf8")
 	@ResponseBody
 	public ResponseVo listOrgProjectPlan(@RequestBody ReqListWeeklyReportProjectVo requestBean) throws ServiceException {
+		validateWeeklyReportProjectVo(requestBean);
 		return new ResponseVo(weeklyReportService.findWeeklyReportProjectPlanByOrgId(requestBean.getOrgId(), requestBean.getStartTime(), requestBean.getEndTime()));
 	}
 
 	@Override
 	public String getFunctionCode() {
-		// TODO Auto-generated method stub
 		return null;
+	}
+
+	private void validateWeeklyReportJobVo(ReqListWeeklyReportJobVo requestBean) throws ServiceException {
+		if (requestBean.getStartTime() == null) {
+			throw new ServiceException("请输入开始时间");
+		}
+		if (requestBean.getEndTime() == null) {
+			throw new ServiceException("请输入截止时间");
+		}
+		if (requestBean.getOrgId() == null || requestBean.getOrgId().isEmpty()) {
+			throw new ServiceException("部门ID不能为空");
+		}
+		if (requestBean.getJobLevel() == 0) {
+			throw new ServiceException("工作级别不能为空");
+		}
+	}
+
+	private void validateWeeklyReportProjectVo(ReqListWeeklyReportProjectVo requestBean) throws ServiceException {
+		if (requestBean.getStartTime() == null) {
+			throw new ServiceException("请输入开始时间");
+		}
+		if (requestBean.getEndTime() == null) {
+			throw new ServiceException("请输入截止时间");
+		}
+		if (requestBean.getOrgId() == null || requestBean.getOrgId().isEmpty()) {
+			throw new ServiceException("部门ID不能为空");
+		}
 	}
 
 }

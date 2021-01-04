@@ -51,7 +51,8 @@ public class ReqListWeeklyReportJobVo {
 			Date endTime = DateTimeUtil.addHours(this.endTime, 23);
 			endTime = DateTimeUtil.addMinutes(endTime, 59);
 			endTime = DateTimeUtil.addSeconds(endTime, 59);
-			this.endTime = endTime;
+			
+			return endTime;
 		}
 
 		return this.endTime;

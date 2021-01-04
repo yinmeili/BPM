@@ -1,5 +1,7 @@
 package com.h3bpm.web.service;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -8,6 +10,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,6 +39,12 @@ public class WorkFlowTaskService extends ApiDataService {
 
 	@Autowired
 	private UserMapper userMapper;
+
+	@Value(value = "${application.conf.path}")
+	private String CONF_PATH = null;
+
+	@Value(value = "${application.weeklyReport.filePath}")
+	private String WEEKLY_REPORT_PATH = null;
 
 	/**
 	 * 导入清算报表
@@ -118,7 +127,8 @@ public class WorkFlowTaskService extends ApiDataService {
 		InputStream is = null;
 		List<WeeklyReportData> list = null;
 		try {
-			is = this.getClass().getClassLoader().getResourceAsStream("config/files/weeklyReport.xlsx");
+			// is = this.getClass().getClassLoader().getResourceAsStream("config/files/weeklyReport.xlsx");
+			is = new FileInputStream(new File(CONF_PATH + WEEKLY_REPORT_PATH));
 			list = FileUtils.importWeeklyReportWorkFlowTask(is);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -138,7 +148,7 @@ public class WorkFlowTaskService extends ApiDataService {
 
 			workFlowTask.setId(UUID.randomUUID().toString());
 			workFlowTask.setCreateTime(new Date());
-			workFlowTask.setWorkFlowCode(WorkflowCode.ORG_SYSTEM_WEEKLY_REPORT.getValue());
+			workFlowTask.setWorkFlowCode(WorkflowCode.WEEKLY_REPORT.getValue());
 			workFlowTask.setUserDisplayName(weeklyReportData.getUserDisplayName());
 			workFlowTask.setStartTime(new Date());
 			workFlowTask.setUserLoginName(userLoginName);

@@ -12,7 +12,7 @@ public enum ApiActionUrl {
 	 * 判断一个组织是否另一个组织的父级 /orgs/{childId}/parents/{ancestorId}
 	 */
 	GET_ORG_IS_PARENT("/orgs/%s/parents/%s", HttpRequestType.GET),
-	
+
 	/**
 	 * 获取上级OU /orgs/{unitId}/parents
 	 */
@@ -21,9 +21,12 @@ public enum ApiActionUrl {
 	/**
 	 * 发起流程
 	 */
-	CREATE_WORKFLOW("/workflows/%s", HttpRequestType.POST);
+	CREATE_WORKFLOW("/workflows/%s", HttpRequestType.POST),
 
-
+	/**
+	 * 激活指定流程某个活动节点 /tokens/activities/{instanceId}/{activityCode}
+	 */
+	ACTIVATE_WORKFOW_NODE("/tokens/activities/%s/%s", HttpRequestType.PUT),
 
 	;
 
