@@ -49,6 +49,13 @@
                   var weekFirstDay = new Date(date - (date.getDay() - 1) * 86400000);
                   var firstMonth = Number(weekFirstDay.getMonth()) + 1;
                   var weekFirstDays = weekFirstDay.getDate();
+                  if (firstMonth <= 9) {
+                    firstMonth="0"+firstMonth
+
+                  }
+                  if (weekFirstDays  <= 9) {
+                    weekFirstDays="0"+weekFirstDays 
+                  }
                   var WeekFirstDate = weekFirstDay.getFullYear() + '-' + firstMonth + '-' + weekFirstDays;
                   //这周最后一天
                   var weekLastDay = new Date((weekFirstDay / 1000 + 6 * 86400) * 1000);
@@ -87,6 +94,13 @@
               var weekFirstDay = new Date(date - (date.getDay() - 1) * 86400000);
               var firstMonth = Number(weekFirstDay.getMonth()) + 1;
               var weekFirstDays = weekFirstDay.getDate();
+              if (firstMonth <= 9) {
+                firstMonth="0"+firstMonth
+
+              }
+              if (weekFirstDays  <= 9) {
+                weekFirstDays="0"+weekFirstDays 
+              }
               var WeekFirstDate = weekFirstDay.getFullYear() + '-' + firstMonth + '-' + weekFirstDays;
               $rootScope.searchWeeklyStartTimeStart = WeekFirstDate;
               //这周最后一天
