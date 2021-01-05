@@ -1,22 +1,16 @@
 package com.h3bpm.web.service;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.h3bpm.web.entity.User;
-import com.h3bpm.web.entity.WeeklyReportData;
 import com.h3bpm.web.entity.WeeklyReportJob;
 import com.h3bpm.web.entity.WeeklyReportProject;
-import com.h3bpm.web.entity.WorkFlowTask;
-import com.h3bpm.web.enumeration.WorkflowCode;
 import com.h3bpm.web.mapper.WeeklyReportMapper;
-import com.h3bpm.web.utils.FileUtils;
 import com.h3bpm.web.vo.WeeklyReportJobVo;
 import com.h3bpm.web.vo.WeeklyReportProjectVo;
 
@@ -42,7 +36,6 @@ public class WeeklyReportService extends ApiDataService {
 			List<User> userList = orgService.findChildrenUserByOrgId(orgId);
 
 			if (userList != null) {
-
 				for (User user : userList) {
 					List<WeeklyReportJob> userJobs = weeklyReportMapper.findWeeklyReportJob(user.getId(), startTime, endTime, jobLevel);
 

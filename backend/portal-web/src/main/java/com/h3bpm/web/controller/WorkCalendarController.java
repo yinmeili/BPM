@@ -180,6 +180,11 @@ public class WorkCalendarController extends ControllerBase {
 			if (workItemViewModel.getInstanceState().equals(InstanceStatus.CANCEL.getValue())) {
 				continue;
 			}
+			
+			//过滤掉部门工作周报
+			if (workItemViewModel.getWorkflowCode().equals(WorkflowCode.ORG_WEEKLY_REPORT.getValue())) {
+				continue;
+			}
 
 			workCalendarVo = new WorkCalendarVo();
 
@@ -268,7 +273,7 @@ public class WorkCalendarController extends ControllerBase {
 		 ********************** 查询待阅任务*********************
 		 */
 		List<Parameter> paramsUnRead = new ArrayList<>();
-		String[] conditionsUnRead = getEngine().getPortalQuery().GetWorkItemConditions(paramsUnRead, this.getUserValidator().getUserID(), startTime, endTime, WorkItemState.Unfinished, "", BoolMatchValue.Unspecified, "", false, CirculateItem.TableName);
+		String[] conditionsUnRead = getEngine().getPortalQuery().GetWorkItemConditions(paramsUnRead, userId, startTime, endTime, WorkItemState.Unfinished, "", BoolMatchValue.Unspecified, "", false, CirculateItem.TableName);
 		DataTable dtWorkitemUnRead = getEngine().getPortalQuery().QueryWorkItem(conditionsUnRead, ListUtil.toArray(paramsUnRead), startIndex, endIndex, "", CirculateItem.TableName);
 		getEngine().getPortalQuery().CountWorkItem(conditionsUnRead, ListUtil.toArray(paramsUnRead), CirculateItem.TableName);
 		String[] columnsUnRead = new String[] { CirculateItem.PropertyName_OrgUnit };

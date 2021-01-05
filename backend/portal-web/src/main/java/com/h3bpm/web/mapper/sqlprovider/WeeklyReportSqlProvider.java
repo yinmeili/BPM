@@ -25,7 +25,7 @@ public class WeeklyReportSqlProvider {
 		String userId = para.get("userId") == null ? "" : (String) para.get("userId");
 		String userIdSqlStr = "";
 		if (!userId.isEmpty()) {
-			userIdSqlStr += " AND a.OwnerId = '" + userId + "'";
+			userIdSqlStr += " AND c.Originator = '" + userId + "'";
 		}
 		
 		int jobLevel = para.get("jobLevel") == null ? 100 : (Integer) para.get("jobLevel");
@@ -38,7 +38,8 @@ public class WeeklyReportSqlProvider {
         		"SELECT"+
         				"	b.ObjectID id,"+
         				"	b.ParentObjectID parentId,"+
-        				"	a.OwnerId userId,"+
+        				"	c.Originator userId,"+
+        				"	c.OriginatorName userName,"+
         				"	b.job_content content,"+
         				"	b.job_evolve evolve,"+
         				"	b.job_level jobLevel,"+
@@ -77,14 +78,15 @@ public class WeeklyReportSqlProvider {
 		String userId = para.get("userId") == null ? "" : (String) para.get("userId");
 		String userIdSqlStr = "";
 		if (!userId.isEmpty()) {
-			userIdSqlStr += " AND a.OwnerId = '" + userId + "'";
+			userIdSqlStr += " AND c.Originator = '" + userId + "'";
 		}
 		
         String sql =
         		"SELECT"+
         				"	b.ObjectID id,"+
         				"	b.ParentObjectID parentId,"+
-        				"	a.OwnerId userId,"+
+        				"	c.Originator userId,"+
+        				"	c.OriginatorName userName,"+
         				"	b.pj_name `name`,"+
         				"	b.pj_info info,"+
         				"	b.pj_evolve evolve,"+
@@ -122,7 +124,7 @@ public class WeeklyReportSqlProvider {
 		String userId = para.get("userId") == null ? "" : (String) para.get("userId");
 		String userIdSqlStr = "";
 		if (!userId.isEmpty()) {
-			userIdSqlStr += " AND a.OwnerId = '" + userId + "'";
+			userIdSqlStr += " AND c.Originator = '" + userId + "'";
 		}
 		
 		int jobLevel = para.get("jobLevel") == null ? 100 : (Integer) para.get("jobLevel");
@@ -135,7 +137,8 @@ public class WeeklyReportSqlProvider {
         		"SELECT"+
         				"	b.ObjectID id,"+
         				"	b.ParentObjectID parentId,"+
-        				"	a.OwnerId userId,"+
+        				"	c.Originator userId,"+
+        				"	c.OriginatorName userName,"+
         				"	b.job_content content,"+
         				"	b.job_evolve evolve,"+
         				"	b.job_level jobLevel,"+
@@ -174,14 +177,15 @@ public class WeeklyReportSqlProvider {
 		String userId = para.get("userId") == null ? "" : (String) para.get("userId");
 		String userIdSqlStr = "";
 		if (!userId.isEmpty()) {
-			userIdSqlStr += " AND a.OwnerId = '" + userId + "'";
+			userIdSqlStr += " AND c.Originator = '" + userId + "'";
 		}
 		
         String sql =
         		"SELECT"+
         				"	b.ObjectID id,"+
         				"	b.ParentObjectID parentId,"+
-        				"	a.OwnerId userId,"+
+        				"	c.Originator userId,"+
+        				"	c.OriginatorName userName,"+
         				"	b.pj_name `name`,"+
         				"	b.pj_info info,"+
         				"	b.pj_evolve evolve,"+

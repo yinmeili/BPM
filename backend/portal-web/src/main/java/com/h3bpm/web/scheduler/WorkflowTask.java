@@ -6,6 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -36,6 +37,9 @@ public class WorkflowTask {
 	@Autowired
 	private UserService userService;
 
+	@Value(value = "${application.sms.head}")
+	private String SMS_HEAD = null;
+
 	/**
 	 * @Author tonghao
 	 * @Description 设置每5分钟执行一次
@@ -63,7 +67,7 @@ public class WorkflowTask {
 					// 发送提醒短信
 					User user = userService.getUserByLoginName(workFlowTask.getUserLoginName());
 					if (user != null && user.getMobile() != null && !user.getMobile().isEmpty()) {
-						kingdomService.sendSmsInfo(new SmsInfoVo(user.getName(), user.getMobile(), "【协办平台】您有一个新的待办任务，请及时处理，谢谢！"));
+						kingdomService.sendSmsInfo(new SmsInfoVo(user.getName(), user.getMobile(), SMS_HEAD + "您有一个新的待办任务，请及时处理，谢谢！"));
 					}
 				}
 
@@ -72,7 +76,7 @@ public class WorkflowTask {
 		} catch (ServiceException e) {
 			logger.error("error to autoStartWorkflowTask : " + e.getMessage());
 		}
-		
+
 		logger.info("======== autoStartWorkflowTask end ========");
 	}
 }
