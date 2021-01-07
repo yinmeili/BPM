@@ -17,9 +17,10 @@ import OThinker.Common.Organization.enums.State;
 
 @Service
 public class OrgService extends ApiDataService {
-	
+
 	@Autowired
 	private OrgMapper orgMapper;
+
 	/**
 	 * 根据指定部门ID获取所有下属用户
 	 * 
@@ -45,7 +46,7 @@ public class OrgService extends ApiDataService {
 
 		return users;
 	}
-	
+
 	/**
 	 * 根据指定部门名称获取部门信息
 	 * 
@@ -57,5 +58,18 @@ public class OrgService extends ApiDataService {
 	 */
 	public OrgInfo getOrgByOrgName(String orgName) throws InstantiationException, IllegalAccessException, Exception {
 		return orgMapper.getOrgByName(orgName);
+	}
+
+	/**
+	 * 根据用户ID获取用户管理的所有部门
+	 * 
+	 * @param userId
+	 * @return
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws Exception
+	 */
+	public List<OrgInfo> findOrgByManagerId(String userId) throws InstantiationException, IllegalAccessException, Exception {
+		return orgMapper.findOrgByManagerId(userId);
 	}
 }

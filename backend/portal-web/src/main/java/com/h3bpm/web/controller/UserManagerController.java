@@ -1,7 +1,7 @@
 package com.h3bpm.web.controller;
 
-import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -11,8 +11,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.h3bpm.web.entity.OrgInfo;
+import com.h3bpm.web.service.OrgService;
 import com.h3bpm.web.service.UserService;
 import com.h3bpm.web.vo.RespListChildrenOrgByUserIdVo;
 import com.h3bpm.web.vo.RespListSubordinateByUserIdVo;
@@ -33,9 +36,12 @@ public class UserManagerController extends ControllerBase {
 	@Autowired
 	private UserService userService;
 
+	@Autowired
+	private OrgService orgService;
+
 	@RequestMapping(value = "/listSubordinate", method = RequestMethod.GET, produces = "application/json;charset=utf8")
 	@ResponseBody
-	public List<RespListSubordinateByUserIdVo> listSubordinate() throws IOException {
+	public List<RespListSubordinateByUserIdVo> listSubordinate(@RequestParam(required = false, name = "key") String key) throws InstantiationException, IllegalAccessException, Exception {
 
 		List<RespListSubordinateByUserIdVo> list = new ArrayList<>();
 
@@ -46,56 +52,40 @@ public class UserManagerController extends ControllerBase {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
+
 		OThinker.Common.Organization.Models.User loginUser = (OThinker.Common.Organization.Models.User) userMap.get("User");
 
-		List<com.h3bpm.web.entity.User> subordinateList = userService.findSubordinateByUserId(loginUser.getObjectId());
+		IOrganization organization = UserManagerController.getEngine().getOrganization();
+		List<OrgInfo> orgList = orgService.findOrgByManagerId(loginUser.getObjectId());
+		List<User> userList = null;
 
-		list.add(new RespListSubordinateByUserIdVo(loginUser.getObjectId(), loginUser.getName()));
-		for (com.h3bpm.web.entity.User user : subordinateList) {
-			list.add(new RespListSubordinateByUserIdVo(user));
+		List<String> orgIdList = new ArrayList<>();
+		if (orgList != null) {
+			for (OrgInfo org : orgList) {
+				orgIdList.add(org.getId());
+			}
+		}
+
+		String[] orgIds = orgIdList.toArray(new String[orgIdList.size()]);
+
+		userList = organization.GetMemberUsers(orgIds, State.Active);
+
+		if (userList != null) {
+			for (User user : userList) {
+				if (key != null && !key.isEmpty()) {
+					if (user.getName().indexOf(key) != -1) {
+						list.add(new RespListSubordinateByUserIdVo(user.getObjectId(), user.getName()));
+					}
+
+				} else {
+					list.add(new RespListSubordinateByUserIdVo(user.getObjectId(), user.getName()));
+				}
+
+			}
 		}
 
 		return list;
 	}
-
-	// public List<RespListSubordinateByUserIdVo> listSubordinate() throws InstantiationException, IllegalAccessException, Exception {
-	//
-	// List<RespListSubordinateByUserIdVo> list = new ArrayList<>();
-	//
-	// Map<String, Object> userMap = null;
-	// try {
-	// userMap = this._getCurrentUser();
-	// } catch (Exception e1) {
-	// // TODO Auto-generated catch block
-	// e1.printStackTrace();
-	// }
-	//
-	// OThinker.Common.Organization.Models.User loginUser = (OThinker.Common.Organization.Models.User) userMap.get("User");
-	//
-	// IOrganization organization = this.getEngine().getOrganization();
-	// String unitId = loginUser.getParentID();
-	// String managerId = organization.GetOUManager(unitId);
-	//
-	// list.add(new RespListSubordinateByUserIdVo(loginUser.getObjectId(), loginUser.getName()));
-	//
-	// List<User> userIdList = null;
-	// if (managerId != null && managerId.equals(loginUser.getObjectId())) {
-	// userIdList = organization.GetMemberUsers(new String[] { unitId }, State.Active);
-	// }
-	//
-	// for (User user : userIdList) {
-	// list.add(new RespListSubordinateByUserIdVo(user.getObjectId(),user.getName()));
-	// }
-	//
-	// return list;
-	//
-	// // list.add(new RespListSubordinateByUserIdVo(loginUser.getObjectId(), loginUser.getName()));
-	// // for (User user : subordinateList) {
-	// // list.add(new RespListSubordinateByUserIdVo(user));
-	// // }
-	// //
-	// // return list;
-	// }
 
 	@SuppressWarnings("static-access")
 	@RequestMapping(value = "/listChildrenOrg", method = RequestMethod.GET, produces = "application/json;charset=utf8")
@@ -112,15 +102,29 @@ public class UserManagerController extends ControllerBase {
 			e1.printStackTrace();
 		}
 		OThinker.Common.Organization.Models.User loginUser = (OThinker.Common.Organization.Models.User) userMap.get("User");
+		List<OrgInfo> orgList = orgService.findOrgByManagerId(loginUser.getObjectId());
+		List<String> orgListTemp = new ArrayList<>();
 
 		IOrganization organization = this.getEngine().getOrganization();
-		List<String> unitIdList = organization.GetChildren(loginUser.getParentID(), UnitType.OrganizationUnit, true, State.Active);
 
-		Unit unit = organization.GetUnit(loginUser.getParentID());
-		list.add(new RespListChildrenOrgByUserIdVo(unit));
+		if (orgList != null) {
+			for (OrgInfo org : orgList) {
+				orgListTemp.add(org.getId());
 
-		if (unitIdList != null) {
-			for (String unitId : unitIdList) {
+				List<String> unitIdList = organization.GetChildren(org.getId(), UnitType.OrganizationUnit, true, State.Active);
+
+				if (unitIdList != null) {
+					for (String unitId : unitIdList) {
+						if (!orgListTemp.contains(unitId)) {
+							orgListTemp.add(unitId);
+						}
+					}
+				}
+			}
+		}
+
+		if (orgListTemp != null) {
+			for (String unitId : orgListTemp) {
 				Unit unitChildren = organization.GetUnit(unitId);
 				list.add(new RespListChildrenOrgByUserIdVo(unitChildren));
 			}
