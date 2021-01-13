@@ -11,7 +11,10 @@
           <span class="h3" ng-bind="menuData.DisplayName"></span>
         </div>
         <div class="col-sm-6 col-xs-12">
-
+          <!-- <button class="btn btn-default btn-sm" style="float: right;margin-right: 15px"id="downloadtable">
+            <i class="glyphicon glyphicon-download" ng-click="downloadTable()"><span
+                style="margin-left: 5px">导出表格</span></i>
+          </button> -->
         </div>
       </div>
     </div>
@@ -124,7 +127,7 @@
             style="border-right: 1px solid rgb(199, 199, 199); border-bottom: 1px solid rgb(199, 199, 199); border-left: 1px solid rgb(199, 199, 199); border-image: initial; border-top: none; overflow: auto;"
             data-title="">
             <table id="org_weekly_report_pj" data-datafield="org_weekly_report_pj" data-type="SheetGridView"
-              class="SheetGridView" style="" data-displaydelete="false" data-displayadd="false">
+              class="SheetGridView" style="" data-displaydelete="false" data-displayadd="false"border-collapse = "collapse">
               <tbody>
                 <tr class="header">
                   <td id="Control15_SerialNo" class="rowSerialNo">序号 </td>

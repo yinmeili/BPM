@@ -35,7 +35,6 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 		var initId = "";
 		var initValue = "";
 		var tmpData = [];
-
 		//渲染数据的地方
 		sltCategoryComBox = obj.ligerComboBox({
 			initValue: initId,
@@ -48,7 +47,8 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 			textField: 'text',//返回的数据的键必须有test
 			autocomplete: true,
 			setTextBySource: true,
-			keySupport: true
+			keySupport: true,
+			
 		});
 
 		//设置想要的样式
@@ -58,6 +58,7 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 		obj.css({ "border": "1px solid #d9d9d9", "border-radius": "4px" });
 		//下拉框的内容样式设置,模态框样式有点
 		$("div.l-box-select-inner").parent().css({ "margin-top": inputHeight + 'px' });
+		$("div.l-box-select-inner").parent().css({ "margin-left": 5 + 'px' });
 		$("div.l-box-select").css({ "width": inputWidth - 2 + 'px' });
 		//删除下拉框的下拉图标
 		$("div.l-trigger-icon").hide();
@@ -161,8 +162,7 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 				},
 
 				eventRender: function (event, element) {
-					$(element).tooltip({ title: event.title});
-				
+					$(element).tooltip({ title: event.title,placement:"right"});	
 				},
 				eventClick: function (calEvent, jsEvent, view) {//日程区块，单击时触发
 					window.open($scope.url = 'WorkItemSheets.html?WorkItemID=' + calEvent.id);
