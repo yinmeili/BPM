@@ -136,7 +136,7 @@ public class WorkFlowTaskService extends ApiDataService {
 		if (list == null)
 			return;
 		for (WeeklyReportData weeklyReportData : list) {
-			String userLoginName = userMapper.getUserLoginNameByUserDisplayName(weeklyReportData.getUserDisplayName());
+			String userLoginName = userMapper.getUserLoginNameByUserDisplayName(weeklyReportData.getUserDisplayName().trim());
 
 			if (userLoginName == null || userLoginName.equals(""))
 				continue;
@@ -149,7 +149,7 @@ public class WorkFlowTaskService extends ApiDataService {
 			workFlowTask.setId(UUID.randomUUID().toString());
 			workFlowTask.setCreateTime(new Date());
 			workFlowTask.setWorkFlowCode(WorkflowCode.WEEKLY_REPORT.getValue());
-			workFlowTask.setUserDisplayName(weeklyReportData.getUserDisplayName());
+			workFlowTask.setUserDisplayName(weeklyReportData.getUserDisplayName().trim());
 			workFlowTask.setStartTime(new Date());
 			workFlowTask.setUserLoginName(userLoginName);
 

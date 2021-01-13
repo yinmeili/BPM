@@ -7,6 +7,7 @@ public class WeeklyReportJobVo {
 	private String id = null;
 	private String parentId = null;
 	private String userId = null;
+	private String userName = null;
 	private String content = null;
 	private String evolve = null;
 	private String ratio = null;
@@ -23,12 +24,21 @@ public class WeeklyReportJobVo {
 		this.id = model.getId();
 		this.parentId = model.getParentId();
 		this.userId = model.getUserId();
+		this.userName = model.getUserName();
 		this.content = model.getContent();
 		this.evolve = model.getEvolve();
 		this.ratio = model.getRatio();
 		this.problem = model.getProblem();
 		this.type = model.getType();
 		this.jobLevel = model.getJobLevel();
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getId() {
