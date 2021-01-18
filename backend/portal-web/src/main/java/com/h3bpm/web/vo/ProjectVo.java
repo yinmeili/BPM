@@ -13,6 +13,7 @@ public class ProjectVo {
 	private Date createTime = null;
 	private Date startTime = null;
 	private Date endTime = null;
+	private String city = null;
 
 	public ProjectVo() {
 
@@ -27,6 +28,7 @@ public class ProjectVo {
 		this.startTime = model.getStartTime();
 		this.endTime = model.getEndTime();
 		this.createTime = model.getCreateTime();
+		this.city = model.getCity();
 	}
 
 	public String getId() {
@@ -43,6 +45,14 @@ public class ProjectVo {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 	public String getDesc() {

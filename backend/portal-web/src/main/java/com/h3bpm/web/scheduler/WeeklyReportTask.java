@@ -72,8 +72,8 @@ public class WeeklyReportTask {
 	 * @Param
 	 * @return void
 	 **/
-//	@Scheduled(cron = "0 0 8 ? * WED") // 每周三上午8点执行一次
-	@Scheduled(cron = "0 0 13 ? * WED") // 每周三 13点执行一次
+	@Scheduled(cron = "0 0 8 ? * MON") // 每周一上午8点执行一次
+//	@Scheduled(cron = "0 0 13 ? * WED") // 每周三 13点执行一次
 //	@Scheduled(cron = "0 0/2 * * * ?")
 	private void addWeeklyReportProcess() {
 		logger.info("======== addWeeklyReportProcess start ========");

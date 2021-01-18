@@ -80,6 +80,8 @@ public class ProjectManageController extends AbstractController {
 		endTime = DateTimeUtil.addMinutes(endTime, 59);
 		endTime = DateTimeUtil.addSeconds(endTime, 59);
 		projectVo.setEndTime(endTime);
+		
+		projectVo.setCity(reqParam.getCity());
 
 		projectManageService.createProjectInfo(projectVo);
 
@@ -102,6 +104,8 @@ public class ProjectManageController extends AbstractController {
 		endTime = DateTimeUtil.addMinutes(endTime, 59);
 		endTime = DateTimeUtil.addSeconds(endTime, 59);
 		projectVo.setEndTime(endTime);
+		
+		projectVo.setCity(reqParam.getCity());
 
 		projectManageService.updateProjectInfo(projectVo);
 

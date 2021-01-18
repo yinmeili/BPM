@@ -11,6 +11,12 @@ public class ProjectInfoSqlProvider {
 		if (!keyword.isEmpty()) {
 			keywordSqlStr = " AND a.`name` like '%" + keyword + "%'";
 		}
+		
+		String city = para.get("city") == null ? "" : (String) para.get("city");
+		String citySqlStr = "";
+		if (!city.isEmpty()) {
+			citySqlStr = " AND a.`city` = '" + city + "'";
+		}
 
 		String leaderId = para.get("leaderId") == null ? "" : (String) para.get("leaderId");
 		String leaderIdSqlStr = "";
@@ -58,12 +64,14 @@ public class ProjectInfoSqlProvider {
 					"	a.leader_name leaderName," + 
 					"	a.start_time startTime," + 
 					"	a.end_time endTime," + 
-					"	a.create_time createTime" + 
+					"	a.create_time createTime," +
+					"	a.city city" + 
 					" FROM " + 
 					"	`ow_project` a" + 
 					" WHERE " + 
 					"	1 = 1" + 
 					keywordSqlStr + 
+					citySqlStr + 
 					leaderIdSqlStr + 
 					startTimeStartSqlStr + 
 					startTimeEndSqlStr + 
@@ -108,7 +116,8 @@ public class ProjectInfoSqlProvider {
 					"	a.leader_name leaderName," + 
 					"	a.start_time startTime," + 
 					"	a.end_time endTime," + 
-					"	a.create_time createTime" + 
+					"	a.create_time createTime," +
+					"	a.city city" + 
 					" FROM " + 
 					"	`ow_project` a" + 
 					" WHERE " + 
