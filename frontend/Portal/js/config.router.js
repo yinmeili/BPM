@@ -906,6 +906,25 @@ angular.module('app')
                         ]
                     }
                 })
+                .state('app.QueryexceptionEvent',{
+                    url:'queryModel/exceptionEvent',
+                    controller:'exceptionEventCtrl',
+                    templateUrl:'queryModel/exceptionEvent/index.html',
+                    resolve:{
+                        deps:['$ocLazyLoad',
+                            function($ocLazyLoad){
+                                return $ocLazyLoad.load([
+                                    'js/services/notify.js',
+                                    'WFRes/_Scripts/MvcSheet/SheetControls.js',
+                                    'WFRes/_Scripts/MvcSheet/MvcSheetUI.js',
+                                    'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js',
+                                    'WFRes/_Scripts/MvcSheet/Controls/MvcSheetControls.js'
+                                ]);
+                            }
+                            
+                        ]
+                    }
+                })
            
              
 

@@ -8,6 +8,10 @@
         $scope.init();
         $scope.myScroll = null
       });
+      $scope.citySelect = [
+        { value: "上海", name: "上海" },
+        { value: "武汉", name: "武汉" }
+      ]
 
       $scope.init = function () {
       }
@@ -79,6 +83,20 @@
         });
         columns.push({
           "mData": "leaderName",
+          "mRender": function (data, type, full) {
+            //打开流程状态
+
+            data = $scope.htmlEncode(data);
+            // data=$scope.htmlEncode[data];
+            if (data == 'null' || data == null) {
+              data = '';
+            }
+            full = JSON.stringify(full);
+            return "<span title=\"" + data + "\">" + data + "</span>";
+          }
+        });
+        columns.push({
+          "mData": "city",
           "mRender": function (data, type, full) {
             //打开流程状态
 
@@ -205,9 +223,13 @@
         "sDom": '<"top"f>rt<"row"ipl>',
         "sPaginationType": "full_numbers",
         "fnServerParams": function (aoData) {
+          if($scope.cityname ==undefined){
+            $scope.cityname="上海";
+          }
           aoData.push(//name的值是传输数据的key，value的值是传输数据的value
             { "name": "keyword", "value": $scope.ProjectManagerKeyword },
             { "name": "leaderId", "value": $scope.LeaderID },
+            { "name": "city", "value":  $scope.cityname },
             { "name": "endTimeStart", "value": $filter("date")($rootScope.ProjectManagerEndTimeStart, "yyyy-MM-dd HH:mm:ss") },
             { "name": "endTimeEnd", "value": $filter("date")($rootScope.ProjectManagerEndTimeEnd, "yyyy-MM-dd HH:mm:ss") },
             { "name": "startTimeStart", "value": $filter("date")($rootScope.ProjectManagerStartTimeStart, "yyyy-MM-dd HH:mm:ss") },
@@ -218,7 +240,13 @@
         "aoColumns": $scope.getMyColumns(), // 字段定义
         "initComplete": function (settings, json) {
           var filter = $("#ProjectManagerSearch");
-          filter.unbind("click.DT").bind("click.DT", function () {
+          filter.unbind("click.DT").bind("click.DT", function () { 
+            var namecity=$('#ProjectManagerCity option:selected').val()
+            if(namecity ==""||namecity==undefined){
+              $scope.cityname="上海";
+            }else{
+              $scope.cityname = $('#ProjectManagerCity option:selected').val();
+            }
             $scope.LeaderID = $("#ProjectManagerLeader").SheetUIManager().GetValue();
             if ($rootScope.ProjectManagerStartTimeStart == undefined && $rootScope.ProjectManagerStartTimeEnd == undefined) {
               $rootScope.ProjectManagerStartTimeStart = "";
