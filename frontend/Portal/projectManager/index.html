@@ -40,6 +40,16 @@
                   </div>
                 </div>
               </div>
+              <div class="header-search-item">
+                <span class="search-title-text">城市</span>
+                <div class="form-group">
+                  <select autocomplete="off" ng-model="ProjectManagerCity" id="ProjectManagerCity" maxlength="32" class="input form-control" > 
+                  <option value=""style="display:none">上海</option>
+                  <option ng-repeat="x in citySelect" value="{{ x.value }}">{{ x.name }}</option>
+                </select>
+                  </div>
+                </div>
+      
               </br>
               <div class="header-search-item">
                 <span class="search-title-text">开始时间</span>
@@ -83,6 +93,7 @@
 
                 <th style="width: 200px"><span>项目名称</span></th>
                 <th ><span>负责人</span></th>
+                <th ><span>城市</span></th>
                 <th > <span>开始时间</span></th>
                 <th ><span>结束时间</span></th>
                 <th class="hide1024" style="width: 120px"><span>操作</span></th>

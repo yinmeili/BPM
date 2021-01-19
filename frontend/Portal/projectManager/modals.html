@@ -29,6 +29,16 @@
             </div>
         </div>
           <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">城市</div>
+              <div class="col-md-8 input-group">
+                <select autocomplete="off" ng-model="editProjectModalCity" id="editProjectModalCityid" maxlength="32" class="input form-control" > 
+                <option ng-repeat="x in citySelect" value="{{ x.value }}"ng-selected="editProjectModalCity==x.name?'selected':''">{{ x.name }}</option>
+                </select>
+              </div>
+            </div>
+          
+          <div class="row form-group" style="margin-bottom: 20px;">
               <div class="col-md-1"></div>
               <div class="col-md-2">开始时间</div>
               <div class="col-md-8 input-group">
@@ -93,7 +103,15 @@
                
             </div>
         </div>
-         
+          <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">城市</div>
+              <div class="col-md-8 input-group">
+                <select autocomplete="off" ng-model="editProjectModalCity" id="editProjectModalCityid" maxlength="32" class="input form-control"ng-disabled="true" > 
+                <option ng-repeat="x in citySelect" value="{{ x.value }}"ng-selected="editProjectModalCity==x.name?'selected':''">{{ x.name }}</option>
+                </select>
+              </div>
+            </div>
       
           <div class="row form-group" style="margin-bottom: 20px;">
               <div class="col-md-1"></div>
@@ -158,6 +176,17 @@
                class="form-horizontal"style="margin-bottom: 20px;" ></div>
             </div>
         </div>
+        <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">城市</div>
+              <div class="col-md-8 input-group">
+                <select autocomplete="off" ng-model="createProjectModalCity" 
+                id="createProjectModalCityid" maxlength="32" class="input form-control" > 
+                <option value=""style="display:none">上海</option>
+                <option ng-repeat="x in citySelect" value="{{ x.value }}">{{ x.name }}</option>
+                </select>
+              </div>
+            </div>
   
           <div class="row form-group" style="margin-bottom: 20px;">
             <div class="col-md-1"></div>

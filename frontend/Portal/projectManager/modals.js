@@ -16,6 +16,10 @@ app.controller("ProjectManagerlController", ["$scope", '$q', "$rootScope", "$htt
             CompanySelectable: false,
 
         }
+        $scope.citySelect = [
+            { value: "上海", name: "上海" },
+            { value: "武汉", name: "武汉" }
+          ]
 
         $scope.params = params;
         params.AgencyID;
@@ -49,13 +53,14 @@ app.controller("ProjectManagerlController", ["$scope", '$q', "$rootScope", "$htt
                 $scope.EditProjectStartTimeShow = params.AgencyID.startTime.substring(0, cutStarttime);
                 $scope.EditProjectEndTimeShow = params.AgencyID.endTime.substring(0, cutEndtime);
                 $scope.editProjectdescription = params.AgencyID.desc;
+                $scope.editProjectModalCity = params.AgencyID.city;
                 $scope.detailProjectLearder = params.AgencyID.leaderName
 
                 setTimeout(function () {
 
                     $("#editModalsProjectLearder").SheetUIManager().SetValue(params.AgencyID.leaderId);
                 }, 100)
-
+                
 
             }
         }
@@ -114,8 +119,6 @@ app.controller("ProjectManagerlController", ["$scope", '$q', "$rootScope", "$htt
 
 
         editModalsProjectManager = function () {
-
-
             if ($rootScope.modalsStartTimeEdit == undefined && $rootScope.modalsEndTimeEdit == undefined) {
                 var StartTimes = new Date($scope.EditProjectStartTimeShow.replace(/-/g, "/")).getTime();
                 var EndTimes = new Date($scope.EditProjectEndTimeShow.replace(/-/g, "/")).getTime();
@@ -178,7 +181,7 @@ app.controller("ProjectManagerlController", ["$scope", '$q', "$rootScope", "$htt
                 startTime: $scope.EditProjectStartTimeShow,
                 endTime: $scope.EditProjectEndTimeShow,
                 leaderId: $scope.OriginatorRange,
-
+                city:$scope.editProjectModalCity,
             };
 
             $http.post('/Portal/project/updateProject', data).success(function (data) {
@@ -201,15 +204,16 @@ app.controller("ProjectManagerlController", ["$scope", '$q', "$rootScope", "$htt
             var editEndTime = $scope.EditProjectEndTimeShow;
             $scope.OriginatorRange = $("#editModalsProjectLearder").SheetUIManager().GetValue();
             var leaderid = $scope.OriginatorRange;
-
-
-
+            var citynameModal=$('#editProjectModalCityid option:selected').text();
             var msg = "";
             if (!projectName) {
                 msg += '请输入项目名称 | ';
             }
             if (!leaderid) {
                 msg += '请选择负责人 | ';
+            }
+            if (!citynameModal) {
+                msg += '请选择城市 | ';
             }
             if (!editStartTime) {
                 msg += '请选择开始时间 | ';
@@ -231,7 +235,13 @@ app.controller("ProjectManagerlController", ["$scope", '$q', "$rootScope", "$htt
         };
         //新建
         createModalsProject = function () {
-            var self = params.AgencyID;
+             var self = params.AgencyID;
+            if($scope.createProjectModalCity ==undefined){
+                $scope.createProjectModalCity="上海";
+              }
+              else{
+                   $scope.createProjectModalCity = $('#createProjectModalCityid option:selected').val();
+              }
             var deferred = $q.defer();
             var StartTimes = new Date($rootScope.modalsStartTimeCreate.replace(/-/g, "/")).getTime();
             var EndTimes = new Date($rootScope.modalsEndTimeCreate.replace(/-/g, "/")).getTime();
@@ -249,6 +259,7 @@ app.controller("ProjectManagerlController", ["$scope", '$q', "$rootScope", "$htt
                 startTime: $rootScope.modalsStartTimeCreate,
                 endTime: $rootScope.modalsEndTimeCreate,
                 leaderId: $scope.OriginatorRange,
+                city:$scope.createProjectModalCity,
             };
 
             $http.post('/Portal/project/createProject', data).success(function (data) {
@@ -265,6 +276,7 @@ app.controller("ProjectManagerlController", ["$scope", '$q', "$rootScope", "$htt
 
         $scope.createProject = function () {
             var msg = "";
+            var createCitynameModal=$('#createProjectModalCityid option:selected').text();
             var projectName = $scope.CreateProjectModalName;
             var createStartTime = $rootScope.modalsStartTimeCreate;
             var createEndTime = $rootScope.modalsEndTimeCreate;
@@ -273,7 +285,9 @@ app.controller("ProjectManagerlController", ["$scope", '$q', "$rootScope", "$htt
             if (!projectName) {
                 msg += '请输入项目名称 | ';
             }
-
+            if (!createCitynameModal) {
+                msg += '请选择城市 | ';
+            }
             if (!createStartTime) {
                 msg += '请选择开始时间 | ';
             }
@@ -328,7 +342,6 @@ app.controller("ProjectManagerlController", ["$scope", '$q', "$rootScope", "$htt
             return deferred.promise;
         }
         $scope.removeProjectManager = function () {
-            $scope.name = "123"
             removeModalsProjectManage().then(function () {
                 $("#tabProjectManager").dataTable().fnDraw();
             });
