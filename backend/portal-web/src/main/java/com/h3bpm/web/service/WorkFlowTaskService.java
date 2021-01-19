@@ -70,9 +70,9 @@ public class WorkFlowTaskService extends ApiDataService {
 			if (liquidationImportData.getStartTime() == null || liquidationImportData.getUserDisplayName() == null)
 				continue;
 
-			// 每天15点开始发起清算任务
+			// 每天10点开始发起清算任务
 			Date workflowTaskStartTime = liquidationImportData.getStartTime();
-			workflowTaskStartTime = DateTimeUtil.addHours(workflowTaskStartTime, 15);
+			workflowTaskStartTime = DateTimeUtil.addHours(workflowTaskStartTime, 10);
 			// workflowTaskStartTime = DateTimeUtil.addMinutes(workflowTaskStartTime, 50);
 
 			WorkFlowTask workFlowTask = workFlowTaskMapper.getWorkFlowTaskByWorkflowCodeAndStartTime(WorkflowCode.LIQUIDATION.getValue(), workflowTaskStartTime);

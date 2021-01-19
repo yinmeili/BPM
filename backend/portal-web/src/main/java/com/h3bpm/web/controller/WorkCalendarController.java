@@ -180,8 +180,8 @@ public class WorkCalendarController extends ControllerBase {
 			if (workItemViewModel.getInstanceState().equals(InstanceStatus.CANCEL.getValue())) {
 				continue;
 			}
-			
-			//过滤掉部门工作周报
+
+			// 过滤掉部门工作周报
 			if (workItemViewModel.getWorkflowCode().equals(WorkflowCode.ORG_WEEKLY_REPORT.getValue())) {
 				continue;
 			}
@@ -293,7 +293,7 @@ public class WorkCalendarController extends ControllerBase {
 		int unReadTotal = griddataUnReadList == null ? 0 : griddataUnReadList.size();
 
 		/* ************************************************************/
-		
+
 		responseWorkCalendarVo = new ResponseWorkCalendarVo(list);
 		responseWorkCalendarVo.setFinishTotal(finishTotal);
 		responseWorkCalendarVo.setUnfinishTotal(unfinishTotal);
@@ -336,12 +336,18 @@ public class WorkCalendarController extends ControllerBase {
 		} else {
 			title = new StringBuffer(circulateItemViewModel.getInstanceName());
 		}
-		
+
 		if (circulateItemViewModel.getWorkflowCode().equals(WorkflowCode.ORG_WEEKLY_REPORT.getValue())) {
 
 			BizObjectInfo bizObjectInfo = workFlowService.getBizObjectInfoByInstanceIdWithOutSysType(circulateItemViewModel.getInstanceId());
 
 			return bizObjectInfo.getTitle();
+
+		} else if (circulateItemViewModel.getWorkflowCode().equals(WorkflowCode.BUSINESS_EXCEPTION.getValue())) {
+
+			BizObjectInfo bizObjectInfo = workFlowService.getBizObjectInfoByInstanceId(circulateItemViewModel.getInstanceId());
+
+			return (title.append("-").append(bizObjectInfo.getBusinessSys())).toString();
 		}
 
 		return title.toString();

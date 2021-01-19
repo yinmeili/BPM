@@ -11,9 +11,12 @@ import com.h3bpm.base.util.AppUtility;
 import com.h3bpm.web.entity.OrgInfo;
 import com.h3bpm.web.entity.User;
 import com.h3bpm.web.mapper.OrgMapper;
+import com.h3bpm.web.vo.RespListChildrenOrgByUserIdVo;
 
 import OThinker.Common.Organization.Interface.IOrganization;
+import OThinker.Common.Organization.Models.Unit;
 import OThinker.Common.Organization.enums.State;
+import OThinker.Common.Organization.enums.UnitType;
 
 @Service
 public class OrgService extends ApiDataService {
@@ -71,5 +74,49 @@ public class OrgService extends ApiDataService {
 	 */
 	public List<OrgInfo> findOrgByManagerId(String userId) throws InstantiationException, IllegalAccessException, Exception {
 		return orgMapper.findOrgByManagerId(userId);
+	}
+	
+	/**
+	 * 根据用户ID获取用户管理的所有部门（嵌套下钻）
+	 * 
+	 * @param userId
+	 * @return
+	 * @throws InstantiationException
+	 * @throws IllegalAccessException
+	 * @throws Exception
+	 */
+	public List<Unit> findAllOrgByManagerId(String userId) throws InstantiationException, IllegalAccessException, Exception {
+		List<OrgInfo> orgList = this.findOrgByManagerId(userId);
+		List<String> orgListTemp = new ArrayList<>();
+		List<Unit> unitList = null;
+
+		EngineClient engine = (EngineClient) AppUtility.getEngine();
+		IOrganization organization = engine.getOrganization();
+
+		if (orgList != null) {
+			for (OrgInfo org : orgList) {
+				orgListTemp.add(org.getId());
+
+				List<String> unitIdList = organization.GetChildren(org.getId(), UnitType.OrganizationUnit, true, State.Active);
+
+				if (unitIdList != null) {
+					for (String unitId : unitIdList) {
+						if (!orgListTemp.contains(unitId)) {
+							orgListTemp.add(unitId);
+						}
+					}
+				}
+			}
+		}
+
+		if (orgListTemp != null) {
+			unitList = new ArrayList<>();
+			for (String unitId : orgListTemp) {
+				Unit unitChildren = organization.GetUnit(unitId);
+				unitList.add(unitChildren);
+			}
+		}
+
+		return unitList;
 	}
 }

@@ -33,5 +33,7 @@ public class QueryProjectInfoList extends ReqListProjectInfoPageVo {
 			endEndTime = DateTimeUtil.addSeconds(endEndTime, 59);
 			this.setEndTimeEnd(endEndTime);
 		}
+
+		this.setCity(voBean.getCity());
 	}
 }

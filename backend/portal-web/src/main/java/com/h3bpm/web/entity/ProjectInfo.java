@@ -13,6 +13,7 @@ public class ProjectInfo {
 	private Date createTime = null;
 	private Date startTime = null;
 	private Date endTime = null;
+	private String city = null;
 
 	@Deprecated
 	public ProjectInfo() {
@@ -28,6 +29,7 @@ public class ProjectInfo {
 		this.startTime = voBean.getStartTime();
 		this.endTime = voBean.getEndTime();
 		this.createTime = voBean.getCreateTime();
+		this.city = voBean.getCity();
 	}
 
 	public String getId() {
@@ -44,6 +46,14 @@ public class ProjectInfo {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 	public String getDesc() {
