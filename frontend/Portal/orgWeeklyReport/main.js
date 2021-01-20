@@ -150,7 +150,7 @@
       }
       $scope.searchOrgWeeklyReport = function () {
         $rootScope.loading = true;
-        var searchorgId = document.getElementById("orgWeeklyReportCompany").value
+        var searchorgId = $("#orgWeeklyReportCompany").val()
         if ($rootScope.orgWeeklyReportStartTimeStart != undefined) {
           var startTime = $rootScope.orgWeeklyReportStartTimeStart;
           var WeekLastDate = $scope.orgWeeklyReportStartTimeEnd
@@ -304,18 +304,34 @@
           alert("请求失败")
         })
       }
+   
+       
+
+     
+        
       //部门下拉框请求
-      $scope.listChildrenOrg = function () {  
+      $scope.listChildrenOrg = function () { 
+       
+        $('#orgWeeklyReportCompany').selectpicker({
+          noneResultsText: '无搜索结果',
+          noneSelectedText:'没有选中内容'
+      }); 
         $.ajax({
           dataType: 'json',
           type: 'GET',
           url: '/Portal/user/listChildrenOrg',
           success: function (data) {
-            for (var i = 0; i < data.length; i++) {
-              $("#orgWeeklyReportCompany").append($("<option value=\"" + data[i].id + "\">" + data[i].text + "</option>"));
-            }
-            document.getElementById("orgWeeklyReportCompany")[0].style = "display:none";
-            document.getElementById("orgWeeklyReportCompany")[1].selected = true;
+            $scope.companyOptionData = data;
+              var optionMulti = [];
+              optionMulti = $scope.companyOptionData;
+              //定义一个对象数组，用于储存所需选项
+              for (var i = 0; i < optionMulti.length; i++) {
+                  $("#orgWeeklyReportCompany").append($("<option value=\"" + optionMulti[i].id +"\">" + optionMulti[i].text + "</option>"));
+              }
+              //使用refresh方法更新UI以匹配新状态
+              $('#orgWeeklyReportCompany').selectpicker('refresh');
+              //render方法强制重新渲染引导程序 - 选择ui。
+              $('#orgWeeklyReportCompany').selectpicker('render');
           },
           error: function () {
             alert("Failed");
@@ -323,6 +339,9 @@
         }).then(function(data) {
            $scope.searchOrgWeeklyReport();
       })
+      $('#orgWeeklyReportCompany').selectpicker('refresh');
+      //render方法强制重新渲染引导程序 - 选择ui。
+      $('#orgWeeklyReportCompany').selectpicker('render');
       }
     }]);
 })(window, angular, jQuery);

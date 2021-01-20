@@ -10,7 +10,7 @@
 				<span class="icon-bar"></span>
 			</button>
 
-			<div ng-controller="workCalendarCtrl" class="selectDate-wrapper">
+			<div class="selectDate-wrapper">
 				<div class="navbar-form navbar-left">
 					<select class="fc fc-button-group fc-next-button fc-button fc-state-default fc-corner-left fc-corner-right"
 						ng-model="selectYear" ng-options="year for year in years" style="height:32px;font-size:15px">
@@ -26,7 +26,12 @@
 				</div>
 				<div class="new">
 					<div class="texttag">人员</div>
-					<div><input autocomplete="off" ng-model="newtag" id="newtag" maxlength="32" /></div>
+					<div class="newtagdiv">
+						<select  id="newtag"data-live-search="true" data-width="150px" data-container="body"title = {{loginUser.User.Name}}
+									class="selectpicker show-tick form-control"data-style="input form-control" >  
+									<option value=""id="newtagAll"selected="selected">{{loginUser.User.Name}}</option>  
+             </select>
+					</div>
 					<span class="onetag">流程模板</span>
 					<div ui-jq="SheetWorkflow" ui-options="newWorkflowOptions" id="sheet" style="width: 170px;height:20px;">
 					</div>

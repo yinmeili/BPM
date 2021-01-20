@@ -32,10 +32,10 @@
               <div class="header-search-item">
                 <span class="search-title-text">部门</span>
                 <div class="form-group">
-                  <select autocomplete="off" ng-model="orgWeeklyReportCompany"
-                    id="orgWeeklyReportCompany" maxlength="32" class="input form-control" > 
-                  </select>
-                 
+                   <!--data-container="body"用于防止被其他页面元素遮住，多选就加multipe，data-live-search用于搜索,data-style用于添加样式-->
+                  <select  id="orgWeeklyReportCompany"data-live-search="true" data-width="150px" data-height="32px" data-container="body"
+                  class="selectpicker show-tick form-control"data-style="input form-control" >    
+                </select>
                 </div>
               </div>
               <div class="header-search-item">

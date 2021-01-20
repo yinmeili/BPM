@@ -42,6 +42,8 @@
            });
           $('#exceptionEventsystemName').selectpicker({
             noneResultsText: '无搜索结果',
+            deselectAllText: '全不选',
+            selectAllText: '全选' 
         });
         //没有搜索结果时显示而noneSelectedText则是没有选中是显示
        
