@@ -311,16 +311,16 @@
         
       //部门下拉框请求
       $scope.listChildrenOrg = function () { 
-       
+      
         $('#orgWeeklyReportCompany').selectpicker({
           noneResultsText: '无搜索结果',
-          noneSelectedText:'没有选中内容'
+          noneSelectedText:'无组织部门'
       }); 
         $.ajax({
           dataType: 'json',
           type: 'GET',
           url: '/Portal/user/listChildrenOrg',
-          success: function (data) {
+          success: function (data) { 
             $scope.companyOptionData = data;
               var optionMulti = [];
               optionMulti = $scope.companyOptionData;
@@ -337,7 +337,20 @@
             alert("Failed");
           },
         }).then(function(data) {
-           $scope.searchOrgWeeklyReport();
+          var searchselect = $("#orgWeeklyReportCompany").val()
+          $rootScope.loading = true;
+          if(searchselect==null)
+          {
+            $('#DashedBlank11').html("暂无数据");
+            $('#DashedBlank14').html("暂无数据");
+            $('#DashedBlank13').html("暂无数据");
+            $('#DashedBlank12').html("暂无数据");
+            $rootScope.loading = false;
+            $scope.$apply();
+          }
+          else{
+             $scope.searchOrgWeeklyReport();
+          }
       })
       $('#orgWeeklyReportCompany').selectpicker('refresh');
       //render方法强制重新渲染引导程序 - 选择ui。
