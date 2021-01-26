@@ -249,6 +249,21 @@ jQuery.extend(
                 $("#collect").hide();
                 $("#share").hide();
             }
+            /*判断当前流程是否已经结束，没完成就隐藏分享和收藏按钮，反之就显示*/
+            if ($.MvcSheetUI.SheetInfo.IsOriginateMode) {
+                $("#collect").css('display', 'none');
+                $("#share").css('display', 'none');
+              }
+              else {
+                if ($.MvcSheetUI.SheetInfo.BizObject.DataItems.RunningInstanceId.V == "") {
+                  $("#collect").css('display', '');
+                  $("#share").css('display', '');
+                }
+                else {
+                  $("#collect").css('display', 'none');
+                  $("#share").css('display', 'none');
+                }
+              }
 
             var manager = $(".SheetToolBar").SheetToolBar($.MvcSheet.Actions);
 
