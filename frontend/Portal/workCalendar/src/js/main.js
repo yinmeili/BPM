@@ -760,8 +760,9 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 	}
 	$scope.announceshow ();
 
+
 	//新人员下拉框js
-	$scope.newtagRefresh=function(){
+	$scope.newtagRefresh=function(){	
 		$('#newtag').on('changed.bs.select',
 		function (e, clickedIndex, isSelected, previousValue) {
 				//选中其他时，去除全部的选择状态
@@ -805,8 +806,11 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 					for (var i = 0; i < optionMulti.length; i++) {
 							$("#newtag").append($("<option value=\"" + optionMulti[i].id +"\">" + optionMulti[i].text + "</option>"));
 					}
-					//使用refresh方法更新UI以匹配新状态
-					
+					$('#newtag').selectpicker({
+						noneResultsText: '无搜索结果',
+						noneSelectedText:'没有选中内容'
+				  }); 
+					//使用refresh方法更新UI以匹配新状态	
 					$('#newtag').selectpicker('refresh');
 					//render方法强制重新渲染引导程序 - 选择ui。
 					$('#newtag').selectpicker('render');
