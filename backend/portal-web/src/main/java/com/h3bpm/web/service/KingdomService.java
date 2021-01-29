@@ -475,11 +475,11 @@ public class KingdomService extends ApiDataService {
 		// 只取名称为"数字-"开头的节点，如 "1-数据库开启",且过滤掉子节点，如 “1-数据库开启\服务器开启”
 		if (!name.matches("^\\d+?-[\\S\\s]*?.[\\S\\s]*?$") || name.indexOf("\\") != -1) {
 
-			// 过滤掉回车和换行
-			name = name.replaceAll("\r|\n", "");
-
 			// 记录下所有非正常的节点名称
 			if (executeResult != null && !executeResult.isEmpty() && !executeResult.trim().equals("正常")) {
+				// 过滤掉回车和换行
+				name = name.replaceAll("\r|\n", "");
+				
 				errorNodeNameList.add(name);
 			}
 
