@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 public class ReqListProjectInfoPageVo extends ReqPageVo {
 	private String keyword = null;// 关键字
 	private String leaderId = null;// 负责人ID
+	private String city = null;// 城市
 
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date startTimeStart = null;// 发生时间开始
@@ -23,6 +24,14 @@ public class ReqListProjectInfoPageVo extends ReqPageVo {
 	@Deprecated
 	public ReqListProjectInfoPageVo() {
 
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 	public String getLeaderId() {

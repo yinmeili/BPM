@@ -181,6 +181,11 @@ public class WorkCalendarController extends ControllerBase {
 				continue;
 			}
 
+			// 过滤掉部门工作周报
+			if (workItemViewModel.getWorkflowCode().equals(WorkflowCode.ORG_WEEKLY_REPORT.getValue())) {
+				continue;
+			}
+
 			workCalendarVo = new WorkCalendarVo();
 
 			workCalendarVo.setId(workItemViewModel.getBaseObjectID());
@@ -268,7 +273,7 @@ public class WorkCalendarController extends ControllerBase {
 		 ********************** 查询待阅任务*********************
 		 */
 		List<Parameter> paramsUnRead = new ArrayList<>();
-		String[] conditionsUnRead = getEngine().getPortalQuery().GetWorkItemConditions(paramsUnRead, this.getUserValidator().getUserID(), startTime, endTime, WorkItemState.Unfinished, "", BoolMatchValue.Unspecified, "", false, CirculateItem.TableName);
+		String[] conditionsUnRead = getEngine().getPortalQuery().GetWorkItemConditions(paramsUnRead, userId, startTime, endTime, WorkItemState.Unfinished, "", BoolMatchValue.Unspecified, "", false, CirculateItem.TableName);
 		DataTable dtWorkitemUnRead = getEngine().getPortalQuery().QueryWorkItem(conditionsUnRead, ListUtil.toArray(paramsUnRead), startIndex, endIndex, "", CirculateItem.TableName);
 		getEngine().getPortalQuery().CountWorkItem(conditionsUnRead, ListUtil.toArray(paramsUnRead), CirculateItem.TableName);
 		String[] columnsUnRead = new String[] { CirculateItem.PropertyName_OrgUnit };
@@ -288,7 +293,7 @@ public class WorkCalendarController extends ControllerBase {
 		int unReadTotal = griddataUnReadList == null ? 0 : griddataUnReadList.size();
 
 		/* ************************************************************/
-		
+
 		responseWorkCalendarVo = new ResponseWorkCalendarVo(list);
 		responseWorkCalendarVo.setFinishTotal(finishTotal);
 		responseWorkCalendarVo.setUnfinishTotal(unfinishTotal);
@@ -331,12 +336,18 @@ public class WorkCalendarController extends ControllerBase {
 		} else {
 			title = new StringBuffer(circulateItemViewModel.getInstanceName());
 		}
-		
+
 		if (circulateItemViewModel.getWorkflowCode().equals(WorkflowCode.ORG_WEEKLY_REPORT.getValue())) {
 
 			BizObjectInfo bizObjectInfo = workFlowService.getBizObjectInfoByInstanceIdWithOutSysType(circulateItemViewModel.getInstanceId());
 
 			return bizObjectInfo.getTitle();
+
+		} else if (circulateItemViewModel.getWorkflowCode().equals(WorkflowCode.BUSINESS_EXCEPTION.getValue())) {
+
+			BizObjectInfo bizObjectInfo = workFlowService.getBizObjectInfoByInstanceId(circulateItemViewModel.getInstanceId());
+
+			return (title.append("-").append(bizObjectInfo.getBusinessSys())).toString();
 		}
 
 		return title.toString();

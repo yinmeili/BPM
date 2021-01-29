@@ -1,4 +1,4 @@
-package com.h3bpm.web.scheduler;
+package com.h3bpm.web.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,47 +15,48 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.h3bpm.web.entity.OrgInfo;
 import com.h3bpm.web.entity.User;
 import com.h3bpm.web.entity.WeeklyReportSendData;
+import com.h3bpm.web.entity.WorkFlowTask;
 import com.h3bpm.web.enumeration.WorkflowCode;
+import com.h3bpm.web.scheduler.WorkflowTask;
 import com.h3bpm.web.service.KingdomService;
 import com.h3bpm.web.service.OrgService;
+import com.h3bpm.web.service.ServiceException;
 import com.h3bpm.web.service.UserService;
 import com.h3bpm.web.service.WorkFlowService;
 import com.h3bpm.web.service.WorkFlowTaskService;
 import com.h3bpm.web.utils.FileUtils;
+import com.h3bpm.web.vo.ResponseVo;
 import com.h3bpm.web.vo.SmsInfoVo;
 
 import OThinker.Common.DateTimeUtil;
 
-@Component
-@PropertySource(value = "classpath:application.properties", ignoreResourceNotFound = true, encoding = "UTF-8")
-public class WeeklyReportTask {
-	private static final Logger logger = LoggerFactory.getLogger(WeeklyReportTask.class);
-
-	@Autowired
-	private WorkFlowService workFlowService;
+@Controller
+@RequestMapping(value = "/Portal/runTask")
+public class RunTaskController extends AbstractController {
+	private static final Logger logger = LoggerFactory.getLogger(RunTaskController.class);
 
 	@Autowired
 	private WorkFlowTaskService workFlowTaskService;
+
+	@Autowired
+	private WorkFlowService workFlowService;
 
 	@Autowired
 	private KingdomService kingdomService;
 
 	@Autowired
 	private UserService userService;
-
+	
 	@Autowired
 	private OrgService orgService;
-
-	// @Autowired
-	// private Environment env;
-
+	
 	private static final String READ_CODE = "check_report";
 	private static final String FINISH_CODE = "finish";
 
@@ -65,37 +66,22 @@ public class WeeklyReportTask {
 	@Value(value = "${application.weeklyReport.send.filePath}")
 	private String WEEKLY_REPORT_SEND_PATH = null;
 
-	/**
-	 * @Author lzf
-	 * @Description
-	 * @Data
-	 * @Param
-	 * @return void
-	 **/
-	@Scheduled(cron = "0 0 8 ? * MON") // 每周一上午8点执行一次
-//	@Scheduled(cron = "0 0 13 ? * WED") // 每周三 13点执行一次
-//	@Scheduled(cron = "0 0/2 * * * ?")
-	private void addWeeklyReportProcess() {
-		logger.info("======== addWeeklyReportProcess start ========");
+
+	@RequestMapping(value = "/addWeeklyReport", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public ResponseVo addWeeklyReport() throws ServiceException {
+		logger.info("======== Test addWeeklyReportProcess start ========");
 
 		workFlowTaskService.addWeeklyReportWorkFlowTask();
 
-		logger.info("======== addWeeklyReportProcess end ========");
+		logger.info("======== Test addWeeklyReportProcess end ========");
+		
+		return new ResponseVo("调用成功");
 	}
-
-	/**
-	 * 定时生成部门待阅周报
-	 * 
-	 * @Author tonghao
-	 * @Description
-	 * @Data
-	 * @Param
-	 * @return void
-	 **/
-//	 @Scheduled(cron = "0 46 9 ? * TUE") // 每周四13点执行一次
-	@Scheduled(cron = "0 0 13 ? * THU") // 每周四13点执行一次
-//	@Scheduled(cron = "0 0/2 * * * ?")
-	private void addOrgWeeklyReportProcess() {
+	
+	@RequestMapping(value = "/addOrgWeeklyReport", produces = "application/json;charset=utf8")
+	@ResponseBody
+	public ResponseVo addOrgWeeklyReport() {
 		logger.info("======== addOrgWeeklyReportProcess start ========");
 
 		InputStream is = null;
@@ -184,9 +170,16 @@ public class WeeklyReportTask {
 			}
 		}
 
-		logger.info("======== addWeeklyReportProcess end ========");
+		logger.info("======== Test addWeeklyReportProcess end ========");
+		
+		return new ResponseVo("调用成功");
 	}
 
+	@Override
+	public String getFunctionCode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	private Date getMonday(Date date) {
 		if (date == null || date.equals("")) {
 			return null;
@@ -210,5 +203,4 @@ public class WeeklyReportTask {
 		cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
 		return cal.getTime();
 	}
-
 }

@@ -11,7 +11,11 @@
           <span class="h3" ng-bind="menuData.DisplayName"></span>
         </div>
         <div class="col-sm-6 col-xs-12">
-
+            <!-- <button class="btn btn-default btn-sm" style="float: right;margin-right: 15px"id="downloadtable">
+               <a href="#" id="exportExcel" style="display:none" >  </a> 
+            <i class="glyphicon glyphicon-download" ng-click="downloadTable()"><span
+                style="margin-left: 5px">导出周报</span></i>
+          </button> -->
         </div>
       </div>
     </div>
@@ -28,10 +32,10 @@
               <div class="header-search-item">
                 <span class="search-title-text">部门</span>
                 <div class="form-group">
-                  <select autocomplete="off" ng-model="orgWeeklyReportCompany"
-                    id="orgWeeklyReportCompany" maxlength="32" class="input form-control" > 
-                  </select>
-                 
+                   <!--data-container="body"用于防止被其他页面元素遮住，多选就加multipe，data-live-search用于搜索,data-style用于添加样式-->
+                  <select  id="orgWeeklyReportCompany"data-live-search="true" data-width="150px" data-height="32px" data-container="body"
+                  class="selectpicker show-tick form-control"data-style="input form-control" >    
+                </select>
                 </div>
               </div>
               <div class="header-search-item">
@@ -70,7 +74,7 @@
           <!-- 表格  -->
           <!-- 常规工作 -->
           <div id="div110456" class="col-md-12" style="border:1px solid #C7C7C7;position: relative;border-bottom: none">
-            <div style="background-color: white;position: absolute;left:15px;top:-10px;color: rgba(0,0,0,.65)">
+            <div style="background-color: white;position: absolute;left:15px;top:-10px;color:red;font-size: 16px;">
               <b>常规工作</b>
             </div>
           </div>
@@ -91,7 +95,7 @@
                       data-type="SheetLabel" style="">工作进展</label></td>
                   <td id="ctl639771_header2" style="" class="" data-field="org_weekly_report_job.job_ratio">
                     <label id="ctl639771_Label2" data-datafield="org_weekly_report_job.job_ratio"
-                      data-type="SheetLabel" style="">完成比例</label></td>
+                      data-type="SheetLabel" style="">完成比例(%)</label></td>
                   <td id="ctl639771_header3" style="" class="" data-field="org_weekly_report_job.job_problem">
                     <label id="ctl639771_Label3" data-datafield="org_weekly_report_job.job_problem"
                       data-type="SheetLabel" style="">存在问题</label></td>
@@ -101,7 +105,9 @@
                   <td id="ctl639771_header5" style="" data-field="org_weekly_report_job.job_level"><label
                       id="ctl639771_Label5" data-datafield="org_weekly_report_job.job_level"
                       data-type="SheetLabel" style="">工作等级</label></td>
-
+                  <td id="ctl639771_header6" style="" data-field="org_weekly_report_job.job_username"><label
+                      id="ctl639771_Label6" data-datafield="org_weekly_report_job.job_username"
+                      data-type="SheetLabel" style="">填报人</label></td>
                 </tr>
 
 
@@ -114,7 +120,7 @@
           <!-- 项目工作 -->
           <div id="div679814" class="col-md-12"
             style="border:1px solid #C7C7C7;position: relative;border-bottom: none;">
-            <div style="background-color: white;position: absolute;left:15px;top:-10px;color: rgba(0,0,0,.65)">
+            <div style="background-color: white;position: absolute;left:15px;top:-10px;color:red;font-size: 16px">
               <b>项目工作</b>
             </div>
           </div>
@@ -122,7 +128,7 @@
             style="border-right: 1px solid rgb(199, 199, 199); border-bottom: 1px solid rgb(199, 199, 199); border-left: 1px solid rgb(199, 199, 199); border-image: initial; border-top: none; overflow: auto;"
             data-title="">
             <table id="org_weekly_report_pj" data-datafield="org_weekly_report_pj" data-type="SheetGridView"
-              class="SheetGridView" style="" data-displaydelete="false" data-displayadd="false">
+              class="SheetGridView" style="" data-displaydelete="false" data-displayadd="false"border-collapse = "collapse">
               <tbody>
                 <tr class="header">
                   <td id="Control15_SerialNo" class="rowSerialNo">序号 </td>
@@ -137,13 +143,16 @@
                       style="">项目进展</label></td>
                   <td id="ctl21142_header3" style="" data-field="org_weekly_report_pj.pj_ratio"><label
                       id="ctl21142_Label3" data-datafield="org_weekly_report_pj.pj_ratio" data-type="SheetLabel"
-                      style="">完成比例</label></td>
+                      style="">完成比例(%)</label></td>
                   <td id="ctl21142_header4" style="" data-field="org_weekly_report_pj.pj_org"><label
                       id="ctl21142_Label4" data-datafield="org_weekly_report_pj.pj_org" data-type="SheetLabel"
                       style="">涉及部门</label></td>
                   <td id="ctl21142_header5" style="" data-field="org_weekly_report_pj.pj_remark"><label
                       id="ctl21142_Label5" data-datafield="org_weekly_report_pj.pj_remark" data-type="SheetLabel"
                       style="">备注</label></td>
+                  <td id="ctl21142_header6" style="" data-field="org_weekly_report_pj.pj_username"><label
+                      id="ctl21142_Label6" data-datafield="org_weekly_report_pj.pj_username" data-type="SheetLabel"
+                      style="">填报人</label></td>
 
                 </tr>
               </tbody>
@@ -156,7 +165,7 @@
          
           <div id="div916338" class="col-md-12"
             style="border:1px solid #C7C7C7;border-bottom: none;position: relative;">
-            <div style="background-color: white;position: absolute;left:15px;top:-10px;color: rgba(0,0,0,.65)">
+            <div style="background-color: white;position: absolute;left:15px;top:-10px;color:red;font-size: 16px">
               <b>下周常规工作计划</b>
             </div>
           </div>
@@ -176,7 +185,7 @@
                       data-type="SheetLabel" style="">工作进展</label></td>
                   <td id="ctl593547_header2" style="" data-field="org_weekly_job_plan.job_ratio"><label
                       id="ctl593547_Label2" data-datafield="org_weekly_job_plan.job_ratio" data-type="SheetLabel"
-                      style="">完成比例</label></td>
+                      style="">完成比例(%)</label></td>
                   <td id="ctl593547_header3" style="" class="" data-field="org_weekly_job_plan.job_problem">
                     <label id="ctl593547_Label3" data-datafield="org_weekly_job_plan.job_problem"
                       data-type="SheetLabel" style="">存在问题</label></td>
@@ -186,6 +195,10 @@
                   <td id="ctl593547_header5" style="" data-field="org_weekly_job_plan.job_level"><label
                       id="ctl593547_Label5" data-datafield="org_weekly_job_plan.job_level" data-type="SheetLabel"
                       style="">工作等级</label></td>
+                  <td id="ctl593547_header6" style="" data-field="org_weekly_job_plan.job_username"><label
+                      id="ctl593547_Label6" data-datafield="org_weekly_job_plan.job_username" data-type="SheetLabel"
+                      style="">填报人</label></td>
+  
 
                 </tr>
               
@@ -198,7 +211,7 @@
           </div>
           <div id="div216556" class="col-md-12"
             style="border:1px solid #C7C7C7;border-bottom: none;position: relative;">
-            <div style="background-color: white;position: absolute;left:15px;top:-10px;color: rgba(0,0,0,.65)">
+            <div style="background-color: white;position: absolute;left:15px;top:-10px;color:red;font-size: 16px">
               <b>下周项目工作计划</b>
             </div>
           </div>
@@ -223,13 +236,16 @@
                       style="">项目进展</label></td>
                   <td id="ctl898092_header3" style="" class="" data-field="org_weekly_pj_plan.pj_ratio"><label
                       id="ctl898092_Label3" data-datafield="org_weekly_pj_plan.pj_ratio" data-type="SheetLabel"
-                      style="" class="">完成比例</label></td>
+                      style="" class="">完成比例(%)</label></td>
                   <td id="ctl898092_header4" style="" class="" data-field="org_weekly_pj_plan.pj_org"><label
                       id="ctl898092_Label4" data-datafield="org_weekly_pj_plan.pj_org" data-type="SheetLabel"
                       style="">涉及部门</label></td>
                   <td id="ctl898092_header5" style="" class="" data-field="org_weekly_pj_plan.pj_remark"><label
                       id="ctl898092_Label5" data-datafield="org_weekly_pj_plan.pj_remark" data-type="SheetLabel"
                       style="">备注</label></td>
+                  <td id="ctl898092_header6" style="" class="" data-field="org_weekly_pj_plan.pj_username"><label
+                      id="ctl898092_Label6" data-datafield="org_weekly_pj_plan.pj_username" data-type="SheetLabel"
+                      style="">填报人</label></td>
                 </tr>
              
               </tbody>

@@ -9,6 +9,7 @@ public class ReqUpdateProjectInfo {
 	private String name;
 	private String desc;
 	private String leaderId;
+	private String city;
 
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private Date startTime;
@@ -30,6 +31,14 @@ public class ReqUpdateProjectInfo {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 	public String getDesc() {

@@ -7,7 +7,7 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 
 	$scope.userId = $rootScope.loginUser.User.ObjectID;
 	$scope.url = "";
-	$('#newtag').attr('placeholder', $rootScope.loginUser.User.Name);
+	// $('#newtag').attr('placeholder', $rootScope.loginUser.User.Name);
 	$scope.years = ['2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025', '2026', '2027', '2028', '2029', '2030'];
 	$scope.months = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
 
@@ -29,59 +29,60 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 		newyear();
 
 
-	$scope.renderTag = function (idName) {//input的元素的id名称
-		var obj = $("#" + idName);
-		var sltCategoryComBox;//拿到所有数据，然后再重新加载页面数据
-		var initId = "";
-		var initValue = "";
-		var tmpData = [];
+	// $scope.renderTag = function (idName) {//input的元素的id名称
+	// 	var obj = $("#" + idName);
+	// 	var sltCategoryComBox;//拿到所有数据，然后再重新加载页面数据
+	// 	var initId = "";
+	// 	var initValue = "";
+	// 	var tmpData = [];
+	// 	//渲染数据的地方
+	// 	sltCategoryComBox = obj.ligerComboBox({
+	// 		initValue: initId,
+	// 		initText: initValue,
+	// 		data: tmpData,//返回的下拉框的数据
+	// 		valueFieldID: 'category',
+	// 		url: '/Portal/user/listSubordinate',//请求的后台地址
+	// 		ajaxType: 'GET',
+	// 		valueField: 'id',//返回的数据的键必须有id
+	// 		textField: 'text',//返回的数据的键必须有test
+	// 		autocomplete: true,
+	// 		setTextBySource: true,
+	// 		keySupport: true,
+			
+	// 	});
 
-		//渲染数据的地方
-		sltCategoryComBox = obj.ligerComboBox({
-			initValue: initId,
-			initText: initValue,
-			data: tmpData,//返回的下拉框的数据
-			valueFieldID: 'category',
-			url: '/Portal/user/listSubordinate',//请求的后台地址
-			ajaxType: 'GET',
-			valueField: 'id',//返回的数据的键必须有id
-			textField: 'text',//返回的数据的键必须有test
-			autocomplete: true,
-			setTextBySource: true,
-			keySupport: true
-		});
+	// 	//设置想要的样式
+	// 	obj.parent().removeClass();
+	// 	var inputHeight = obj.outerHeight();
+	// 	var inputWidth = obj.outerWidth();
+	// 	obj.css({ "border": "1px solid #d9d9d9", "border-radius": "4px" });
+	// 	//下拉框的内容样式设置,模态框样式有点
+	// 	$("div.l-box-select-inner").parent().css({ "margin-top": inputHeight + 'px' });
+	// 	$("div.l-box-select-inner").parent().css({ "margin-left": 5 + 'px' });
+	// 	$("div.l-box-select").css({ "width": inputWidth - 2 + 'px' });
+	// 	//删除下拉框的下拉图标
+	// 	$("div.l-trigger-icon").hide();
+	// 	$("div.l-trigger").hide();
+	// 	//鼠标离开输入框，下拉框隐藏
+	// 	obj.mouseleave(function (e) {
+	// 		var x = e.pageX - obj.offset().left;
+	// 		var y = e.pageY - obj.offset().top;
+	// 		if (x < 0 || y < 0 || x - inputWidth > 0) {
+	// 			$("div.l-box-select").hide();
+	// 		}
+	// 	});
 
-		//设置想要的样式
-		obj.parent().removeClass();
-		var inputHeight = obj.outerHeight();
-		var inputWidth = obj.outerWidth();
-		obj.css({ "border": "1px solid #d9d9d9", "border-radius": "4px" });
-		//下拉框的内容样式设置,模态框样式有点
-		$("div.l-box-select-inner").parent().css({ "margin-top": inputHeight + 'px' });
-		$("div.l-box-select").css({ "width": inputWidth - 2 + 'px' });
-		//删除下拉框的下拉图标
-		$("div.l-trigger-icon").hide();
-		$("div.l-trigger").hide();
-		//鼠标离开输入框，下拉框隐藏
-		obj.mouseleave(function (e) {
-			var x = e.pageX - obj.offset().left;
-			var y = e.pageY - obj.offset().top;
-			if (x < 0 || y < 0 || x - inputWidth > 0) {
-				$("div.l-box-select").hide();
-			}
-		});
-
-		//update by zhangj
-		obj.change(function () {//按回车键触发该函数
-			$scope.userId = $("#category").val();//获取的是数据中的，选中数据条的id
+	// 	//update by zhangj
+	// 	obj.change(function () {//按回车键触发该函数
+	// 		$scope.userId = $("#category").val();//获取的是数据中的，选中数据条的id
 
 
-		});
-	}
+	// 	});
+	// }
 
-	setTimeout(function () {
-		$scope.renderTag('newtag');
-	}, 500);
+	// setTimeout(function () {
+	// 	$scope.renderTag('newtag');
+	// }, 500);
 
 
 	//流程模板
@@ -161,8 +162,7 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 				},
 
 				eventRender: function (event, element) {
-					$(element).tooltip({ title: event.title});
-				
+					$(element).tooltip({ title: event.title,placement:"right"});	
 				},
 				eventClick: function (calEvent, jsEvent, view) {//日程区块，单击时触发
 					window.open($scope.url = 'WorkItemSheets.html?WorkItemID=' + calEvent.id);
@@ -171,8 +171,7 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 					$scope.initStartAndEndDate();
 
 					$rootScope.loading=true;
-					
-					var userID = $scope.userId;
+			    var userID = $rootScope.loginUser.User.ObjectID;
 					var workflowCode = "";
 					if (typeof ($("#sheet").SheetUIManager()) != 'undefined' && $("#sheet").SheetUIManager().GetValue() != "") {
 						workflowCode = ($("#sheet").SheetUIManager().GetValue()).join();
@@ -659,9 +658,8 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 	$scope.newway = function () {
 		$scope.goToByDate();
 		$scope.initStartAndEndDate();
-		var userID = $("#category").val();
+		var userID = $("#newtag").val();
 		if (userID === "") {
-
 			var userID = $rootScope.loginUser.User.ObjectID;
 		}
 
@@ -673,7 +671,7 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 		if ($scope.sheet != "") {
 			workflowCode = ($scope.sheet).join();
 		}
-
+		$rootScope.loading=true;
 
 		$.ajax({
 			dataType: 'json',
@@ -706,8 +704,8 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 				$(".newval2").html(data.data.exceedTimeLimitTotal);
 				$('.calendar').fullCalendar('removeEvents', function () { return true; });
 				$('.calendar').fullCalendar('addEventSource', events, true);
-
-
+				$rootScope.loading=false;
+				$scope.$apply();
 			},
 
 			error: function () {
@@ -761,6 +759,72 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 		});
 	}
 	$scope.announceshow ();
+
+
+	//新人员下拉框js
+	$scope.newtagRefresh=function(){	
+		$('#newtag').on('changed.bs.select',
+		function (e, clickedIndex, isSelected, previousValue) {
+				//选中其他时，去除全部的选择状态
+				if ($('#newtag').val() != null) {
+						$scope.newtagData.forEach(el => {
+								if ($('#newtag').val().indexOf(el.code) != "-1") {
+									//   $('#newtagALL').removeAttr("selected");
+									$('#newtagALL').attr("selected",false);
+										$('#newtag').selectpicker('refresh');
+										$('#newtag').selectpicker('render');
+								}
+						})
+				}
+				//选中全部时，只选全部，去除其他元素的选择状态
+			 if(clickedIndex==0)
+			 {
+					$('#newtag').find("option:selected").attr("selected", false);
+					$('#newtagALL').prop('selected',true);
+					$('#newtag').selectpicker('refresh');
+					$('#newtag').selectpicker('render');
+
+			 }
+			 //没有选中元素时，默认选择全部
+			 if($('#newtag').val()==null){
+					$('#newtagALL').prop('selected',true);
+					$('#newtag').selectpicker('refresh');
+					$('#newtag').selectpicker('render');
+			 }
+		 });
+ 
+		$.ajax({
+			"url": "/Portal/user/listSubordinate",
+			"type": "Get",
+			// "data": { categoryCode: "零售系统"},
+			"dataType": "json",
+			"success": function (data) {
+					$scope.newtagData = data;
+					var optionMulti = [];
+					optionMulti = $scope.newtagData;
+					//定义一个对象数组，用于储存所需选项
+					for (var i = 0; i < optionMulti.length; i++) {
+							$("#newtag").append($("<option value=\"" + optionMulti[i].id +"\">" + optionMulti[i].text + "</option>"));
+					}
+					$('#newtag').selectpicker({
+						noneResultsText: '无搜索结果',
+						noneSelectedText:'没有选中内容'
+				  }); 
+					//使用refresh方法更新UI以匹配新状态	
+					$('#newtag').selectpicker('refresh');
+					//render方法强制重新渲染引导程序 - 选择ui。
+					$('#newtag').selectpicker('render');
+				},
+			"error": function () {
+			}
+		})
+		$('#newtag').selectpicker('refresh');
+		//render方法强制重新渲染引导程序 - 选择ui。
+		$('#newtag').selectpicker('render');
+	}
+		$scope.newtagRefresh();
+	
+	
 
 	// $scope.events = [
 	// 	{ title: '你好', start: new Date(y, m, d), },

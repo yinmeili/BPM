@@ -36,7 +36,7 @@ public class ProjectManageService {
 	 */
 	public PageInfo<ProjectVo> findProjectInfoByPage(QueryProjectInfoList queryBean) {
 		Page<ProjectVo> page = PageHelper.startPage(queryBean.getPageNum(), queryBean.getiDisplayLength());
-		List<ProjectInfo> projectInfoList = projectInoMapper.findProjectInfo(queryBean.getKeyword(), queryBean.getLeaderId(), queryBean.getStartTimeStart(), queryBean.getStartTimeEnd(), queryBean.getEndTimeStart(), queryBean.getEndTimeEnd());
+		List<ProjectInfo> projectInfoList = projectInoMapper.findProjectInfo(queryBean.getKeyword(), queryBean.getCity(), queryBean.getLeaderId(), queryBean.getStartTimeStart(), queryBean.getStartTimeEnd(), queryBean.getEndTimeStart(), queryBean.getEndTimeEnd());
 
 		List<ProjectVo> projectVoList = new ArrayList<ProjectVo>();
 		if (projectInfoList != null) {

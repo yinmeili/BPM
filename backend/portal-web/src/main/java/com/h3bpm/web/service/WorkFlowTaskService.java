@@ -70,9 +70,9 @@ public class WorkFlowTaskService extends ApiDataService {
 			if (liquidationImportData.getStartTime() == null || liquidationImportData.getUserDisplayName() == null)
 				continue;
 
-			// 每天15点开始发起清算任务
+			// 每天10点开始发起清算任务
 			Date workflowTaskStartTime = liquidationImportData.getStartTime();
-			workflowTaskStartTime = DateTimeUtil.addHours(workflowTaskStartTime, 15);
+			workflowTaskStartTime = DateTimeUtil.addHours(workflowTaskStartTime, 10);
 			// workflowTaskStartTime = DateTimeUtil.addMinutes(workflowTaskStartTime, 50);
 
 			WorkFlowTask workFlowTask = workFlowTaskMapper.getWorkFlowTaskByWorkflowCodeAndStartTime(WorkflowCode.LIQUIDATION.getValue(), workflowTaskStartTime);
@@ -136,7 +136,7 @@ public class WorkFlowTaskService extends ApiDataService {
 		if (list == null)
 			return;
 		for (WeeklyReportData weeklyReportData : list) {
-			String userLoginName = userMapper.getUserLoginNameByUserDisplayName(weeklyReportData.getUserDisplayName());
+			String userLoginName = userMapper.getUserLoginNameByUserDisplayName(weeklyReportData.getUserDisplayName().trim());
 
 			if (userLoginName == null || userLoginName.equals(""))
 				continue;
@@ -149,7 +149,7 @@ public class WorkFlowTaskService extends ApiDataService {
 			workFlowTask.setId(UUID.randomUUID().toString());
 			workFlowTask.setCreateTime(new Date());
 			workFlowTask.setWorkFlowCode(WorkflowCode.WEEKLY_REPORT.getValue());
-			workFlowTask.setUserDisplayName(weeklyReportData.getUserDisplayName());
+			workFlowTask.setUserDisplayName(weeklyReportData.getUserDisplayName().trim());
 			workFlowTask.setStartTime(new Date());
 			workFlowTask.setUserLoginName(userLoginName);
 

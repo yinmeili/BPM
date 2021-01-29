@@ -87,10 +87,13 @@ p .checkbox {
   margin-left: 20px;
 } 
  .onetag{
-  margin-left: 190px;
+  margin-left: 20px;
   padding-top: 1px;
   font-size: 20px;
 }  
+.newtagdiv{
+  margin-left: 4px;
+}
 #newtag{
 	width:150px;
   height:32px;

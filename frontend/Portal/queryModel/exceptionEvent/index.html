@@ -1,0 +1,113 @@
+<!--
+    共享流程
+     -->
+     <div class="hbox hbox-auto-xs hbox-auto-sm">
+      <!-- main -->
+      <div class="col" ng-controller="exceptionEventCtrl">
+          <!-- main header -->
+        <div class="wrapper-md">
+            <div class="row">
+                <div class="col-sm-6 col-xs-12 form-title-name">
+                    <span class="h3" ng-bind="menuData.DisplayName"></span>
+                </div>
+            </div>
+        </div>
+  
+          <!--表格部分Start-->
+          <div class="wrapper-md paddingbottomNone">
+              <div class="panel panel-default">
+                  <div class="table-responsive">
+                      <div class="form-inline search-box">
+                          <div class="input-group searchContainer">
+                              <!--名称-->
+                              <div class="header-search-item">
+                                  <span class="search-title-text">标题</span>
+                                  <div class="form-group">
+                                      <input ng-model="exceptionEventKeyword" maxlength="32" class="input form-control" placeholder="标题" id="exceptionEventName"/>
+                                  </div>
+                              </div>
+                              <!--标签-->
+                             
+                              <div class="header-search-item">
+                                <span class="search-title-text">创建者</span>
+                                <div class="form-group">
+                                    <div ui-jq="SheetUser" ui-options="searchexceptionEventWasAgentOptions" id="searchexceptionEventCompany"
+                                    class="form-horizontal" data-sheetusercontrol="true" >
+                                    </div>
+                                </div>
+                                <div class="header-search-item">
+                                    <span class="search-title-text">系统名</span>
+                                    <div class="form-group">
+                                        <select  id="exceptionEventsystemName"data-live-search="true" data-width="200px" 
+                                        class="selectpicker show-tick form-control" data-style="input form-control" multiple title="全部" >
+                                            <option value=""id="exceptionEventAll"selected="selected">全部</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            </br>
+                              <div class="header-search-item">
+                                  <span class="search-title-text">开始时间</span>
+                                  <div class="form-group search-time-box">
+                                      <div class="input-group"style="z-index:0">
+                                          <input 
+                                                 id="searchexceptionEventStartTimeStart"
+                                                 autocomplete="off"
+                                                 ui-jq="wdatePicker" ui-options="searchexceptionEventStartTimeStart"
+                                                 class="input form-control" />
+                                          <span class="input-group-addon" style="border-left:0;border-right:0;" translate="QueryTableColumn.To"></span>
+                                          <input 
+                                                 autocomplete="off" id="searchexceptionEventStartTimeEnd"
+                                                 class="input form-control"
+                                                 ui-jq="wdatePicker" ui-options="searchexceptionEventStartTimeEnd"/>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="header-search-item">
+                                <span class="search-title-text">截止时间</span>
+                                <div class="form-group search-time-box">
+                                    <div class="input-group"style="z-index:0">
+                                        <input 
+                                               id="searchexceptionEventEndTimeStart"
+                                               autocomplete="off"
+                                               ui-jq="wdatePicker" ui-options="searchexceptionEventEndTimeStart"
+                                               class="input form-control" />
+                                        <span class="input-group-addon" style="border-left:0;border-right:0;" translate="QueryTableColumn.To"></span>
+                                        <input 
+                                               autocomplete="off" id="searchexceptionEventEndTimeEnd"
+                                               class="input form-control"
+                                               ui-jq="wdatePicker" ui-options="searchexceptionEventEndTimeEnd"/>
+                                    </div>
+                                </div>
+                            </div>
+                             
+                              <button class="btn btn-primary search-box-btn" id="searchBusinessExceptionOrgName" type="button">查询</button>
+                             
+                      </div>
+                      </div>
+                   
+                      <table ui-jq="dataTable" id="tabexceptionEventtabFlow"
+                             ui-options="dtMyFlowOptions"
+                             class="table table-striped m-b-none" style="width:99.5%;">
+                          <thead>
+                              <tr>
+                                  <th> <span>标题</span></th>
+                                  <th><span>系统名</span></th>
+                                  <th><span>创建者</span></th>
+                                  <th class="hide1024"><span >开始时间</span></th>
+                                  <th class="hide414" ><span>截止时间</span></th> 
+                              </tr>
+                          </thead>
+                          <tbody></tbody>
+                      </table>
+                
+
+                  </div>
+              </div>
+          </div>
+          <!--表格部分End-->
+      </div>
+    
+  </div>
+ 
+  

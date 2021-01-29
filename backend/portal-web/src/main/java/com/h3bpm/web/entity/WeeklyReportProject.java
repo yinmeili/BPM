@@ -4,6 +4,7 @@ public class WeeklyReportProject {
 	private String id = null;
 	private String parentId = null;
 	private String userId = null;
+	private String userName = null;
 	private String name = null;
 	private String info = null;
 	private String evolve = null;
@@ -13,6 +14,14 @@ public class WeeklyReportProject {
 
 	public WeeklyReportProject() {
 
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getId() {

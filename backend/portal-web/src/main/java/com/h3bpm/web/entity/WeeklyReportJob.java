@@ -4,12 +4,21 @@ public class WeeklyReportJob {
 	private String id = null;
 	private String parentId = null;
 	private String userId = null;
+	private String userName = null;
 	private String content = null;
 	private String evolve = null;
 	private String ratio = null;
 	private String problem = null;
 	private String type = null;
 	private int jobLevel = 1;
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
 
 	public WeeklyReportJob() {
 
