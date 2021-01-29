@@ -888,6 +888,25 @@ angular.module('app')
                         ]
                     }
                 })
+                //测试信息管理
+                .state('app.testManage', {
+                    url: '/testManage',
+                    controller: "testManageCtrl",
+                    templateUrl: 'testManage/index.html',
+                    resolve: {
+                        deps: ['$ocLazyLoad',
+                            function ($ocLazyLoad) {
+                                return $ocLazyLoad.load([
+                                    'WFRes/_Scripts/MvcSheet/SheetControls.js',
+                                    'WFRes/_Scripts/MvcSheet/MvcSheetUI.js',
+                                    'WFRes/_Scripts/MvcSheet/Controls/SheetUser.js',
+                                    'WFRes/_Scripts/MvcSheet/Controls/MvcSheetControls.js',
+                                    'js/services/notify.js', 
+                                ]);
+                            }
+                        ]
+                    }
+                })
                    //周报快速查看
                 .state('app.OrgWeeklyReportQuery', {
                     url: '/orgWeeklyReport',
