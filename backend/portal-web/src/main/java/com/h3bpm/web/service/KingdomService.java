@@ -330,8 +330,10 @@ public class KingdomService extends ApiDataService {
 					List<List<Map<String, Object>>> nodeMapList = (List<List<Map<String, Object>>>) dataMap.get("Value");
 					nodeMapList.remove(0);
 
+					List<String> errorNodeNameList = new ArrayList<>();
+
 					for (List<Map<String, Object>> nodeMaps : nodeMapList) {
-						KingdomNodeVo nodeVo = buildNodeVo(nodeMaps);
+						KingdomNodeVo nodeVo = buildNodeVo(nodeMaps, errorNodeNameList);
 
 						if (nodeVo != null) {
 							String name = nodeVo.getName();
@@ -339,6 +341,15 @@ public class KingdomService extends ApiDataService {
 
 							if (names.length == 2) {
 								kingdomVoList.add(nodeVo);
+							}
+						}
+					}
+
+					// 判断主节点下的子节点（下钻）是否有异常，如有异常则修改主节点的执行结果
+					for (String errorNodeName : errorNodeNameList) {
+						for (KingdomNodeVo kingdomVo : kingdomVoList) {
+							if (errorNodeName.indexOf(kingdomVo.getName()) != -1) {
+								kingdomVo.setExecuteResult("异常");
 							}
 						}
 					}
@@ -456,12 +467,22 @@ public class KingdomService extends ApiDataService {
 		liquidationMonitorMapper.createMonitorNodeHistory(monitorNodeHistory);
 	}
 
-	private KingdomNodeVo buildNodeVo(List<Map<String, Object>> nodeMaps) {
+	private KingdomNodeVo buildNodeVo(List<Map<String, Object>> nodeMaps, List<String> errorNodeNameList) {
 
 		String name = (String) nodeMaps.get(0).get("Value");
+		String executeResult = (String) nodeMaps.get(3).get("Value");
 
 		// 只取名称为"数字-"开头的节点，如 "1-数据库开启",且过滤掉子节点，如 “1-数据库开启\服务器开启”
 		if (!name.matches("^\\d+?-[\\S\\s]*?.[\\S\\s]*?$") || name.indexOf("\\") != -1) {
+
+			// 记录下所有非正常的节点名称
+			if (executeResult != null && !executeResult.isEmpty() && !executeResult.trim().equals("正常")) {
+				// 过滤掉回车和换行
+				name = name.replaceAll("\r|\n", "");
+				
+				errorNodeNameList.add(name);
+			}
+
 			return null;
 		}
 
@@ -472,8 +493,6 @@ public class KingdomService extends ApiDataService {
 		if (status != null) {
 			status = KingdomNodeStatus.parse(status).getDisplayName();
 		}
-
-		String executeResult = (String) nodeMaps.get(3).get("Value");
 
 		return new KingdomNodeVo(name, status, executeResult);
 	}
@@ -556,7 +575,6 @@ public class KingdomService extends ApiDataService {
 		if (nodeVoList != null) {
 			for (KingdomNodeVo nodeVo : nodeVoList) {
 				MonitorNodeHistory monitorNodeHistory = liquidationMonitorMapper.getMonitorNodeHistoryByNodeNameAndTypeAndDate(nodeVo.getName(), monitorNodeName.getValue(), DateTimeUtil.parse(DateTimeUtil.format(monitorDate, "yyyy-MM-dd"), "yyyy-MM-dd"));
-
 				if (monitorNodeHistory == null) {
 					this.createMonitorNodeHistory(nodeVo, monitorNodeName.getValue());
 
@@ -585,16 +603,16 @@ public class KingdomService extends ApiDataService {
 
 	public void sendSmsInfo(SmsInfoVo smsInfoVo) {
 		try {
-		List<KingdomRequestVo> kingdomRequestVoList = new ArrayList<KingdomRequestVo>();
-		kingdomRequestVoList.add(new KingdomRequestVo("TSystemDM", modelName));
-		kingdomRequestVoList.add(new KingdomRequestVo(user, "User"));
-		kingdomRequestVoList.add(new KingdomRequestVo(pass, "Pass"));
-		kingdomRequestVoList.add(new KingdomRequestVo("SendMessageInfo", methodName));
-		kingdomRequestVoList.add(new KingdomRequestVo(smsInfoVo.getPhoneNum(), "PhoneNo"));
-		kingdomRequestVoList.add(new KingdomRequestVo(smsInfoVo.getContent(), "Msg"));
+			List<KingdomRequestVo> kingdomRequestVoList = new ArrayList<KingdomRequestVo>();
+			kingdomRequestVoList.add(new KingdomRequestVo("TSystemDM", modelName));
+			kingdomRequestVoList.add(new KingdomRequestVo(user, "User"));
+			kingdomRequestVoList.add(new KingdomRequestVo(pass, "Pass"));
+			kingdomRequestVoList.add(new KingdomRequestVo("SendMessageInfo", methodName));
+			kingdomRequestVoList.add(new KingdomRequestVo(smsInfoVo.getPhoneNum(), "PhoneNo"));
+			kingdomRequestVoList.add(new KingdomRequestVo(smsInfoVo.getContent(), "Msg"));
 
-		List<Map<String, Object>> mapList = this.processSyncKingdom(HttpRequestType.POST, kingdomRequestVoList);
-		
+			List<Map<String, Object>> mapList = this.processSyncKingdom(HttpRequestType.POST, kingdomRequestVoList);
+
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
