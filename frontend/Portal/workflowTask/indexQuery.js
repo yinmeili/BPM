@@ -2,19 +2,22 @@
   'use strict';
   app.controller('WorkflowTaskIndexQueryCtrl', ['$scope', "$rootScope", "$translate", "$compile", "$http", "$timeout", "$state", "$interval", "$filter", "ControllerConfig", "datecalculation", "jq.datables", '$modal', 'item', 'fileNavigator',
       function ($scope, $rootScope, $translate, $compile, $http, $timeout, $state, $interval, $filter, ControllerConfig, datecalculation, jqdatables, $modal, Item, FileNavigator) {
-          $scope.dex=document.getElementById('WorkflowTaskIndexQueryIndex').selectedIndex 
+         $scope.$on('$viewContentLoaded', function (event) {
+            $scope.init();
+         })  
+        $scope.dex=document.getElementById('WorkflowTaskIndexQueryIndex').selectedIndex 
           $scope.WorkFlowTaskIndexQueryIndex = [
               { WorkflowTaskIndexQueryIndexName: '清算', id: "liquidation" },
           ];
           
           //共享知识的日期控件初始化
-          $scope.WorkFlowTaskIndexQuerysearchStartTimeStart = {
+          $scope.WorkFlowTaskIndexQuerysearchStartTimeStart1 = {
               dateFmt: 'yyyy-MM-dd', realDateFmt: "yyyy-MM-dd", minDate: '2012-1-1', maxDate: '2099-12-31',
               onpicked: function (e) {
                   $rootScope.WorkFlowTaskIndexQuerysearchStartTimeStart = e.el.value;
-              }
+              },
           }
-          $scope.WorkFlowTaskIndexQuerysearchStartTimeEnd = {
+          $scope.WorkFlowTaskIndexQuerysearchStartTimeEnd1 = {
               dateFmt: 'yyyy-MM-dd', realDateFmt: "yyyy-MM-dd", minDate: '2012-1-1', maxDate: '2099-12-31',
               onpicked: function (e) {
                   $rootScope.WorkFlowTaskIndexQuerysearchStartTimeEnd = e.el.value;
@@ -30,8 +33,23 @@
 
           $scope.init = function () {
               $scope.name = $translate.instant("WorkItemController.FinishedWorkitem");
-              $scope.searchStartTimeStart = datecalculation.redDays(new Date(), 30);
-              $scope.searchStartTimeEnd = datecalculation.addDays(new Date(), 30);
+            //   $scope.searchStartTimeStart = datecalculation.redDays(new Date(), 30);
+            //   $scope.searchStartTimeEnd = datecalculation.addDays(new Date(), 30);
+              var date = new Date();
+              var weekFirstDay = new Date(date - (date.getDay() - 1) * 86400000);
+              var firstMonth = Number(weekFirstDay.getMonth()) + 1;
+              var weekFirstDays = date.getDate();
+              if (firstMonth<= 9) {
+                firstMonth="0"+firstMonth
+
+              }
+              if (weekFirstDays<= 9) {
+                weekFirstDays="0"+weekFirstDays 
+              }
+              var WeekFirstDate = date.getFullYear()+ '-' + firstMonth + '-' +weekFirstDays;
+              $rootScope.WorkFlowTaskIndexQuerysearchStartTimeStart = WeekFirstDate;
+              
+            //   $rootScope.WorkFlowTaskIndexQuerysearchStartTimeEnd= WeekFirstDate;
           }
 
 

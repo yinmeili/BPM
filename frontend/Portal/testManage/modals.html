@@ -1,0 +1,483 @@
+<!-- 编辑 -->
+<script type="text/ng-template" id="editTestEnv.html">
+    <form class="bs-example form-horizontal" ng-submit="editTestEnv()">
+        <div class="modal-header">
+            <button type="button" class="close"
+                    data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+                ×
+            </button>
+            <h4 class="modal-title" style="color:#778CA2;">
+                编辑
+            </h4>
+        </div>
+        <div class="modal-body" style="color:#778CA2;">
+            <div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">名称</div>
+                <div class="col-md-4 input-group">
+                    <input class="form-control" type="text" style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                           ng-model="editTestEnvModalName" autofocus="autofocus"/>
+                </div>
+            </div>
+            <div class="row" style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">系统名</div>
+              <div class="col-md-3 input-group">
+                  <select 
+                  class="form-control"style="border:1px solid #d9d9d9;
+                  background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                  id="editTestEnvSystemName"data-live-search="true"data-container="body"
+                  >
+                  </select>
+              </div>
+            </div>
+            <div class="row " style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">交易环境类别</div>
+              <div class="col-md-3 input-group">
+                 <select class="form-control"style="border:1px solid #d9d9d9;
+                 background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                 id="editTestEnvEnvironmentalCategory"
+                 >
+                    <option>无</option>
+                 </select>
+              </div>
+            </div>
+            <hr style="border:1px silver dashed;width:85%;"> 
+  
+            <div class="row "style="margin-bottom:20px;">
+              <div class="col-md-1"></div>
+              <table style="border-collapse:separate;border-spacing:0px 10px; ">
+                  <tr>
+                      <th>部署服务</th>
+                      <th style="padding-left:10px;">IP地址</th>
+                      <th style="padding-left:10px;">操作系统</th>
+                      <th style="padding-left:10px;">cpu个数/核数</th>
+                      <th style="padding-left:10px;">内存(G)</th>
+                      <th style="padding-left:10px;">硬盘(G)</th>
+                  </tr>
+                 
+                  <tr ng-repeat="item in editTestEnvList">
+                    <td ><input class="form-control" type="text" 
+                        style="border:1px solid #d9d9d9;background-color:transparent;width:110px;
+                         border-radius: 4px;box-shadow: none;height: 32px;"
+                        type="text"ng-model="item.name"/></td>
+                    <td style="padding-left:10px;"><input class="form-control" type="text" 
+                        style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;width:110px;"
+                        type="text"ng-model="item.ip"/></td>
+                    <td style="padding-left:10px;"><input class="form-control" type="text" 
+                        style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;width:110px;"
+                        type="text"ng-model="item.os"/></td>
+                    <td style="padding-left:10px;"><input class="form-control" type="text" 
+                        style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;width:110px;"
+                        type="text"ng-model="item.cpu"/></td>
+                    <td style="padding-left:10px;"><input class="form-control" type="text" 
+                        style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;width:50px;"
+                        type="text"ng-model="item.ram"/></td>
+                    <td style="padding-left:10px;"><input class="form-control" type="text" 
+                        style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;width:110px;"
+                        type="text"ng-model="item.diskSize"/></td>
+                    <td ><input type="button"ng-click="increate1($index)"value='+'class='btn btn-default'style="width:30px;margin-left:10px;padding-left:10px;border-radius:50%;"/></td>
+                    <td><input type="button"ng-click="delete1($index)"value="-"class='btn btn-default'style="margin-left:10px;border-radius:50%;"/></td>
+                   
+                </tr>
+              </table>
+              <hr style="border:1px silver dashed;width:83%;"> 
+  
+            </div>
+            <div class="row form-group"style="margin-bottom:20px;"ng-repeat="item in editTestEnvDockingEnvironmentList">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">关联环境</div>
+              <div class="col-md-4 input-group"style="float:left;">
+                  <select class="form-control"id='editTestEnvDockingEnvironment{{$index}}' style="border:1px solid #d9d9d9;
+                  background-color:transparent;border-radius: 4px;box-shadow: none;height: 32px;">
+                      <!-- <option  selected disabled hidden>{{item.text}}</option> -->
+                      <option>无</option>
+                  </select>
+                 
+              </div>
+              <input type="button"ng-click="increate3($index)"value='+'class='btn btn-default'style="width:30px;padding-left:10px;margin-left:5px;border-radius:50%;"/>
+              <input type="button"ng-click="delete3($index)"value="-"class='btn btn-default'style="margin-left:5px;border-radius:50%;"/>
+            </div>
+            <hr style="border:1px silver dashed;width:85%;"> 
+            <div class="row form-group" style="margin-bottom: 20px;">
+                <div class="col-md-1"></div>
+                <div class="col-md-2">接入地址</div>
+                <div class="col-md-8 input-group">
+                    <textarea ng-model="editTestEnvAddress" class="form-control" rows="4" style="resize: none;"></textarea>
+                </div>
+            </div>
+            <div class="row form-group" style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">描述</div>
+              <div class="col-md-8 input-group">
+                  <textarea ng-model="editTestEnvDescription" class="form-control" rows="4" style="resize: none;"></textarea>
+              </div>
+          </div>
+            
+          
+        
+  
+  
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
+            <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess">保存</button>
+        </div>
+    </form>
+  </script>
+<!-- 详情 -->
+<script type="text/ng-template" id="detailTestEnv.html">
+  <form class="bs-example form-horizontal" >
+      <div class="modal-header">
+          <button type="button" class="close"
+                  data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+              ×
+          </button>
+          <h4 class="modal-title" style="color:#778CA2;">
+             详情
+          </h4>
+      </div>
+      <div class="modal-body" style="color:#778CA2;"ng-disabled="disabled">
+        <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">名称</div>
+            <div class="col-md-4 input-group">
+                <input class="form-control" type="text" style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                       ng-model="detailTestEnvModalName"readonly="readonly"/>
+            </div>
+        </div>
+        <div class="row " style="margin-bottom: 20px;">
+          <div class="col-md-1"></div>
+          <div class="col-md-2">系统名</div>
+          <div class="col-md-3 input-group">
+              
+              <input class="form-control" type="text" style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+              ng-model="detailTestEnvSystemName"readonly="readonly"/>
+          </div>
+        </div>
+        <div class="row " style="margin-bottom: 20px;">
+          <div class="col-md-1"></div>
+          <div class="col-md-2">交易环境类别</div>
+          <div class="col-md-3 input-group">
+            <input class="form-control" type="text" style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+              ng-model="detailTestEnvEnvironmentalCategory"readonly="readonly"/>
+          </div>
+        </div>
+        <hr style="border:1px silver dashed;width:85%;"> 
+
+        <div class="row "style="margin-bottom:20px;">
+          <div class="col-md-1"></div>
+          <table style="border-collapse:separate;border-spacing:0px 10px; ">
+            <tr>
+                <th>部署服务</th>
+                <th style="padding-left:10px;">IP地址</th>
+                <th style="padding-left:10px;">操作系统</th>
+                <th style="padding-left:10px;">cpu个数/核数</th>
+                <th style="padding-left:10px;">内存(G)</th>
+                <th style="padding-left:10px;">硬盘(G)</th>
+            </tr>
+            <tr ng-repeat="item in detailTestEnvList">
+                <td ><input class="form-control" readonly="readonly"type="text" 
+                    style="border:1px solid #d9d9d9;background-color:transparent;
+                     border-radius: 4px;box-shadow: none;height: 32px;width:125px;"
+                    type="text"ng-model="item.name"/></td>
+                <td style="padding-left:10px;"><input class="form-control" readonly="readonly"type="text" 
+                    style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;width:125px;"
+                    type="text"ng-model="item.ip"/></td>
+                <td style="padding-left:10px;"><input class="form-control" readonly="readonly"type="text" 
+                    style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;width:125px;"
+                    type="text"ng-model="item.os"/></td>
+                <td style="padding-left:10px;"><input class="form-control" readonly="readonly"type="text" 
+                    style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;width:125px;"
+                    type="text"ng-model="item.cpu"/></td>
+                <td style="padding-left:10px;"><input class="form-control" readonly="readonly"type="text" 
+                    style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;width:65px;"
+                    type="text"ng-model="item.ram"/></td>
+                <td style="padding-left:10px;"><input class="form-control"readonly="readonly" type="text" 
+                    style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;width:125px;"
+                    type="text"ng-model="item.diskSize"/></td>
+                
+               
+            </tr>
+        </table>
+        <hr style="border:1px silver dashed;width:83%;"> 
+        </div>
+        <div class="row form-group"style="margin-bottom:20px;"ng-repeat="item in detailTestEnvDockingEnvironmentList ">
+          <div class="col-md-1"></div>
+          <div class="col-md-2">关联环境</div>
+          <div class="col-md-4 input-group"style="float:left;">
+              <input class="form-control" type="text" style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                ng-model="item.text"readonly="readonly"/>
+          </div>
+          <button type="button"id="detailTestEnvBtn{{$index}}" ng-hide="item.text=='无'" class="btn btn-default" style="margin-left:10px"ng-click="jumpEnv($index)" >跳转</button>
+        </div>
+        <hr style="border:1px silver dashed;width:85%;"> 
+        <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">接入地址</div>
+            <div class="col-md-8 input-group">
+                <textarea ng-model="detailTestEnvAddress" class="form-control" rows="4" style="resize: none;"readonly="readonly"></textarea>
+            </div>
+        </div>
+        <div class="row form-group" style="margin-bottom: 20px;">
+          <div class="col-md-1"></div>
+          <div class="col-md-2">描述</div>
+          <div class="col-md-8 input-group">
+              <textarea ng-model="detailTestEnvDescription" class="form-control" rows="4" style="resize: none;"readonly="readonly"></textarea>
+          </div>
+      </div>
+    </form>
+</script>
+<!-- 新建 -->
+<script type="text/ng-template" id="createTestEnv.html">
+  <form class="bs-example form-horizontal" ng-submit="createTestEnv()">
+      <div class="modal-header">
+          <button type="button" class="close"
+                  data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+              ×
+          </button>
+          <h4 class="modal-title" style="color:#778CA2;">
+              新建
+          </h4>
+      </div>
+      <div class="modal-body" style="color:#778CA2;">
+          <div class="row form-group" style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">名称</div>
+              <div class="col-md-4 input-group">
+                  <input class="form-control" type="text" style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                         ng-model="createTestEnvModalName" autofocus="autofocus"/>
+              </div>
+          </div>
+          <div class="row " style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">系统名</div>
+            <div class="col-md-3 input-group">
+                <select class="form-control"style="border:1px solid #d9d9d9;
+                background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                id="testEnvSystemName"data-live-search="true"data-container="body"
+                >
+                </select>
+            </div>
+          </div>
+          <div class="row " style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">交易环境类别</div>
+            <div class="col-md-3 input-group">
+               <select class="form-control"style="border:1px solid #d9d9d9;
+               background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+               id="testEnvEnvironmentalCategory"
+               >
+                <option>无</option>
+
+               </select>
+            </div>
+          </div>
+          <hr style="border:1px silver dashed;width:85%;"> 
+
+          <div class="row "style="margin-bottom:20px;">
+            <div class="col-md-1"></div>
+            <table style="border-collapse:separate;border-spacing:0px 10px; ">
+                <tr>
+                    <th>部署服务</th>
+                    <th style="padding-left:10px;">IP地址</th>
+                    <th style="padding-left:10px;">操作系统</th>
+                    <th style="padding-left:10px;">cpu个数/核数</th>
+                    <th style="padding-left:10px;">内存(G)</th>
+                    <th style="padding-left:10px;">硬盘(G)</th>
+                </tr>
+                <tr ng-repeat="item in testEnvList">
+                    <td ><input class="form-control" type="text" 
+                        style="border:1px solid #d9d9d9;background-color:transparent;width:110px;
+                         border-radius: 4px;box-shadow: none;height: 32px;"
+                        type="text"ng-model="item.name"/></td>
+                    <td style="padding-left:10px;"><input class="form-control" type="text" 
+                        style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;width:110px;"
+                        type="text"ng-model="item.ip"/></td>
+                    <td style="padding-left:10px;"><input class="form-control" type="text" 
+                        style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;width:110px;"
+                        type="text"ng-model="item.os"/></td>
+                    <td style="padding-left:10px;"><input class="form-control" type="text" 
+                        style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;width:110px;"
+                        type="text"ng-model="item.cpu"/></td>
+                    <td style="padding-left:10px;"><input class="form-control" type="text" 
+                        style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;width:50px;"
+                        type="text"ng-model="item.ram"/></td>
+                    <td style="padding-left:10px;"><input class="form-control" type="text" 
+                        style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;width:110px;"
+                        type="text"ng-model="item.diskSize"/></td>
+                    <td ><input type="button"ng-click="increate($index)"value='+'class='btn btn-default'style="width:30px;margin-left:10px;padding-left:10px;border-radius:50%;"/></td>
+                    <td><input type="button"ng-click="delete($index)"value="-"class='btn btn-default'style="margin-left:10px;border-radius:50%;"/></td>
+                   
+                </tr>
+            </table>
+            <hr style="border:1px silver dashed;width:83%;"> 
+
+          </div>
+          <div class="row form-group"style="margin-bottom:20px;"ng-repeat="item in testEnvDockingEnvironmentList">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">关联环境</div>
+            <div class="col-md-4 input-group"style="float:left;">
+               
+                <select class="form-control"id="testEnvDockingEnvironment{{$index}}"style="border:1px solid #d9d9d9;
+                background-color:transparent;border-radius: 4px;box-shadow: none;height: 32px;">
+                    <!-- <option  selected disabled hidden>{{item.text}}</option> -->
+                    <option>无</option>
+                </select>
+               
+            </div>
+            <input type="button"ng-click="increate2($index)"value='+'class='btn btn-default'style="width:30px;padding-left:10px;margin-left:5px;border-radius:50%;"/>
+            <input type="button"ng-click="delete2($index)"value="-"class='btn btn-default'style="margin-left:5px;border-radius:50%;"/>
+          </div>
+          <hr style="border:1px silver dashed;width:85%;"> 
+          <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">接入地址</div>
+            <div class="col-md-8 input-group">
+                <textarea ng-model="createTestEnvAddress" class="form-control" rows="4" style="resize: none;"></textarea>
+            </div>
+          </div>
+          <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">描述</div>
+            <div class="col-md-8 input-group">
+                <textarea ng-model="createTestEnvDescription" class="form-control" rows="4" style="resize: none;"></textarea>
+            </div>
+        </div>
+          
+        
+      
+
+
+      <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
+          <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess">保存</button>
+      </div>
+  </form>
+</script>
+<!-- 点击详情 -->
+<script type="text/ng-template" id="detailTestEnvTestManage.html">
+    <form class="bs-example form-horizontal" >
+        <div class="modal-header">
+            <button type="button" class="close"
+                    data-dismiss="modal" aria-hidden="true" ng-click="cancel()">
+                ×
+            </button>
+            <h4 class="modal-title" style="color:#778CA2;">
+               详情
+            </h4>
+        </div>
+        <div class="modal-body" style="color:#778CA2;"ng-disabled="disabled">
+          <div class="row form-group" style="margin-bottom: 20px;">
+              <div class="col-md-1"></div>
+              <div class="col-md-2">名称</div>
+              <div class="col-md-4 input-group">
+                  <input class="form-control" type="text" style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                         ng-model="detailEnvTestManageModalName"readonly="readonly"/>
+              </div>
+          </div>
+          <div class="row " style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">系统名</div>
+            <div class="col-md-3 input-group">
+                
+                <input class="form-control" type="text" style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                ng-model="detailEnvTestManageSystemName"readonly="readonly"/>
+            </div>
+          </div>
+          <div class="row " style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">交易环境类别</div>
+            <div class="col-md-3 input-group">
+              <input class="form-control" type="text" style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                ng-model="detailEnvTestManageEnvironmentalCategory"readonly="readonly"/>
+            </div>
+          </div>
+          <hr style="border:1px silver dashed;width:85%;"> 
+  
+          <div class="row "style="margin-bottom:20px;">
+            <div class="col-md-1"></div>
+            <table style="border-collapse:separate;border-spacing:0px 10px; ">
+              <tr>
+                  <th>部署服务</th>
+                  <th style="padding-left:10px;">IP地址</th>
+                  <th style="padding-left:10px;">操作系统</th>
+                  <th style="padding-left:10px;">cpu个数/核数</th>
+                  <th style="padding-left:10px;">内存(G)</th>
+                  <th style="padding-left:10px;">硬盘(G)</th>
+              </tr>
+              <tr ng-repeat="item in detailEnvTestManageList">
+                  <td ><input class="form-control" readonly="readonly"type="text" 
+                      style="border:1px solid #d9d9d9;background-color:transparent;
+                       border-radius: 4px;box-shadow: none;height: 32px;width:120px;"
+                      type="text"ng-model="item.name"/></td>
+                  <td style="padding-left:10px;"><input class="form-control" readonly="readonly"type="text" 
+                      style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;width:125px;"
+                      type="text"ng-model="item.ip"/></td>
+                  <td style="padding-left:10px;"><input class="form-control" readonly="readonly"type="text" 
+                      style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;width:125px;"
+                      type="text"ng-model="item.os"/></td>
+                  <td style="padding-left:10px;"><input class="form-control" readonly="readonly"type="text" 
+                      style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;width:125px;"
+                      type="text"ng-model="item.cpu"/></td>
+                  <td style="padding-left:10px;"><input class="form-control" readonly="readonly"type="text" 
+                      style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;width:65px;"
+                      type="text"ng-model="item.ram"/></td>
+                  <td style="padding-left:10px;"><input class="form-control"readonly="readonly" type="text" 
+                      style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;width:125px;"
+                      type="text"ng-model="item.diskSize"/></td>
+                  
+                 
+              </tr>
+          </table>
+          <hr style="border:1px silver dashed;width:83%;"> 
+          </div>
+          <div class="row form-group"style="margin-bottom:20px;"ng-repeat="item in detailEnvTestManageDockingEnvironmentList ">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">关联环境</div>
+            <div class="col-md-4 input-group"style="float:left;">
+               
+             
+                <input class="form-control" type="text" style="border:1px solid #d9d9d9;background-color:transparent; border-radius: 4px;box-shadow: none;height: 32px;"
+                  ng-model="item.text"readonly="readonly"/>
+               
+            </div>
+          
+            <button type="button"id="detailEnvTestManageBtn{{$index}}" ng-hide="item.text=='无'" class="btn btn-default" style="margin-left:10px"ng-click="jumpDetailEnv($index)" >跳转</button>
+          </div>
+          <hr style="border:1px silver dashed;width:85%;"> 
+          <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">接入地址</div>
+            <div class="col-md-8 input-group">
+                <textarea ng-model="detailEnvTestManageDescription" class="form-control" rows="4" style="resize: none;"readonly="readonly"></textarea>
+            </div>
+        </div>
+          <div class="row form-group" style="margin-bottom: 20px;">
+            <div class="col-md-1"></div>
+            <div class="col-md-2">描述</div>
+            <div class="col-md-8 input-group">
+                <textarea ng-model="detailEnvTestManageAddress" class="form-control" rows="4" style="resize: none;"readonly="readonly"></textarea>
+            </div>
+            </div>
+         
+      </form>
+</script>
+<script type="text/ng-template" id="deleteTestEnv.html">
+  <form ng-submit="removeTestEnv()" style="color:#778CA2;">
+      <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">
+              <span aria-hidden="true" ng-click="cancel();">&times;</span>
+          </button>
+          <h4 class="modal-title">确认框</h4>
+      </div>
+      <div class="modal-body">
+          确定删除 <b>{{deleteSystemName}}</b> ?
+          <!-- <div ng-include data-src="'error-bar'" class="clearfix"></div> -->
+      </div>
+      <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal" ng-disabled="temp.inprocess" ng-click="cancel();">取消</button>
+          <button type="submit" class="btn btn-primary" ng-disabled="temp.inprocess" autofocus="autofocus">确定</button>
+      </div>
+  </form>
+</script>
