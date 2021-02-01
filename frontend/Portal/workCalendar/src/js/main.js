@@ -822,7 +822,10 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 		//render方法强制重新渲染引导程序 - 选择ui。
 		$('#newtag').selectpicker('render');
 	}
+	setTimeout(function() {
 		$scope.newtagRefresh();
+	}, 300);
+		
 	
 	
 
