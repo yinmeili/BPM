@@ -122,11 +122,13 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 		}
 
 	}
+	$rootScope.flashFlag=0;//定义一个标志位来区分页面是有跳转（日历时间发生变化）初始值为零
 	$scope.getday();
 	$scope.goToByDate = function () {
 		var year = $scope.selectYear;
 		var month = $scope.selectMonth;
 		var date = year + ',' + month;
+		$rootScope.flashFlag=1;//将标志位置为1，也就是页面发生变化--有翻页
 		var goToDate = $.fullCalendar.moment(date);
 		uiCalendarConfig.calendars.myCalendar.fullCalendar('gotoDate', goToDate);
 		// console.log(goToDate)
@@ -168,14 +170,21 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 					window.open($scope.url = 'WorkItemSheets.html?WorkItemID=' + calEvent.id);
 				},
 				events: function (start, end, timezone, callback) {
-					$scope.initStartAndEndDate();
-
-					$rootScope.loading=true;
-			    var userID = $rootScope.loginUser.User.ObjectID;
-					var workflowCode = "";
-					if (typeof ($("#sheet").SheetUIManager()) != 'undefined' && $("#sheet").SheetUIManager().GetValue() != "") {
-						workflowCode = ($("#sheet").SheetUIManager().GetValue()).join();
+					if($rootScope.flashFlag==1){//当标志位为1时，也就是页面翻页时调用搜索功能的数据来渲染日历
+						callback($scope.events);
+						$rootScope.flashFlag=0;//同时将标志位置为0
 					}
+					else if($rootScope.flashFlag==0){//当标志位为0时，也就是页面无翻页行为，调用控件的数据来渲染日历
+					$scope.initStartAndEndDate();
+					$rootScope.loading=true;
+					var workflowCode = "";
+					var userID = $("#newtag").val();
+					if (userID === "") {
+							var userID = $rootScope.loginUser.User.ObjectID;
+					}
+					if ($("#sheet").SheetUIManager() != undefined && $("#sheet").SheetUIManager().GetValue() != "") {
+						  workflowCode = ($("#sheet").SheetUIManager().GetValue()).join();
+					}	
 					var start = $scope.start;//获取上面分析的starttime
 					var end = $scope.end;//获取上面分析的endtime
 					$.ajax({
@@ -224,6 +233,8 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 						}
 
 					})
+					}
+				
 				},
 			
 
@@ -666,8 +677,7 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 		var start = $scope.start;//获取上面分析的starttime
 		var end = $scope.end;//获取上面分析的endtime
 		$scope.sheet = $("#sheet").SheetUIManager().GetValue();
-
-		var workflowCode = "";
+		var workflowCode="";
 		if ($scope.sheet != "") {
 			workflowCode = ($scope.sheet).join();
 		}
@@ -715,9 +725,11 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 	}
 	$scope.initStartAndEndDate = function () {
 		var e = new Date($('#calendarview').fullCalendar('getView').end);
-		var tY = e.getFullYear();
-		var tM = e.getMonth() + 1;
-		var da = e.getDate() - 1;
+		var calendarLastDayLong=e.getTime()-86400000;
+		var calendarLastDay=new Date(calendarLastDayLong)
+		var tY = calendarLastDay.getFullYear();
+		var tM = calendarLastDay.getMonth() + 1;
+		var da = calendarLastDay.getDate();
 		$scope.end = tY + '-' + tM + '-' + da;
 
 		var s = new Date($('#calendarview').fullCalendar('getView').start);
@@ -725,6 +737,7 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 		var tMonth = s.getMonth() + 1;
 		var my = s.getDate();
 		$scope.start = tYear + '-' + tMonth + '-' + my;
+		
 	}
 
 
