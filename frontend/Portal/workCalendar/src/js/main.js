@@ -803,8 +803,13 @@ app.controller('workCalendarCtrl', ['$scope', '$rootScope', '$http', '$compile',
 					var optionMulti = [];
 					optionMulti = $scope.newtagData;
 					//定义一个对象数组，用于储存所需选项
+					if($("#newtag").children('option').length==2){
 					for (var i = 0; i < optionMulti.length; i++) {
 							$("#newtag").append($("<option value=\"" + optionMulti[i].id +"\">" + optionMulti[i].text + "</option>"));
+						}
+					}
+					else{
+						return false;
 					}
 					$('#newtag').selectpicker({
 						noneResultsText: '无搜索结果',
